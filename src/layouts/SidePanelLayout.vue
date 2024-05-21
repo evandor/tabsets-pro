@@ -6,7 +6,7 @@
     </q-page-container>
 
     <q-footer elevated>
-<!--      <SidePanelFooter/>-->
+      <SidePanelFooter/>
     </q-footer>
 
   </q-layout>
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 
 import {ref, watchEffect} from "vue";
-// import SidePanelFooter from "components/SidePanelFooter.vue";
+import SidePanelFooter from "components/SidePanelFooter.vue";
 import {useMeta, useQuasar} from "quasar";
 
 const location = ref('')
