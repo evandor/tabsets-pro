@@ -1,6 +1,6 @@
-import { bexBackground } from 'quasar/wrappers';
+import {bexBackground} from 'quasar/wrappers'
 
-function openExtension () {
+function openExtension() {
   chrome.tabs.create(
     {
       url: chrome.runtime.getURL('www/index.html')
@@ -8,11 +8,11 @@ function openExtension () {
     (/* newTab */) => {
       // Tab opened.
     }
-  );
+  )
 }
 
-chrome.runtime.onInstalled.addListener(openExtension);
-chrome.action.onClicked.addListener(openExtension);
+chrome.runtime.onInstalled.addListener(openExtension)
+chrome.action.onClicked.addListener(openExtension)
 
 declare module '@quasar/app-vite' {
   interface BexEventMap {
@@ -27,18 +27,27 @@ declare module '@quasar/app-vite' {
   }
 }
 
+// @ts-ignore
+if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+  // @ts-ignore
+  chrome.sidePanel
+    .setPanelBehavior({openPanelOnActionClick: true})
+    .catch((error: any) => console.error(error));
+}
+
 export default bexBackground((bridge /* , allActiveConnections */) => {
-  bridge.on('log', ({ data, respond }) => {
+  bridge.on('log', ({data/*, respond */}) => {
     console.log(`[BEX] ${data.message}`, ...(data.data || []));
-    respond();
+    // TODO
+    //respond();
   });
 
-  bridge.on('getTime', ({ respond }) => {
+  bridge.on('getTime', ({respond}) => {
     respond(Date.now());
   });
 
-  bridge.on('storage.get', ({ data, respond }) => {
-    const { key } = data;
+  bridge.on('storage.get', ({data, respond}) => {
+    const {key} = data;
     if (key === null) {
       chrome.storage.local.get(null, (items) => {
         // Group the values up into an array to take advantage of the bridge's chunk splitting.
@@ -53,15 +62,15 @@ export default bexBackground((bridge /* , allActiveConnections */) => {
   // Usage:
   // const { data } = await bridge.send('storage.get', { key: 'someKey' })
 
-  bridge.on('storage.set', ({ data, respond }) => {
-    chrome.storage.local.set({ [data.key]: data.value }, () => {
+  bridge.on('storage.set', ({data, respond}) => {
+    chrome.storage.local.set({[data.key]: data.value}, () => {
       respond();
     });
   });
   // Usage:
   // await bridge.send('storage.set', { key: 'someKey', value: 'someValue' })
 
-  bridge.on('storage.remove', ({ data, respond }) => {
+  bridge.on('storage.remove', ({data, respond}) => {
     chrome.storage.local.remove(data.key, () => {
       respond();
     });
