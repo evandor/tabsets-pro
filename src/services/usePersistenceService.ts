@@ -4,7 +4,7 @@ import {LocalStorage, QVueGlobals, useQuasar} from "quasar";
 import PersistenceService from "src/services/PersistenceService";
 // import FsPersistentService from "src/services/persistence/FirestorePersistenceService";
 import SpacesPersistence from "src/spaces/persistence/SpacesPersistence";
-import IndexedDbSpacesStorage from "src/spaces/persistence/IndexedDbSpacesStorage";
+// import IndexedDbSpacesStorage from "src/spaces/persistence/IndexedDbSpacesStorage"
 import TabsetsPersistence from "src/tabsets/persistence/TabsetsPersistence";
 import IndexedDbTabsetsPersistence from "src/tabsets/persistence/IndexedDbTabsetsPersistence";
 import FirestoreTabsetsPersistence from "src/tabsets/persistence/FirestoreTabsetsPersistence";
@@ -12,12 +12,13 @@ import FirestoreSpacesPersistence from "src/spaces/persistence/FirestoreSpacesPe
 import FeaturesPersistence from "src/features/persistence/FeaturesPersistence";
 import {LocalStorageFeaturesPersistence} from "src/features/persistence/LocalStorageFeaturesPersistence";
 import FirestoreFeaturesPersistence from "src/features/persistence/FirestoreFeaturesPersistence";
+import IndexedDbSpacesPersistence from "src/spaces/persistence/IndexedDbSpacesPersistence";
 
 export function useDB(quasar: QVueGlobals | undefined = undefined) {
 
   //const db: PersistenceService = IndexedDbPersistenceService
 
-  const spacesIndexedDb: SpacesPersistence = IndexedDbSpacesStorage
+  const spacesIndexedDb: SpacesPersistence = IndexedDbSpacesPersistence
   const spacesFirestoreDb: SpacesPersistence = FirestoreSpacesPersistence
 
   const tabsetsIndexedDb: TabsetsPersistence = IndexedDbTabsetsPersistence
