@@ -17,6 +17,7 @@
     "@types/lodash": "^4.17.4",
     "@types/sanitize-html": "^2.11.0",
     "axios": "^1.2.1",
+    "date-fns": "^3.6.0",
     "events": "^3.3.0",
     "firebase": "^10.12.1",
     "idb": "^8.0.0",
