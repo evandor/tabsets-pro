@@ -16,7 +16,7 @@ import IndexedDbSpacesPersistence from "src/spaces/persistence/IndexedDbSpacesPe
 
 export function useDB(quasar: QVueGlobals | undefined = undefined) {
 
-  //const db: PersistenceService = IndexedDbPersistenceService
+  // const db: PersistenceService = IndexedDbPersistenceService
 
   const spacesIndexedDb: SpacesPersistence = IndexedDbSpacesPersistence
   const spacesFirestoreDb: SpacesPersistence = FirestoreSpacesPersistence

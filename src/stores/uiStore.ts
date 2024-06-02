@@ -10,6 +10,7 @@ import {
   SHARING_AVATAR_IDENT,
 } from "boot/constants";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
+import {Tab} from "src/tabsets/models/Tab";
 
 export enum DrawerTabs {
   BOOKMARKS = "bookmarks",
@@ -420,14 +421,14 @@ export const useUiStore = defineStore('ui', () => {
 
   const getContentCount = computed((): number => contentCount.value)
 
-  // function setSelectedTab(tab: Tab) {
-  //   console.log("setting selected tab", tab)
-  //   selectedTab.value = tab
-  // }
+  function setSelectedTab(tab: Tab) {
+    console.log("setting selected tab", tab)
+    //selectedTab.value = tab
+  }
 
-  // const getSelectedTab = computed(() => {
-  //   return selectedTab.value
-  // })
+  const getSelectedTab = computed(() => {
+    return null//selectedTab.value
+  })
 
   // highlight url(s) feature
   function clearHighlights() {
@@ -609,6 +610,7 @@ export const useUiStore = defineStore('ui', () => {
     startButtonAnimation,
     showLoginTable,
     showSwitchedToLocalInfo,
-    syncing
+    syncing,
+    getSelectedTab
   }
 })
