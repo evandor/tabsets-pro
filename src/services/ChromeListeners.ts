@@ -184,7 +184,9 @@ class ChromeListeners {
       //   }
       // });
 
-      chrome.commands.onCommand.addListener(this.onCommandListener);
+      if (chrome.commands) {
+        chrome.commands.onCommand.addListener(this.onCommandListener);
+      }
 
       // TODO removed listeners as well?
       if (useFeaturesStore().hasFeature(FeatureIdent.NOTIFICATIONS)) {

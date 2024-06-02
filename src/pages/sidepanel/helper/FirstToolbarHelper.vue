@@ -25,13 +25,13 @@
         <div v-else class="col q-ma-none q-pa-none">
 
           <!-- no spaces && searching -->
-          <SearchWithTransitionHelper v-if="searching"
-                                      :search-term="props.searchTerm"
-                                      :search-hits="props.searchHits"/>
+<!--          <SearchWithTransitionHelper v-if="searching"-->
+<!--                                      :search-term="props.searchTerm"-->
+<!--                                      :search-hits="props.searchHits"/>-->
 
-          <FilterWithTransitionHelper v-else-if="showFilter"/>
+<!--          <FilterWithTransitionHelper v-else-if="showFilter"/>-->
           <!-- no spaces && not searching -->
-          <template v-else>
+          <template>
 
             <!-- no spaces && not searching -->
             <div class="col-12 text-subtitle1">
@@ -61,7 +61,7 @@
               <span class="q-ma-none q-pa-none q-mx-sm text-grey-5">|</span>
             </template>
 
-            <SidePanelToolbarTabNavigationHelper/>
+<!--            <SidePanelToolbarTabNavigationHelper/>-->
 
             <SidePanelToolbarButton
               v-if="showSyncInfo()"
@@ -106,11 +106,9 @@ import {useRouter} from "vue-router";
 import {ref, watchEffect} from "vue";
 import {SidePanelView, useUiStore} from "stores/uiStore";
 import NewTabsetDialog from "src/tabsets/dialogues/NewTabsetDialog.vue";
-import {Tabset, TabsetType} from "src/tabsets/models/Tabset";
 import SidePanelToolbarButton from "components/buttons/SidePanelToolbarButton.vue";
 import {useQuasar} from "quasar";
 import {useAuthStore} from "stores/authStore";
-import {SyncType} from "stores/appStore";
 import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
@@ -162,7 +160,7 @@ watchEffect(() => {
     useUiStore().toolbarFilter
 })
 
-if ($q.platform.is.chrome && $q.platform.is.bex) {
+if ($q.platform.is.chrome && $q.platform.is.bex && chrome.commands) {
   chrome.commands.onCommand.addListener((command) => {
     if (command === 'search') {
       console.debug(`got Command: ${command}`);
@@ -225,8 +223,8 @@ const showSyncInfo = () => {
   if (!useAuthStore().isAuthenticated()) {
     return false
   }
-  const syncType = useAuthStore().getAccount()?.userData?.sync?.type || SyncType.NONE
-  return syncType !== SyncType.NONE
+  // const syncType = useAuthStore().getAccount()?.userData?.sync?.type || SyncType.NONE
+  return true
 }
 
 const offsetTop = () => ($q.platform.is.capacitor || $q.platform.is.cordova) ? 'margin-top:40px;' : ''

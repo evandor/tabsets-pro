@@ -1,9 +1,7 @@
-import {SyncType} from "stores/appStore";
-
 export class SyncSettings {
 
   constructor(
-    public type: SyncType | undefined,
+    public type: undefined,
     public url: string | undefined,
   ) {
   }

@@ -13,7 +13,7 @@ import {useSearchStore} from "src/search/stores/searchStore";
 import {Router} from "vue-router";
 import {useGroupsStore} from "stores/groupsStore";
 import {FeatureIdent} from "src/models/FeatureIdent";
-import {SyncType, useAppStore} from "stores/appStore";
+import {useAppStore} from "stores/appStore";
 import {useAuthStore} from "stores/authStore";
 import PersistenceService from "src/services/PersistenceService";
 import {useUiStore} from "stores/uiStore";
@@ -27,22 +27,18 @@ import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import ChromeListeners from "src/services/ChromeListeners";
 
-function dbStoreToUse(st: SyncType) {
+function dbStoreToUse() {
   const isAuthenticated = useAuthStore().isAuthenticated()
   if (!isAuthenticated) {
     console.debug("%not authenticated", "font-weight:bold")
     return useDB(undefined).localDb
   }
-  if (st === SyncType.FIRESTORE) {
-    console.debug("%csyncType " + st, "font-weight:bold")
-    return useDB(undefined).localDb
-  }
-  console.debug("%cfallback, syncType " + st, "font-weight:bold")
+  // if (st === SyncType.FIRESTORE) {
+  //   console.debug("%csyncType " + st, "font-weight:bold")
+  //   return useDB(undefined).localDb
+  // }
+  // console.debug("%cfallback, syncType " + st, "font-weight:bold")
   return useDB(undefined).localDb
-}
-
-function useFirestore(syncType: SyncType) {
-  return !(!useAuthStore().isAuthenticated() || syncType !== SyncType.FIRESTORE);
 }
 
 class AppService {
@@ -69,7 +65,6 @@ class AppService {
     const appStore = useAppStore()
     const settingsStore = useSettingsStore()
     const bookmarksStore = useBookmarksStore()
-    // const messagesStore = useMessagesStore()
     const searchStore = useSearchStore()
     const uiStore = useUiStore()
 
@@ -80,9 +75,7 @@ class AppService {
     appStore.init()
 
     // init of stores and some listeners
-    await usePermissionsStore().initialize(useDB(quasar).localDb)
-
-
+    // await usePermissionsStore().initialize(useDB(quasar).localDb)
 
     await ChromeListeners.initListeners()
 
@@ -110,11 +103,8 @@ class AppService {
     tabsetService.setLocalStorage(localStorage)
 
     if (useAuthStore().isAuthenticated()) {
-      // sync features
-      const syncType = useAuthStore().getAccount()?.userData?.sync?.type || SyncType.NONE
-      // const syncUrl = useAuthStore().getAccount()?.userData?.sync?.url
 
-      let persistenceStore = dbStoreToUse(syncType)
+      let persistenceStore = dbStoreToUse()
 
       // await useFeaturesStore().initialize(useDB(quasar).featuresLocalStorage)
 
@@ -123,13 +113,13 @@ class AppService {
         console.log("failed login, falling back to indexedDB")
       }
 
-      console.debug(`%cchecking sync config: type=${syncType}, persistenceStore=${persistenceStore.getServiceName()}`, "font-weight:bold")
+      console.debug(`%cchecking sync config: persistenceStore=${persistenceStore.getServiceName()}`, "font-weight:bold")
 
       // await FsPersistenceService.init()
 
-      await this.initCoreSerivces(quasar, persistenceStore, this.router, syncType)
+      await this.initCoreSerivces(quasar, persistenceStore, this.router)
     } else {
-      await this.initCoreSerivces(quasar, useDB().localDb, this.router, SyncType.NONE)
+      await this.initCoreSerivces(quasar, useDB().localDb, this.router)
     }
 
     // useNotificationsStore().bookmarksExpanded = quasar.localStorage.getItem("bookmarks.expanded") || []
@@ -155,7 +145,7 @@ class AppService {
     useAuthStore().setAuthRequest(null as unknown as string)
   }
 
-  private async initCoreSerivces(quasar: any, store: PersistenceService, router: Router, syncType: SyncType) {
+  private async initCoreSerivces(quasar: any, store: PersistenceService, router: Router) {
     const spacesStore = useSpacesStore()
     const groupsStore = useGroupsStore()
     const tabsetsStore = useTabsetsStore()
@@ -164,7 +154,7 @@ class AppService {
      * features store: passing storage for better testing.
      * make sure features are not used before this line in code.
      */
-    const featuresStorage = useFirestore(syncType) ? useDB().featuresFirestoreDb : useDB(quasar).featuresLocalStorage
+    const featuresStorage = useDB(quasar).featuresLocalStorage
     await useFeaturesStore().initialize(featuresStorage)
 
     /**
@@ -173,14 +163,17 @@ class AppService {
     await useWindowsStore().initialize()
     useWindowsStore().initListeners()
 
-    await spacesStore.initialize(syncType, useAuthStore().isAuthenticated())
+    await spacesStore.initialize(useDB().spacesFirestoreDb)
 
-    const tabsetsPersistence = store.getServiceName() === 'FirestorePersistenceService' ?
-      useDB().tabsetsFirestoreDb : useDB().tabsetsIndexedDb
-    await tabsetsStore.initialize(tabsetsPersistence)
-    await useTabsetService().init(tabsetsPersistence, false)
+    console.log("===> store: ", store)
+    if (store) {
+      const tabsetsPersistence = store.getServiceName() === 'FirestorePersistenceService' ?
+        useDB().tabsetsFirestoreDb : useDB().tabsetsIndexedDb
+      await tabsetsStore.initialize(tabsetsPersistence)
+      await useTabsetService().init(tabsetsPersistence, false)
 
-    await useTabsStore2().initialize()
+      await useTabsStore2().initialize()
+    }
 
     const thumbnailsPersistence = IndexedDbThumbnailsPersistence
       //store.getServiceName() === 'FirestorePersistenceService' ? useDB().spacesFirestoreDb : useDB().spacesIndexedDb
@@ -201,6 +194,7 @@ class AppService {
     // probably running an import ("/imp/:sharedId")
     // we do not want to go to the welcome back
     // console.log("checking for welcome page", useTabsetsStore().tabsets.size === 0, quasar.platform.is.bex, !useAuthStore().isAuthenticated())
+    console.log("===>", useTabsetsStore().tabsets.size)
     if (useTabsetsStore().tabsets.size === 0 &&
       quasar.platform.is.bex &&
       !useAuthStore().isAuthenticated() &&

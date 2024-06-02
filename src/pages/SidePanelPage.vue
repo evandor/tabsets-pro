@@ -156,6 +156,7 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import AppService from "src/services/AppService";
+import InfoMessageWidget from "components/widgets/InfoMessageWidget.vue";
 
 const {t} = useI18n({locale: navigator.language, useScope: "global"})
 

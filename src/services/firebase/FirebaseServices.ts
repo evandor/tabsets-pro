@@ -24,9 +24,6 @@ class FirebaseServices {
 
   init() {
 
-    if (process.env.USE_FIREBASE !== "true") {
-      return
-    }
     console.log("initializing FirebaseServices")
     this.firebaseApp = firebase.initializeApp({
       apiKey: process.env.FIREBASE_API_KEY,
@@ -57,7 +54,6 @@ class FirebaseServices {
   }
 
   getAuth() {
-    console.log("returning auth", this.auth)
     return this.auth
   }
 

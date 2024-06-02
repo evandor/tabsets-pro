@@ -12,6 +12,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/SidePanelLayout.vue'),
     children: [{path: '', component: () => import('pages/SidePanelPage.vue')}],
   },
+  {
+    path: '/sidepanel/welcome',
+    component: () => import('layouts/SidePanelLayout.vue'),
+    children: [{path: '', component: () => import('pages/sidepanel/WelcomePage.vue')}],
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
