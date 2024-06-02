@@ -1,7 +1,6 @@
 import {Tabset} from "src/tabsets/models/Tabset";
 import {CLEANUP_PERIOD_IN_MINUTES, MONITORING_PERIOD_IN_MINUTES} from "boot/constants";
 import _ from "lodash"
-import NavigationService from "src/core/services/NavigationService";
 import {useSearchStore} from "src/search/stores/searchStore";
 import {SearchDoc} from "src/search/models/SearchDoc";
 import {usePermissionsStore} from "src/stores/permissionsStore";
@@ -19,6 +18,7 @@ import {useContentService} from "src/content/services/ContentService";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
+import NavigationService from "src/services/NavigationService";
 
 
 function runHousekeeping() {
