@@ -29,13 +29,14 @@ export default configure((ctx) => {
       // 'ionicons-v4',
       // 'mdi-v7',
       // 'fontawesome-v6',
-      // 'eva-icons',
+      'eva-icons',
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
       'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
+      'material-icons-outlined'
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -65,6 +66,10 @@ export default configure((ctx) => {
       // viteVuePluginOptions: {},
 
       vitePlugins: [
+        // ['@intlify/unplugin-vue-i18n/vite', {
+        //   include: [path.resolve(__dirname, './src/i18n/**')],
+        // }],
+
         ['@intlify/unplugin-vue-i18n/vite', {
           // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
           // compositionOnly: false,

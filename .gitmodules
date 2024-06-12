@@ -38,3 +38,11 @@
 	path = src/suggestions
 	url = https://github.com/evandor/submodule-suggestions.git
 	branch = main
+[submodule "src/opentabs"]
+	path = src/opentabs
+	url = https://github.com/evandor/submodule-opentabs.git
+	branch = main
+[submodule "src/snapshots"]
+	path = src/snapshots
+	url = https://github.com/evandor/submodule-snapshots.git
+	branch = main

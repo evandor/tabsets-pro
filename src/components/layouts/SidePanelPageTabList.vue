@@ -57,6 +57,7 @@ import {TabsetColumn} from "src/tabsets/models/TabsetColumn";
 import {SPECIAL_ID_FOR_NO_GROUP_ASSIGNED} from "boot/constants";
 import _ from "lodash"
 import {IndexedTab} from "src/tabsets/models/IndexedTab";
+import SidePanelTabListHelper from "components/layouts/sidepanel/SidePanelTabListHelper.vue";
 
 const props = defineProps({
   hideMenu: {type: Boolean, default: false},

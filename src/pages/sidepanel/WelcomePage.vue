@@ -12,10 +12,6 @@
           <div class="col-12 text-h6 q-mb-md">
             {{ t('welcome_to_tabsets') }} {{ stageIdentifier() }}
           </div>
-<!--          <div class="col-12 text-caption text-primary q-mx-sm q-my-sm">-->
-<!--            {{ t('one_line_about_tabsets1') }}<br>-->
-<!--            {{ t('one_line_about_tabsets2') }}-->
-<!--          </div>-->
         </div>
 
         <div class="q-pa-sm q-mb-none row items-start q-gutter-md" @click.stop="selected()">
@@ -64,37 +60,6 @@
 
         <br><br>
 
-        <div class="row q-mt-lg q-ml-md">
-          <div class="col-12 text-caption q-mb-sm">
-            {{ t('optionally') }}
-          </div>
-          <div class="col-12 q-mb-md">
-<!--            <q-checkbox size="xs" v-model="activateBookmarks" class="text-grey" :label="t('activate_bookmarks_integration')"/>-->
-<!--            <q-icon class="q-ml-sm cursor-pointer" name="o_help" color="grey">-->
-<!--              <q-tooltip class="tooltip">Allow access to your bookmarks. Can be added later, too</q-tooltip>-->
-<!--            </q-icon>-->
-            <q-checkbox size="xs" v-model="activateNotifications" class="text-grey"
-                        :label="t('activate_browser_notifications')"/>
-            <q-icon class="q-ml-sm cursor-pointer" name="o_help" color="grey">
-              <q-tooltip class="tooltip">Allow browser notifications for better integration. Can be added later, too
-              </q-tooltip>
-            </q-icon>
-
-            <q-checkbox size="xs" v-model="activateFullPageApp" class="text-grey"
-                        :label="t('activate_fullpage_application')"/>
-            <q-icon class="q-ml-sm cursor-pointer" name="o_help" color="grey">
-              <q-tooltip class="tooltip">Tabsets can be additionally run as fullpage app</q-tooltip>
-            </q-icon>
-
-<!--            <template v-if="firebaseActive()">-->
-<!--              <q-checkbox-->
-<!--                size="xs" v-model="login" class="text-grey" label="Login or create Account"/>-->
-<!--              <q-icon class="q-ml-sm cursor-pointer" name="o_help" color="grey">-->
-<!--                <q-tooltip class="tooltip">With an Account, you can sync your tabsets across browsers and computers</q-tooltip>-->
-<!--              </q-icon>-->
-<!--            </template>-->
-          </div>
-        </div>
 
       </div>
     </q-page>

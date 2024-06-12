@@ -1,4 +1,3 @@
-import {usePermissionsStore} from "stores/permissionsStore";
 import BookmarksService from "src/bookmarks/services/BookmarksService";
 import {useDB} from "src/services/usePersistenceService";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
@@ -33,11 +32,6 @@ function dbStoreToUse() {
     console.debug("%not authenticated", "font-weight:bold")
     return useDB(undefined).localDb
   }
-  // if (st === SyncType.FIRESTORE) {
-  //   console.debug("%csyncType " + st, "font-weight:bold")
-  //   return useDB(undefined).localDb
-  // }
-  // console.debug("%cfallback, syncType " + st, "font-weight:bold")
   return useDB(undefined).localDb
 }
 
@@ -113,7 +107,7 @@ class AppService {
         console.log("failed login, falling back to indexedDB")
       }
 
-      console.debug(`%cchecking sync config: persistenceStore=${persistenceStore.getServiceName()}`, "font-weight:bold")
+      // console.debug(`%cchecking sync config: persistenceStore=${persistenceStore.getServiceName()}`, "font-weight:bold")
 
       // await FsPersistenceService.init()
 
@@ -163,17 +157,15 @@ class AppService {
     await useWindowsStore().initialize()
     useWindowsStore().initListeners()
 
-    await spacesStore.initialize(useDB().spacesFirestoreDb)
 
-    console.log("===> store: ", store)
-    if (store) {
-      const tabsetsPersistence = store.getServiceName() === 'FirestorePersistenceService' ?
-        useDB().tabsetsFirestoreDb : useDB().tabsetsIndexedDb
-      await tabsetsStore.initialize(tabsetsPersistence)
-      await useTabsetService().init(tabsetsPersistence, false)
+      await spacesStore.initialize(useDB().spacesFirestoreDb)
+
+      // const tabsetsPersistence = store.getServiceName() === 'FirestorePersistenceService' ?
+      //   useDB().tabsetsFirestoreDb : useDB().tabsetsIndexedDb
+      await tabsetsStore.initialize(useDB().tabsetsFirestoreDb)
+      await useTabsetService().init(useDB().tabsetsFirestoreDb, false)
 
       await useTabsStore2().initialize()
-    }
 
     const thumbnailsPersistence = IndexedDbThumbnailsPersistence
       //store.getServiceName() === 'FirestorePersistenceService' ? useDB().spacesFirestoreDb : useDB().spacesIndexedDb
@@ -194,14 +186,13 @@ class AppService {
     // probably running an import ("/imp/:sharedId")
     // we do not want to go to the welcome back
     // console.log("checking for welcome page", useTabsetsStore().tabsets.size === 0, quasar.platform.is.bex, !useAuthStore().isAuthenticated())
-    console.log("===>", useTabsetsStore().tabsets.size)
-    if (useTabsetsStore().tabsets.size === 0 &&
-      quasar.platform.is.bex &&
-      !useAuthStore().isAuthenticated() &&
-      !router.currentRoute.value.path.startsWith("/fullpage") &&
-      !router.currentRoute.value.path.startsWith("/mainpanel")) {
-      await router.push("/sidepanel/welcome")
-    }
+    // if (useTabsetsStore().tabsets.size === 0 &&
+    //   quasar.platform.is.bex &&
+    //   !useAuthStore().isAuthenticated() &&
+    //   !router.currentRoute.value.path.startsWith("/fullpage") &&
+    //   !router.currentRoute.value.path.startsWith("/mainpanel")) {
+    //   await router.push("/sidepanel/welcome")
+    // }
 
 
   }

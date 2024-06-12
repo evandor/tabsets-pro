@@ -18,9 +18,9 @@ class FirebaseServices {
   private firebaseApp: firebase.app.App = null as unknown as firebase.app.App
   private auth: Auth = null as unknown as Auth
   private firestore: Firestore = null as unknown as Firestore
-  private messaging: Messaging = null as unknown as Messaging
-  private storage: Messaging = null as unknown as Messaging
-  private realtimeDb: Database = null as unknown as Database
+  // private messaging: Messaging = null as unknown as Messaging
+  // private storage: Messaging = null as unknown as Messaging
+  // private realtimeDb: Database = null as unknown as Database
 
   init() {
 
@@ -44,12 +44,12 @@ class FirebaseServices {
     this.firestore = getFirestore(this.firebaseApp)
     //console.log("got firestore", this.firestore)
 
-    this.messaging = getMessaging(this.firebaseApp)
-    //console.log("got messaging", this.messaging)
-
-    this.storage = getStorage(this.firebaseApp)
-
-    this.realtimeDb = getDatabase(this.firebaseApp)
+    // this.messaging = getMessaging(this.firebaseApp)
+    // //console.log("got messaging", this.messaging)
+    //
+    // this.storage = getStorage(this.firebaseApp)
+    //
+    // this.realtimeDb = getDatabase(this.firebaseApp)
 
   }
 
@@ -61,40 +61,6 @@ class FirebaseServices {
     return this.firestore
   }
 
-  getMessaging() {
-    return this.messaging
-  }
-
-  getStorage() {
-    return this.storage
-  }
-
-  getMessageToken() {
-    return getToken(this.messaging, {vapidKey: process.env.FIREBASE_MESSAGING_KEY});
-  }
-
-  getRealtimeDb() {
-    return this.realtimeDb
-  }
-
-  startRealtimeDbListeners(userId: string) {
-    console.debug("startRealtimeListeners start for user", userId)
-    const path = 'users/' + userId + '/access'
-    console.log("listening to changes on ", path)
-    const userAccessRef = ref(this.getRealtimeDb(), path);
-    // this will not work
-    // onValue(userAccessRef, (snapshot) => {
-    //   const data = snapshot.val();
-    //   console.log("got change:", data)
-    //   if (data && data['tabsetChanged']) {
-    //     // bridge.send('fb.message.received', {
-    //     //   msg: 'event.tabset.updated',
-    //     //   tstamp: data['tabsetChanged'],
-    //     //   origin: data['origin']
-    //     // })
-    //   }
-    // })
-  }
 }
 
 export default new FirebaseServices();

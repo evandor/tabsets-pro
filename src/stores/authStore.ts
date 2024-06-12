@@ -123,7 +123,7 @@ export const useAuthStore = defineStore('auth', () => {
         account.setProducts(Array.from(products))
         //console.log("hier", account, products)
       })
-      useAuthStore().upsertAccount(account)
+      upsertAccount(account)
 
     } else {
       LocalStorage.remove(CURRENT_USER_ID)
@@ -152,7 +152,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function upsertAccount(acc: Account | undefined) {
     if (acc) {
-      storage.upsertAccount(acc)
+      //storage.upsertAccount(acc)
     }
     account.value = acc
   }

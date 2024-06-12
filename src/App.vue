@@ -27,11 +27,11 @@ const emitter = new EventEmitter()
 FirebaseServices.init()
 
 const auth = FirebaseServices.getAuth()
+
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("%conAuthStateChanged: about to log in", "border:1px solid green")
 
-    // TODO revisit now
     try {
       await AppService.init($q, router, true, user)
       if (inBexMode()) {
@@ -48,10 +48,11 @@ onAuthStateChanged(auth, async (user) => {
   } else {
     // User is signed out
     console.log("%conAuthStateChanged: logged out", "border:1px solid green")
-    await AppService.init($q, router, true, undefined)
-    if (inBexMode()) {
-      $q.bex.send('auth.user.logout', {})
-    }
+    // await AppService.init($q, router, true, undefined)
+    // if (inBexMode()) {
+    //   $q.bex.send('auth.user.logout', {})
+    // }
+    router.push("/sidepanel/login")
     // if (!router.currentRoute.value.path.startsWith("/mainpanel")) {
     //   console.log("NOT redirecting to '/'")
     //   //await router.push("/")

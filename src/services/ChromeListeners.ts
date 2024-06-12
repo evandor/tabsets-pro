@@ -220,7 +220,9 @@ class ChromeListeners {
     chrome.tabs.onDetached.removeListener(this.onDetachedListener)
     chrome.tabs.onHighlighted.removeListener(this.onHighlightedListener)
     chrome.runtime.onMessage.removeListener(this.onMessageListener)
-    chrome.commands.onCommand.removeListener(this.onCommandListener);
+    if (chrome.commands) {
+      chrome.commands.onCommand.removeListener(this.onCommandListener)
+    }
   }
 
   clearWorking() {

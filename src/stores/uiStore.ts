@@ -11,6 +11,7 @@ import {
 } from "boot/constants";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {Tab} from "src/tabsets/models/Tab";
+import {Toast, ToastType} from "src/core/models/Toast";
 
 export enum DrawerTabs {
   BOOKMARKS = "bookmarks",
@@ -182,7 +183,7 @@ export const useUiStore = defineStore('ui', () => {
   const hiddenMessages = ref<string[]>(LocalStorage.getItem('ui.hiddenInfoMessages') as unknown as string[] || [])
   const messageAlreadyShown = ref<string | undefined>(undefined)
 
-  // const toasts = ref<Toast[]>([])
+  const toasts = ref<Toast[]>([])
   const toastTimeouts = ref<NodeJS.Timeout[]>([])
 
   // highlight url(s) feature
@@ -461,44 +462,44 @@ export const useUiStore = defineStore('ui', () => {
   }
 
   function createSuccessToast(msg: string, action: any = undefined) {
-    // toastTimeouts.value.forEach((timeout: NodeJS.Timeout) => clearTimeout(timeout))
-    // toasts.value.push(new Toast(msg, ToastType.INFO, action))
+    toastTimeouts.value.forEach((timeout: NodeJS.Timeout) => clearTimeout(timeout))
+    toasts.value.push(new Toast(msg, ToastType.INFO, action))
   }
 
   function createWarningToast(msg: string, action: any = undefined) {
-    // toastTimeouts.value.forEach((timeout: NodeJS.Timeout) => clearTimeout(timeout))
-    // toasts.value.push(new Toast(msg, ToastType.WARNING, action))
+    toastTimeouts.value.forEach((timeout: NodeJS.Timeout) => clearTimeout(timeout))
+    toasts.value.push(new Toast(msg, ToastType.WARNING, action))
   }
 
   function createErrorToast(msg: string) {
-    // toastTimeouts.value.forEach((timeout: NodeJS.Timeout) => clearTimeout(timeout))
-    // toasts.value.push(new Toast(msg, ToastType.ERROR))
+    toastTimeouts.value.forEach((timeout: NodeJS.Timeout) => clearTimeout(timeout))
+    toasts.value.push(new Toast(msg, ToastType.ERROR))
   }
 
-  // function removeToast(toast: Toast) {
-  //   const index = _.findIndex(toasts.value, t => t.id === toast.id)
-  //   if (index >= 0) {
-  //     toasts.value.splice(index, 1)
-  //   }
-  // }
+  function removeToast(toast: Toast) {
+    const index = _.findIndex(toasts.value, (t:any) => t.id === toast.id)
+    if (index >= 0) {
+      toasts.value.splice(index, 1)
+    }
+  }
 
   function delayedToastRemoval(delay: number = 3000) {
-    // if (toasts.value.length > 0) {
-    //   const toast = toasts.value[0]
-    //   let timeout = setTimeout(() => {
-    //     removeToast(toast)
-    //   }, delay)
-    //   toastTimeouts.value.push(timeout)
-    // }
+    if (toasts.value.length > 0) {
+      const toast = toasts.value[0]
+      let timeout = setTimeout(() => {
+        removeToast(toast)
+      }, delay)
+      toastTimeouts.value.push(timeout)
+    }
   }
 
   function callUndoActionFromCurrentToast() {
-    // if (toasts.value.length > 0) {
-    //   const toast = toasts.value[0]
-    //   console.log("applying undo method...")
-    //   toast.action.handler.apply(null)
-    //   removeToast(toast)
-    // }
+    if (toasts.value.length > 0) {
+      const toast = toasts.value[0]
+      console.log("applying undo method...")
+      toast.action.handler.apply(null)
+      removeToast(toast)
+    }
   }
 
   function getButtonSize(ident: string) {
@@ -550,8 +551,8 @@ export const useUiStore = defineStore('ui', () => {
     showMessage,
     footerInfo,
     getContentCount,
-    //setSelectedTab,
-    //getSelectedTab,
+    setSelectedTab,
+    getSelectedTab,
     newTabUrlList,
     addToNewTabUrlList,
     removeNewTabUrl,
@@ -584,7 +585,7 @@ export const useUiStore = defineStore('ui', () => {
     toolbarFilter,
     toggleToolbarFilter,
     toolbarFilterTerm,
-    //toasts,
+    toasts,
     createSuccessToast,
     createWarningToast,
     createErrorToast,
@@ -610,7 +611,6 @@ export const useUiStore = defineStore('ui', () => {
     startButtonAnimation,
     showLoginTable,
     showSwitchedToLocalInfo,
-    syncing,
-    getSelectedTab
+    syncing
   }
 })
