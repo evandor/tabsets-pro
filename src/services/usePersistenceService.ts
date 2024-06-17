@@ -13,6 +13,8 @@ import FeaturesPersistence from "src/features/persistence/FeaturesPersistence";
 import {LocalStorageFeaturesPersistence} from "src/features/persistence/LocalStorageFeaturesPersistence";
 import FirestoreFeaturesPersistence from "src/features/persistence/FirestoreFeaturesPersistence";
 import IndexedDbSpacesPersistence from "src/spaces/persistence/IndexedDbSpacesPersistence";
+import SnapshotsPersistence from "src/snapshots/persistence/SnapshotsPersistence";
+import IndexedDbSnapshotPersistence from "src/snapshots/persistence/IndexedDbSnapshotPersistence";
 
 export function useDB(quasar: QVueGlobals | undefined = undefined) {
 
@@ -25,6 +27,8 @@ export function useDB(quasar: QVueGlobals | undefined = undefined) {
   const tabsetsFirestoreDb: TabsetsPersistence = FirestoreTabsetsPersistence
 
   const featuresFirestoreDb: FeaturesPersistence = FirestoreFeaturesPersistence
+
+  const snapshotsIndexedDb: SnapshotsPersistence = IndexedDbSnapshotPersistence
 
   let localDb = undefined as unknown as PersistenceService
   let featuresLocalStorage: FeaturesPersistence = undefined as unknown as FeaturesPersistence
@@ -40,7 +44,8 @@ export function useDB(quasar: QVueGlobals | undefined = undefined) {
     //firestore,
     spacesIndexedDb, spacesFirestoreDb,
     tabsetsIndexedDb, tabsetsFirestoreDb,
-    featuresFirestoreDb, featuresLocalStorage
+    featuresFirestoreDb, featuresLocalStorage,
+    snapshotsIndexedDb
   }
 
 }

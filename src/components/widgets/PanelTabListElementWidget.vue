@@ -354,7 +354,7 @@ import {
 import TabsetService from "src/tabsets/services/TabsetService";
 import {onMounted, PropType, ref, watchEffect} from "vue";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
-import {ListDetailLevel, useUiStore} from "src/stores/uiStore";
+import {ListDetailLevel, useUiStore} from "src/ui/stores/uiStore";
 import TabFaviconWidget from "components/widgets/TabFaviconWidget.vue";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import ShortUrl from "components/utils/ShortUrl.vue";
@@ -367,18 +367,16 @@ import {useUtils} from "src/core/services/Utils";
 import {useRouter} from "vue-router";
 import {useGroupsStore} from "stores/groupsStore";
 import {PlaceholdersType} from "src/models/Placeholders";
-import {LocalStorage, useQuasar} from "quasar";
+import {useQuasar} from "quasar";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {Suggestion, SuggestionState} from "src/suggestions/models/Suggestion";
-// import CommentDialog from "components/dialogues/CommentDialog.vue";
 import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SavedBlob} from "src/models/SavedBlob";
 import TabService from "src/services/TabService";
 import {DeleteChromeGroupCommand} from "src/domain/groups/DeleteChromeGroupCommand";
 import CommentDialog from "components/dialogues/CommentDialog.vue";
-// import {DeleteChromeGroupCommand} from "src/domain/groups/DeleteChromeGroupCommand";
+import {SavedBlob} from "src/snapshots/models/SavedBlob";
 
 const {inBexMode} = useUtils()
 
@@ -491,7 +489,7 @@ watchEffect(() => {
     const url = props.tab.url
     const tabsetIds = useTabsetService().tabsetsFor(url)
     tsBadges.value = []
-    _.forEach(tabsetIds, (tsId:string) => tsBadges.value.push({
+    _.forEach(tabsetIds, (tsId: string) => tsBadges.value.push({
       label: TabsetService.nameForTabsetId(tsId),
       tabsetId: tsId,
       encodedUrl: btoa(url || '')
@@ -543,7 +541,7 @@ const formatDate = (timestamp: number | undefined) =>
 
 const iconStyle = () => {
   // if (TabService.isCurrentTab(props.tab)) {
-    return "border:1px solid #bfbfbf;border-radius:3px"
+  return "border:1px solid #bfbfbf;border-radius:3px"
   // } else {
   //   return "border:0px solid white;border-radius:3px"
   // }
@@ -645,7 +643,7 @@ const openImage = () => window.open(chrome.runtime.getURL('www/index.html#/mainp
 
 const deleteAnnotation = async (tab: Tab, annotationToDelete: any) => {
   //console.log("deleting annotatin", tab, annotationToDelete)
-  tab.annotations = _.filter(tab.annotations, (a:any) => a.id !== annotationToDelete.id)
+  tab.annotations = _.filter(tab.annotations, (a: any) => a.id !== annotationToDelete.id)
   useTabsetService().saveCurrentTabset()
 }
 

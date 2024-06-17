@@ -75,7 +75,7 @@ import {useDialogPluginComponent} from 'quasar'
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {Tab, UrlExtension} from "src/tabsets/models/Tab";
-import DialogButton from "components/buttons/DialogButton.vue";
+import DialogButton from "src/core/dialog/buttons/DialogButton.vue";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {FeatureIdent} from "src/models/FeatureIdent";

@@ -18,9 +18,19 @@ const routes: RouteRecordRaw[] = [
     children: [{path: '', component: () => import('pages/SidePanelLoginPage.vue')}],
   },
   {
+    path: '/sidepanel/tab/:tabId',
+    component: () => import('layouts/SidePanelLayout.vue'),
+    children: [{path: '', component: () => import('pages/sidepanel/SidePanelTabDetails.vue')}],
+  },
+  {
     path: '/sidepanel/welcome',
     component: () => import('layouts/SidePanelLayout.vue'),
     children: [{path: '', component: () => import('pages/sidepanel/WelcomePage.vue')}],
+  },
+  {
+    path: '/mainpanel/settings',
+    component: () => import('layouts/PlainWithRightDrawerLayout.vue'),
+    children: [{path: '', component: () => import('pages/SettingsPage.vue')}],
   },
 
   // Always leave this as last one,

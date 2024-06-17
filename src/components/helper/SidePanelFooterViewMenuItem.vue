@@ -14,12 +14,13 @@
 
 <script lang="ts" setup>
 
-import {SidePanelView, useUiStore} from "stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 import {PropType} from "vue";
 import {useRouter} from "vue-router";
+import {SidePanelViews} from "src/models/SidePanelViews";
 
 const props = defineProps({
-  sidePanelView: {type: Object as PropType<SidePanelView>, required: true},
+  sidePanelView: {type: Object as PropType<SidePanelViews>, required: true},
   icon: {type: String, required: true},
   size: {type: String, default: "9px"},
   label: {type: String, required: true},
@@ -30,17 +31,17 @@ const props = defineProps({
 const router = useRouter()
 
 const isActive = () => useUiStore().sidePanelIsActive(props.sidePanelView)
-const activateView = (view: SidePanelView) => useUiStore().sidePanelSetActiveView(view)
+const activateView = (view: SidePanelViews) => useUiStore().sidePanelSetActiveView(view)
 
 const showItem = () => props.sidePanelView?.showButton()
 
 const toggleView = () => {
   if (isActive()) {
-    activateView(SidePanelView.MAIN)
+    activateView(SidePanelViews.MAIN)
     router.push("/sidepanel")
   } else {
     activateView(props.sidePanelView)
-    props.sidePanelView === SidePanelView.MAIN ?
+    props.sidePanelView === SidePanelViews.MAIN ?
       router.push("/sidepanel") :
       router.push("/sidepanel/" + props.sidePanelView)
   }

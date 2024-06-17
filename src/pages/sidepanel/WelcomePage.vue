@@ -68,14 +68,14 @@
 
 <script lang="ts" setup>
 
-import {SidePanelView, useUiStore} from "src/stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 import {onMounted, ref, UnwrapRef, watchEffect} from "vue";
 import {useRouter} from "vue-router";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {CreateTabsetCommand} from "src/tabsets/commands/CreateTabset";
 import {STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT} from "boot/constants";
 import Analytics from "src/core/utils/google-analytics";
-import DialogButton from "components/buttons/DialogButton.vue";
+import DialogButton from "src/core/dialog/buttons/DialogButton.vue";
 import {useAuthStore} from "stores/authStore";
 import {LocalStorage, openURL} from "quasar";
 import {FeatureIdent} from "src/models/FeatureIdent";
@@ -83,6 +83,7 @@ import {AppFeatures} from "src/models/AppFeatures";
 import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
+import {SidePanelViews} from "src/models/SidePanelViews";
 
 const {t} = useI18n()
 const router = useRouter()
@@ -164,7 +165,7 @@ const addFirstTabset = () => {
   useCommandExecutor()
     .executeFromUi(new CreateTabsetCommand(tabsetName.value, []))
     .then((res) => {
-      useUiStore().sidePanelSetActiveView(SidePanelView.MAIN)
+      useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
       router.push("/sidepanel?first=true")
     })
 }
@@ -180,8 +181,8 @@ const stageIdentifier = () => process.env.TABSETS_STAGE !== 'PRD' ? ' (' + proce
 const clicked = (url: string) => openURL(url)
 
 const openBookmarksView = () => {
-  useUiStore().sidePanelSetActiveView(SidePanelView.BOOKMARKS)
-  router.push("/sidepanel/" + SidePanelView.BOOKMARKS)
+  useUiStore().sidePanelSetActiveView(SidePanelViews.BOOKMARKS)
+  router.push("/sidepanel/" + SidePanelViews.BOOKMARKS)
 }
 
 </script>

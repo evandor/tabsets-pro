@@ -180,11 +180,12 @@ import ShareTabsetPubliclyDialog from "src/tabsets/dialogues/ShareTabsetPublicly
 import {MarkTabsetAsArchivedCommand} from "src/tabsets/commands/MarkTabsetAsArchived";
 import {useRouter} from "vue-router";
 import {MarkTabsetDeletedCommand} from "src/tabsets/commands/MarkTabsetDeleted";
-import {SidePanelView, useUiStore} from "stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 import {NotificationType} from "src/core/services/ErrorHandler";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {CopyToClipboardCommand} from "src/core/domain/commands/CopyToClipboard";
+import {SidePanelViews} from "src/models/SidePanelViews";
 
 const {inBexMode} = useUtils()
 
@@ -332,7 +333,7 @@ const deleteTabsetDialog = (tabset: Tabset) => {
 const deleteTabset = (tabset: Tabset) => useCommandExecutor().executeFromUi(new MarkTabsetDeletedCommand(tabset.id))
   .then((res: any) => {
     //if (props.sidePanelMode) {
-    useUiStore().sidePanelSetActiveView(SidePanelView.MAIN)
+    useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
     //}
     return res
   })

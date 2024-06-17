@@ -104,7 +104,7 @@ import {FeatureIdent} from "src/models/FeatureIdent";
 import {useSpacesStore} from "src/spaces/stores/spacesStore";
 import {useRouter} from "vue-router";
 import {ref, watchEffect} from "vue";
-import {SidePanelView, useUiStore} from "stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 import NewTabsetDialog from "src/tabsets/dialogues/NewTabsetDialog.vue";
 import SidePanelToolbarButton from "components/buttons/SidePanelToolbarButton.vue";
 import {useQuasar} from "quasar";
@@ -113,6 +113,7 @@ import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
+import {SidePanelViews} from "src/models/SidePanelViews";
 
 const {t} = useI18n({useScope: 'global'})
 
@@ -156,7 +157,7 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  showFilter.value = useUiStore().sidePanelActiveViewIs(SidePanelView.TABS_LIST) &&
+  showFilter.value = useUiStore().sidePanelActiveViewIs(SidePanelViews.TABS_LIST) &&
     useUiStore().toolbarFilter
 })
 
@@ -189,17 +190,17 @@ const webClipActive = () => useTabsStore2().currentChromeTab
 const showSearchIcon = () => useTabsetsStore().tabsets.size > 1
 
 const showToggleSessionIcon = () =>
-  useUiStore().sidePanelActiveViewIs(SidePanelView.MAIN) &&
+  useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
   useFeaturesStore().hasFeature(FeatureIdent.SESSIONS) &&
   !searching.value
 
 const showCreateClipButton = () =>
-  useUiStore().sidePanelActiveViewIs(SidePanelView.MAIN) &&
+  useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
   useFeaturesStore().hasFeature(FeatureIdent.WEBSITE_CLIP) && webClipActive() &&
   !searching.value
 
 const showCreateClipButtonInActive = () =>
-  useUiStore().sidePanelActiveViewIs(SidePanelView.MAIN) &&
+  useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
   useFeaturesStore().hasFeature(FeatureIdent.WEBSITE_CLIP) && !webClipActive() &&
   !searching.value
 

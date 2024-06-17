@@ -36,8 +36,8 @@
             style="font-size: smaller;text-align: center"
             :class="toastBannerClass()">
             {{ useUiStore().toasts[0]?.msg }}
-            <template v-slot:action v-if="useUiStore().toasts[0]?.action">
-              <q-btn flat label="Undo"
+            <template v-slot:action v-if="useUiStore().toasts[0]?.actions[0]">
+              <q-btn flat :label="useUiStore().toasts[0].actions[0].label"
                      @click="useUiStore().callUndoActionFromCurrentToast()"/>
             </template>
           </q-banner>
@@ -188,7 +188,7 @@
   </q-footer>
 </template>
 <script setup lang="ts">
-import {SidePanelView, useUiStore} from "src/stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 import {Tab} from "src/tabsets/models/Tab";
 import {onMounted, ref, watch, watchEffect} from "vue";
 import {useRoute, useRouter} from "vue-router";
@@ -216,6 +216,7 @@ import {useSpacesStore} from "src/spaces/stores/spacesStore";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {ToastType} from "src/core/models/Toast";
+import {SidePanelViews} from "src/models/SidePanelViews";
 
 const {handleSuccess, handleError} = useNotificationHandler()
 
@@ -276,7 +277,7 @@ watchEffect(() => {
   //console.log("watcheffect for", suggestions)
   showSuggestionButton.value =
     doShowSuggestionButton.value ||
-    (useUiStore().sidePanelActiveViewIs(SidePanelView.MAIN) &&
+    (useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
       _.findIndex(suggestions, (s:Suggestion) => {
         return s.state === SuggestionState.NEW ||
           (s.state === SuggestionState.NOTIFICATION && !useFeaturesStore().hasFeature(FeatureIdent.NOTIFICATIONS))
@@ -284,7 +285,7 @@ watchEffect(() => {
 
   showSuggestionIcon.value =
     !doShowSuggestionButton.value &&
-    useUiStore().sidePanelActiveViewIs(SidePanelView.MAIN) &&
+    useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
     _.findIndex(suggestions, (s:Suggestion) => {
       return s.state === SuggestionState.DECISION_DELAYED
     }) >= 0

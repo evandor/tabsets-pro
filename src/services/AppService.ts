@@ -15,7 +15,7 @@ import {FeatureIdent} from "src/models/FeatureIdent";
 import {useAppStore} from "stores/appStore";
 import {useAuthStore} from "stores/authStore";
 import PersistenceService from "src/services/PersistenceService";
-import {useUiStore} from "stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 import {User} from "firebase/auth";
 import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
 import IndexedDbThumbnailsPersistence from "src/thumbnails/persistence/IndexedDbThumbnailsPersistence";

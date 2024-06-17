@@ -20,39 +20,39 @@
         <!--        <q-item dense clickable v-close-popup>-->
         <!--          <q-item-section>new window</q-item-section>-->
         <!--        </q-item>-->
-        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelView.SHARED_TABSETS_LIST"
-                                     label="Shared Tabsets"
-                                     icon="o_share"
-                                     :size="buttonSize"
-                                     tooltip="All your shared tabsets"/>
-        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelView.BY_DOMAIN_LIST"
+<!--        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.SHARED_TABSETS_LIST"-->
+<!--                                     label="Shared Tabsets"-->
+<!--                                     icon="o_share"-->
+<!--                                     :size="buttonSize"-->
+<!--                                     tooltip="All your shared tabsets"/>-->
+        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.BY_DOMAIN_LIST"
                                      label="Tabs By Domain"
                                      icon="o_dns"
                                      :size="buttonSize"
                                      tooltip="List all your tabs URLs by domain"/>
-<!--        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelView.TAGS_LIST"-->
+<!--        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.TAGS_LIST"-->
 <!--                                     icon="o_label"-->
 <!--                                     label="Tags List"-->
 <!--                                     :size="buttonSize"-->
 <!--                                     tooltip="List of all tags sorted by prevalence"/>-->
-        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelView.NEWEST_TABS_LIST"
+        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.NEWEST_TABS_LIST"
                                      label="Newest Tabs"
                                      icon="o_schedule"
                                      :size="buttonSize"
                                      tooltip="Newest Tabs List"/>
-        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelView.TOP_10_TABS_LIST"
+        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.TOP_10_TABS_LIST"
                                      label="Top 10 Tabs"
                                      icon="o_workspace_premium"
                                      :size="buttonSize"
                                      tooltip="Top 10 Tabs List"/>
-        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelView.TABS_AS_TREE"
+        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.TABS_AS_TREE"
                                      label="Tabs as Tree"
                                      icon="o_account_tree"
                                      :size="buttonSize"
                                      tooltip="Show a tree view of your tabs"/>
 
-        <!-- :disable="useUiStore().sidePanelActiveViewIs(SidePanelView.MAIN)" -->
-        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelView.MAIN"
+        <!-- :disable="useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN)" -->
+        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.MAIN"
                                      label="Default View"
                                      icon=""
                                      :size="buttonSize"
@@ -63,26 +63,26 @@
   </q-btn>
 
   <SidePanelFooterLeftButton
-    :side-panel-view="SidePanelView.TABS_LIST"
+    :side-panel-view="SidePanelViews.TABS_LIST"
     :size="props.size"
     icon="o_playlist_add"
     tooltip="All your browser's open tabs"/>
 
   <SidePanelFooterLeftButton v-if="unreadMessagesCount > 0"
-                             :side-panel-view="SidePanelView.MESSAGES"
+                             :side-panel-view="SidePanelViews.MESSAGES"
                              icon="o_chat"
                              :size="props.size"
                              tooltip="Your messages">
     <q-badge color="red" floating v-if="unreadMessagesCount > 0">{{ unreadMessagesCount }}</q-badge>
   </SidePanelFooterLeftButton>
 
-  <SidePanelFooterLeftButton :side-panel-view="SidePanelView.BOOKMARKS"
+  <SidePanelFooterLeftButton :side-panel-view="SidePanelViews.BOOKMARKS"
                              icon="o_bookmark"
                              :class="{ shake: animateBookmarksButton }"
                              :size="props.size"
                              tooltip="Show the Bookmarks Browser"/>
 
-  <SidePanelFooterLeftButton :side-panel-view="SidePanelView.RSS_LIST"
+  <SidePanelFooterLeftButton :side-panel-view="SidePanelViews.RSS_LIST"
                              icon="o_rss_feed"
                              :size="props.size"
                              tooltip="List all your RSS feeds"/>
@@ -96,7 +96,7 @@
 
 </template>
 <script setup lang="ts">
-import {SidePanel, SidePanelView, useUiStore} from "stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 import SidePanelFooterLeftButton from "components/helper/SidePanelFooterLeftButton.vue";
 import {usePermissionsStore} from "stores/permissionsStore";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
@@ -104,6 +104,7 @@ import {ref, watchEffect} from "vue";
 import {SuggestionState} from "src/suggestions/models/Suggestion";
 import SidePanelFooterViewMenuItem from "components/helper/SidePanelFooterViewMenuItem.vue";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
+import {SidePanelViews} from "src/models/SidePanelViews";
 
 const props = defineProps({
   showSuggestionIcon: {type: Boolean, required: true},

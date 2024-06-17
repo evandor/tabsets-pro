@@ -1,5 +1,6 @@
 export enum FeatureIdent {
   DEV_MODE = "DEV_MODE",
+  BOOKMARKS="BOOKMARKS",
   SAVE_TAB_AS_PDF = "SAVE_TAB_AS_PDF", // not active yet
   SAVE_TAB_AS_PNG = "SAVE_TAB_AS_PNG",
   GROUP_BY_DOMAIN = "GROUP_BY_DOMAIN",
@@ -43,6 +44,7 @@ export enum FeatureIdent {
   TABSET_SUBFOLDER = "TABSET_SUBFOLDER",
   TABSETS_SHARING = "TABSETS_SHARING",
   WINDOWS_MANAGEMENT = "WINDOWS_MANAGEMENT",
+  NEWEST_TABS="NEWEST_TABS"
 }
 
 export enum FeatureType {
