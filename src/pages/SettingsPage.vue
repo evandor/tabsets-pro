@@ -433,7 +433,6 @@ import {useSettingsStore} from "src/stores/settingsStore"
 import OpenRightDrawerWidget from "components/widgets/OpenRightDrawerWidget.vue";
 import {useUtils} from "src/core/services/Utils";
 import Analytics from "src/core/utils/google-analytics";
-import {useGroupsStore} from "../stores/groupsStore";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {StaticSuggestionIdent, Suggestion} from "src/suggestions/models/Suggestion";
 import {useRoute} from "vue-router";
@@ -444,18 +443,13 @@ import {
   STRIP_CHARS_IN_USER_INPUT,
   TITLE_IDENT
 } from "boot/constants";
-// import SyncingSettings from "pages/helper/SyncingSettings.vue";
-// import SubscriptionSettings from "pages/helper/SubscriptionSettings.vue";
-// import SubscriptionBexSettings from "pages/helper/SubscriptionBexSettings.vue";
 import {Account} from "src/models/Account";
 import {AccessItem, useAuthStore} from "stores/authStore";
-// import SharingSettings from "pages/helper/SharingSettings.vue";
-// import AccountSettings from "pages/helper/AccountSettings.vue";
-// import InfoLine from "pages/helper/InfoLine.vue";
 import FeatureToggleSettings from "pages/helper/FeatureToggleSettings.vue";
 import {useI18n} from "vue-i18n";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
+import {useGroupsStore} from "../tabsets/stores/groupsStore";
 const { t } = useI18n()
 
 const {sendMsg, inBexMode} = useUtils()

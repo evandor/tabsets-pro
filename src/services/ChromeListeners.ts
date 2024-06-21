@@ -10,7 +10,7 @@ import {Suggestion, SuggestionState, SuggestionType} from "src/suggestions/model
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {FeatureIdent} from "src/models/FeatureIdent";
 import {useUtils} from "src/core/services/Utils";
-import {useGroupsStore} from "stores/groupsStore";
+import {useGroupsStore} from "src/tabsets/stores/groupsStore";
 import NavigationService from "src/services/NavigationService";
 import {useAuthStore} from "stores/authStore";
 import {EMAIL_LINK_REDIRECT_DOMAIN} from "boot/constants";
@@ -311,10 +311,10 @@ class ChromeListeners {
           // we care only about actually setting a group, not about removal
           if (info.groupId && info.groupId >= 0) {
             console.log(" --- updating existing tabs for url: ", chromeTab.url, t, info)
-            t.groupId = info.groupId
-            t.groupName = useGroupsStore().currentGroupForId(info.groupId)?.title || '???'
-            t.updated = new Date().getTime()
-            const tabset = useTabsetsStore().tabsetFor(t.id)
+            t.tab.groupId = info.groupId
+            t.tab.groupName = useGroupsStore().currentGroupForId(info.groupId)?.title || '???'
+            t.tab.updated = new Date().getTime()
+            const tabset = useTabsetsStore().tabsetFor(t.tab.id)
             if (tabset) {
               await useTabsetService().saveTabset(tabset)
             }

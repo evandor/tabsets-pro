@@ -217,6 +217,7 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {ToastType} from "src/core/models/Toast";
 import {SidePanelViews} from "src/models/SidePanelViews";
+import {TabAndTabsetId} from "src/tabsets/models/TabAndTabsetId";
 
 const {handleSuccess, handleError} = useNotificationHandler()
 
@@ -229,7 +230,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const currentChromeTabs = ref<chrome.tabs.Tab[]>([])
-const currentTabs = ref<Tab[]>([])
+const currentTabs = ref<TabAndTabsetId[]>([])
 const currentChromeTab = ref<chrome.tabs.Tab>(null as unknown as chrome.tabs.Tab)
 const showSuggestionButton = ref(false)
 const showSuggestionIcon = ref(false)

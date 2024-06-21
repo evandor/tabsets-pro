@@ -10,7 +10,7 @@ import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {useSearchStore} from "src/search/stores/searchStore";
 import {Router} from "vue-router";
-import {useGroupsStore} from "stores/groupsStore";
+import {useGroupsStore} from "src/tabsets/stores/groupsStore";
 import {FeatureIdent} from "src/models/FeatureIdent";
 import {useAppStore} from "stores/appStore";
 import {useAuthStore} from "stores/authStore";
@@ -79,6 +79,10 @@ class AppService {
 
     settingsStore.initialize(quasar.localStorage);
 
+    // should be initialized before search submodule
+    await useThumbnailsService().init(IndexedDbThumbnailsPersistence)
+    await useContentService().init(IndexedDbContentPersistence)
+
     searchStore.init().catch((err) => console.error(err))
 
     // init db
@@ -88,7 +92,6 @@ class AppService {
     // await useAuthStore().initialize(useDB(undefined).db)
     await useAuthStore().setUser(user)
     //useAuthStore().upsertAccount(account)
-
 
 
     // await useNotificationsStore().initialize(useDB(undefined).db)
@@ -158,20 +161,15 @@ class AppService {
     useWindowsStore().initListeners()
 
 
-      await spacesStore.initialize(useDB().spacesFirestoreDb)
+    await spacesStore.initialize(useDB().spacesFirestoreDb)
 
-      // const tabsetsPersistence = store.getServiceName() === 'FirestorePersistenceService' ?
-      //   useDB().tabsetsFirestoreDb : useDB().tabsetsIndexedDb
-      await tabsetsStore.initialize(useDB().tabsetsFirestoreDb)
-      await useTabsetService().init(useDB().tabsetsFirestoreDb, false)
+    // const tabsetsPersistence = store.getServiceName() === 'FirestorePersistenceService' ?
+    //   useDB().tabsetsFirestoreDb : useDB().tabsetsIndexedDb
+    await tabsetsStore.initialize(useDB().tabsetsFirestoreDb)
+    await useTabsetService().init(useDB().tabsetsFirestoreDb, false)
 
-      await useTabsStore2().initialize()
+    await useTabsStore2().initialize()
 
-    const thumbnailsPersistence = IndexedDbThumbnailsPersistence
-      //store.getServiceName() === 'FirestorePersistenceService' ? useDB().spacesFirestoreDb : useDB().spacesIndexedDb
-    await useThumbnailsService().init(thumbnailsPersistence)
-
-    await useContentService().init(IndexedDbContentPersistence)
 
     ChromeApi.init(router)
 

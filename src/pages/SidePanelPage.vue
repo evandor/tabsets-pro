@@ -151,7 +151,7 @@ import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {TITLE_IDENT} from "boot/constants";
 import SidePanelToolbarButton from "components/buttons/SidePanelToolbarButton.vue";
 import {useI18n} from 'vue-i18n'
-import SidePanelTabsetsExpansionList from "components/tabsets/SidePanelTabsetsExpansionList.vue";
+import SidePanelTabsetsExpansionList from "src/tabsets/components/SidePanelTabsetsExpansionList.vue";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";

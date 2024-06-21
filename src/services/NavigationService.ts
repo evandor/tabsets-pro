@@ -2,7 +2,7 @@ import {openURL, uid} from "quasar";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import JsUtils from "src/utils/JsUtils";
-import {useGroupsStore} from "stores/groupsStore";
+import {useGroupsStore} from "src/tabsets/stores/groupsStore";
 import {ExecutionResult} from "src/core/domain/ExecutionResult";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
@@ -61,11 +61,11 @@ class NavigationService {
         // get all tabs with this url
         const tabsForUrl = useTabsetsStore().tabsForUrl(url) || []
         tabsForUrl.forEach(t => {
-          if (t.httpInfo) {
-            t.httpError = ''
-            t.httpInfo = ''
+          if (t.tab.httpInfo) {
+            t.tab.httpError = ''
+            t.tab.httpInfo = ''
 
-            const ts = useTabsetsStore().tabsetFor(t.id)
+            const ts = useTabsetsStore().tabsetFor(t.tab.id)
             if (ts) {
               //console.log("saving tabset ", ts)
               useTabsetService().saveTabset(ts)
@@ -163,7 +163,7 @@ class NavigationService {
     } else if (urls.length === 1) {
       const tabs = useTabsetsStore().tabsForUrl(urls[0])
       if (tabs.length === 1) {
-        const tabAndTabsetId = useTabsetsStore().getTabAndTabsetId(tabs[0].id)
+        const tabAndTabsetId = useTabsetsStore().getTabAndTabsetId(tabs[0].tab.id)
         if (tabAndTabsetId) {
           return useTabsetsStore().getTabset(tabAndTabsetId.tabsetId)?.window || 'current'
         }
