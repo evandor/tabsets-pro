@@ -424,7 +424,7 @@ class ChromeListeners {
     const scripts: string[] = []
 
     //if (useFeaturesStore().hasFeature(FeatureIdent.THUMBNAILS)) {
-    scripts.push("content-script-thumbnails.js")
+    //scripts.push("content-script-thumbnails.js")
     //}
     if (useFeaturesStore().hasFeature(FeatureIdent.TAB_HELPER)) {
       scripts.push("content-script-tab-helper.js")
@@ -434,7 +434,7 @@ class ChromeListeners {
     }
     scripts.push("content-script.js")
     //scripts.push("recogito2.js")
-    scripts.push("tabsets-content-script.js")
+    //scripts.push("tabsets-content-script.js")
     if (scripts.length > 0 && tab.id !== null) { // && !this.injectedScripts.get(.chromeTabId)) {
 
       chrome.tabs.get(tab.id, (chromeTab: chrome.tabs.Tab) => {

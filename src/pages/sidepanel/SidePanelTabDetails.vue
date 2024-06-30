@@ -132,6 +132,18 @@
           </q-btn>
         </template>
 
+        <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+          <q-btn
+            @click.stop="saveWarc(tab as Tab)"
+            flat round color="primary" size="11px" icon="o_picture_as_pdf"
+            :disabled="!isOpen(tab as Tab)">
+            <q-tooltip v-if="isOpen(tab as Tab)">Save this tab as a Warc File</q-tooltip>
+            <q-tooltip v-else>The tab must be open if you want to save it. Click on the link and come back here to save
+              it.
+            </q-tooltip>
+          </q-btn>
+        </template>
+
 <!--        <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SAVE_TAB)">-->
 <!--          <q-btn-->
 <!--              @click.stop="saveTab(tab)"-->
@@ -191,7 +203,7 @@
       <q-card>
         <q-card-section>
           <div class="row q-mx-sm q-mt-xs" v-for="png in pngs">
-            <PngViewHelper :pngId="png.id" :created="png.created" :tabId="tab?.id || 'unknown'"/>
+<!--            <PngViewHelper :pngId="png.id" :created="png.created" :tabId="tab?.id || 'unknown'"/>-->
           </div>
         </q-card-section>
       </q-card>
@@ -202,7 +214,7 @@
       <q-card>
         <q-card-section>
           <div class="row q-mx-sm q-mt-xs" v-for="pdf in pdfs">
-            <PngViewHelper extension='pdf' :pngId="pdf.id" :created="pdf.created" :tabId="tab?.id || 'unknown'"/>
+<!--            <PngViewHelper extension='pdf' :pngId="pdf.id" :created="pdf.created" :tabId="tab?.id || 'unknown'"/>-->
           </div>
         </q-card-section>
       </q-card>
@@ -358,14 +370,17 @@ import NavigationService from "src/services/NavigationService";
 import {useSearchStore} from "src/search/stores/searchStore";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {FeatureIdent} from "src/models/FeatureIdent";
-import PdfService from "src/snapshots/services/PdfService";
-// import PngViewHelper from "pages/sidepanel/helper/PngViewHelper.vue";
 import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {SavePngCommand} from "src/snapshots/domain/SavePng";
-import {SavedBlob} from "src/snapshots/models/SavedBlob";
+
+import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
+import PngViewHelper from "pages/sidepanel/helper/PngViewHelper.vue";
+import {SavePdfCommand} from "src/snapshots/domain/SavePdf";
+import {SaveWarcCommand} from "src/snapshots/domain/SaveWarc";
+import {BlobMetadata} from "src/snapshots/models/BlobMetadata";
 
 const {inBexMode} = useUtils()
 
@@ -380,8 +395,8 @@ const searchIndex = ref<any>()
 const metaRows = ref<object[]>([])
 const metas = ref({})
 const tab = ref<Tab | undefined>(undefined)
-const pngs = ref<SavedBlob[]>([])
-const pdfs = ref<SavedBlob[]>([])
+const pngs = ref<BlobMetadata[]>([])
+const pdfs = ref<BlobMetadata[]>([])
 
 const {selectTabset} = useTabsetService()
 
@@ -434,10 +449,10 @@ watchEffect(() => {
             metaRows.value = _.sortBy(metaRows.value, (s:any) => s['name' as keyof object])
           }
         })
-    PdfService.getPngsForTab(tab.value.id)
-        .then((blobs: SavedBlob[]) => pngs.value = blobs)
-    PdfService.getPdfsForTab(tab.value.id)
-        .then((blobs: SavedBlob[]) => pdfs.value = blobs)
+    // useSnapshotsService().getPngsForTab(tab.value.id)
+    //     .then((blobs: SavedBlob[]) => pngs.value = blobs)
+    // useSnapshotsService().getPdfsForTab(tab.value.id)
+    //     .then((blobs: SavedBlob[]) => pdfs.value = blobs)
   }
 })
 
@@ -526,13 +541,19 @@ const saveTab = (tab: Tab | undefined) =>
 
 const savePng = (tab: Tab | undefined) => {
   if (tab) {
-    useCommandExecutor().execute(new SavePngCommand(tab, "saved by user"))
+    //useCommandExecutor().execute(new SavePngCommand(tab, "saved by user"))
   }
 }
 
 const savePdf = (tab: Tab | undefined) => {
   if (tab) {
-    // useCommandExecutor().execute(new SavePdfCommand(tab, "saved by user"))
+    useCommandExecutor().execute(new SavePdfCommand(tab, "saved by user"))
+  }
+}
+
+const saveWarc = (tab: Tab | undefined) => {
+  if (tab) {
+    useCommandExecutor().execute(new SaveWarcCommand(tab, "saved by user"))
   }
 }
 

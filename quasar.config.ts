@@ -16,7 +16,7 @@ export default configure((ctx) => {
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
       'i18n',
-      'axios'
+      //'axios'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -232,7 +232,7 @@ export default configure((ctx) => {
       // extendBexManifestJson (json) {},
 
       contentScripts: [
-        'my-content-script'
+        'content-script'
       ]
     }
   }

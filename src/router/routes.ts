@@ -32,7 +32,16 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/PlainWithRightDrawerLayout.vue'),
     children: [{path: '', component: () => import('pages/SettingsPage.vue')}],
   },
-
+  {
+    path: '/mainpanel/png/:tabId/:blobId',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/snapshots/pages/MainPanelPngPage.vue')}],
+  },
+  {
+    path: '/mainpanel/pdf/:tabId/:blobId',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/snapshots/pages/MainPanelPdfPage.vue')}],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

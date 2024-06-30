@@ -7,6 +7,7 @@
   },
   "permissions": [
     "alarms",
+    "scripting",
     "storage",
     "tabs",
     "activeTab",
@@ -27,8 +28,7 @@
   "content_scripts": [
     {
       "matches": [ "*://*/*" ],
-      "css": [ "assets/content.css" ],
-      "js": [ "my-content-script.js" ]
+      "css": [ "assets/content.css" ]
     }
   ],
 

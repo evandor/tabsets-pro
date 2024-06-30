@@ -1,5 +1,4 @@
 import {api} from "boot/axios";
-import axios, {AxiosError} from 'axios';
 import {useAuthStore} from "src/stores/authStore";
 
 export abstract class FirebaseCall<T> {
@@ -77,16 +76,16 @@ export abstract class FirebaseCall<T> {
   // }
 
   private static handleError(err: any) {
-    if (axios.isAxiosError(err)) {
-      const axiosError = err as AxiosError
-      if (axiosError.response?.status === 403) {
+    // if (axios.isAxiosError(err)) {
+    //   const axiosError = err as AxiosError
+     // if (axiosError.response?.status === 403) {
         console.warn("logging out due to invalid token (potentially expired)")
         //useAuthStore().logout();
         //Logz.info({"message": "logging out due to invalid token (potentially expired)"})
-      }
-    } else {
-      console.error("error in firebase call", err)
-      //Logz.info({"message": "error in firebase call" + err})
-    }
+      //}
+    // } else {
+    //   console.error("error in firebase call", err)
+    //   //Logz.info({"message": "error in firebase call" + err})
+    // }
   }
 }

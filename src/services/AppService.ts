@@ -25,6 +25,9 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import ChromeListeners from "src/services/ChromeListeners";
+import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
+import IndexedDbSnapshotPersistence from "src/snapshots/persistence/IndexedDbSnapshotPersistence";
+import {useSnapshotsStore} from "src/snapshots/stores/SnapshotsStore";
 
 function dbStoreToUse() {
   const isAuthenticated = useAuthStore().isAuthenticated()
@@ -78,6 +81,9 @@ class AppService {
     await BookmarksService.init()
 
     settingsStore.initialize(quasar.localStorage);
+
+    await useSnapshotsService().init()
+    await useSnapshotsStore().initialize(useDB().snapshotsIndexedDb)
 
     // should be initialized before search submodule
     await useThumbnailsService().init(IndexedDbThumbnailsPersistence)
