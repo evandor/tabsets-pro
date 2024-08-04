@@ -411,14 +411,14 @@ class ChromeListeners {
     if (useFeaturesStore().hasFeature(FeatureIdent.ANNOTATIONS)) {
       const tabForUrl = useTabsetsStore().tabForUrlInSelectedTabset(tab.url || '')
       console.log("about to run annotationScript...", tabForUrl)
-      if (tabForUrl) {
-        chrome.scripting.executeScript({
-          target: {tabId: (tab.id || 0)},
-          func: annotationScript,
-          args: [tabForUrl.id, tabForUrl.annotations],
-        })
-          .then(() => console.log("injected a function"));
-      }
+      // if (tabForUrl) {
+      //   chrome.scripting.executeScript({
+      //     target: {tabId: (tab.id || 0)},
+      //     func: annotationScript,
+      //     args: [tabForUrl.id, tabForUrl.annotations],
+      //   })
+      //     .then(() => console.log("injected a function"));
+      // }
     }
 
     const scripts: string[] = []

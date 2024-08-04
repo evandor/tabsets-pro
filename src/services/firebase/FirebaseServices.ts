@@ -1,8 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import {getStorage} from "firebase/storage";
-import {getDatabase, Database, ref, onValue} from "firebase/database";
 import {getAuth, Auth} from "firebase/auth";
 import {
   getFirestore,
@@ -11,7 +9,7 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager
 } from 'firebase/firestore';
-import {getMessaging, Messaging, getToken, onMessage} from "firebase/messaging";
+import { getStorage, FirebaseStorage } from "firebase/storage";
 
 class FirebaseServices {
 
@@ -19,7 +17,7 @@ class FirebaseServices {
   private auth: Auth = null as unknown as Auth
   private firestore: Firestore = null as unknown as Firestore
   // private messaging: Messaging = null as unknown as Messaging
-  // private storage: Messaging = null as unknown as Messaging
+  private storage: FirebaseStorage = null as unknown as FirebaseStorage
   // private realtimeDb: Database = null as unknown as Database
 
   init() {
@@ -34,23 +32,16 @@ class FirebaseServices {
       messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
     })
     this.auth = getAuth(this.firebaseApp)
-    //console.log("got auth", this.auth)
 
     // https://firebase.google.com/docs/firestore/manage-data/enable-offline#web-modular-api
-    initializeFirestore(this.firebaseApp, {
-      localCache:
-        persistentLocalCache({tabManager: persistentMultipleTabManager()})
-    })
+    // initializeFirestore(this.firebaseApp, {
+    //   localCache:
+    //     persistentLocalCache({tabManager: persistentMultipleTabManager()})
+    // })
+    initializeFirestore(this.firebaseApp,{})
     this.firestore = getFirestore(this.firebaseApp)
-    //console.log("got firestore", this.firestore)
-
-    // this.messaging = getMessaging(this.firebaseApp)
-    // //console.log("got messaging", this.messaging)
-    //
-    // this.storage = getStorage(this.firebaseApp)
-    //
-    // this.realtimeDb = getDatabase(this.firebaseApp)
-
+    this.storage = getStorage(this.firebaseApp)
+    console.log("initializing FirebaseServices -- done")
   }
 
   getAuth() {
@@ -59,6 +50,10 @@ class FirebaseServices {
 
   getFirestore(): Firestore {
     return this.firestore
+  }
+
+  getStorage(): FirebaseStorage {
+    return this.storage
   }
 
 }

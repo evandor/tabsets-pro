@@ -1,14 +1,16 @@
 import {defineStore} from 'pinia';
 import {getAuth, signOut, User} from "firebase/auth";
-import {LocalStorage, useQuasar} from "quasar";
+import {LocalStorage} from "quasar";
 import {computed, ref} from "vue";
 import {Account, UserData} from "src/models/Account";
 import {CURRENT_USER_ID} from "boot/constants";
 import {collection, doc, getDoc, getDocs} from "firebase/firestore";
 import FirebaseServices from "src/services/firebase/FirebaseServices";
 import PersistenceService from "src/services/PersistenceService";
+import {useSettingsStore} from "stores/settingsStore";
 
 export enum AccessItem {
+  TABSETS = "TABSETS",
   SYNC = "SYNC",
   SHARE = "SHARE",
   FEATURE_TOGGLES = "FEATURE_TOGGLES"
@@ -20,6 +22,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const authenticated = ref(false)
   const user = ref<User>(null as unknown as User)
+  const roles = ref<string[]>([])
   const authRequest = ref<string>(null as unknown as string)
   const account = ref<Account | undefined>(undefined)
 
@@ -77,6 +80,33 @@ export const useAuthStore = defineStore('auth', () => {
     // authRequest.value = null as unknown as string
     // console.log("auth request was nulled, was ", val)
     return val
+  })
+
+  const limitExceeded = computed(() => {
+
+    function hasRole(role: string) {
+      return roles.value.indexOf(role) >= 0
+    }
+
+    return (item: AccessItem, count: number): boolean => {
+      const localMode = useSettingsStore().isEnabled('localMode')
+      if (localMode) {
+        return false
+      }
+
+      switch (item) {
+        case AccessItem.TABSETS:
+          if (hasRole('bibbly.team')) {
+            return count >= 50
+          } else if (hasRole('bibbly.user')) {
+            return count >= 10
+          } else {
+            return count >= 5
+          }
+        default:
+          return false
+      }
+    }
   })
 
   const userMayAccess = computed(() => {
@@ -174,6 +204,7 @@ export const useAuthStore = defineStore('auth', () => {
     upsertAccount,
     getAccount,
     setProducts,
-    userMayAccess
+    userMayAccess,
+    limitExceeded
   }
 })

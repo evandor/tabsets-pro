@@ -374,13 +374,9 @@ import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SavePngCommand} from "src/snapshots/domain/SavePng";
-
-import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
-import PngViewHelper from "pages/sidepanel/helper/PngViewHelper.vue";
-import {SavePdfCommand} from "src/snapshots/domain/SavePdf";
-import {SaveWarcCommand} from "src/snapshots/domain/SaveWarc";
 import {BlobMetadata} from "src/snapshots/models/BlobMetadata";
+import {SavePdfCommand} from "src/snapshots/commands/SavePdfCommand";
+import {SaveWarcCommand} from "src/snapshots/commands/SaveWarcCommand";
 
 const {inBexMode} = useUtils()
 
@@ -547,13 +543,13 @@ const savePng = (tab: Tab | undefined) => {
 
 const savePdf = (tab: Tab | undefined) => {
   if (tab) {
-    useCommandExecutor().execute(new SavePdfCommand(tab, "saved by user"))
+    useCommandExecutor().execute(new SavePdfCommand(tab.id, "saved by user"))
   }
 }
 
 const saveWarc = (tab: Tab | undefined) => {
   if (tab) {
-    useCommandExecutor().execute(new SaveWarcCommand(tab, "saved by user"))
+    useCommandExecutor().execute(new SaveWarcCommand(tab.id, "saved by user"))
   }
 }
 

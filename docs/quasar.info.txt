@@ -4,11 +4,11 @@ NodeJs - 18.19.1
 
 Global packages
   NPM - 10.2.4
-  yarn - 1.22.19
+  yarn - 1.22.22
   pnpm - Not installed
   bun - Not installed
   @quasar/cli - undefined
-  @quasar/icongenie - 4.0.0
+  @quasar/icongenie - Not installed
   cordova - 12.0.0 (cordova-lib@12.0.1)
 
 Important local packages
@@ -17,7 +17,7 @@ Important local packages
   @quasar/extras - 1.16.11 -- Quasar Framework fonts, icons and animations
   eslint-plugin-quasar - Not installed
   vue - 3.4.29 -- The progressive JavaScript framework for building modern web UI.
-  vue-router - 4.3.3
+  vue-router - 4.4.0
   pinia - 2.1.7 -- Intuitive, type safe and flexible Store for Vue
   vuex - Not installed
   vite - 5.3.1 -- Native-ESM powered web dev build tool

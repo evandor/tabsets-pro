@@ -172,7 +172,7 @@ class AppService {
     // const tabsetsPersistence = store.getServiceName() === 'FirestorePersistenceService' ?
     //   useDB().tabsetsFirestoreDb : useDB().tabsetsIndexedDb
     await tabsetsStore.initialize(useDB().tabsetsFirestoreDb)
-    await useTabsetService().init(useDB().tabsetsFirestoreDb, false)
+    await useTabsetService().init()
 
     await useTabsStore2().initialize()
 
