@@ -8,7 +8,6 @@ import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {MetaLink} from "src/models/MetaLink";
 import {Suggestion, SuggestionState, SuggestionType} from "src/suggestions/models/Suggestion";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
-import {FeatureIdent} from "src/models/FeatureIdent";
 import {useUtils} from "src/core/services/Utils";
 import {useGroupsStore} from "src/tabsets/stores/groupsStore";
 import NavigationService from "src/services/NavigationService";
@@ -20,6 +19,7 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {Extractor, Extractors, ExtractorType} from "src/config/Extractors";
 import {SidePanelViews} from "src/models/SidePanelViews";
+import {FeatureIdent} from "src/app/models/FeatureIdent";
 
 const {
   saveTabset,
@@ -116,7 +116,7 @@ function runOnNotificationClick(notificationId: string, buttonIndex: number) {
   }
 }
 
-class ChromeListeners {
+class BrowserListeners {
 
   inProgress = false;
 
@@ -807,5 +807,5 @@ class ChromeListeners {
   }
 }
 
-export default new ChromeListeners();
+export default new BrowserListeners();
 

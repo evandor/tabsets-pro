@@ -2,7 +2,7 @@ import _ from "lodash"
 //import {GrantPermissionCommand} from "src/domain/commands/GrantPermissionCommand";
 //import {RevokePermissionCommand} from "src/domain/commands/RevokePermissionCommand";
 import {Feature} from "src/features/models/Feature";
-import {FeatureIdent, FeatureType} from "src/models/FeatureIdent";
+import {FeatureIdent, FeatureType} from "src/app/models/FeatureIdent";
 
 export class AppFeatures {
   features: Feature[] = [
@@ -74,6 +74,13 @@ export class AppFeatures {
       'Use Tags for Tabs',
       'Tabs can be tagged with labels making it easier to be found again',
       'o_label', '', ['all']),
+
+    new Feature(FeatureIdent.RESEARCH_SESSIONS, FeatureType.OPTIONAL,
+      'Research Sessions',
+      'Add Research Capabilities to tabsets - save snapshots of pages and annotate them',
+      'o_science', '', ['all']),
+    // .setActivateCommands([new GrantPermissionCommand('pageCapture')])
+    // .setDeactivateCommands([new RevokePermissionCommand('pageCapture')]),
 
     new Feature(FeatureIdent.NOTES, FeatureType.EXPERIMENTAL,
       'Notes Feature',

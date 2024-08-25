@@ -96,7 +96,7 @@ import {DeleteTabCommand} from "src/domain/tabs/DeleteTabCommand";
 import {useRouter} from "vue-router";
 import NavigationService from "src/services/NavigationService";
 import {Tabset, TabsetType} from "src/tabsets/models/Tabset";
-import {FeatureIdent} from "src/models/FeatureIdent";
+import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
 import EditUrlDialog from "components/dialogues/EditUrlDialog.vue";
 import {PlaceholdersType} from "src/models/Placeholders";

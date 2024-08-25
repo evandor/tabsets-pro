@@ -428,7 +428,7 @@ import {DrawerTabs, ListDetailLevel, useUiStore} from "src/ui/stores/uiStore";
 import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
 import {usePermissionsStore} from "src/stores/permissionsStore";
 import {ExecutionResult} from "src/core/domain/ExecutionResult";
-import {FeatureIdent} from "src/models/FeatureIdent";
+import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useSettingsStore} from "src/stores/settingsStore"
 import OpenRightDrawerWidget from "components/widgets/OpenRightDrawerWidget.vue";
 import {useUtils} from "src/core/services/Utils";

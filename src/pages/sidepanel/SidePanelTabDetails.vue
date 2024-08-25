@@ -369,7 +369,7 @@ import {useUtils} from "src/core/services/Utils";
 import NavigationService from "src/services/NavigationService";
 import {useSearchStore} from "src/search/stores/searchStore";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
-import {FeatureIdent} from "src/models/FeatureIdent";
+import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
@@ -565,7 +565,7 @@ const updatedTags = (val: string[]) => {
 const openTabset = (chip: any) => {
   console.log("chip", chip)
   useCommandExecutor()
-      .execute(new SelectTabsetCommand(chip['tabsetId'], undefined))
+      .execute(new SelectTabsetCommand(chip['tabsetId']))
 }
 
 </script>
