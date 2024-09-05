@@ -91,7 +91,6 @@ const router = useRouter()
 const tabsetName = ref('')
 const tabsetNameRef = ref<HTMLElement>(null as unknown as HTMLInputElement)
 const windowLocation = ref('---')
-const activateNotifications = ref(false)
 const activateFullPageApp = ref(false)
 const login = ref(false)
 
@@ -100,18 +99,6 @@ onMounted(() => {
   Analytics.firePageViewEvent('WelcomePage', document.location.href);
   windowLocation.value = window.location.href
   LocalStorage.set(TITLE_IDENT, 'Tabsets' + stageIdentifier())
-})
-
-watchEffect(async () => {
-  const feature = new AppFeatures().getFeature(FeatureIdent.NOTIFICATIONS)
-  // if (activateNotifications.value && feature) {
-  //   const res = await useCommandExecutor().execute(new GrantPermissionCommand('notifications'))
-  //   if (!res.result) {
-  //     activateNotifications.value = false
-  //   }
-  // } else if (!activateNotifications.value && feature) {
-  //   useFeaturesStore().deactivateFeature('notifications')
-  // }
 })
 
 function setFeature(featureIdent: FeatureIdent, val: UnwrapRef<boolean>) {
@@ -164,7 +151,7 @@ watchEffect(() => {
 const addFirstTabset = () => {
   useCommandExecutor()
     .executeFromUi(new CreateTabsetCommand(tabsetName.value, []))
-    .then((res) => {
+    .then((res:any) => {
       useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
       router.push("/sidepanel?first=true")
     })

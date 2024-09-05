@@ -3,8 +3,8 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-import { configure } from 'quasar/wrappers'
-import { fileURLToPath } from 'node:url'
+import {configure} from 'quasar/wrappers'
+import {fileURLToPath} from 'node:url'
 
 export default configure((ctx) => {
   return {
@@ -34,9 +34,10 @@ export default configure((ctx) => {
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      'roboto-font', // optional, you are not bound to it
-      'material-icons', // optional, you are not bound to it
-      'material-icons-outlined'
+      'roboto-font',
+      'material-icons',
+      'material-icons-outlined',
+      'material-symbols-outlined'
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -104,7 +105,7 @@ export default configure((ctx) => {
     framework: {
       config: {},
 
-      // iconSet: 'material-icons', // Quasar icon set
+      iconSet: 'eva-icons',
       // lang: 'en-US', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
@@ -118,16 +119,16 @@ export default configure((ctx) => {
       plugins: [
         'LocalStorage',
         'Dialog',
-        // 'Meta',
+        'Meta',
         'Notify',
-        // 'Loading',
-        // 'LoadingBar'
+        'Loading',
+        'LoadingBar'
       ]
     },
 
     // animations: 'all', // --- includes all animations
     // https://v2.quasar.dev/options/animations
-    animations: [],
+    animations: 'all',
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
     // sourceFiles: {
@@ -228,12 +229,9 @@ export default configure((ctx) => {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
     bex: {
-      // extendBexScriptsConf (esbuildConf) {},
-      // extendBexManifestJson (json) {},
-
       contentScripts: [
-        'content-script'
+        'tabsets-content-script'
       ]
     }
   }
-})
+});

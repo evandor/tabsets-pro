@@ -202,9 +202,6 @@
                       v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE) && pngs.length > 0">
       <q-card>
         <q-card-section>
-          <div class="row q-mx-sm q-mt-xs" v-for="png in pngs">
-<!--            <PngViewHelper :pngId="png.id" :created="png.created" :tabId="tab?.id || 'unknown'"/>-->
-          </div>
         </q-card-section>
       </q-card>
     </q-expansion-item>
@@ -213,9 +210,6 @@
                       v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE) && pdfs.length > 0">
       <q-card>
         <q-card-section>
-          <div class="row q-mx-sm q-mt-xs" v-for="pdf in pdfs">
-<!--            <PngViewHelper extension='pdf' :pngId="pdf.id" :created="pdf.created" :tabId="tab?.id || 'unknown'"/>-->
-          </div>
         </q-card-section>
       </q-card>
     </q-expansion-item>
@@ -330,6 +324,7 @@
         <q-card-section>
           <div class="row q-mx-sm">
             <div class="col-12 text-caption">
+              <!-- @vue-ignore -->
               <div v-for="(k,index) in searchIndex">
                 <div class="row" v-if="searchIndex.get(index)['v']">
                   <div class="col-4 q-ml-sm text-bold">
@@ -389,12 +384,9 @@ const thumbnail = ref('')
 const content = ref('')
 const searchIndex = ref<any>()
 const metaRows = ref<object[]>([])
-const metas = ref({})
 const tab = ref<Tab | undefined>(undefined)
 const pngs = ref<BlobMetadata[]>([])
 const pdfs = ref<BlobMetadata[]>([])
-
-const {selectTabset} = useTabsetService()
 
 const tags = ref<string[]>([])
 
@@ -529,11 +521,6 @@ watchEffect(() => {
     }
   }
 })
-
-const saveTab = (tab: Tab | undefined) =>
-{
-  //useCommandExecutor().execute(new SaveTabCommand(useTabsetsStore().getCurrentTabset, tab))
-}
 
 const savePng = (tab: Tab | undefined) => {
   if (tab) {

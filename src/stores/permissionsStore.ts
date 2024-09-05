@@ -1,20 +1,12 @@
 import {defineStore} from 'pinia';
 import {computed, ref} from "vue";
-import {FeatureIdent} from "src/app/models/FeatureIdent";
 // import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 // import {StaticSuggestionIdent, Suggestion} from "src/suggestions/models/Suggestion";
 // import {CreateSpecialTabsetCommand, SpecialTabsetIdent} from "src/domain/tabsets/CreateSpecialTabset";
-import {TabsetType} from "src/tabsets/models/Tabset";
-import {useCommandExecutor} from "src/core/services/CommandExecutor";
-import {AppFeatures} from "src/app/models/AppFeatures";
-import {useUtils} from "src/core/services/Utils";
-import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import PersistenceService from "src/services/PersistenceService";
 import {LocalStorage} from "quasar";
 
 export const usePermissionsStore = defineStore('permissions', () => {
-
-  const {sendMsg} = useUtils()
 
   let storage = null as unknown as PersistenceService
 
@@ -69,44 +61,12 @@ export const usePermissionsStore = defineStore('permissions', () => {
       .then(() => Promise.resolve(granted))
   }
 
-  async function grantAllOrigins(): Promise<boolean> {
-    // @ts-ignore
-    const granted: boolean = await chrome.permissions.request({origins: ["*://*/*", "<all_urls>"]})
-    return load()
-      .then(() => Promise.resolve(granted))
-  }
-
   async function revokePermission(permission: string): Promise<void> {
     // @ts-ignore
     await chrome.permissions.remove({permissions: [permission]})
     await load()
     return Promise.resolve()
   }
-
-  async function revokeAllOrigins(): Promise<void> {
-    // @ts-ignore
-    await chrome.permissions.remove({origins: ["*://*/*", "<all_urls>"]})
-    await load()
-    return Promise.resolve()
-  }
-
-  const hasFeature = computed(() => {
-    return (feature: FeatureIdent): boolean => {
-      if (feature === FeatureIdent.SIDE_PANEL) {
-        // @ts-ignore
-        return chrome.sidePanel !== undefined
-      }
-      const appFeature = new AppFeatures().getFeature(feature)
-      if (appFeature) {
-        return activeFeatures.value.indexOf(feature.toLowerCase()) >= 0
-      }
-      return false
-    }
-  })
-
-  const featuresCount = computed(() => (): number =>
-    activeFeatures.value.length)
-
 
   function addActivateFeature(feature: string): boolean {
     if (activeFeatures.value.indexOf(feature) < 0) {

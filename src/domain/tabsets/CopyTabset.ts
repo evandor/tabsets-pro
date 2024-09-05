@@ -2,7 +2,6 @@ import Command from "src/core/domain/Command";
 import {ExecutionResult} from "src/core/domain/ExecutionResult";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {Tabset} from "src/tabsets/models/Tabset";
-import {useSpacesStore} from "src/spaces/stores/spacesStore";
 import {DeleteTabsetCommand} from "src/tabsets/commands/DeleteTabset";
 
 class UndoCopyTabsetCommand implements Command<object> {

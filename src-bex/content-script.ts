@@ -2,7 +2,6 @@
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/content-hooks
 // @ts-ignore
 import {bexContent} from 'quasar/wrappers'
-import {CURRENT_USER_EMAIL} from "boot/constants";
 
 export default bexContent((bridge: any) => {
 

@@ -31,7 +31,7 @@
               <q-tooltip v-if="filter">Apply Filter: '{{ filter }}'</q-tooltip>
               <q-tooltip v-else>Apply Filter</q-tooltip>
             </q-btn>
-            <q-popup-edit v-model="filter" v-slot="scope">
+<!--            <q-popup-edit v-model="filter" v-slot="scope">-->
 <!--              <q-input-->
 <!--                autofocus-->
 <!--                dense-->
@@ -48,7 +48,7 @@
 <!--                  />-->
 <!--                </template>-->
 <!--              </q-input>-->
-            </q-popup-edit>
+<!--            </q-popup-edit>-->
           </div>
         </div>
 
@@ -93,20 +93,12 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, watch, watchEffect} from "vue";
-import RssTabs from "src/components/RssTabs.vue"
-import {useRoute, useRouter} from "vue-router";
+import {ref, watchEffect} from "vue";
+import {useRoute} from "vue-router";
 import {useSettingsStore} from "src/stores/settingsStore";
 import {DrawerTabs, useUiStore} from "src/ui/stores/uiStore";
 import BookmarksTree from "src/bookmarks/components/BookmarksTree.vue";
-import TabDetails from "components/views/TabDetails.vue";
-import TabsetHelp from "components/TabsetHelp.vue";
-import TabsetDetails from "components/views/TabsetDetails.vue";
-import TagsListViewer from "components/views/TagsListViewer.vue";
-import TagListViewer from "components/views/TagListViewer.vue";
 import ByDomainList from "src/tabsets/components/ByDomainList.vue";
-import OpenTabsView from "components/views/OpenTabsView.vue";
-import SavedPdfs from "components/SavedPdfs.vue";
 import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
@@ -178,15 +170,6 @@ const drawerLabel = () => {
   }
 }
 
-const cancelFilter = () => {
-  console.log("cancelFilter")
-  filter.value = ''
-}
-const setFilter2 = (newVal: string) => {
-  console.log("newVal2", newVal)
-  filter.value = newVal
-}
-// const closeCurrentView = () => useUiService().closeCurrentView()
 const closeRightDrawer = () => useUiStore().rightDrawerOpen = false
 
 </script>

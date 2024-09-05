@@ -26,7 +26,6 @@ import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import ChromeListeners from "src/app/listeners/BrowserListeners";
 import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
-import IndexedDbSnapshotPersistence from "src/snapshots/persistence/IndexedDbSnapshotPersistence";
 import {useSnapshotsStore} from "src/snapshots/stores/SnapshotsStore";
 
 function dbStoreToUse() {

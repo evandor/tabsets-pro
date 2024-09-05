@@ -1,5 +1,4 @@
 import {useSearchStore} from "src/search/stores/searchStore";
-import {ContentItem} from "src/content/models/ContentItem";
 
 /**
  * meant for inter-submodule communication.

@@ -1,15 +1,9 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import {getAuth, Auth} from "firebase/auth";
-import {
-  getFirestore,
-  Firestore,
-  initializeFirestore,
-  persistentLocalCache,
-  persistentMultipleTabManager
-} from 'firebase/firestore';
-import { getStorage, FirebaseStorage } from "firebase/storage";
+import {Auth, getAuth} from "firebase/auth";
+import {Firestore, getFirestore, initializeFirestore,} from 'firebase/firestore';
+import {FirebaseStorage, getStorage} from "firebase/storage";
 
 class FirebaseServices {
 

@@ -18,15 +18,12 @@
 import {PropType} from "vue";
 import {Tab} from "src/tabsets/models/Tab";
 import {Tabset} from "src/tabsets/models/Tabset";
-import {useRouter} from "vue-router";
 
+// @ts-ignore
 const props = defineProps({
   tab: {type: Object as PropType<Tab>, required: true},
   tabset: {type: Object as PropType<Tabset>, required: false}
 })
-
-const router = useRouter()
-
 
 
 </script>

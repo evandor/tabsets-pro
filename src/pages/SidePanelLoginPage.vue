@@ -46,8 +46,6 @@
 
 import {ref} from "vue";
 import {LocalStorage} from "quasar";
-import NavigationService from "src/services/NavigationService.js";
-import {defineComponent} from "vue";
 import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, UserCredential} from "firebase/auth";
 import {CURRENT_USER_EMAIL} from "boot/constants";
 import {useAuthStore} from "stores/authStore";

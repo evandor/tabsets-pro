@@ -132,12 +132,12 @@
 
 <script lang="ts" setup>
 
-import {onMounted, onUnmounted, ref, watch, watchEffect} from "vue";
+import {onMounted, onUnmounted, ref, watchEffect} from "vue";
 import _ from "lodash"
-import {Tabset, TabsetSharing, TabsetStatus} from "src/tabsets/models/Tabset";
+import {Tabset, TabsetStatus} from "src/tabsets/models/Tabset";
 import {useRouter} from "vue-router";
 import {useUtils} from "src/core/services/Utils";
-import {LocalStorage, scroll, uid} from "quasar";
+import {LocalStorage} from "quasar";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {useUiStore} from "src/ui/stores/uiStore";
 import {usePermissionsStore} from "src/stores/permissionsStore";
@@ -165,7 +165,6 @@ const {inBexMode} = useUtils()
 const router = useRouter()
 const permissionsStore = usePermissionsStore()
 const uiStore = useUiStore()
-const randomKey = ref<string>(uid())
 
 const showSearchBox = ref(false)
 const user = ref<any>()
@@ -334,11 +333,11 @@ if (inBexMode()) {
       TabsetService.rename(message.data.tabsetId, message.data.newName, message.data.newColor)
     } else if (message.name === "progress-indicator") {
       if (message.percent) {
-        uiStore.progress = message.percent
+        // uiStore.progress = message.percent
         // uiStore.progressLabel = message.label
       }
       if (message.status === "done") {
-        uiStore.progress = undefined
+        // uiStore.progress = undefined
         // uiStore.progressLabel = undefined
       }
       sendResponse("ui store progress set to " + uiStore.progress)
@@ -409,19 +408,10 @@ const importSharedTabset = () => {
   const currentTabUrl = useTabsStore2().currentChromeTab?.url
   if (currentTabUrl) {
     console.log("Importing", currentTabUrl)
-    const urlSplit = currentTabUrl.split("/")
-    const tabsetId = urlSplit[urlSplit.length - 1]
-    // FirebaseCall.get("/share/public/" + tabsetId + "?cb=" + new Date().getTime(), false)
-    //   .then((res: any) => {
-    //     const newTabset = res as Tabset
-    //     newTabset.sharing = TabsetSharing.UNSHARED
-    //     //_.forEach(newTabset.tabs, t => t.preview = TabPreview.THUMBNAIL)
-    //     useTabsetService().saveTabset(newTabset)
-    //     useTabsetService().reloadTabset(newTabset.id)
-    //   })
   }
 }
 
+// @ts-ignore
 const drop = (evt: any, folder: Tabset) => {
   console.log("drop", evt, folder)
   const tabToDrag = useUiStore().tabBeingDragged

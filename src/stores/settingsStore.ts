@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia';
 import _ from 'lodash'
 import {computed, ref, watch} from "vue";
-import {LocalStorage, useQuasar} from "quasar";
+import {useQuasar} from "quasar";
 
 export const useSettingsStore = defineStore('settings', () => {
 

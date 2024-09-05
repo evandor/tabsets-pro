@@ -1,7 +1,7 @@
 import {Tabset, TabsetStatus, TabsetType} from "src/tabsets/models/Tabset";
 import _ from "lodash";
 import {HTMLSelection, Tab} from "src/tabsets/models/Tab";
-import {uid, useQuasar} from "quasar";
+import {uid} from "quasar";
 import throttledQueue from 'throttled-queue';
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
@@ -23,13 +23,12 @@ import {FeatureIdent} from "src/app/models/FeatureIdent";
 
 const {
   saveTabset,
-  saveText,
   saveMetaLinksFor,
   saveLinksFor,
   addToTabsetId
 } = useTabsetService()
 
-const {sanitize, sendMsg, inBexMode} = useUtils()
+const {sanitize, inBexMode} = useUtils()
 
 async function setCurrentTab() {
   const tabs = await chrome.tabs.query({active: true, lastFocusedWindow: true})
@@ -45,28 +44,6 @@ async function setCurrentTab() {
       useTabsStore2().setCurrentChromeTab(tabs2[0] as unknown as chrome.tabs.Tab)
     }
   }
-}
-
-function annotationScript(tabId: string, annotations: any[]) {
-  console.log("!!! here in annotation script", tabId, annotations)
-
-  var l: HTMLLinkElement = document.createElement('link');
-  l.setAttribute("href", chrome.runtime.getURL('www/css/ts-content-script.css'))
-  l.setAttribute("rel", "stylesheet")
-  document.head.appendChild(l)
-
-  var s = document.createElement('script');
-  //s.type = "module"
-  // s.src = chrome.runtime.getURL('www/js/rangy/rangy.js');
-  // s.setAttribute("type", 'text/javascript');
-  // //s.src = "https://cdn.jsdelivr.net/npm/rangy@1.3.1/lib/rangy-core.min.js";
-  // document.body.appendChild(s);
-
-  // var s3 = document.createElement('script');
-  // s3.dataset.id = 'tabsets-rangy-annotation-data';
-  // s3.dataset.annotations = JSON.stringify(annotations);
-  // (document.head || document.documentElement).appendChild(s3);
-
 }
 
 function inIgnoredMessages(request: any) {
@@ -323,10 +300,8 @@ class BrowserListeners {
       }
 
       // handle sessions
-      let foundSession = false
       _.forEach([...useTabsetsStore().tabsets.values()] as Tabset[], (ts: Tabset) => {
         if (ts.type === TabsetType.SESSION) {
-          foundSession = true
           this.handleUpdate(ts, chromeTab)
         }
       })
@@ -637,14 +612,6 @@ class BrowserListeners {
       this.addToTabset(request.tabsetId, new Tab(uid(), sender.tab))
     }
     sendResponse({addTabToCurrent: 'done'});
-  }
-
-  private ignoreUrl(tab: Tab, info: chrome.tabs.TabChangeInfo) {
-    return (tab.url?.startsWith("chrome")) ||
-      (tab.url?.startsWith("about")) ||
-      info.url?.startsWith("chrome") ||
-      info.url?.startsWith("about") ||
-      info.url?.startsWith("https://skysail.eu.auth0.com/")
   }
 
   private capture(request: any) {

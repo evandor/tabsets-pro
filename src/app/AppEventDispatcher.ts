@@ -1,5 +1,4 @@
 import {useSearchStore} from "src/search/stores/searchStore";
-import {ContentItem} from "src/content/models/ContentItem";
 import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {RestoreTabsetCommand} from "src/tabsets/commands/RestoreTabset";

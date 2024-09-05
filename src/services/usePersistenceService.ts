@@ -1,10 +1,6 @@
-// import IndexedDbPersistenceService from "src/services/IndexedDbPersistenceService";
-import {LocalStorage, QVueGlobals, useQuasar} from "quasar";
-// import {LocalStoragePersistenceService} from "src/services/storage/LocalStoragePersistenceService";
+import {QVueGlobals} from "quasar";
 import PersistenceService from "src/services/PersistenceService";
-// import FsPersistentService from "src/services/persistence/FirestorePersistenceService";
 import SpacesPersistence from "src/spaces/persistence/SpacesPersistence";
-// import IndexedDbSpacesStorage from "src/spaces/persistence/IndexedDbSpacesStorage"
 import TabsetsPersistence from "src/tabsets/persistence/TabsetsPersistence";
 import IndexedDbTabsetsPersistence from "src/tabsets/persistence/IndexedDbTabsetsPersistence";
 import FirestoreTabsetsPersistence from "src/tabsets/persistence/FirestoreTabsetsPersistence";

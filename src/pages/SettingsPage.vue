@@ -421,13 +421,9 @@ import TabsetService from "src/tabsets/services/TabsetService";
 import _ from "lodash";
 import {Tabset, TabsetStatus} from "src/tabsets/models/Tabset";
 import {MarkTabsetAsDefaultCommand} from "src/tabsets/commands/MarkTabsetAsDefault";
-import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
-import NavigationService from "src/services/NavigationService";
 import {DrawerTabs, ListDetailLevel, useUiStore} from "src/ui/stores/uiStore";
-import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
 import {usePermissionsStore} from "src/stores/permissionsStore";
-import {ExecutionResult} from "src/core/domain/ExecutionResult";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useSettingsStore} from "src/stores/settingsStore"
 import OpenRightDrawerWidget from "components/widgets/OpenRightDrawerWidget.vue";
@@ -436,13 +432,7 @@ import Analytics from "src/core/utils/google-analytics";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {StaticSuggestionIdent, Suggestion} from "src/suggestions/models/Suggestion";
 import {useRoute} from "vue-router";
-import {
-  SHARING_AUTHOR_IDENT,
-  SHARING_AVATAR_IDENT,
-  APP_INSTALLATION_ID,
-  STRIP_CHARS_IN_USER_INPUT,
-  TITLE_IDENT
-} from "boot/constants";
+import {STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT} from "boot/constants";
 import {Account} from "src/models/Account";
 import {AccessItem, useAuthStore} from "stores/authStore";
 import FeatureToggleSettings from "pages/helper/FeatureToggleSettings.vue";
@@ -450,9 +440,10 @@ import {useI18n} from "vue-i18n";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {useGroupsStore} from "../tabsets/stores/groupsStore";
+
 const { t } = useI18n()
 
-const {sendMsg, inBexMode} = useUtils()
+const {sendMsg} = useUtils()
 
 const searchStore = useSearchStore()
 const settingsStore = useSettingsStore()
@@ -507,8 +498,6 @@ const autoSwitcherOptions = [
   {label: '2 min.', value: 120000},
   {label: '5 min.', value: 300000}
 ]
-
-const {handleError} = useNotificationHandler()
 
 onMounted(() => {
   Analytics.firePageViewEvent('SettingsPage', document.location.href);

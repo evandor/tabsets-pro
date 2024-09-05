@@ -189,13 +189,12 @@
 </template>
 <script setup lang="ts">
 import {useUiStore} from "src/ui/stores/uiStore";
-import {Tab} from "src/tabsets/models/Tab";
 import {onMounted, ref, watch, watchEffect} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import NavigationService from "src/services/NavigationService";
 import {openURL, uid, useQuasar} from "quasar";
-import {useUtils} from "src/core/services/Utils";
+import {useUtils} from "src/core/services/Utils"
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import _ from "lodash";
@@ -207,7 +206,6 @@ import {useAuthStore} from "stores/authStore";
 import {Account} from "src/models/Account";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import SidePanelLoginWidget from "components/helper/SidePanelLoginWidget.vue";
-import SidePanelStatsMarkupTable from "components/helper/SidePanelStatsMarkupTable.vue"
 import {Window} from "src/windows/models/Window"
 import WindowsMarkupTable from "src/windows/components/WindowsMarkupTable.vue";
 import {WindowAction, WindowHolder} from "src/windows/models/WindowHolder";
@@ -219,7 +217,7 @@ import {ToastType} from "src/core/models/Toast";
 import {SidePanelViews} from "src/models/SidePanelViews";
 import {TabAndTabsetId} from "src/tabsets/models/TabAndTabsetId";
 
-const {handleSuccess, handleError} = useNotificationHandler()
+const {handleError} = useNotificationHandler()
 
 const {inBexMode} = useUtils()
 
@@ -231,7 +229,6 @@ const authStore = useAuthStore()
 
 const currentChromeTabs = ref<chrome.tabs.Tab[]>([])
 const currentTabs = ref<TabAndTabsetId[]>([])
-const currentChromeTab = ref<chrome.tabs.Tab>(null as unknown as chrome.tabs.Tab)
 const showSuggestionButton = ref(false)
 const showSuggestionIcon = ref(false)
 const doShowSuggestionButton = ref(false)
@@ -302,14 +299,7 @@ watchEffect(() => {
   if (!inBexMode()) {
     return
   }
-  const windowId = useWindowsStore().currentChromeWindow?.id || 0
-  //currentChromeTab.value = useTabsStore2().getCurrentChromeTab(windowId) || useTabsStore().currentChromeTab
 })
-
-// watchEffect(() => {
-//   progress.value = (uiStore.progress || 0.0) / 100.0
-//   progressLabel.value = uiStore.progressLabel + " " + Math.round(100 * progress.value) + "%"
-// })
 
 watchEffect(() => {
   const uiProgrss = useUiStore().progress

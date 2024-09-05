@@ -6,7 +6,6 @@
 
 import {setCssVar, useQuasar} from "quasar";
 import AppService from "src/services/AppService";
-import {EventEmitter} from "events";
 import {onAuthStateChanged} from "firebase/auth";
 import {useRouter} from "vue-router";
 import FirebaseServices from "src/services/firebase/FirebaseServices";
@@ -21,7 +20,7 @@ const {inBexMode} = useUtils()
 const {handleError} = useNotificationHandler()
 
 // https://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
-const emitter = new EventEmitter()
+// const emitter = new EventEmitter()
 // emitter.setMaxListeners(12)
 
 FirebaseServices.init()
@@ -35,6 +34,7 @@ onAuthStateChanged(auth, async (user) => {
     try {
       await AppService.init($q, router, true, user)
       if (inBexMode()) {
+        // @ts-ignore
         $q.bex.send('auth.user.login', {userId: user.uid})
       }
       //FirebaseServices.startRealtimeDbListeners(user.uid)

@@ -58,20 +58,17 @@
 import NavigationService from "src/services/NavigationService";
 import {ref} from "vue";
 import {LocalStorage} from "quasar";
-import {CURRENT_USER_EMAIL, EMAIL_LINK_REDIRECT_DOMAIN} from "boot/constants";
+import {CURRENT_USER_EMAIL} from "boot/constants";
 import {
   createUserWithEmailAndPassword,
   getAuth,
-  sendSignInLinkToEmail,
   signInWithEmailAndPassword,
   UserCredential
 } from "firebase/auth";
 import {useAuthStore} from "stores/authStore";
 import {NotificationType, useNotificationHandler} from "src/core/services/ErrorHandler";
-import {useUtils} from "src/core/services/Utils";
 
 const {handleError} = useNotificationHandler()
-const {sendMsg} = useUtils()
 
 const emits = defineEmits(['hideLogin'])
 
@@ -79,14 +76,6 @@ const email = ref(LocalStorage.getItem(CURRENT_USER_EMAIL) as string)
 const password = ref('')
 const loading = ref<boolean>(false)
 const mailSent = ref<boolean>(false)
-
-const actionCodeSettings = {
-  // URL must be in the authorized domains list in the Firebase Console.
-  //url: 'http://localhost:9000',
-  url: EMAIL_LINK_REDIRECT_DOMAIN,
-  handleCodeInApp: true,
-};
-
 
 const signin = async (newUser: boolean) => {
   loading.value = true

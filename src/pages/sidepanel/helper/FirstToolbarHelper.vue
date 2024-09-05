@@ -99,7 +99,6 @@
 
 <script lang="ts" setup>
 
-import {usePermissionsStore} from "stores/permissionsStore";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useSpacesStore} from "src/spaces/stores/spacesStore";
 import {useRouter} from "vue-router";
@@ -109,13 +108,9 @@ import NewTabsetDialog from "src/tabsets/dialogues/NewTabsetDialog.vue";
 import SidePanelToolbarButton from "components/buttons/SidePanelToolbarButton.vue";
 import {useQuasar} from "quasar";
 import {useAuthStore} from "stores/authStore";
-import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
-import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {SidePanelViews} from "src/models/SidePanelViews";
-
-const {t} = useI18n({useScope: 'global'})
 
 const props = defineProps({
   title: {type: String, default: "My Tabsets"},
@@ -127,10 +122,8 @@ const props = defineProps({
 
 const $q = useQuasar()
 const router = useRouter()
-const permissionsStore = usePermissionsStore()
 
 const searching = ref(false)
-const existingSession = ref(false)
 const showFilter = ref(false)
 const windowLocation = ref('')
 const annimateNewTabsetButton = ref(false)
@@ -185,29 +178,7 @@ if ($q.platform.is.chrome && $q.platform.is.bex && chrome.commands) {
 //   }
 // }
 
-const webClipActive = () => useTabsStore2().currentChromeTab
-
 const showSearchIcon = () => useTabsetsStore().tabsets.size > 1
-
-const showToggleSessionIcon = () =>
-  useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
-  useFeaturesStore().hasFeature(FeatureIdent.SESSIONS) &&
-  !searching.value
-
-const showCreateClipButton = () =>
-  useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
-  useFeaturesStore().hasFeature(FeatureIdent.WEBSITE_CLIP) && webClipActive() &&
-  !searching.value
-
-const showCreateClipButtonInActive = () =>
-  useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
-  useFeaturesStore().hasFeature(FeatureIdent.WEBSITE_CLIP) && !webClipActive() &&
-  !searching.value
-
-const newTabsetTooltip = () =>
-  useFeaturesStore().hasFeature(FeatureIdent.SPACES) ?
-    (useSpacesStore().space ? 'Add new Tabset in this space' : 'Add new unassigned Tabset') :
-    t('add_new_tabset')
 
 const openNewTabsetDialog = () => {
   $q.dialog({

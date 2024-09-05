@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 
-import {UserLevel, useUiStore} from "src/ui/stores/uiStore";
+import {useUiStore} from "src/ui/stores/uiStore";
 
 const uiStore = useUiStore()
 

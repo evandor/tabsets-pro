@@ -25,9 +25,6 @@
     "<all_urls>",
     "*://*/*"
   ],
-  "side_panel": {
-    "default_path": "www/sidepanel.html"
-  },
   "background": {
     "service_worker": "background.js"
   },

@@ -1,9 +1,10 @@
 <template>
   <div class="col-12 text-caption">
+    <!-- @vue-ignore -->
     <div v-for="(k,index) in searchIndex">
-      <div class="row" v-if="searchIndex.get(index)['v']">
+      <div class="row" v-if="searchIndex.get(index)['v']" >
         <div class="col-4 q-ml-sm text-bold">
-          {{ searchIndex.get(index)['name'] }}
+          {{ searchIndex.get(index)['name'] }} <!-- {{k}} -->
         </div>
         <div class="col-7 ellipsis">
           {{ searchIndex.get(index)['v'] }}

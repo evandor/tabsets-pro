@@ -28,12 +28,10 @@
 <script lang="ts" setup>
 
 import {Tabset} from "src/tabsets/models/Tabset";
-import {useQuasar} from "quasar";
 import ContextMenuItem from "pages/sidepanel/helper/ContextMenuItem.vue";
 import {PropType} from "vue";
 
-const $q = useQuasar()
-
+// @ts-ignore
 const props = defineProps({
   tabset: {type: Object as PropType<Tabset>, required: true},
   folder: {type: Object as PropType<Tabset>, required: true}

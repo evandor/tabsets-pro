@@ -14,7 +14,7 @@
 
       <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSET_SUBFOLDER)">
 
-        <q-separator inset />
+        <q-separator inset/>
 
         <ContextMenuItem v-close-popup
                          @was-clicked="createSubfolder(tabset)"
@@ -103,12 +103,13 @@
 
       <q-separator inset/>
 
-      <ContextMenuItem v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING) && (tabset.sharing === TabsetSharing.UNSHARED || !tabset.sharing)"
-                       v-close-popup
-                       @was-clicked="shareTabsetPubliclyDialog(tabset)"
-                       icon="ios_share"
-                       color="warning"
-                       label="Share as link..."/>
+      <ContextMenuItem
+        v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING) && (tabset.sharing === TabsetSharing.UNSHARED || !tabset.sharing)"
+        v-close-popup
+        @was-clicked="shareTabsetPubliclyDialog(tabset)"
+        icon="ios_share"
+        color="warning"
+        label="Share as link..."/>
 
       <ContextMenuItem v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
                        v-close-popup
@@ -129,16 +130,16 @@
         <q-tooltip class="tooltip-small">Delete Shared Link</q-tooltip>
       </ContextMenuItem>
 
-      <q-separator inset v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING)" />
+      <q-separator inset v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING)"/>
 
-<!--      <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">-->
-<!--        <ContextMenuItem v-close-popup-->
-<!--                         @was-clicked="useSearchStore().reindexTabset(tabset.id)"-->
-<!--                         icon="o_note"-->
-<!--                         label="Re-Index Search (dev)"/>-->
+      <!--      <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">-->
+      <!--        <ContextMenuItem v-close-popup-->
+      <!--                         @was-clicked="useSearchStore().reindexTabset(tabset.id)"-->
+      <!--                         icon="o_note"-->
+      <!--                         label="Re-Index Search (dev)"/>-->
 
-<!--        <q-separator inset/>-->
-<!--      </template>-->
+      <!--        <q-separator inset/>-->
+      <!--      </template>-->
 
       <ContextMenuItem v-close-popup
                        @was-clicked="deleteTabsetDialog(tabset as Tabset)"
@@ -158,13 +159,11 @@
 
 <script lang="ts" setup>
 
-import {usePermissionsStore} from "stores/permissionsStore";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {Tabset, TabsetSharing, TabsetStatus} from "src/tabsets/models/Tabset";
-import {useSearchStore} from "src/search/stores/searchStore";
 import NavigationService from "src/services/NavigationService";
 import EditTabsetDialog from "src/tabsets/dialogues/EditTabsetDialog.vue";
-import {LocalStorage, openURL, useQuasar} from "quasar";
+import {LocalStorage, useQuasar} from "quasar";
 import {useUtils} from "src/core/services/Utils";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {RestoreTabsetCommand} from "src/tabsets/commands/RestoreTabset";
@@ -174,31 +173,25 @@ import DeleteTabsetDialog from "src/tabsets/dialogues/DeleteTabsetDialog.vue";
 import ContextMenuItem from "pages/sidepanel/helper/ContextMenuItem.vue";
 import {PropType} from "vue";
 import {UnShareTabsetCommand} from "src/tabsets/commands/UnShareTabsetCommand"
-import {useTabsetService} from "src/tabsets/services/TabsetService2";
-import {Tab} from "src/tabsets/models/Tab";
 import ShareTabsetPubliclyDialog from "src/tabsets/dialogues/ShareTabsetPubliclyDialog.vue";
 import {MarkTabsetAsArchivedCommand} from "src/tabsets/commands/MarkTabsetAsArchived";
 import {useRouter} from "vue-router";
-import {MarkTabsetDeletedCommand} from "src/tabsets/commands/MarkTabsetDeleted";
 import {useUiStore} from "src/ui/stores/uiStore";
 import {NotificationType} from "src/core/services/ErrorHandler";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {CopyToClipboardCommand} from "src/core/domain/commands/CopyToClipboard";
-import {SidePanelViews} from "src/models/SidePanelViews";
 
 const {inBexMode} = useUtils()
 
 const $q = useQuasar()
 const router = useRouter()
 
+// @ts-ignore
 const props = defineProps({
   tabset: {type: Object as PropType<Tabset>, required: true}
 })
 
 const emits = defineEmits(['editHeaderDescription'])
-
-const publictabsetsPath = "https://public.tabsets.net/tabsets/"
 
 const startTabsetNote = (tabset: Tabset) => {
   const url = chrome && chrome.runtime && chrome.runtime.getURL ?
@@ -277,50 +270,10 @@ const unpin = (tabset: Tabset) =>
 
 const removePublicShare = (tabsetId: string, sharedId: string) => useCommandExecutor().executeFromUi(new UnShareTabsetCommand(tabsetId, sharedId))
 
-const openPublicShare = (tabsetId: string) => {
-  const ts = useTabsetsStore().getTabset(tabsetId)
-  if (ts && ts.sharedId) {
-    openURL(getPublicTabsetLink(ts))
-  }
-}
-
-const copyPublicShareToClipboard = (tabsetId: string) => {
-  const ts = useTabsetsStore().getTabset(tabsetId)
-  if (ts && ts.sharedId) {
-    useCommandExecutor().executeFromUi(new CopyToClipboardCommand(getPublicTabsetLink(ts)))
-  }
-}
-
-const getPublicTabsetLink = (ts: Tabset) => {
-  let image = "https://tabsets.web.app/favicon.ico"
-  if (ts && ts.sharedId) {
-    ts.tabs.reverse().forEach((t: Tab) => {
-      if (t.image) {
-        image = t.image
-      }
-    })
-    return publictabsetsPath + ts.sharedId + "?n=" + btoa(ts.name) + "&i=" + btoa(image)
-  }
-  return image
-}
-
 const archiveTabset = (tabset: Tabset) =>
   useCommandExecutor().executeFromUi(new MarkTabsetAsArchivedCommand(tabset.id), NotificationType.NOTIFY)
 
-const changeWindow = (tabset: Tabset, window: string) => {
-  tabset.window = window
-  useTabsetService().saveTabset(tabset)
-}
-
 const deleteTabsetDialog = (tabset: Tabset) => {
-  // $q.dialog({
-  //   title: 'Delete Tabset',
-  //   message: "Would you like to delete the tabset '"+tabset.name +"'?",
-  //   cancel: true
-  // }).onOk(() => {
-  //   deleteTabset(tabset)
-  // })
-
   $q.dialog({
     component: DeleteTabsetDialog,
     componentProps: {
@@ -329,15 +282,6 @@ const deleteTabsetDialog = (tabset: Tabset) => {
     }
   })
 }
-
-const deleteTabset = (tabset: Tabset) => useCommandExecutor().executeFromUi(new MarkTabsetDeletedCommand(tabset.id))
-  .then((res: any) => {
-    //if (props.sidePanelMode) {
-    useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
-    //}
-    return res
-  })
-
 
 const shareTabsetPubliclyDialog = (tabset: Tabset, republish: boolean = false) => {
   $q.dialog({

@@ -7,9 +7,7 @@ import {usePermissionsStore} from "src/stores/permissionsStore";
 import {Tab} from "src/tabsets/models/Tab";
 import {uid} from "quasar";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
-import {RequestInfo} from "src/models/RequestInfo";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
-import {MonitoringType} from "src/models/Monitor";
 import {Router} from "vue-router";
 
 //import "rangy/lib/rangy-serializer";
@@ -62,13 +60,13 @@ function runContentHousekeeping(fnc: (url:string) => boolean) {
 
 async function checkMonitors(router: Router) {
   const monitoredContentHash: string[] = []
-  for (const ts of useTabsetsStore().tabsets.values()) {
-    for (const tab of ts.tabs) {
-      if (tab.monitor && tab.monitor.type === MonitoringType.CONTENT_HASH && tab.url) {
-        monitoredContentHash.push(tab.url)
-      }
-    }
-  }
+  // for (const ts of useTabsetsStore().tabsets.values()) {
+  //   for (const tab of ts.tabs) {
+  //     if (tab.monitor && tab.monitor.type === MonitoringType.CONTENT_HASH && tab.url) {
+  //       monitoredContentHash.push(tab.url)
+  //     }
+  //   }
+  // }
 
   if (monitoredContentHash.length > 0) {
     //console.log("%croute", "color:orange", router, router.currentRoute.value.path)
@@ -514,18 +512,6 @@ class BrowserApi {
     }
   }
 
-  private chromeTabsCreateAsync(createProperties: object): Promise<chrome.tabs.Tab> {
-    return new Promise((resolve, reject) => {
-      chrome.tabs.create(createProperties, tab => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError)
-        } else {
-          resolve(tab);
-        }
-      });
-    });
-  }
-
   executeClippingJS(tabId: number) {
     // @ts-ignore
     chrome.scripting.insertCSS({
@@ -593,6 +579,62 @@ class BrowserApi {
         }
       }
     });
+  }
+
+  tabsetIndication = (color: string, tooltip: string) => {
+    const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+    const iconTitle = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'title'
+    )
+    iconTitle.textContent = tooltip
+
+    const iconPath = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    );
+
+    iconSvg.setAttribute('fill', 'none');
+    iconSvg.setAttribute('viewBox', '0 0 24 24');
+    iconSvg.setAttribute('stroke', color);
+    iconSvg.setAttribute('width', '20');
+    iconSvg.setAttribute('height', '20');
+    iconSvg.setAttribute('style', 'position:fixed;top:3;right:3;z-index:10000');
+    iconSvg.classList.add('post-icon');
+
+    iconPath.setAttribute(
+      'd',
+      'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1'
+    );
+    iconPath.setAttribute('stroke-linecap', 'round');
+    iconPath.setAttribute('stroke-linejoin', 'round');
+    iconPath.setAttribute('stroke-width', '2');
+
+    iconSvg.appendChild(iconTitle)
+    iconSvg.appendChild(iconPath);
+    document.body.appendChild(iconSvg)
+  }
+
+  addIndicatorIcon(tabId: number, tabUrl: string | undefined, color: string = 'orange', tooltip: string = 'managed by tabsets') {
+    if (tabUrl && chrome && chrome.scripting) {
+      const tabsetIds = useTabsetService().tabsetsFor(tabUrl)
+      if (tabsetIds.length > 0 && tabId) {
+        const currentTabsetId =  useTabsetsStore().currentTabsetId
+        if (currentTabsetId && tabsetIds.indexOf(currentTabsetId) >= 0) {
+          color = "green"
+        }
+        chrome.scripting
+          .executeScript({
+            target: {tabId: tabId},
+            func: this.tabsetIndication,
+            args: [color, tooltip]
+          })
+          // .then(() => console.log("injected script file"))
+          .catch((res) => console.log("err", res))
+      }
+    }
+
   }
 }
 

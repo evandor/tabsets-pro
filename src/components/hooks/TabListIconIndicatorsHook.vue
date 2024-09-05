@@ -7,16 +7,9 @@
 
 <script lang="ts" setup>
 
-import {ref, watchEffect} from "vue";
-
+// @ts-ignore
 const props = defineProps({
   tabId: {type: String, required: true}
-})
-
-// const showResearchIndicator = ref(false)
-
-watchEffect(async () => {
-  //showResearchIndicator.value = (await useSnapshotsStore().metadataFor(props.tabId)).length > 0
 })
 
 </script>
