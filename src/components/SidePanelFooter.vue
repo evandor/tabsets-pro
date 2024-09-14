@@ -14,9 +14,9 @@
       <!-- https://michaelnthiessen.com/force-re-render -->
 
       <WindowsMarkupTable
-        :rows="useWindowsStore().getWindowsForMarkupTable(additionalActions)"
+        :rows="useWindowsStore().getWindowsForMarkupTable(getAdditionalActions)"
         @was-clicked="e => additionalActionWasClicked(e)"
-        @recalculate-windows="windowRows = calcWindowRows()"
+        @recalculate-windows="windowHolderRows = calcWindowHolderRows()"
         :key="randomKey"
       />
 
@@ -26,7 +26,7 @@
 <!--      <SidePanelStatsMarkupTable :key="randomKey"/>-->
     </div>
 
-    <div class="row fit">
+    <div class="row fit q-ma-none q-pa-none">
       <div class="col-6">
 
         <Transition name="fade" appear>
@@ -91,12 +91,12 @@
         </q-btn>
 
         <q-btn v-if="useFeaturesStore().hasFeature(FeatureIdent.WINDOWS_MANAGEMENT)"
-          icon="o_grid_view"
-          data-testid="buttonManageWindows"
-          :class="rightButtonClass()"
-          flat
-          :size="getButtonSize()"
-          @click="toggleShowWindowTable()">
+               icon="o_grid_view"
+               data-testid="buttonManageWindows"
+               :class="rightButtonClass()"
+               flat
+               :size="getButtonSize()"
+               @click="toggleShowWindowTable()">
           <q-tooltip class="tooltip_small" anchor="top left" self="bottom left">Manage Windows</q-tooltip>
         </q-btn>
 
@@ -216,6 +216,7 @@ import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {ToastType} from "src/core/models/Toast";
 import {SidePanelViews} from "src/models/SidePanelViews";
 import {TabAndTabsetId} from "src/tabsets/models/TabAndTabsetId";
+import {useTabsStore2} from "src/tabsets/stores/tabsStore2.ts";
 
 const {handleError} = useNotificationHandler()
 
@@ -229,6 +230,7 @@ const authStore = useAuthStore()
 
 const currentChromeTabs = ref<chrome.tabs.Tab[]>([])
 const currentTabs = ref<TabAndTabsetId[]>([])
+const currentChromeTab = ref<chrome.tabs.Tab | undefined>(undefined)
 const showSuggestionButton = ref(false)
 const showSuggestionIcon = ref(false)
 const doShowSuggestionButton = ref(false)
@@ -241,12 +243,12 @@ const randomKey = ref<string>(uid())
 const progressValue = ref<number>(0.0)
 const progressLabel = ref<string>('')
 const animateSettingsButton = ref<boolean>(false)
-const windowRows = ref<WindowHolder[]>([])
+const windowHolderRows = ref<WindowHolder[]>([])
 const windowsToOpenOptions = ref<object[]>([])
 const tabsetsMangedWindows = ref<object[]>([])
 
 onMounted(() => {
-  windowRows.value = calcWindowRows()
+  windowHolderRows.value = calcWindowHolderRows()
 })
 
 watchEffect(() => {
@@ -299,18 +301,20 @@ watchEffect(() => {
   if (!inBexMode()) {
     return
   }
+  const windowId = useWindowsStore().currentChromeWindow?.id || 0
+  currentChromeTab.value = useTabsStore2().getCurrentChromeTab(windowId) //|| useTabsStore2().currentChromeTab
 })
 
 watchEffect(() => {
-  const uiProgrss = useUiStore().progress
-  if (uiProgrss) {
-    progressValue.value = uiProgrss['val' as keyof object] || 0.0
-    progressLabel.value = uiProgrss['label' as keyof object] || 'no msg'
+  const uiProgress = useUiStore().progress
+  if (uiProgress) {
+    progressValue.value = uiProgress['val' as keyof object] as number || 0.0
+    progressLabel.value = uiProgress['label' as keyof object] || ''
     //console.log("we are here", progressValue.value)
   }
 })
 
-const additionalActions = (windowName: string) => {
+const getAdditionalActions = (windowName: string) => {
   const additionalActions: WindowAction[] = []
   if (!windowIsManaged(windowName)) {
     additionalActions.push(new WindowAction("o_bookmark_add", "saveTabset", "text-orange", "Save as Tabset"))
@@ -322,38 +326,35 @@ const additionalActions = (windowName: string) => {
 
 
 const updateWindows = () => {
-  useWindowsStore().setup('got window-updated message', true)
-    .then(() => windowRows.value = calcWindowRows())
+  useWindowsStore().setup('window-updated', true)
+    .then(() => windowHolderRows.value = calcWindowHolderRows())
 }
 
 
 watch(() => useWindowsStore().currentChromeWindows, (newWindows, oldWindows) => {
-  //console.log("windows changed", newWindows, oldWindows)
-  windowRows.value = calcWindowRows()
+  windowHolderRows.value = calcWindowHolderRows()
 })
 
-//console.log("====>: chrome.runtime.onMessage.hasListeners(windowsUpdatedListener)", chrome.runtime.onMessage.hasListener(windowsUpdatedListener))
-//chrome.runtime.onMessage.addListener(windowsUpdatedListener)
 if (inBexMode()) {
   chrome.windows.onCreated.addListener((w: chrome.windows.Window) => updateWindows())
   chrome.windows.onRemoved.addListener((wId: number) => updateWindows())
 
 
   chrome.tabs.onRemoved.addListener((tabId: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
-    //console.log("***here we are", tabId, removeInfo)
-    useWindowsStore().setup('got window-updated message')
-      .then(() => windowRows.value = calcWindowRows())
+    useWindowsStore().setup('on removed in SidePanelFooter')
+      .then(() => windowHolderRows.value = calcWindowHolderRows())
       .catch((err) => handleError(err))
   })
 
 
   chrome.tabs.onUpdated.addListener((tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => {
-    useWindowsStore().setup('got window-updated message')
-      .then(() => windowRows.value = calcWindowRows())
-      .catch((err) => {
-        console.log("could not yet calcWindowRows: " + err)
-        //handleError(err)
-      })
+    if (changeInfo.status === "complete") {
+      useWindowsStore().setup('on updated in SidePanelFooter')
+        .then(() => windowHolderRows.value = calcWindowHolderRows())
+        .catch((err) => {
+          console.log("could not yet calcWindowRows: " + err)
+        })
+    }
   })
 }
 
@@ -364,7 +365,7 @@ watchEffect(() => {
   for (const ts of [...useTabsetsStore().tabsets.values()] as Tabset[]) {
     if (ts.window && ts.window !== "current" && ts.window.trim() !== '') {
       tabsetsMangedWindows.value.push({label: ts.window, value: ts.id})
-      const found = _.find(windowRows.value, (r: object) => ts.window === r['name' as keyof object])
+      const found = _.find(windowHolderRows.value, (r: object) => ts.window === r['name' as keyof object])
       if (!found) {
         windowsToOpenOptions.value.push({label: ts.window, value: ts.id})
       }
@@ -373,17 +374,13 @@ watchEffect(() => {
   windowsToOpenOptions.value = _.sortBy(windowsToOpenOptions.value, ["label"])
 })
 
-//const openOptionsPage = () => window.open(chrome.runtime.getURL('www/index.html#/mainpanel/settings'));
-//const openOptionsPage = () => window.open('#/mainpanel/settings');
 const openOptionsPage = () => {
   ($q.platform.is.cordova || $q.platform.is.capacitor || !$q.platform.is.bex) ?
-    //Browser.open({ url: 'http://capacitorjs.com/' }).catch((err) => console.log("error", err)) :
     router.push("/settings") :
     NavigationService.openOrCreateTab([chrome.runtime.getURL('www/index.html#/mainpanel/settings')], undefined, [], true, true)
 }
 
 const openExtensionTab = () =>
-  //NavigationService.openOrCreateTab([chrome.runtime.getURL('www/index.html#/fullpage')])
   openURL(chrome.runtime.getURL('www/index.html#/fullpage'))
 
 const settingsTooltip = () => {
@@ -495,7 +492,7 @@ const logout = () => {
     })
 }
 
-const calcWindowRows = (): WindowHolder[] => {
+const calcWindowHolderRows = (): WindowHolder[] => {
   const result = _.map(useWindowsStore().currentChromeWindows as chrome.windows.Window[], (cw: chrome.windows.Window) => {
     const windowFromStore: Window | undefined = useWindowsStore().windowForId(cw.id || -2)
     const windowName = useWindowsStore().windowNameFor(cw.id || 0) || cw.id!.toString()
@@ -506,23 +503,19 @@ const calcWindowRows = (): WindowHolder[] => {
       additionalActions.push(new WindowAction("o_bookmark_add", undefined, "text-grey", "already a tabset", true))
     }
 
-    return WindowHolder.of(
-      cw,
-      windowFromStore?.index || 0,
-      windowName,
-      windowFromStore?.hostList || [],
-      additionalActions)
-
-    // return {
-    //   windowHeight: cw['height' as keyof object],
-    //   windowWidth: cw['width' as keyof object],
-    //   hostList: windowFromStore?.hostList,
+    if (windowFromStore) {
+      windowFromStore.title = windowName
+      return WindowHolder.of(windowFromStore, cw, cw.id || -6, additionalActions)
+    } else {
+      return WindowHolder.of(null as unknown as Window, cw, cw.id || -7, additionalActions)
+    }
   })
 
   return _.sortBy(result, "index")
 }
 
 const windowIsManaged = (windowName: string) => {
+  //console.log("managed?", tabsetsMangedWindows.value, windowName)
   return _.find(tabsetsMangedWindows.value, (tmw:any) => tmw['label' as keyof object] === windowName) !== undefined
 }
 
