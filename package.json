@@ -26,6 +26,8 @@
     "@mozilla/readability": "^0.5.0",
     "@quasar/extras": "^1.16.4",
     "@sentry/browser": "^8.30.0",
+    "@sentry/cli": "^2.36.1",
+    "@sentry/vite-plugin": "^2.22.4",
     "@types/lodash": "^4.17.4",
     "@types/sanitize-html": "^2.11.0",
     "axios": "^1.2.1",
@@ -71,6 +73,7 @@
     "eslint-plugin-vue": "^9.0.0",
     "typescript": "~5.3.0",
     "vite-plugin-checker": "^0.6.4",
+    "vite-plugin-sentry": "^1.4.0",
     "vue-tsc": "^1.8.22"
   },
   "engines": {

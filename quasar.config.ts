@@ -5,8 +5,13 @@
 
 import {configure} from 'quasar/wrappers'
 import {fileURLToPath} from 'node:url'
+import 'dotenv/config';
+// import "@sentry/vite-plugin";
 
 export default configure((ctx) => {
+
+ // require('dotenv').config()
+
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -15,6 +20,7 @@ export default configure((ctx) => {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
+      'errorhandling',
       'i18n',
       //'axios'
     ],
@@ -42,6 +48,10 @@ export default configure((ctx) => {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+
+      // https://github.com/quasarframework/quasar/issues/14589
+      sourcemap: true,
+
       target: {
         browser: ['es2022', 'firefox115', 'chrome115', 'safari14'],
         node: 'node20'
@@ -56,7 +66,15 @@ export default configure((ctx) => {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        BUILD_TIMESTAMP: new Date().toISOString().split('T')[0],
+        // BACKEND_URL: process.env.BACKEND_URL,
+        //
+        // TABSETS_PWA_URL: process.env.TABSETS_PWA_URL,
+        TABSETS_STAGE: process.env.STAGE,
+        // LOCALE: process.env.LOCALE,
+        // SENTRY_DSN: process.env.SENTRY_DSN
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -91,7 +109,12 @@ export default configure((ctx) => {
           // eslint: {
           //   lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"'
           // }
-        }, { server: false }]
+        }, { server: false }],
+        // ['vite-plugin-sentry',{
+        //   authToken: process.env.SENTRY_AUTH_TOKEN,
+        //   org: "skysail-dk",
+        //   project: "tabsets"
+        // }]
       ]
     },
 
