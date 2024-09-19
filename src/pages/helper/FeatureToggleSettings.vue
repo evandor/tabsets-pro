@@ -70,7 +70,7 @@ const updateSettings = (ident: string, val: boolean) => {
 }
 
 const triggerErrorHandler = () =>
-  handleError("an user-initated error message from tabsets")
+  handleError("an user-initated error message from tabsets-pro at " + new Date().getTime())
 
 
 </script>

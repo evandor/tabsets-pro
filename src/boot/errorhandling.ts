@@ -1,4 +1,4 @@
-import { boot } from 'quasar/wrappers'
+import {boot} from 'quasar/wrappers'
 import {BrowserClient, defaultStackParser, getDefaultIntegrations, makeFetchTransport, Scope} from "@sentry/browser";
 
 
@@ -16,6 +16,7 @@ export default boot(async ({app}) => {
   const client = new BrowserClient({
     dsn: process.env.SENTRY_DSN,
     environment: process.env.TABSETS_STAGE,
+    release: "tabsets-pro@" + import.meta.env.PACKAGE_VERSION,
     transport: makeFetchTransport,
     stackParser: defaultStackParser,
     integrations: integrations,
