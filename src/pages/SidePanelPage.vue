@@ -327,8 +327,6 @@ if (inBexMode()) {
       useTabsetService().reloadTabset(message.data.tabsetId)
     } else if (message.name === "tabset-added") {
       useTabsetService().reloadTabset(message.data.tabsetId)
-    } else if (message.name === "mark-tabset-deleted") {
-      TabsetService.markAsDeleted(message.data.tabsetId)
     } else if (message.name === "tabset-renamed") {
       TabsetService.rename(message.data.tabsetId, message.data.newName, message.data.newColor)
     } else if (message.name === "progress-indicator") {
