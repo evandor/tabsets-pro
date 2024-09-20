@@ -8,6 +8,7 @@ import {collection, doc, getDoc, getDocs} from "firebase/firestore";
 import FirebaseServices from "src/services/firebase/FirebaseServices";
 import PersistenceService from "src/services/PersistenceService";
 import {useSettingsStore} from "stores/settingsStore";
+import {sha256} from 'js-sha256';
 
 export enum AccessItem {
   TABSETS = "TABSETS",
@@ -27,6 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
   const account = ref<Account | undefined>(undefined)
 
   const products = ref<string[]>([])
+  const avatar = ref('https://www.gravatar.com/avatar/unknown')
 
 
   // --- init ---
@@ -109,6 +111,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   })
 
+  async function getCustomClaimRoles(): Promise<string[]> {
+    await FirebaseServices.getAuth().currentUser!.getIdToken(true);
+    const decodedToken = await FirebaseServices.getAuth().currentUser!.getIdTokenResult();
+    //console.log("decodedToken", decodedToken)
+    return decodedToken.claims.stripeRole as string[] || []
+  }
+
   const userMayAccess = computed(() => {
     return (item: AccessItem): boolean => {
       //console.log("checking access item", item)
@@ -133,13 +142,16 @@ export const useAuthStore = defineStore('auth', () => {
 
   // --- actions ---
   async function setUser(u: User | undefined) {
-    console.log("setting user id to ", u?.uid)
     if (u) {
+      console.log("setting user id to", u.uid, await getCustomClaimRoles())
       LocalStorage.set(CURRENT_USER_ID, u.uid)
       authenticated.value = true;
-      user.value = u;
-
-      const userDoc = await getDoc(doc(FirebaseServices.getFirestore(), "users", u.uid))
+      user.value = JSON.parse(JSON.stringify(u))
+      roles.value = await getCustomClaimRoles()
+      console.log("user has roles: ", roles.value)
+      const fs = FirebaseServices.getFirestore()
+      const d = doc(fs, "users", u.uid)
+      const userDoc = await getDoc(d)
       const userData = userDoc.data() as UserData
       const account = new Account(u.uid, userData)
       console.debug("created account object", account)
@@ -155,10 +167,16 @@ export const useAuthStore = defineStore('auth', () => {
       })
       upsertAccount(account)
 
+      if (user.value.email) {
+        const hashedEmail = sha256(user.value.email.trim().toLowerCase())
+        avatar.value = `https://www.gravatar.com/avatar/${hashedEmail}`
+      }
+
     } else {
       LocalStorage.remove(CURRENT_USER_ID)
       authenticated.value = false;
       user.value = null as unknown as User;
+      console.log(` ...setting user id to <null>`)
       products.value = []
     }
   }
@@ -170,6 +188,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function logout(): Promise<any> {
     console.log("logging out user")
+    avatar.value = 'https://www.gravatar.com/avatar/unknown'
     return signOut(getAuth())
       .then(() => {
         authenticated.value = false
@@ -205,6 +224,7 @@ export const useAuthStore = defineStore('auth', () => {
     getAccount,
     setProducts,
     userMayAccess,
-    limitExceeded
+    limitExceeded,
+    avatar
   }
 })
