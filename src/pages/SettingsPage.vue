@@ -20,7 +20,7 @@
             v-model="tab"
             no-caps>
       <q-tab name="appearance" :label="t('appearance')"/>
-<!--      <q-tab name="account" label="Account"/>-->
+      <q-tab name="account" label="Account"/>
 <!--      <q-tab name="subscription" label="Subscription" icon="o_shopping_bag"/>-->
 <!--      <q-tab name="sharing" label="Sharing"-->
 <!--             :class="useAuthStore().userMayAccess(AccessItem.SHARE) ? 'text-primary':'text-grey'"/>-->
@@ -194,12 +194,17 @@
   </div>
 
   <div v-if="tab === 'account'">
-    <AccountSettings/>
-  </div>
+    <div class="q-pa-md q-gutter-sm">
 
-  <div v-if="tab === 'subscription'">
-<!--    <SubscriptionBexSettings v-if="inBexMode()"/>-->
-<!--    <SubscriptionSettings v-else/>-->
+      <SubscriptionSettings/>
+
+      <q-banner rounded style="border:1px solid orange">
+        TODO: Caution! The user will be deleted immediately
+      </q-banner>
+
+      <q-btn label="delete account" class="bg-red-1" @click="deleteAccount()"/>
+
+    </div>
   </div>
 
   <div v-if="tab === 'sharing'">
@@ -415,8 +420,7 @@
 import {onMounted, ref, watch, watchEffect} from "vue";
 import {LocalStorage, useQuasar} from "quasar";
 import {useSearchStore} from "src/search/stores/searchStore";
-import TabsetService from "src/tabsets/services/TabsetService";
-// import ExportDialog from "components/dialogues/ExportDialog.vue";
+import TabsetService from "src/tabsets/services/TabsetService"; // import ExportDialog from "components/dialogues/ExportDialog.vue";
 // import ImportDialog from "components/dialogues/ImportDialog.vue";
 import _ from "lodash";
 import {Tabset, TabsetStatus} from "src/tabsets/models/Tabset";
@@ -437,9 +441,13 @@ import {Account} from "src/models/Account";
 import {AccessItem, useAuthStore} from "stores/authStore";
 import FeatureToggleSettings from "pages/helper/FeatureToggleSettings.vue";
 import {useI18n} from "vue-i18n";
+import {deleteUser, getAuth} from "firebase/auth";
+import SubscriptionSettings from "pages/helper/SubscriptionSettings.vue";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {useGroupsStore} from "../tabsets/stores/groupsStore";
+import {useSpacesStore} from "src/spaces/stores/spacesStore.ts";
+import {Space} from "src/spaces/models/Space.ts";
+import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
 
 const { t } = useI18n()
 
@@ -613,7 +621,7 @@ const archivedTabsets = () => {
 
 const unarchive = (tabset: Tabset) =>
   useCommandExecutor().executeFromUi(new MarkTabsetAsDefaultCommand(tabset.id))
-    .then((res) => {
+    .then((res:any) => {
       sendMsg('reload-tabset', {tabsetId: tabset.id})
     })
 
@@ -643,5 +651,27 @@ const simulateStaticSuggestion = () => {
 
 const setTab = (a: any) => tab.value = a['tab' as keyof object]
 
+const deleteAccount = () => {
+  const auth = getAuth();
+  const user2 = auth.currentUser;
+  if (user2) {
+    deleteUser(user2).then(() => {
+      //chrome.storage.local.clear()
+      localStorage.clear()
+      useTabsetsStore().tabsets = new Map<string, Tabset>()
+      useSpacesStore().spaces = new Map<string, Space>()
+      // FirebaseServices.getFirestore().clearPersistence().catch(error => {
+      //   console.error('Could not enable persistence:', error.code);
+      // })
+      alert("user account has been deleted")
+      sendMsg('restart-application', {initiatedBy: "FeatureToggleSettings"})
+      setTimeout(() => {
+        window.close()
+      }, 1000)
+    }).catch((error) => {
+      console.error("got error", error)
+    });
+  }
+}
 </script>
 

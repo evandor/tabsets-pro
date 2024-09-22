@@ -1,47 +1,39 @@
-import {QVueGlobals} from "quasar";
 import PersistenceService from "src/services/PersistenceService";
 import SpacesPersistence from "src/spaces/persistence/SpacesPersistence";
 import TabsetsPersistence from "src/tabsets/persistence/TabsetsPersistence";
-import IndexedDbTabsetsPersistence from "src/tabsets/persistence/IndexedDbTabsetsPersistence";
 import FirestoreTabsetsPersistence from "src/tabsets/persistence/FirestoreTabsetsPersistence";
 import FirestoreSpacesPersistence from "src/spaces/persistence/FirestoreSpacesPersistence";
 import FeaturesPersistence from "src/features/persistence/FeaturesPersistence";
-import {LocalStorageFeaturesPersistence} from "src/features/persistence/LocalStorageFeaturesPersistence";
 import FirestoreFeaturesPersistence from "src/features/persistence/FirestoreFeaturesPersistence";
-import IndexedDbSpacesPersistence from "src/spaces/persistence/IndexedDbSpacesPersistence";
 import SnapshotsPersistence from "src/snapshots/persistence/SnapshotsPersistence";
-import IndexedDbSnapshotPersistence from "src/snapshots/persistence/IndexedDbSnapshotPersistence";
+import FirestoreSnapshotsPersistence from "src/snapshots/persistence/FirestoreSnapshotsPersistence.ts";
+import FirestoreNotesPersistence from "src/notes/persistence/FirestoreNotesPersistence.ts";
+import NotesPersistence from "src/notes/persistence/NotesPersistence.ts";
+import ThumbnailsPersistence from "src/thumbnails/persistence/ThumbnailsPersistence.ts";
+import FirestoreThumbnailsPersistence from "src/thumbnails/persistence/FirestoreThumbnailsPersistence.ts";
 
-export function useDB(quasar: QVueGlobals | undefined = undefined) {
+export function useDB() {
 
-  // const db: PersistenceService = IndexedDbPersistenceService
+  const spacesDb: SpacesPersistence = FirestoreSpacesPersistence
+  const tabsetsDb: TabsetsPersistence = FirestoreTabsetsPersistence
 
-  const spacesIndexedDb: SpacesPersistence = IndexedDbSpacesPersistence
-  const spacesFirestoreDb: SpacesPersistence = FirestoreSpacesPersistence
+  const featuresDb: FeaturesPersistence = FirestoreFeaturesPersistence
 
-  const tabsetsIndexedDb: TabsetsPersistence = IndexedDbTabsetsPersistence
-  const tabsetsFirestoreDb: TabsetsPersistence = FirestoreTabsetsPersistence
-
-  const featuresFirestoreDb: FeaturesPersistence = FirestoreFeaturesPersistence
-
-  const snapshotsIndexedDb: SnapshotsPersistence = IndexedDbSnapshotPersistence
+  const snapshotsDb: SnapshotsPersistence = FirestoreSnapshotsPersistence
+  const notesDb: NotesPersistence = FirestoreNotesPersistence
+  const thumbnailsDb: ThumbnailsPersistence = FirestoreThumbnailsPersistence
 
   let localDb = undefined as unknown as PersistenceService
-  let featuresLocalStorage: FeaturesPersistence = undefined as unknown as FeaturesPersistence
-  if (quasar) {
-    //localDb = new LocalStoragePersistenceService(quasar)
-    featuresLocalStorage = new LocalStorageFeaturesPersistence(quasar)
-  }
-  //let firestore = FsPersistentService
 
   return {
     //db,
     localDb,
-    //firestore,
-    spacesIndexedDb, spacesFirestoreDb,
-    tabsetsIndexedDb, tabsetsFirestoreDb,
-    featuresFirestoreDb, featuresLocalStorage,
-    snapshotsIndexedDb
+    spacesDb,
+    tabsetsDb,
+    snapshotsDb,
+    notesDb,
+    thumbnailsDb,
+    featuresDb
   }
 
 }

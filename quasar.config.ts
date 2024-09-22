@@ -20,9 +20,9 @@ export default configure((ctx) => {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
+      'axios',
       'errorhandling',
-      'i18n',
-      //'axios'
+      'i18n'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -72,6 +72,7 @@ export default configure((ctx) => {
         //
         // TABSETS_PWA_URL: process.env.TABSETS_PWA_URL,
         TABSETS_STAGE: process.env.STAGE,
+        HOST: process.env.HOST,
         // LOCALE: process.env.LOCALE,
         // SENTRY_DSN: process.env.SENTRY_DSN
       },
@@ -110,6 +111,7 @@ export default configure((ctx) => {
           //   lintCommand: 'eslint "./**/*.{js,ts,mjs,cjs,vue}"'
           // }
         }, { server: false }],
+        // handled differently in new vite version
         // ['vite-plugin-sentry',{
         //   authToken: process.env.SENTRY_AUTH_TOKEN,
         //   org: "skysail-dk",

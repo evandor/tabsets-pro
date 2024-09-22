@@ -12,12 +12,24 @@ import FirebaseServices from "src/services/firebase/FirebaseServices";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {useUtils} from "src/core/services/Utils";
 import {CURRENT_USER_ID} from "boot/constants";
+import {useSettingsStore} from "stores/settingsStore.ts";
+import {useAppStore} from "stores/appStore.ts";
+import {useLogger} from "src/services/Logger.ts";
 
 const $q = useQuasar()
 const router = useRouter()
 const {inBexMode} = useUtils()
 
 const {handleError} = useNotificationHandler()
+
+const settingsStore = useSettingsStore()
+settingsStore.initialize($q.localStorage)
+//const localMode = settingsStore.isEnabled('localMode')
+//console.log(` ...config: localMode=${localMode}`)
+
+useAppStore().init()
+
+const {info} = useLogger()
 
 // https://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
 // const emitter = new EventEmitter()
@@ -33,6 +45,7 @@ onAuthStateChanged(auth, async (user) => {
 
     try {
       await AppService.init($q, router, true, user)
+      info(`tabsets-pro started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
       if (inBexMode()) {
         // @ts-ignore
         $q.bex.send('auth.user.login', {userId: user.uid})
@@ -96,16 +109,8 @@ if (currentUser) {
     // triggers, but app should already have been started, no restart enforced
     console.debug("app start fallback after 2000ms")
     AppService.init($q, router, false)
+    info(`tabsets-pro started: timeout=true, mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
   }, 2000)
 }
-
-
-// info(`tabsets started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
-
-// Notification.requestPermission().then((permission) => {
-//   if (permission === 'granted') {
-//     console.log('Notification permission granted.')
-//   }
-// })
 
 </script>

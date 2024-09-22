@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from 'vue-router'
+import {RouteRecordRaw} from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -31,6 +31,31 @@ const routes: RouteRecordRaw[] = [
     path: '/mainpanel/settings',
     component: () => import('layouts/PlainWithRightDrawerLayout.vue'),
     children: [{path: '', component: () => import('pages/SettingsPage.vue')}],
+  },
+  {
+    path: '/mainpanel/features/:feature',
+    component: () => import('layouts/PlainWithRightDrawerLayout.vue'),
+    children: [{path: '', component: () => import('src/features/pages/FeaturesPage.vue')}],
+  },
+  {
+    path: '/mainpanel/notes/:noteId/edit', // editorjs setup cannot toggle between readonly/write mode
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/notes/pages/mainpanel/MainPanelNotePage.vue')}],
+  },
+  {
+    path: '/mainpanel/notes/:noteId',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/notes/pages/mainpanel/MainPanelNotePage.vue')}],
+  },
+  {
+    path: '/mainpanel/notes/',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/notes/pages/mainpanel/MainPanelNotePage.vue')}],
+  },
+  {
+    path: '/mainpanel/tabsets/overview/:tabsetId',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/tabsets/pages/MainPanelTabsetOverviewPage.vue')}],
   },
   {
     path: '/mainpanel/png/:tabId/:blobId',
