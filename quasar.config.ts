@@ -6,11 +6,14 @@
 import {configure} from 'quasar/wrappers'
 import {fileURLToPath} from 'node:url'
 import 'dotenv/config';
-// import "@sentry/vite-plugin";
+import "@sentry/vite-plugin";
+
+const version = require('./package.json').version
+console.log("version", version);
 
 export default configure((ctx) => {
 
- // require('dotenv').config()
+  // console.log("ctx", ctx)
 
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -20,7 +23,7 @@ export default configure((ctx) => {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      'axios',
+      //'axios',
       'errorhandling',
       'i18n'
     ],
@@ -73,6 +76,7 @@ export default configure((ctx) => {
         // TABSETS_PWA_URL: process.env.TABSETS_PWA_URL,
         TABSETS_STAGE: process.env.STAGE,
         HOST: process.env.HOST,
+        VERSION: version
         // LOCALE: process.env.LOCALE,
         // SENTRY_DSN: process.env.SENTRY_DSN
       },

@@ -45,7 +45,7 @@ onAuthStateChanged(auth, async (user) => {
 
     try {
       await AppService.init($q, router, true, user)
-      info(`tabsets-pro started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
+      info(`tabsets-pro started: mode=${process.env.MODE}, version=${process.env.VERSION}`)
       if (inBexMode()) {
         // @ts-ignore
         $q.bex.send('auth.user.login', {userId: user.uid})
@@ -109,7 +109,7 @@ if (currentUser) {
     // triggers, but app should already have been started, no restart enforced
     console.debug("app start fallback after 2000ms")
     AppService.init($q, router, false)
-    info(`tabsets-pro started: timeout=true, mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
+    info(`tabsets-pro started: timeout=true, mode=${process.env.MODE}, version=${process.env.VERSION}`)
   }, 2000)
 }
 

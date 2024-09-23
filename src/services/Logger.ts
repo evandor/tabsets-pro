@@ -1,7 +1,5 @@
 import {api} from "boot/axios";
 
-const version = import.meta.env.PACKAGE_VERSION
-
 let graylogErrorLogged = false
 
 function log(msg: string, level: number) {
@@ -12,7 +10,7 @@ function log(msg: string, level: number) {
     "level": level,
     _app: "tabsets-pro",
     _mode: process.env.MODE,
-    _version: version,
+    _version: "0.0.1",
     _stage: process.env.TABSETS_STAGE
   }
   api.post("http://graylog.tabsets.net:12201/gelf", gelfMessage, {headers: {"Content-Type": "application/json"}})
