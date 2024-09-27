@@ -9,7 +9,6 @@ import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {useSearchStore} from "src/search/stores/searchStore";
 import {Router} from "vue-router";
-import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useAppStore} from "stores/appStore";
 import {useAuthStore} from "stores/authStore";
 import {useUiStore} from "src/ui/stores/uiStore";
@@ -134,11 +133,8 @@ class AppService {
 
     console.log(`%cinitializing AppService: initCoreSerivces`, "font-weight:bold")
 
-    if (useFeaturesStore().hasFeature(FeatureIdent.WINDOWS_MANAGEMENT)) {
-      await useWindowsStore().initialize()
-      useWindowsStore().initListeners()
-    }
-
+    await useWindowsStore().initialize()
+    useWindowsStore().initListeners()
 
     /**
      * features store: passing storage for better testing.

@@ -216,14 +216,14 @@
     </div>
   </div>
 
-  <div v-if="tab === 'syncing'">
-    <div class="q-pa-md q-gutter-sm">
-      <SyncingSettings v-if="useAuthStore().userMayAccess(AccessItem.SYNC)" @was-clicked="(e:any) => setTab(e)"/>
-      <q-banner v-else rounded style="border:1px solid orange">
-        To use Syncing, you need to have a account and subscribe to the 'SYNC' Plan.
-      </q-banner>
-    </div>
-  </div>
+<!--  <div v-if="tab === 'syncing'">-->
+<!--    <div class="q-pa-md q-gutter-sm">-->
+<!--      <SyncingSettings v-if="useAuthStore().userMayAccess(AccessItem.SYNC)" @was-clicked="(e:any) => setTab(e)"/>-->
+<!--      <q-banner v-else rounded style="border:1px solid orange">-->
+<!--        To use Syncing, you need to have a account and subscribe to the 'SYNC' Plan.-->
+<!--      </q-banner>-->
+<!--    </div>-->
+<!--  </div>-->
 
   <div v-if="tab === 'internals'">
 
@@ -438,7 +438,7 @@ import {StaticSuggestionIdent, Suggestion} from "src/suggestions/models/Suggesti
 import {useRoute} from "vue-router";
 import {STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT} from "boot/constants";
 import {Account} from "src/models/Account";
-import {AccessItem, useAuthStore} from "stores/authStore";
+import {useAuthStore} from "stores/authStore";
 import FeatureToggleSettings from "pages/helper/FeatureToggleSettings.vue";
 import {useI18n} from "vue-i18n";
 import {deleteUser, getAuth} from "firebase/auth";
@@ -448,6 +448,7 @@ import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {useSpacesStore} from "src/spaces/stores/spacesStore.ts";
 import {Space} from "src/spaces/models/Space.ts";
 import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
+import InfoLine from "pages/helper/InfoLine.vue";
 
 const { t } = useI18n()
 
