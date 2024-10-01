@@ -11,7 +11,29 @@ function openExtension() {
   )
 }
 
-chrome.runtime.onInstalled.addListener(openExtension)
+
+// chrome.runtime.onInstalled.addListener((callback) => {
+//   console.log("[service-worker] ga: fire event install", callback.reason, callback.previousVersion)
+//   // getting error: "Service worker registration failed. Status code: 15"
+//   // Analytics.fireEvent('install-' + callback.reason);
+//   console.log("callback:::", callback)
+//   if (callback.reason !== OnInstalledReason.CHROME_UPDATE) {
+//     chrome.tabs.create({
+//       active: false,
+//       url: callback.previousVersion ?
+//         "https://docs.tabsets.net/release-notes" :
+//         "https://tabsets.web.app/#/installed/"
+//     }).then((newTab: chrome.tabs.Tab) => {
+//       setTimeout(() => {
+//         chrome.tabs.update(newTab.id || 0, {active: true})
+//       }, 2000)
+//     })
+//   }
+//   if (chrome.runtime.lastError) {
+//     console.warn("got runtime error", chrome.runtime.lastError)
+//   }
+// });
+
 chrome.action.onClicked.addListener(openExtension)
 
 declare module '@quasar/app-vite' {

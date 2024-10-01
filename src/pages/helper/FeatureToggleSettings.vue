@@ -43,11 +43,11 @@
 import {ref, watchEffect} from "vue";
 import {useSettingsStore} from "stores/settingsStore";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
-import {ActivateFeatureCommand} from "src/features/commands/ActivateFeature";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
-import {DeactivateFeatureCommand} from "src/features/commands/DeactivateFeature";
+import {DeactivateFeatureCommand} from "src/features/commands/DeactivateFeatureCommand";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {useFeaturesStore} from "src/features/stores/featuresStore.ts";
+import {ActivateFeatureCommand} from "src/features/commands/ActivateFeatureCommand.ts";
 
 const settingsStore = useSettingsStore()
 const {handleError} = useNotificationHandler()

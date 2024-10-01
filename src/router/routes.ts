@@ -8,6 +8,11 @@ const routes: RouteRecordRaw[] = [
       '/sidepanel'
   },
   {
+    path: '/fullpage',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('pages/FullpageStart.vue')}],
+  },
+  {
     path: '/sidepanel',
     component: () => import('layouts/SidePanelLayout.vue'),
     children: [{path: '', component: () => import('pages/SidePanelPage.vue')}],

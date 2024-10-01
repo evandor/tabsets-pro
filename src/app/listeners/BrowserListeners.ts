@@ -20,6 +20,7 @@ import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {Extractor, Extractors, ExtractorType} from "src/config/Extractors";
 import {SidePanelViews} from "src/models/SidePanelViews";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
+import {useTabsetsUiStore} from "src/tabsets/stores/tabsetsUiStore.ts";
 
 const {
   saveTabset,
@@ -477,6 +478,13 @@ class BrowserListeners {
           }
         }
       })
+      if (url) {
+        //useTabsetService().urlWasActivated(url)
+
+        // matching tabs for url
+        useTabsetsUiStore().setMatchingTabsFor(url)
+
+      }
     })
   }
 

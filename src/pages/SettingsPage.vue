@@ -580,17 +580,17 @@ watchEffect(() => {
     LocalStorage.remove(TITLE_IDENT)
 })
 
-watchEffect(() => {
+watch(() => detailLevel.value, () => {
   localStorage.set('ui.detailLevel', detailLevel.value)
   sendMsg('detail-level-changed', {level: detailLevel.value})
 })
 
-watchEffect(() => {
+watch(() => fullUrls.value, (a:any,b:any) => {
   localStorage.set('ui.fullUrls', fullUrls.value)
   sendMsg('fullUrls-changed', {value: fullUrls.value})
 })
 
-watchEffect(() => {
+watch(() => detailLevelPerTabset.value, (v:any) => {
   localStorage.set('ui.detailsPerTabset', detailLevelPerTabset.value)
   sendMsg('detail-level-perTabset-changed', {level: detailLevelPerTabset.value})
 })
@@ -649,8 +649,6 @@ const simulateStaticSuggestion = () => {
   ]
   useSuggestionsStore().addSuggestion(suggestions[suggestionsCounter++ % 2])
 }
-
-const setTab = (a: any) => tab.value = a['tab' as keyof object]
 
 const deleteAccount = () => {
   const auth = getAuth();
