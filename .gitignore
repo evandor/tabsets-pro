@@ -37,3 +37,4 @@ yarn-error.log*
 .env.sentry-build-plugin
 /.env.prd
 /.prd.env
+/.env.tmp

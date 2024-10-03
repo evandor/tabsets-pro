@@ -449,6 +449,9 @@ import {useSpacesStore} from "src/spaces/stores/spacesStore.ts";
 import {Space} from "src/spaces/models/Space.ts";
 import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
 import InfoLine from "pages/helper/InfoLine.vue";
+import SharingSettings from "pages/helper/SharingSettings.vue";
+import ImportDialog from "src/tabsets/dialogues/ImportDialog.vue";
+import ExportDialog from "src/tabsets/dialogues/ExportDialog.vue";
 
 const { t } = useI18n()
 
@@ -635,10 +638,10 @@ const simulateNewVersion = (version: string) => {
 const restoreHints = () => useUiStore().restoreHints()
 
 const showExportDialog = () => {
-  //$q.dialog({component: ExportDialog, componentProps: {inSidePanel: true}})
+  $q.dialog({component: ExportDialog, componentProps: {inSidePanel: true}})
 }
 const showImportDialog = () => {
-  // $q.dialog({component: ImportDialog, componentProps: {inSidePanel: true}})
+  $q.dialog({component: ImportDialog, componentProps: {inSidePanel: true}})
 }
 
 const simulateStaticSuggestion = () => {
