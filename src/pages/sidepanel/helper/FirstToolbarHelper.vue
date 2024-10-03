@@ -1,4 +1,5 @@
 <template>
+  <!-- FirstToolbarHelper -->
   <q-toolbar class="text-primary q-pa-none q-pl-sm q-pr-xs q-pb-none greyBorderBottom" :style="offsetTop()">
     <q-toolbar-title>
       <div class="row q-ma-none q-pa-none">
@@ -8,14 +9,14 @@
 
           <!-- spaces and no back button -->
 
-<!--          <SearchWithTransitionHelper v-if="searching"/>-->
+          <SearchWithTransitionHelper v-if="searching"/>
 
-<!--          <FilterWithTransitionHelper v-else-if="showFilter"/>-->
+          <FilterWithTransitionHelper v-else-if="showFilter"/>
 
           <template>
             <div class="column q-ma-none q-pa-none">
               <div class="col q-ma-none q-pa-none cursor-pointer text-subtitle1">
-                <slot name="title">{{ props.title }}</slot>
+                <slot name="title">**{{ props.title }}</slot>
               </div>
             </div>
           </template>
@@ -23,15 +24,14 @@
 
         <!-- no spaces here -->
         <div v-else class="col q-ma-none q-pa-none">
-
           <!-- no spaces && searching -->
-<!--          <SearchWithTransitionHelper v-if="searching"-->
-<!--                                      :search-term="props.searchTerm"-->
-<!--                                      :search-hits="props.searchHits"/>-->
+          <SearchWithTransitionHelper v-if="searching"
+                                      :search-term="props.searchTerm"
+                                      :search-hits="props.searchHits"/>
 
-<!--          <FilterWithTransitionHelper v-else-if="showFilter"/>-->
+          <FilterWithTransitionHelper v-else-if="showFilter"/>
           <!-- no spaces && not searching -->
-          <template>
+          <template v-else>
 
             <!-- no spaces && not searching -->
             <div class="col-12 text-subtitle1">
@@ -111,6 +111,8 @@ import {useAuthStore} from "stores/authStore";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {SidePanelViews} from "src/models/SidePanelViews";
+import FilterWithTransitionHelper from "src/core/widget/FilterWithTransitionHelper.vue";
+import SearchWithTransitionHelper from "pages/sidepanel/helper/SearchWithTransitionHelper.vue";
 
 const props = defineProps({
   title: {type: String, default: "My Tabsets"},

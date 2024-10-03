@@ -33,6 +33,11 @@ const routes: RouteRecordRaw[] = [
     children: [{path: '', component: () => import('pages/sidepanel/WelcomePage.vue')}],
   },
   {
+    path: '/sidepanel/research/:sourceId',
+    component: () => import('layouts/SidePanelLayout.vue'),
+    children: [{path: '', component: () => import('src/pages/SidePanelResearchPage.vue')}],
+  },
+  {
     path: '/mainpanel/settings',
     component: () => import('layouts/PlainWithRightDrawerLayout.vue'),
     children: [{path: '', component: () => import('pages/SettingsPage.vue')}],
@@ -58,17 +63,27 @@ const routes: RouteRecordRaw[] = [
     children: [{path: '', component: () => import('src/notes/pages/mainpanel/MainPanelNotePage.vue')}],
   },
   {
+    path: '/mainpanel/html/:snapshotId', // both MHtml and HTML managed by same page
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/snapshots/pages/MainPanelHtmlPage.vue')}],
+  },
+  {
+    path: '/mainpanel/editedHtml/:snapshotId',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/snapshots/pages/MainPanelHtmlPage.vue')}],
+  },
+  {
     path: '/mainpanel/tabsets/overview/:tabsetId',
     component: () => import('layouts/PlainLayout.vue'),
     children: [{path: '', component: () => import('src/tabsets/pages/MainPanelTabsetOverviewPage.vue')}],
   },
   {
-    path: '/mainpanel/png/:tabId/:blobId',
+    path: '/mainpanel/png/:snapshotId',
     component: () => import('layouts/PlainLayout.vue'),
     children: [{path: '', component: () => import('src/snapshots/pages/MainPanelPngPage.vue')}],
   },
   {
-    path: '/mainpanel/pdf/:tabId/:blobId',
+    path: '/mainpanel/pdf/:snapshotId',
     component: () => import('layouts/PlainLayout.vue'),
     children: [{path: '', component: () => import('src/snapshots/pages/MainPanelPdfPage.vue')}],
   },

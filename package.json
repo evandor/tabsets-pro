@@ -36,6 +36,7 @@
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
     "date-fns": "^4.1.0",
+    "diff": "^7.0.0",
     "editorjs-alert": "^1.1.4",
     "editorjs-text-color-plugin": "^2.0.4",
     "events": "^3.3.0",

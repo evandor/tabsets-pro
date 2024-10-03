@@ -1,5 +1,6 @@
 <template>
 
+  <!-- SidePanelPage -->
   <q-page style="padding-top: 50px">
 
     <div class="wrap" v-if="useUiStore().appLoading">
@@ -107,7 +108,6 @@
 
     <!-- place QPageSticky at end of page -->
     <q-page-sticky expand position="top" class="darkInDarkMode brightInBrightMode">
-
       <FirstToolbarHelper
         :showSearchBox="showSearchBox">
 
@@ -231,8 +231,6 @@ function determineTabsets() {
 }
 
 watchEffect(() => {
-
-//console.log("==== watch effect ====")
   if (useFeaturesStore().hasFeature(FeatureIdent.SPACES)) {
     const currentSpace = useSpacesStore().space
     tabsets.value = _.sortBy(
