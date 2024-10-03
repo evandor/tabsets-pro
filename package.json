@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "dev": "quasar dev -m bex",
+    "build bex (prd)": "mv .env .env.tmp && cp .prd.env .env && quasar build -m bex && mv .env.tmp .env",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
     "build": "quasar build",
