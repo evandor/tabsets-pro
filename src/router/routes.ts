@@ -15,12 +15,17 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/sidepanel',
     component: () => import('layouts/SidePanelLayout.vue'),
-    children: [{path: '', component: () => import('pages/SidePanelPage.vue')}],
+    children: [{path: '', component: () => import('pages/SidePanelPage2.vue')}],
   },
   {
     path: '/sidepanel/login',
     component: () => import('layouts/SidePanelNoFooterLayout.vue'),
     children: [{path: '', component: () => import('pages/SidePanelLoginPage.vue')}],
+  },
+  {
+    path: '/sidepanel/collections',
+    component: () => import('layouts/SidePanelLayout.vue'),
+    children: [{path: '', component: () => import('pages/SidePanelCollectionsPage.vue')}],
   },
   {
     path: '/sidepanel/tab/:tabId',
