@@ -32,6 +32,7 @@
              v-if="useFeaturesStore().hasFeature(FeatureIdent.ARCHIVE_TABSET)"/>
       <q-tab name="search" label="Search Engine" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"/>
       <q-tab name="importExport" label="Import/Export"/>
+      <q-tab name="backup" label="Backup"/>
       <q-tab name="internals" label="Internals" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"/>
       <!--      <q-tab name="featureToggles" label="Feature Toggles"-->
       <!--             :class="useAuthStore().userMayAccess(AccessItem.FEATURE_TOGGLES) ? 'text-primary':'text-grey'"/>-->
@@ -407,7 +408,10 @@
       </div>
 
     </div>
+  </div>
 
+  <div v-if="tab === 'backup'">
+    <BackupSettings />
   </div>
 
   <div v-if="tab === 'featureToggles'">
@@ -452,6 +456,7 @@ import InfoLine from "pages/helper/InfoLine.vue";
 import SharingSettings from "pages/helper/SharingSettings.vue";
 import ImportDialog from "src/tabsets/dialogues/ImportDialog.vue";
 import ExportDialog from "src/tabsets/dialogues/ExportDialog.vue";
+import BackupSettings from "src/tabsets/pages/settings/BackupSettings.vue";
 
 const { t } = useI18n()
 
