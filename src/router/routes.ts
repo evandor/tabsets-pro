@@ -28,6 +28,11 @@ const routes: RouteRecordRaw[] = [
     children: [{path: '', component: () => import('pages/SidePanelCollectionsPage.vue')}],
   },
   {
+    path: '/sidepanel/spaces',
+    component: () => import('layouts/SidePanelLayout.vue'),
+    children: [{path: '', component: () => import('src/spaces/pages/SidePanelSpacesPage.vue')}],
+  },
+  {
     path: '/sidepanel/tab/:tabId',
     component: () => import('layouts/SidePanelLayout.vue'),
     children: [{path: '', component: () => import('pages/sidepanel/SidePanelTabDetails.vue')}],
@@ -91,6 +96,11 @@ const routes: RouteRecordRaw[] = [
     path: '/mainpanel/pdf/:snapshotId',
     component: () => import('layouts/PlainLayout.vue'),
     children: [{path: '', component: () => import('src/snapshots/pages/MainPanelPdfPage.vue')}],
+  },
+  {
+    path: '/tabsets/:tabsetId',
+    component: () => import('layouts/FullPageLayout.vue'),
+    children: [{path: '', component: () => import('src/tabsets/pages/TabsetPage.vue')}],
   },
   // Always leave this as last one,
   // but you can also remove it
