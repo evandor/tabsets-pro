@@ -1,30 +1,50 @@
 import _ from "lodash"
-//import {GrantPermissionCommand} from "src/domain/commands/GrantPermissionCommand";
-//import {RevokePermissionCommand} from "src/domain/commands/RevokePermissionCommand";
 import {Feature} from "src/features/models/Feature";
 import {FeatureIdent, FeatureType} from "src/app/models/FeatureIdent";
+import {GrantPermissionCommand} from "src/domain/commands/GrantPermissionCommand";
+import {RevokePermissionCommand} from "src/domain/commands/RevokePermissionCommand";
 
 export class AppFeatures {
   features: Feature[] = [
 
     new Feature(FeatureIdent.DEV_MODE, FeatureType.INTERNAL, "Developer Mode",
-      "A feature toggle to switch between dev mode on/off", "","",['all']),
+      "A feature toggle to switch between dev mode on/off", "", "", ['all']),
 
-    new Feature(FeatureIdent.TOP10, FeatureType.RECOMMENDED,
+    new Feature(FeatureIdent.BOOKMARKS, FeatureType.RECOMMENDED,
+      'Bookmarks Manager',
+      'Activate a Bookmark Manager in the Side Panel',
+      'o_bookmark', 'bookmarks.png', ['all'], [], false, 'warning'),
+
+    new Feature(FeatureIdent.GALLERY, FeatureType.RECOMMENDED,
+      'Gallery View',
+      'View and organize your tabs in a Tabset Gallery',
+      'calendar_view_month', 'gallery.png', ['all'], [], false, 'primary'),
+
+    new Feature(FeatureIdent.STATS, FeatureType.RECOMMENDED,
+      'Stats Widget',
+      'Activate a little Widget to display some statistics (tabs count etc)',
+      'show_chart', 'stats.png', ['bex']),
+
+    new Feature(FeatureIdent.TOP10, FeatureType.OPTIONAL,
       'Top 10 Tabs',
       'Activate a view to list all tabs by how often they have been accessed',
       'o_workspace_premium', 'top10.png', ['all']),
+
+    new Feature(FeatureIdent.WINDOWS_MANAGEMENT, FeatureType.EXPERIMENTAL,
+      'Windows Management',
+      'Access to your browsers windows and their tabs',
+      'o_grid_view', '', ['all']),
 
     new Feature(FeatureIdent.OPEN_TABS, FeatureType.RECOMMENDED,
       'Open Tabs',
       'Quick access to all your open tabs of the current browsers window<br><br>' +
       'Adds quick navigation to jump back and forth to recently opened tabs.',
-      'o_playlist_add', '', ['bex']),
+      'o_playlist_add', 'opentabs.png', ['bex']),
 
-    new Feature(FeatureIdent.SAVE_TAB_AS_PNG, FeatureType.EXPERIMENTAL,
-      'Save Tab as Image', 'You can save tabs as a PNG Image.<br>Creating an image will utilize an external server.',
-      'o_image', '', ['bex'], [], true),
-   //   .setActivateCommands([new GrantPermissionCommand('pageCapture')]),
+   //  new Feature(FeatureIdent.SAVE_TAB_AS_PNG, FeatureType.EXPERIMENTAL,
+   //    'Save Tab as Image', 'You can save tabs as a PNG Image.<br>Creating an image will utilize an external server.',
+   //    'o_image', '', ['bex'], [], true),
+   // //   .setActivateCommands([new GrantPermissionCommand('pageCapture')]),
 
     new Feature(FeatureIdent.GROUP_BY_DOMAIN, FeatureType.OPTIONAL,
       'Group By Domain View',
@@ -43,7 +63,7 @@ export class AppFeatures {
       'The default view of your tabset is a list - but there can be other views as well like grids or even a canvas.',
       'o_explore', '', ['all']),
 
-    new Feature(FeatureIdent.RSS, FeatureType.EXPERIMENTAL,
+    new Feature(FeatureIdent.RSS, FeatureType.DISABLED,
       'RSS View',
       'The "RSS View" list all your RSS Pages. It is recommended to enable the "analyse Tabs" feature as well to automatically find linked rss feeds from your tabsets.',
       'o_rss_feed', 'rss.png', ['bex', 'spa']),
@@ -58,7 +78,7 @@ export class AppFeatures {
       'The "Spaces" Feature lets you organize your tabsets in a larger structure, which might become handy ' +
       'if you start having many tabsets. The main difference to bookmark folders is that there is only two ' +
       'levels, but you can assign a tabset to multiple spaces.',
-      'o_space_dashboard', '',['all']),
+      'o_space_dashboard', '', ['all']),
 
     new Feature(FeatureIdent.BACKUP, FeatureType.EXPERIMENTAL,
       'Backup Tabset',
@@ -75,17 +95,39 @@ export class AppFeatures {
       'Tabs can be tagged with labels making it easier to be found again',
       'o_label', '', ['all']),
 
-    new Feature(FeatureIdent.RESEARCH_SESSIONS, FeatureType.OPTIONAL,
+    new Feature(FeatureIdent.TABS_AS_TREE, FeatureType.OPTIONAL,
+      'Tabs as Tree',
+      'A view organizing your tabs URLs as a tree',
+      'account_tree', '', ['all']),
+
+    new Feature(FeatureIdent.NEWEST_TABS, FeatureType.OPTIONAL,
+      'Latest Tabs',
+      'A quick access view for your latest tabs',
+      'schedule', '', ['all']),
+
+    new Feature(FeatureIdent.RESEARCH_SESSIONS, FeatureType.EXPERIMENTAL,
       'Research Sessions',
       'Add Research Capabilities to tabsets - save snapshots of pages and annotate them',
-      'o_science', '', ['all']),
-    // .setActivateCommands([new GrantPermissionCommand('pageCapture')])
-    // .setDeactivateCommands([new RevokePermissionCommand('pageCapture')]),
+      'o_science', '', ['all'])
+      .setActivateCommands([new GrantPermissionCommand('pageCapture')])
+      .setDeactivateCommands([new RevokePermissionCommand('pageCapture')]),
 
-    new Feature(FeatureIdent.NOTES, FeatureType.EXPERIMENTAL,
+    new Feature(FeatureIdent.NOTES, FeatureType.OPTIONAL,
       'Notes Feature',
       'CreateCreate notes and treat them like tabs',
       'o_note', '', ['all']),
+
+    new Feature(FeatureIdent.STANDALONE_APP, FeatureType.EXPERIMENTAL,
+      'Standalone App',
+      'Tabsets as full-page application',
+      'o_open_in_new', '', ['bex']),
+
+    new Feature(FeatureIdent.NOTIFICATIONS, FeatureType.EXPERIMENTAL,
+      'Browser Notifications',
+      'Allow Tabsets to send Notifications via your Browser. Recommended.',
+      'o_notifications', '', ['all']),
+    // .setActivateCommands([new GrantPermissionCommand('notifications')])
+    // .setDeactivateCommands([ne0w RevokePermissionCommand('notifications')]),
 
     // permissions notification
     new Feature(FeatureIdent.WEBSITE_CLIP, FeatureType.EXPERIMENTAL,
@@ -99,14 +141,7 @@ export class AppFeatures {
       'Tabsets as full-page application',
        'o_open_in_new','', ['bex']),
 
-    new Feature(FeatureIdent.NOTIFICATIONS, FeatureType.RECOMMENDED,
-      'Browser Notifications',
-      'Allow Tabsets to send Notifications via your Browser. Recommended.',
-      'o_notifications', '', ['all']),
-      // .setActivateCommands([new GrantPermissionCommand('notifications')])
-      // .setDeactivateCommands([new RevokePermissionCommand('notifications')]),
-
-    new Feature(FeatureIdent.ANNOTATIONS, FeatureType.EXPERIMENTAL,
+    new Feature(FeatureIdent.ANNOTATIONS, FeatureType.DISABLED,
       'Annotate Websites',
       'Hightlight text on a website and create and comment on annotations.',
       'o_auto_awesome', '', ['bex']),
@@ -132,7 +167,7 @@ export class AppFeatures {
       'its links and the received http headers are taken into account. ' +
       'Please note that only tabs that you visit (or revisit) after the activation of this feature are going to be analysed.',
       'o_tab', 'analyse.png', ['bex'])
-      // .setActivateCommands([new GrantPermissionCommand('webRequest')])
+      //.setActivateCommands([new GrantPermissionCommand('webRequest')])
       .setImageWidth("700px"),
 
     new Feature(FeatureIdent.TAB_GROUPS, FeatureType.EXPERIMENTAL,
@@ -160,15 +195,21 @@ export class AppFeatures {
       'Switch the Tab\'s URL every x Seconds',
       'o_switch_left', '', ['bex']),
 
-    new Feature(FeatureIdent.TABSET_SUBFOLDER, FeatureType.OPTIONAL,
-      'Subfolder for Tabsets',
-      'Use Subfolders in Tabsets. Currently the only way to create subfolders is by importing recursive levels of bookmarks.',
-      'o_folder', '', ['all']),
-
     new Feature(FeatureIdent.TABSETS_SHARING, FeatureType.OPTIONAL,
       'Sharing Tabsets',
       'Share tabsets publicly.',
       'o_ios_share', '', ['all'], [], true),
+
+    new Feature(FeatureIdent.READING_MODE, FeatureType.EXPERIMENTAL,
+      'Reading Mode',
+      'Analyse tab contents and use the distraction-free Reading Mode if applicable',
+      'library_books', '', ['bex']),
+
+    new Feature(FeatureIdent.HTML_SNIPPETS, FeatureType.EXPERIMENTAL,
+      'HTML Snippets',
+      'Drag and drop Text and Images to the sidebar to create Website Snippets',
+      'text_snippet', '', ['bex']),
+
   ]
 
   getFeature(f: FeatureIdent): Feature | undefined {

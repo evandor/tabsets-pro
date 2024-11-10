@@ -10,7 +10,7 @@
     <q-tooltip class="tooltip">{{ suggestionsLabel() }}</q-tooltip>
   </q-btn>
 
-  <q-btn v-if="useTabsetsStore().allTabsCount > 0"
+  <q-btn v-if="showViewMenu()"
          icon="o_view_list"
          :size="props.size"
          class="q-my-xs q-ml-xs q-mr-none q-px-xs"
@@ -30,16 +30,16 @@
                                      icon="o_dns"
                                      :size="buttonSize"
                                      tooltip="List all your tabs URLs by domain"/>
-<!--        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.TAGS_LIST"-->
-<!--                                     icon="o_label"-->
-<!--                                     label="Tags List"-->
-<!--                                     :size="buttonSize"-->
-<!--                                     tooltip="List of all tags sorted by prevalence"/>-->
+        <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.TAGS_LIST"
+                                     icon="o_label"
+                                     label="Tags List"
+                                     :size="buttonSize"
+                                     tooltip="List of all tags sorted by prevalence"/>
         <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.NEWEST_TABS_LIST"
                                      label="Newest Tabs"
                                      icon="o_schedule"
                                      :size="buttonSize"
-                                     tooltip="Newest Tabs List"/>
+                                     tooltip="Latest Tabs List"/>
         <SidePanelFooterViewMenuItem :side-panel-view="SidePanelViews.TOP_10_TABS_LIST"
                                      label="Top 10 Tabs"
                                      icon="o_workspace_premium"
@@ -78,6 +78,7 @@
 
   <SidePanelFooterLeftButton :side-panel-view="SidePanelViews.BOOKMARKS"
                              icon="o_bookmark"
+                             defaultColor="warning"
                              :class="{ shake: animateBookmarksButton }"
                              :size="props.size"
                              tooltip="Show the Bookmarks Browser"/>
@@ -97,13 +98,15 @@
 </template>
 <script setup lang="ts">
 import {useUiStore} from "src/ui/stores/uiStore";
-import SidePanelFooterLeftButton from "components/helper/SidePanelFooterLeftButton.vue";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {ref, watchEffect} from "vue";
 import {SuggestionState} from "src/suggestions/models/Suggestion";
-import SidePanelFooterViewMenuItem from "components/helper/SidePanelFooterViewMenuItem.vue";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
+import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {SidePanelViews} from "src/models/SidePanelViews";
+import SidePanelFooterViewMenuItem from "src/ui/components/SidePanelFooterViewMenuItem.vue";
+import SidePanelFooterLeftButton from "src/ui/components/SidePanelFooterLeftButton.vue";
+import {FeatureIdent} from "src/app/models/FeatureIdent.ts";
 
 const props = defineProps({
   showSuggestionIcon: {type: Boolean, required: true},
@@ -132,6 +135,19 @@ const suggestionsLabel = () => {
 
 }
 
+const showViewMenu = () => {
+  if (useTabsetsStore().allTabsCount === 0) {
+    return false
+  }
+  const activeViews = [
+    useFeaturesStore().hasFeature(FeatureIdent.TABS_AS_TREE),
+    useFeaturesStore().hasFeature(FeatureIdent.NEWEST_TABS),
+    useFeaturesStore().hasFeature(FeatureIdent.GROUP_BY_DOMAIN),
+    useFeaturesStore().hasFeature(FeatureIdent.TAGS),
+    useFeaturesStore().hasFeature(FeatureIdent.TOP10)
+  ]
+  return activeViews.filter(Boolean).length > 3
+}
 </script>
 
 <script setup lang="ts">

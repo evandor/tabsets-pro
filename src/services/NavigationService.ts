@@ -29,6 +29,14 @@ class NavigationService {
     }
   }
 
+  /**
+   * superseded by useNavigationService().openOrCreateTab(...)
+   * @param withUrls
+   * @param matcher
+   * @param groups
+   * @param forceCurrent
+   * @param forceReload
+   */
   async openOrCreateTab(
     withUrls: string[],
     matcher: string | undefined = undefined,
@@ -153,27 +161,6 @@ class NavigationService {
               windowId: useWindowId
             }, (tab: chrome.tabs.Tab) => {
               chrome.windows.update(useWindowId, {focused: true})
-
-              // if (!useFeaturesStore().hasFeature(FeatureIdent.ANALYSE_TABS)) {
-              //   setTimeout(() => {
-              //     // check potential redirect
-              //     chrome.tabs.get(tab.id || 0, (potentiallyChangedTab: chrome.tabs.Tab) => {
-              //       if (tab.url !== potentiallyChangedTab.url && tab.url?.trim() !== "" && potentiallyChangedTab.url?.trim() !== "") {
-              //         console.log("tab's URL change during one second, assuming 30x redirect, creating suggestion", tab, potentiallyChangedTab)
-              //         const suggestionId = uid()
-              //         const suggestion = new Suggestion(suggestionId,
-              //           "Tab's URL changed", "Seems like the tab's URL has changed according to the server. " +
-              //           "Should the URL be updated?",
-              //           "/suggestions/" + suggestionId,
-              //           SuggestionType.REDIRECT_HAPPENED_FOR_TAB)
-              //         suggestion.setData({url, location: potentiallyChangedTab.url})
-              //         useSuggestionsStore().addSuggestion(suggestion).catch((err) => {
-              //           console.log("got error", err)
-              //         })
-              //       }
-              //     })
-              //   }, 1000)
-              // }
 
               if (groups.length > i) {
                 ctx.handleGroup(groups[i], useWindowId, tab);

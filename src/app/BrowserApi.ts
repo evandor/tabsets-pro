@@ -1,11 +1,11 @@
 import {Tabset} from "src/tabsets/models/Tabset";
-import {CLEANUP_PERIOD_IN_MINUTES, MONITORING_PERIOD_IN_MINUTES} from "boot/constants";
+import {CLEANUP_PERIOD_IN_MINUTES, GITHUB_AUTO_BACKUP, MONITORING_PERIOD_IN_MINUTES} from "boot/constants";
 import _ from "lodash"
 import {useSearchStore} from "src/search/stores/searchStore";
 import {SearchDoc} from "src/search/models/SearchDoc";
 import {usePermissionsStore} from "src/stores/permissionsStore";
 import {Tab} from "src/tabsets/models/Tab";
-import {uid} from "quasar";
+import {LocalStorage, uid} from "quasar";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {Router} from "vue-router";
@@ -17,6 +17,8 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import NavigationService from "src/services/NavigationService";
+import {GithubBackupCommand} from "src/tabsets/commands/github/GithubBackupCommand.ts";
+import {useCommandExecutor} from "src/core/services/CommandExecutor.ts";
 
 
 function runHousekeeping() {
@@ -100,6 +102,9 @@ class BrowserApi {
     console.debug(" ...initializing ChromeApi")
 
     chrome.alarms.create("housekeeping", {periodInMinutes: CLEANUP_PERIOD_IN_MINUTES})
+
+    chrome.alarms.create("hourlyTasks", {periodInMinutes: 30})
+
     chrome.alarms.create("monitoring", {periodInMinutes: MONITORING_PERIOD_IN_MINUTES})
 
     chrome.alarms.onAlarm.addListener(
@@ -112,6 +117,10 @@ class BrowserApi {
           if (useFeaturesStore().hasFeature(FeatureIdent.MONITORING)) {
             checkMonitors(router)
           }
+        } else if (alarm.name === "hourlyTasks") {
+          if (LocalStorage.getItem(GITHUB_AUTO_BACKUP) as boolean) {
+            useCommandExecutor().execute(new GithubBackupCommand());
+          }
         } else {
           console.log("unknown alarm", alarm)
         }
@@ -120,7 +129,7 @@ class BrowserApi {
 
     chrome.runtime.onUpdateAvailable.addListener(
       (details: any) => {
-        //NavigationService.updateAvailable(details)
+        // NavigationService.updateAvailable(details)
       }
     )
 
@@ -156,11 +165,11 @@ class BrowserApi {
     if (chrome && chrome.contextMenus) {
       chrome.contextMenus.removeAll(
         () => {
-          console.log("creating contextmenu for tabset_extension")
+          console.debug(" ...creating contextmenu for tabset_extension")
           chrome.contextMenus.create({
               id: 'tabset_extension',
               title: 'Tabsets Extension',
-              documentUrlPatterns: ['https://*/*', 'https://*/'],
+              documentUrlPatterns: ['https://*/*', 'https://*/', 'chrome-extension://*/'],
               contexts: ['all']
             },
             () => {
@@ -177,7 +186,7 @@ class BrowserApi {
                   id: 'website_clip',
                   parentId: 'tabset_extension',
                   title: 'Create Website Clip',
-                  documentUrlPatterns: ['https://*/*', 'https://*/'],
+                  documentUrlPatterns: ['https://*/*', 'https://*/', 'chrome-extension://*/'],
                   contexts: ['all']
                 })
               }
@@ -189,7 +198,7 @@ class BrowserApi {
               //   contexts: ['all']
               // })
               //}
-              console.debug(" > context menu: save_to_currentTS")
+              // console.debug(" > context menu: save_to_currentTS")
               chrome.contextMenus.create({
                 id: 'save_to_currentTS',
                 parentId: 'tabset_extension',
@@ -211,17 +220,17 @@ class BrowserApi {
                 // rest of logic in windowsStore
               }
 
-              if (useFeaturesStore().hasFeature(FeatureIdent.ANNOTATIONS)) {
-                console.debug(" > context menu: annotate_website")
-                chrome.contextMenus.create({
-                  id: 'annotate_website',
-                  parentId: 'tabset_extension',
-                  title: 'Annotate',
-                  documentUrlPatterns: ['https://*/*', 'https://*/'],
-                  contexts: ['all']
-                })
-              }
-              console.debug(` > context menu: save_as_tabset for ${useTabsetsStore().tabsets.size} tabset(s)`)
+              // if (useFeaturesStore().hasFeature(FeatureIdent.ANNOTATIONS)) {
+              //   console.debug(" > context menu: annotate_website")
+              //   chrome.contextMenus.create({
+              //     id: 'annotate_website',
+              //     parentId: 'tabset_extension',
+              //     title: 'Annotate',
+              //     documentUrlPatterns: ['https://*/*', 'https://*/'],
+              //     contexts: ['all']
+              //   })
+              // }
+              //console.debug(` > context menu: save_as_tabset for ${useTabsetsStore().tabsets.size} tabset(s)`)
               const allTabsets = [...useTabsetsStore().tabsets.values()] as Tabset[]
 
               if (allTabsets.length > 0) {
@@ -298,12 +307,12 @@ class BrowserApi {
             const tabId = tab?.id || 0
             const currentTsId = useTabsetsStore().currentTabsetId
             if (currentTsId) {
-            this.executeAddToTS(tabId, currentTsId)
+              this.executeAddToTS(tabId, currentTsId)
             }
           } else if (e.menuItemId === 'annotate_website') {
             console.log("creating annotation JS", tab)
             if (tab && tab.id) {
-              this.executeAnnotationJS(tab.id)
+              // this.executeAnnotationJS(tab.id)
             }
           } else if (e.menuItemId.toString().startsWith("save_as_tab|")) {
             //console.log("got", e, e.menuItemId.split("|"))
@@ -322,7 +331,6 @@ class BrowserApi {
     }
 
   }
-
 
   private createSubmenu(ts: Tabset, parentId: string, title: string) {
     chrome.contextMenus.create({
@@ -357,7 +365,7 @@ class BrowserApi {
     console.log("restoring tabset ", tabset.id, windowName, inNewWindow)
 
     const urlAndGroupArray: object[] = _.map(tabset.tabs, (t: Tab) => {
-      return {url: t.url || '', group: t.groupName}
+      return {url: t.url || '', group: t.groupName || undefined} //|| {url: '', group: undefined}
     })
     console.log("restoring urls and groups:", urlAndGroupArray)
     if (inNewWindow && !windowName) {
@@ -600,7 +608,7 @@ class BrowserApi {
     iconSvg.setAttribute('stroke', color);
     iconSvg.setAttribute('width', '20');
     iconSvg.setAttribute('height', '20');
-    iconSvg.setAttribute('style', 'position:fixed;top:3;right:3;z-index:10000');
+    iconSvg.setAttribute('style', 'position:fixed;top:3;right:3;z-index:2147483647');
     iconSvg.classList.add('post-icon');
 
     iconPath.setAttribute(
@@ -617,10 +625,11 @@ class BrowserApi {
   }
 
   addIndicatorIcon(tabId: number, tabUrl: string | undefined, color: string = 'orange', tooltip: string = 'managed by tabsets') {
+    console.log("addIndicatorIcon", tabId, tabUrl)
     if (tabUrl && chrome && chrome.scripting) {
       const tabsetIds = useTabsetService().tabsetsFor(tabUrl)
       if (tabsetIds.length > 0 && tabId) {
-        const currentTabsetId =  useTabsetsStore().currentTabsetId
+        const currentTabsetId = useTabsetsStore().currentTabsetId
         if (currentTabsetId && tabsetIds.indexOf(currentTabsetId) >= 0) {
           color = "green"
         }
@@ -630,7 +639,7 @@ class BrowserApi {
             func: this.tabsetIndication,
             args: [color, tooltip]
           })
-          // .then(() => console.log("injected script file"))
+          //.then(() => console.log("injected script file tabsetIndication"))
           .catch((res) => console.log("err", res))
       }
     }

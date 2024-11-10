@@ -12,7 +12,7 @@ export const useSettingsStore = defineStore('settings', () => {
     min: 0,
     max: 40
   })
-  const thumbnailQuality = ref( 25)
+  const thumbnailQuality = ref( 75)
 
   const isEnabled = computed(() => (ident: string) =>
     _.findIndex(activeToggles.value, (e: string) => e === ident) >= 0)
@@ -27,7 +27,7 @@ export const useSettingsStore = defineStore('settings', () => {
   watch(thumbnailQuality, (val: Object) => localStorage.set("thumbnailQuality", val))
 
   function initialize(localStorage: any) {
-    console.debug(" ...initializing settingsStore")
+    console.debug(" ...initializing settingsStore", '✅')
     const fts: string | undefined = localStorage.getItem("settings")
     if (fts) {
       console.debug(` ...determining activeToggles from '${fts}'`)

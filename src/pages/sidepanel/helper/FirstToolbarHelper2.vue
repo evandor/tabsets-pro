@@ -176,8 +176,6 @@ if ($q.platform.is.chrome && $q.platform.is.bex) {
 
 const showSearchIcon = () => useTabsetsStore().tabsets.size > 1
 
-const stageIdentifier = () => process.env.TABSETS_STAGE !== 'PRD' ? ' (' + process.env.TABSETS_STAGE + ')' : ''
-
 const title = (): string => {
   if (useFeaturesStore().hasFeature(FeatureIdent.SPACES)) {
     const spaceName = useSpacesStore().space ? useSpacesStore().space.label : t('no_space_selected')

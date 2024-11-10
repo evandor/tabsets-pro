@@ -12,8 +12,14 @@ class TabService {
       return false
     }
     const windowId = useWindowsStore().currentChromeWindow?.id || 0
-    const currentChromeTab = useTabsStore2().getCurrentChromeTab(windowId) || useTabsStore2().currentChromeTab
-    //console.log("checking current tab", currentChromeTab.url, tab.url, currentChromeTab.url === tab.url)
+    const currentChromeTab:chrome.tabs.Tab | undefined = useTabsStore2().getCurrentChromeTab(windowId) || useTabsStore2().currentChromeTab
+    // console.log("checking current tab", currentChromeTab, tab.url, currentChromeTab.url === tab.url)
+
+    // special urls
+    // if (currentChromeTab?.url === "https://excalidraw.com/" && useContentStore().currentLocalStorage) {
+    //   return tab.id === useContentStore().currentLocalStorage['tabsetsTabId']
+    // }
+
     if (currentChromeTab?.url === tab.url) {
       tab.chromeTabId = currentChromeTab.id
       return true

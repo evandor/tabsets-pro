@@ -61,8 +61,6 @@ import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {SidePanelViews} from "src/models/SidePanelViews";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
-import {ActionHandlerButtonClickedHolder} from "src/tabsets/actionHandling/model/ActionHandlerButtonClickedHolder";
-import {useActionHandlers} from "src/tabsets/actionHandling/ActionHandlers";
 import {Tabset} from "src/tabsets/models/Tabset";
 
 const {t} = useI18n({useScope: 'global'})
@@ -146,12 +144,6 @@ const openNewTabsetDialog = () => {
       fromPanel: true
     }
   })
-}
-
-
-const handleButtonClicked = async (tabset: Tabset, args: ActionHandlerButtonClickedHolder, folder?: Tabset) => {
-  console.log(`button clicked: tsId=${tabset.id}, folderId=${folder?.id}, args=...`)
-  await useActionHandlers(undefined).handleClick(tabset, currentChromeTab.value!, args, folder)
 }
 
 const offsetTop = () => ($q.platform.is.capacitor || $q.platform.is.cordova) ? 'margin-top:40px;' : ''

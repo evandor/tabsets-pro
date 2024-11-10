@@ -67,7 +67,7 @@
             <q-icon size="xs" name="o_equal"/>
           </q-item-section>
           <q-item-section>
-            Open similar websites
+            Open similar websites!
           </q-item-section>
         </q-item>
       </template>

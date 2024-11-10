@@ -79,8 +79,8 @@
 
 
               </div>
-<!--              created: {{ source?.created }}<br>-->
-<!--              Description: {{ source?.description }}<br>-->
+              <!--              created: {{ source?.created }}<br>-->
+              <!--              Description: {{ source?.description }}<br>-->
 
 
             </q-tab-panel>
@@ -101,21 +101,21 @@
                         <q-item-label>as MHtml</q-item-label>
                       </q-item-section>
                     </q-item>
-                    <q-item clickable v-close-popup @click="savePng(source as Tab)">
-                      <q-item-section>
-                        <q-item-label>as Image</q-item-label>
-                      </q-item-section>
-                    </q-item>
-                    <q-item clickable v-close-popup @click="savePdf(source as Tab)">
-                      <q-item-section>
-                        <q-item-label>as PDF</q-item-label>
-                      </q-item-section>
-                    </q-item>
-                    <q-item clickable v-close-popup @click="saveWArch(source as Tab)">
-                      <q-item-section>
-                        <q-item-label>as Web Archive</q-item-label>
-                      </q-item-section>
-                    </q-item>
+<!--                    <q-item clickable v-close-popup @click="savePng(source as Tab)">-->
+<!--                      <q-item-section>-->
+<!--                        <q-item-label>as Image</q-item-label>-->
+<!--                      </q-item-section>-->
+<!--                    </q-item>-->
+<!--                    <q-item clickable v-close-popup @click="savePdf(source as Tab)">-->
+<!--                      <q-item-section>-->
+<!--                        <q-item-label>as PDF</q-item-label>-->
+<!--                      </q-item-section>-->
+<!--                    </q-item>-->
+<!--                    <q-item clickable v-close-popup @click="saveWArch(source as Tab)">-->
+<!--                      <q-item-section>-->
+<!--                        <q-item-label>as Web Archive</q-item-label>-->
+<!--                      </q-item-section>-->
+<!--                    </q-item>-->
                   </q-list>
                 </q-btn-dropdown>
               </div>
@@ -228,7 +228,7 @@
 
 <script lang="ts" setup>
 
-import FirstToolbarHelper from "pages/sidepanel/helper/FirstToolbarHelper.vue";
+import FirstToolbarHelper from "pages/sidepanel/helper/FirstToolbarHelper2.vue";
 import {onMounted, ref, watchEffect} from "vue";
 import Analytics from "src/core/utils/google-analytics";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
@@ -246,10 +246,7 @@ import {Annotation} from "src/snapshots/models/Annotation";
 import {useUtils} from "src/core/services/Utils";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import SourcePageAnnotation from "src/pages/helper/SourcePageAnnotation.vue";
-import {SavePngCommand} from "src/snapshots/commands/SavePngCommand";
 import SnapshotViewHelper from "pages/sidepanel/helper/SnapshotViewHelper.vue";
-import {SavePdfCommand} from "src/snapshots/commands/SavePdfCommand";
-import {SaveWarcCommand} from "src/snapshots/commands/SaveWarcCommand";
 import {SaveHtmlCommand} from "src/snapshots/commands/SaveHtmlCommand";
 import OfflineInfo from "src/core/components/helper/offlineInfo.vue";
 import PanelTabListElementWidget from "src/tabsets/widgets/PanelTabListElementWidget.vue";
@@ -480,27 +477,6 @@ const saveMHtml = (source: Tab | undefined) => {
   console.log("saving mhtml for", source)
   if (source && source.url) {
     useCommandExecutor().executeFromUi(new SaveMHtmlCommand(source.id, source.url))
-  }
-}
-
-const saveWArch = (source: Tab | undefined) => {
-  console.log("saving Warc for", source)
-  if (source && source.url) {
-    useCommandExecutor().executeFromUi(new SaveWarcCommand(source.id, source.url))
-  }
-}
-
-const savePng = (source: Tab | undefined) => {
-  console.log("saving png for", source)
-  if (source && source.url) {
-    useCommandExecutor().executeFromUi(new SavePngCommand(source.id, source.url))
-  }
-}
-
-const savePdf = (source: Tab | undefined) => {
-  console.log("saving PDF for", source)
-  if (source && source.url) {
-    useCommandExecutor().executeFromUi(new SavePdfCommand(source.id, source.url))
   }
 }
 

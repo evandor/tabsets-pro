@@ -23,7 +23,18 @@
     </div>
 
     <div class="row fit q-mb-sm" v-if="showStatsTable">
-<!--      <SidePanelStatsMarkupTable :key="randomKey"/>-->
+      <SidePanelStatsMarkupTable :key="randomKey"/>
+    </div>
+
+    <div class="row fit q-ma-none q-pa-none" v-if="!checkToasts() && useUiStore().progress">
+      <div class="col-12">
+        <q-linear-progress stripe size="18px" :value="progressValue" color="grey-7" track-color="grey-4">
+          <div class="absolute-full flex flex-center">
+            <q-badge :label="progressLabel" color="grey"/>
+          </div>
+        </q-linear-progress>
+
+      </div>
     </div>
 
     <div class="row fit q-ma-none q-pa-none">
@@ -43,20 +54,12 @@
           </q-banner>
         </Transition>
 
-        <template v-if="!checkToasts() && useUiStore().progress">
-          <q-linear-progress size="25px" :value="progressValue">
-            <div class="absolute-full flex flex-center">
-              <q-badge :label="progressLabel"/>
-            </div>
-          </q-linear-progress>
-        </template>
-
         <q-btn v-if="!checkToasts() && !transitionGraceTime && showSuggestionButton"
                outline
                icon="o_lightbulb"
                :label="suggestionsLabel()"
                :color="dependingOnStates()"
-               :size="getButtonSize()"
+               size="12px"
                @click="suggestionDialog()"
                class="q-ma-none q-pa-xs q-ml-sm q-mt-xs q-pr-md cursor-pointer">
         </q-btn>
@@ -74,21 +77,42 @@
         &nbsp;
       </div>
       <div v-else class="col text-right">
-        <q-btn icon="o_help" v-if="useFeaturesStore().hasFeature(FeatureIdent.HELP)"
-               :class="rightButtonClass()"
-               flat
-               :size="getButtonSize()"
-               @click="openHelpView()">
-        </q-btn>
-
-        <q-btn icon="o_settings" v-if="showSettingsButton()"
-               class="q-my-xs q-px-xs q-mr-none"
-               :class="{ shake: animateSettingsButton }"
-               flat
-               :size="getButtonSize()"
-               @click="openOptionsPage()">
-          <q-tooltip class="tooltip_small" anchor="top left" self="bottom left">{{ settingsTooltip() }}</q-tooltip>
-        </q-btn>
+        <span>
+        <input
+          class="q-ma-none q-pa-none"
+          v-if="useFeaturesStore().hasFeature(FeatureIdent.HTML_SNIPPETS) && useContentStore().currentTabUrl"
+          v-model="ignored"
+          style="border:1px dotted grey;border-radius:3px;max-width:30px;max-height:20px"
+          @drop="drop($event)"/>
+          <q-tooltip class="tooltip_small">Drag and drop text or images from your current tab</q-tooltip>
+        </span>
+        <span>
+          <q-btn icon="o_settings" v-if="showSettingsButton()"
+                 class="q-my-xs q-px-xs q-mr-none"
+                 :class="{ shake: animateSettingsButton }"
+                 flat
+                 :size="getButtonSize()">
+            <q-tooltip :delay="4000" class="tooltip_small" anchor="top left" self="bottom left">{{
+                settingsTooltip()
+              }}</q-tooltip>
+          </q-btn>
+          <q-menu :offset="[-10, 0]">
+            <q-list dense>
+              <q-item clickable v-close-popup @click="openOptionsPage()">
+                <q-item-section>Open Settings</q-item-section>
+              </q-item>
+              <q-separator/>
+              <q-item clickable v-close-popup
+                      @click="openURL('https://docs.google.com/forms/d/e/1FAIpQLSdUtiKIyhqmNoNkXXzZOEhnzTCXRKT-Ju83SyyEovnfx1Mapw/viewform?usp=pp_url')">
+                Feedback
+              </q-item>
+              <q-separator/>
+              <q-item clickable v-close-popup @click="openURL('https://docs.tabsets.net')">
+                Documentation
+              </q-item>
+            </q-list>
+          </q-menu>
+        </span>
 
         <q-btn v-if="useFeaturesStore().hasFeature(FeatureIdent.WINDOWS_MANAGEMENT)"
                icon="o_grid_view"
@@ -101,6 +125,7 @@
         </q-btn>
 
         <q-btn
+          v-if="useFeaturesStore().hasFeature(FeatureIdent.STATS)"
           icon="show_chart"
           :class="rightButtonClass()"
           flat
@@ -109,26 +134,27 @@
           <q-tooltip class="tooltip_small" anchor="top left" self="bottom left">Show Stats</q-tooltip>
         </q-btn>
 
-        <span v-if="useFeaturesStore().hasFeature(FeatureIdent.STANDALONE_APP) && useAuthStore().isAuthenticated()">
+        <span v-if="useFeaturesStore().hasFeature(FeatureIdent.STANDALONE_APP)">
           <q-icon
             name="o_open_in_new"
+            @click="openExtensionTab()"
             :class="rightButtonClass()"
             class="cursor-pointer"
             flat
             size="20px">
             <q-tooltip :delay="2000" anchor="center left" self="center right"
-                       class="tooltip-small">Alternative Access</q-tooltip>
+                       class="tooltip-small">Tabsets as full-page app</q-tooltip>
           </q-icon>
-          <q-menu :offset="[0, 7]" fit>
-            <q-list dense style="min-width: 200px;min-height:50px">
-              <q-item clickable v-close-popup>
-                <q-item-section @click="openExtensionTab()">Tabsets as full-page app</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section @click="openPwaUrl()">Tabsets Online Access</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
+          <!--          <q-menu :offset="[0, 7]" fit>-->
+          <!--            <q-list dense style="min-width: 200px;min-height:50px">-->
+          <!--              <q-item clickable v-close-popup>-->
+          <!--                <q-item-section @click="openExtensionTab()">Tabsets as full-page app</q-item-section>-->
+          <!--              </q-item>-->
+          <!--              <q-item clickable v-close-popup>-->
+          <!--                <q-item-section @click="openPwaUrl()">Tabsets Online Access</q-item-section>-->
+          <!--              </q-item>-->
+          <!--            </q-list>-->
+          <!--          </q-menu>-->
         </span>
         <q-btn v-else-if="useFeaturesStore().hasFeature(FeatureIdent.STANDALONE_APP)"
                icon="o_open_in_new"
@@ -200,7 +226,7 @@ import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import _ from "lodash";
 import {Suggestion, SuggestionState} from "src/suggestions/models/Suggestion";
 import SuggestionDialog from "src/suggestions/dialogues/SuggestionDialog.vue";
-import {Tabset, TabsetStatus} from "src/tabsets/models/Tabset";
+import {Tabset} from "src/tabsets/models/Tabset";
 import SidePanelFooterLeftButtons from "components/helper/SidePanelFooterLeftButtons.vue";
 import {useAuthStore} from "stores/authStore";
 import {Account} from "src/models/Account";
@@ -217,6 +243,12 @@ import {ToastType} from "src/core/models/Toast";
 import {SidePanelViews} from "src/models/SidePanelViews";
 import {TabAndTabsetId} from "src/tabsets/models/TabAndTabsetId";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2.ts";
+import {useContentStore} from "src/content/stores/contentStore.ts";
+import {Tab, TabSnippet} from "src/tabsets/models/Tab.ts";
+import BrowserApi from "src/app/BrowserApi.ts";
+import {useCommandExecutor} from "src/core/services/CommandExecutor.ts";
+import {AddTabToTabsetCommand} from "src/tabsets/commands/AddTabToTabsetCommand.ts";
+import SidePanelStatsMarkupTable from "components/helper/SidePanelStatsMarkupTable.vue";
 
 const {handleError} = useNotificationHandler()
 
@@ -237,6 +269,7 @@ const doShowSuggestionButton = ref(false)
 const transitionGraceTime = ref(false)
 const showWindowTable = ref(false)
 const showStatsTable = ref(false)
+const ignored = ref('')
 const showLogin = ref(false)
 const account = ref<Account | undefined>(undefined)
 const randomKey = ref<string>(uid())
@@ -278,7 +311,7 @@ watchEffect(() => {
   showSuggestionButton.value =
     doShowSuggestionButton.value ||
     (useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
-      _.findIndex(suggestions, (s:Suggestion) => {
+      _.findIndex(suggestions, (s: Suggestion) => {
         return s.state === SuggestionState.NEW ||
           (s.state === SuggestionState.NOTIFICATION && !useFeaturesStore().hasFeature(FeatureIdent.NOTIFICATIONS))
       }) >= 0)
@@ -286,7 +319,7 @@ watchEffect(() => {
   showSuggestionIcon.value =
     !doShowSuggestionButton.value &&
     useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
-    _.findIndex(suggestions, (s:Suggestion) => {
+    _.findIndex(suggestions, (s: Suggestion) => {
       return s.state === SuggestionState.DECISION_DELAYED
     }) >= 0
 })
@@ -411,16 +444,6 @@ const suggestionsLabel = () => {
 
 }
 
-const openHelpView = () => {
-  const helpTabset = useTabsetsStore().getTabset("HELP")
-  console.log("got helpTabset", helpTabset)
-  if (helpTabset && helpTabset.status !== TabsetStatus.DELETED) {
-    router.push("/sidepanel/tabsets/HELP")
-  } else {
-    //deactivateHelpFeature();
-  }
-}
-
 const checkToasts = () => {
   if (useUiStore().toasts.length > 0) {
     const useDelay = 3000
@@ -538,9 +561,34 @@ const additionalActionWasClicked = (event: any) => {
 
 const offsetBottom = () => ($q.platform.is.capacitor || $q.platform.is.cordova) ? 'margin-bottom:20px;' : ''
 const gotoStripe = () => openURL("https://billing.stripe.com/p/login/test_5kA9EHf2Da596HuaEE")
-const openPwaUrl = () => NavigationService.openOrCreateTab([process.env.TABSETS_PWA_URL || 'https://www.skysail.io'])
+// const openPwaUrl = () => NavigationService.openOrCreateTab([process.env.TABSETS_PWA_URL || 'https://www.skysail.io'])
 const showLoginBtn = () => true
 const showSettingsButton = () => route?.path !== '/sidepanel/welcome' || useAuthStore().isAuthenticated()
+
+const drop = (evt: any) => {
+  evt.preventDefault()
+  var text = evt.dataTransfer.getData('text')
+  var html = evt.dataTransfer.getData('text/html')
+  const currentTabUrl = useContentStore().currentTabUrl
+  console.log("===>", evt, text, html, currentTabUrl)
+  if (currentTabUrl) {
+    const existing: Tab | undefined = useTabsetsStore().tabForUrlInSelectedTabset(currentTabUrl!)
+    if (existing) {
+      existing.snippets.push(new TabSnippet(text, html))
+      existing.title = "Snippet ("+existing.snippets.length+")"
+      const currentTabset = useTabsetsStore().getCurrentTabset
+      if (currentTabset) {
+        useTabsetsStore().saveTabset(currentTabset)
+      }
+    } else {
+      const tab = new Tab(uid(), BrowserApi.createChromeTabObject("Snippet", currentTabUrl!))
+      tab.snippets.push(new TabSnippet(text, html))
+      tab.description = text
+      useCommandExecutor().executeFromUi(new AddTabToTabsetCommand(tab))
+    }
+  }
+}
+
 </script>
 
 <style>

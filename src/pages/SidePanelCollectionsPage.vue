@@ -42,7 +42,6 @@
 import {onMounted, onUnmounted, ref, watchEffect} from "vue";
 import {useUiStore} from "src/ui/stores/uiStore";
 import Analytics from "src/core/utils/google-analytics";
-import {useI18n} from 'vue-i18n'
 import {Tabset, TabsetStatus} from "src/tabsets/models/Tabset";
 import _ from "lodash"
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
@@ -58,8 +57,6 @@ import {dragContext, Draggable, OpenIcon} from "@he-tree/vue";
 import '@he-tree/vue/style/default.css'
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {DeleteTabsetFolderCommand} from "src/tabsets/commands/DeleteTabsetFolderCommand";
-
-const {t} = useI18n({locale: navigator.language, useScope: "global"})
 
 type NodeTreeObject = { text: string, id: string, tsId: string, level: number, url: string, children: NodeTreeObject[] }
 
@@ -187,6 +184,7 @@ function treeNodeFromNote(n: Tabset, rootId: string = n.id, level = 0): NodeTree
 watchEffect(async () => {
   if (tabsets.value && tabsets.value.length > 0) {
     treeData.value = tabsets.value
+      .filter((ts: Tabset) => ts.status !== TabsetStatus.ARCHIVED)
       .map((f: Tabset) => {
         return treeNodeFromNote(f)
       })

@@ -1,29 +1,28 @@
-import {Tabset, TabsetStatus, TabsetType} from "src/tabsets/models/Tabset";
 import _ from "lodash";
-import {HTMLSelection, Tab} from "src/tabsets/models/Tab";
 import {uid} from "quasar";
-import throttledQueue from 'throttled-queue';
-import {useWindowsStore} from "src/windows/stores/windowsStore";
-import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {MetaLink} from "src/models/MetaLink";
-import {Suggestion, SuggestionState, SuggestionType} from "src/suggestions/models/Suggestion";
-import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
-import {useUtils} from "src/core/services/Utils";
+import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useGroupsStore} from "src/tabsets/stores/groupsStore";
 import NavigationService from "src/services/NavigationService";
-import {useAuthStore} from "stores/authStore";
-import {EMAIL_LINK_REDIRECT_DOMAIN} from "boot/constants";
 import {useUiStore} from "src/ui/stores/uiStore";
+import {useWindowsStore} from "src/windows/stores/windowsStore";
+import {Tab} from "src/tabsets/models/Tab";
+import {useTabsetService} from "src/tabsets/services/TabsetService2";
+import {Extractor, Extractors, ExtractorType} from "src/core/config/Extractors";
+import {useUtils} from "src/core/services/Utils";
+import {Suggestion, SuggestionState, SuggestionType} from "src/suggestions/models/Suggestion";
+import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {Extractor, Extractors, ExtractorType} from "src/config/Extractors";
 import {SidePanelViews} from "src/models/SidePanelViews";
-import {FeatureIdent} from "src/app/models/FeatureIdent";
-import {useTabsetsUiStore} from "src/tabsets/stores/tabsetsUiStore.ts";
+import {useTabsetsUiStore} from "src/tabsets/stores/tabsetsUiStore";
+import BrowserApi from "src/app/BrowserApi";
+import {useContentStore} from "src/content/stores/contentStore";
+import ContentUtils from "src/core/utils/ContentUtils.ts";
 
 const {
-  saveTabset,
+  saveText,
   saveMetaLinksFor,
   saveLinksFor,
   addToTabsetId
@@ -33,19 +32,25 @@ const {sanitize, inBexMode} = useUtils()
 
 async function setCurrentTab() {
   const tabs = await chrome.tabs.query({active: true, lastFocusedWindow: true})
-
+  if (chrome.runtime.lastError) {
+    console.warn("got runtime error:" + chrome.runtime.lastError);
+  }
   //console.debug("setting current tab", tabs)
   if (tabs && tabs[0]) {
     useTabsStore2().setCurrentChromeTab(tabs[0] as unknown as chrome.tabs.Tab)
   } else {
     // Seems to be necessary when creating a new chrome group
     const tabs2 = await chrome.tabs.query({active: true})
+    if (chrome.runtime.lastError) {
+      console.warn("got runtime error:" + chrome.runtime.lastError);
+    }
     //console.log("setting current tab II", tabs2)
     if (tabs2 && tabs2[0]) {
       useTabsStore2().setCurrentChromeTab(tabs2[0] as unknown as chrome.tabs.Tab)
     }
   }
 }
+
 
 function inIgnoredMessages(request: any) {
   // TODO name vs. msg!
@@ -73,7 +78,6 @@ function inIgnoredMessages(request: any) {
     request.name === 'reload-entities' ||
     request.name === 'api-changed' ||
     request.action === 'highlight-annotation'
-  //request.name === 'recogito-annotation-created'
 
 }
 
@@ -99,8 +103,6 @@ class BrowserListeners {
   inProgress = false;
 
   thumbnailsActive = true
-
-  throttleOnePerSecond = throttledQueue(1, 1000, true)
 
   private onCreatedListener = (tab: chrome.tabs.Tab) => this.onCreated(tab)
   private onUpdatedListener = (number: number, info: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) => this.onUpdated(number, info, tab)
@@ -131,7 +133,6 @@ class BrowserListeners {
   async initListeners() {
 
     if (process.env.MODE === 'bex') {
-
       console.debug(" ...initializing chrome tab listeners")
 
       chrome.runtime.setUninstallURL("https://tabsets.web.app/#/uninstall")
@@ -223,48 +224,14 @@ class BrowserListeners {
   }
 
   onCreated(tab: chrome.tabs.Tab) {
-    // if (!useTabsStore().listenersOn) {
-    //   console.debug(`onCreated: tab ${tab.id}: >>> listeners off, returning <<<`)
-    //   return
-    // }
     this.eventTriggered()
-    console.debug(`onCreated: tab ${tab.id}: >>> ${tab.pendingUrl}`, tab)
+    // console.debug(`onCreated: tab ${tab.id}: >>> ${tab.pendingUrl}`, tab)
     //sendMsg('window-updated', {initiated: "ChromeListeners#onCreated"})
-
-    let foundSession = false
-    _.forEach([...useTabsetsStore().tabsets.values()] as Tabset[], (ts: Tabset) => {
-      if (ts.type === TabsetType.SESSION) {
-        foundSession = true
-        console.debug("pushing to", ts.id, tab)
-        ts.tabs.push(new Tab(uid(), tab))
-      }
-    })
-    if (!foundSession) {
-      console.debug("pushing to pending", tab)
-      //tabsStore.pendingTabset.tabs.push(new Tab(uid(), tab))
-    }
   }
 
   async onUpdated(number: number, info: chrome.tabs.TabChangeInfo, chromeTab: chrome.tabs.Tab) {
-    if (info.url) {
-      if (this.checkOriginForEmailLink(info.url)) {
-        const split = info.url.split("?")
-        const authRequest = split[1]
-        console.log("authRequest received on", window.location.href)
-        //const newLocation = window.location + "?" + authRequest
-        //console.log("%cnewLocation", "color:green",newLocation)
-        //window.location.href = newLocation
-        useAuthStore().setAuthRequest(authRequest)
-      }
-    }
 
-
-    // if (!useTabsStore().listenersOn) {
-    //   console.debug(`onUpdated:   tab ${number}: >>> listeners off, returning <<<`)
-    //   return
-    // }
-
-    // set current chrome tab in tabsStore
+    // set current browser tab in tabsStore
     await setCurrentTab()
 
     const selfUrl = chrome.runtime.getURL("")
@@ -275,24 +242,29 @@ class BrowserListeners {
 
     this.eventTriggered()
 
-    if (!info.status || (Object.keys(info).length > 1)) {
+    if (info.status === "complete") {
       console.debug(`onUpdated:   tab ${number}: >>> ${JSON.stringify(info)} <<<`)
 
-      // handle pending Tabset
-      //this.handleUpdate(tabsStore.pendingTabset as Tabset, chromeTab)
+      if (chromeTab.id) {
+        try {
+          const contentRequest = await chrome.tabs.sendMessage(chromeTab.id, 'getExcerpt')
+          useContentStore().setBrowserTabData(chromeTab, contentRequest)
+        } catch (err) {} // ignore
+      }
+
       this.handleUpdateInjectScripts(info, chromeTab)
 
       // handle existing tabs
       if (useFeaturesStore().hasFeature(FeatureIdent.TAB_GROUPS)) {
         const matchingTabs = useTabsetsStore().tabsForUrl(chromeTab.url || '')
-        for (const t of matchingTabs) {
+        for (const tabAndTabsetId of matchingTabs) {
           // we care only about actually setting a group, not about removal
           if (info.groupId && info.groupId >= 0) {
-            console.log(" --- updating existing tabs for url: ", chromeTab.url, t, info)
-            t.tab.groupId = info.groupId
-            t.tab.groupName = useGroupsStore().currentGroupForId(info.groupId)?.title || '???'
-            t.tab.updated = new Date().getTime()
-            const tabset = useTabsetsStore().tabsetFor(t.tab.id)
+            console.log(" --- updating existing tabs for url: ", chromeTab.url, tabAndTabsetId, info)
+            tabAndTabsetId.tab.groupId = info.groupId
+            tabAndTabsetId.tab.groupName = useGroupsStore().currentGroupForId(info.groupId)?.title || '???'
+            tabAndTabsetId.tab.updated = new Date().getTime()
+            const tabset = useTabsetsStore().tabsetFor(tabAndTabsetId.tab.id)
             if (tabset) {
               await useTabsetService().saveTabset(tabset)
             }
@@ -300,82 +272,18 @@ class BrowserListeners {
         }
       }
 
-      // handle sessions
-      _.forEach([...useTabsetsStore().tabsets.values()] as Tabset[], (ts: Tabset) => {
-        if (ts.type === TabsetType.SESSION) {
-          this.handleUpdate(ts, chromeTab)
-        }
-      })
-
-      // handle windowsStore related pages
-      //sendMsg('window-updated', {initiated: "ChromeListeners#onUpdated"})
-    }
-  }
-
-  /**
-   *
-   * @param tabset: usually the "pendingTabset", or any one which is a session
-   * @param tab
-   * @private
-   */
-  private handleUpdate(tabset: Tabset, tab: chrome.tabs.Tab) {
-    // find tab which was created by "onCreate" moments ago
-    const index = _.findIndex(tabset?.tabs, (t:Tab) => t.chromeTabId === tab.id);
-    if (index >= 0) {
-      const existingPendingTab = tabset.tabs[index]
-      const updatedTab = new Tab(uid(), tab)
-
-      //console.log("updatedTab A", updatedTab)
-
-      // (chrome) Group
-      //console.log("updating updatedTab group for group id", updatedTab.groupId)
-      updatedTab.groupName = useGroupsStore().currentGroupForId(updatedTab.groupId)?.title || '?' + updatedTab.groupId + '?'
-      //console.log("group set to", updatedTab.groupName)
-
-      updatedTab.setHistoryFrom(existingPendingTab)
-      if (existingPendingTab.url !== updatedTab.url && existingPendingTab.url !== 'chrome://newtab/') {
-        if (existingPendingTab.url) {
-          updatedTab.addToHistory(existingPendingTab.url)
-        }
-      }
-      const urlExistsAlready = _.filter(tabset.tabs, (pT:Tab) => pT.url === tab.url).length >= 2
-      if (urlExistsAlready) {
-        tabset.tabs.splice(index, 1);
-        //console.log("Tabset spliced", tabset.tabs)
-      } else {
-        tabset.tabs.splice(index, 1, updatedTab);
-        //console.log("Tabset spliced and deleted", tabset.tabs)
+      // matching tabs for url
+      if (chromeTab.url) {
+        useTabsetsUiStore().setMatchingTabsFor(chromeTab.url)
       }
 
-    } else {
-      console.debug(`onUpdated: tab ${tab.id}: pending tab cannot be found in ${tabset.name}`)
-      if (tab.url !== undefined) {
-
-        const newTab = new Tab(uid(), tab)
-
-        // (chrome) Group
-        if (tab.groupId >= 0) {
-          console.log("updating updatedTab group for group id", tab.groupId)
-          //newTab.group = useGroupsStore().groupForId(tab.groupId)
-          //const g = await browser.tabGroups.get(tab.groupId)
-
-          newTab.groupName = useGroupsStore().currentGroupForId(tab.groupId)?.title || '???'
-        }
-
-        console.debug(`onUpdated: tab ${tab.id}: missing tab added for url ${tab.url}`)
-        tabset.tabs.push(newTab)
-      }
     }
   }
 
   private handleUpdateInjectScripts(info: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) {
-    // TODO ignoring urls !?
-    // if (this.ignoreUrl(tab, info)) {
+    // if (info.status !== "loading") {
     //   return
     // }
-    if (info.status !== "loading") {
-      return
-    }
     if (!tab.id) {
       return
     }
@@ -384,57 +292,7 @@ class BrowserListeners {
       return
     }
 
-    if (useFeaturesStore().hasFeature(FeatureIdent.ANNOTATIONS)) {
-      const tabForUrl = useTabsetsStore().tabForUrlInSelectedTabset(tab.url || '')
-      console.log("about to run annotationScript...", tabForUrl)
-      // if (tabForUrl) {
-      //   chrome.scripting.executeScript({
-      //     target: {tabId: (tab.id || 0)},
-      //     func: annotationScript,
-      //     args: [tabForUrl.id, tabForUrl.annotations],
-      //   })
-      //     .then(() => console.log("injected a function"));
-      // }
-    }
-
-    const scripts: string[] = []
-
-    //if (useFeaturesStore().hasFeature(FeatureIdent.THUMBNAILS)) {
-    //scripts.push("content-script-thumbnails.js")
-    //}
-    if (useFeaturesStore().hasFeature(FeatureIdent.TAB_HELPER)) {
-      scripts.push("content-script-tab-helper.js")
-    }
-    if (useFeaturesStore().hasFeature(FeatureIdent.ANNOTATIONS)) {
-      scripts.push("highlight-annotations.js")
-    }
-    scripts.push("content-script.js")
-    //scripts.push("recogito2.js")
-    //scripts.push("tabsets-content-script.js")
-    if (scripts.length > 0 && tab.id !== null) { // && !this.injectedScripts.get(.chromeTabId)) {
-
-      chrome.tabs.get(tab.id, (chromeTab: chrome.tabs.Tab) => {
-        if (chrome.runtime.lastError) {
-          console.warn("got runtime error:" + chrome.runtime.lastError);
-        }
-        if (!tab.url?.startsWith("chrome")) {
-          scripts.forEach((script: string) => {
-            //console.debug("executing scripts", tab.id, script)
-
-
-            // @ts-ignore
-            chrome.scripting.executeScript({
-              target: {tabId: tab.id || 0, allFrames: false},
-              files: [script] //["tabsets-content-script.js","content-script-thumbnails.js"],
-            }, (callback: any) => {
-              if (chrome.runtime.lastError) {
-                console.warn("could not execute script: " + chrome.runtime.lastError.message, info.url);
-              }
-            });
-          })
-        }
-      })
-    }
+    BrowserApi.addIndicatorIcon(tab.id, tab.url)
   }
 
   onRemoved(number: number, info: chrome.tabs.TabRemoveInfo) {
@@ -442,6 +300,7 @@ class BrowserListeners {
     console.debug("onRemoved tab event: ", number, info)
     //useWindowsStore().refreshCurrentWindows()
     useWindowsStore().refreshTabsetWindow(info.windowId)
+    useContentStore().removeBrowserTabData(number)
     //sendMsg('window-updated', {initiated: "ChromeListeners#onRemoved"})
   }
 
@@ -456,34 +315,28 @@ class BrowserListeners {
 
     await setCurrentTab()
 
+    if (info.tabId) {
+      const found = useContentStore().tabActivated(info.tabId)
+      if (!found) {
+        try {
+          const contentRequest = await chrome.tabs.sendMessage(info.tabId, 'getExcerpt')
+          useContentStore().currentTabContent = contentRequest['html' as keyof object] || ''
+        } catch (err) {
+          // ignore
+        }
+      }
+    }
+
     chrome.tabs.get(info.tabId, tab => {
       if (chrome.runtime.lastError) {
         console.warn("got runtime error:" + chrome.runtime.lastError);
       }
       const url = tab.url
-      _.forEach([...useTabsetsStore().tabsets.keys()], (key:string) => {
-        const ts = useTabsetsStore().tabsets.get(key)
-        if (ts && ts.status !== TabsetStatus.DELETED) {
-          // increasing hit count
-          const hits = _.filter(ts.tabs, (t: Tab) => t.url === url) as Tab[]
-          let hit = false
-          _.forEach(hits, (h:Tab) => {
-            h.activatedCount = 1 + h.activatedCount
-            h.lastActive = new Date().getTime()
-            hit = true
-          })
-          if (hit) {
-            console.debug("saving tabset on activated", ts.name)
-            saveTabset(ts as Tabset)
-          }
-        }
-      })
       if (url) {
-        //useTabsetService().urlWasActivated(url)
+        useTabsetService().urlWasActivated(url)
 
         // matching tabs for url
         useTabsetsUiStore().setMatchingTabsFor(url)
-
       }
     })
   }
@@ -503,7 +356,7 @@ class BrowserListeners {
   }
 
   onHighlighted(info: chrome.tabs.TabHighlightInfo) {
-    console.debug(`onHighlighted: tab ${info.tabIds} highlighted: ${JSON.stringify(info)}`)
+    //console.debug(`onHighlighted: tab ${info.tabIds} highlighted: ${JSON.stringify(info)}`)
   }
 
   onZoomChange(info: chrome.tabs.ZoomChangeInfo) {
@@ -514,7 +367,7 @@ class BrowserListeners {
     if (inIgnoredMessages(request)) {
       return true
     }
-    console.debug(" <<< got message in ChromeListeners", request)
+    console.debug(` <<< got message '${request.msg}'`, request)
     if (request.msg === 'captureThumbnail') {
       // moved to thumbnailsService
     } else if (request.msg === 'html2text') {
@@ -589,9 +442,9 @@ class BrowserListeners {
     }
 
     if (sender.tab) {
-      // const tokens = ContentUtils.html2tokens(request.html)
-      // const tab = new Tab(uid(), sender.tab)
-      // saveText(tab, [...tokens].join(" "), request.metas)
+      const tokens = ContentUtils.html2tokens(request.html)
+      const tab = new Tab(uid(), sender.tab)
+      saveText(tab, [...tokens].join(" "), request.metas)
     }
     sendResponse({html2text: 'done'});
   }
@@ -696,11 +549,7 @@ class BrowserListeners {
         sendResponse({error: 'could not find tab for url ' + url})
         return
       }
-      if (!t.annotations) {
-        t.annotations = []
-      }
-      t.annotations.push(new HTMLSelection(request.text, request.range))
-      useTabsetService().saveCurrentTabset()
+      await useTabsetService().saveCurrentTabset()
       sendResponse({capturedAnnotation: 'done'});
       return
     }
@@ -754,32 +603,6 @@ class BrowserListeners {
       })
   }
 
-  private checkOriginForEmailLink(url: string) {
-    try {
-      const theUrl = new URL(url)
-      const urlOrigin = theUrl.origin;
-      //console.log("theURL", theUrl)
-      const res = urlOrigin === EMAIL_LINK_REDIRECT_DOMAIN || urlOrigin === "http://localhost:9000"
-      if (res) {
-        //console.log("checking: origin ok")
-        const params = theUrl.searchParams
-        if (!params.has("apiKey") || !params.has("oobCode") || !params.has("mode")) {
-          //console.log("checking: missing key", params)
-          return false
-        }
-        if (!params.get("apiKey")?.startsWith("AIzaS") || params.get("mode") !== "signIn") {
-          //console.log("checking: wrong key", params.get("apiKey"))
-          //console.log("checking: wrong key", params.get("mode"))
-          return false
-        }
-        console.log("%cfound email authorization link @", "border:1px solid green", url)
-        return true
-      }
-      return false
-    } catch (err) {
-      console.log("could not check url for auth link", url)
-    }
-  }
 }
 
 export default new BrowserListeners();

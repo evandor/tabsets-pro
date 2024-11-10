@@ -445,18 +445,17 @@ import {Account} from "src/models/Account";
 import {useAuthStore} from "stores/authStore";
 import FeatureToggleSettings from "pages/helper/FeatureToggleSettings.vue";
 import {useI18n} from "vue-i18n";
-import {deleteUser, getAuth} from "firebase/auth";
+import {getAuth} from "firebase/auth";
 import SubscriptionSettings from "pages/helper/SubscriptionSettings.vue";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {useSpacesStore} from "src/spaces/stores/spacesStore.ts";
-import {Space} from "src/spaces/models/Space.ts";
 import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
 import InfoLine from "pages/helper/InfoLine.vue";
 import SharingSettings from "pages/helper/SharingSettings.vue";
 import ImportDialog from "src/tabsets/dialogues/ImportDialog.vue";
 import ExportDialog from "src/tabsets/dialogues/ExportDialog.vue";
 import BackupSettings from "src/tabsets/pages/settings/BackupSettings.vue";
+import DeleteAccountCommand from "src/account/commands/DeleteAccountCommand.ts";
 
 const { t } = useI18n()
 
@@ -662,22 +661,23 @@ const deleteAccount = () => {
   const auth = getAuth();
   const user2 = auth.currentUser;
   if (user2) {
-    deleteUser(user2).then(() => {
-      //chrome.storage.local.clear()
-      localStorage.clear()
-      useTabsetsStore().tabsets = new Map<string, Tabset>()
-      useSpacesStore().spaces = new Map<string, Space>()
-      // FirebaseServices.getFirestore().clearPersistence().catch(error => {
-      //   console.error('Could not enable persistence:', error.code);
-      // })
-      alert("user account has been deleted")
-      sendMsg('restart-application', {initiatedBy: "FeatureToggleSettings"})
-      setTimeout(() => {
-        window.close()
-      }, 1000)
-    }).catch((error) => {
-      console.error("got error", error)
-    });
+    useCommandExecutor().executeFromUi(new DeleteAccountCommand())
+    // deleteUser(user2).then(() => {
+    //   //chrome.storage.local.clear()
+    //   localStorage.clear()
+    //   useTabsetsStore().tabsets = new Map<string, Tabset>()
+    //   useSpacesStore().spaces = new Map<string, Space>()
+    //   // FirebaseServices.getFirestore().clearPersistence().catch(error => {
+    //   //   console.error('Could not enable persistence:', error.code);
+    //   // })
+    //   alert("user account has been deleted")
+    //   sendMsg('restart-application', {initiatedBy: "FeatureToggleSettings"})
+    //   setTimeout(() => {
+    //     window.close()
+    //   }, 1000)
+    // }).catch((error) => {
+    //   console.error("got error", error)
+    // });
   }
 }
 </script>
