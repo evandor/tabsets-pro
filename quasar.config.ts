@@ -86,7 +86,11 @@ export default configure((ctx) => {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) {
+        if (viteConf.optimizeDeps) {
+          viteConf.optimizeDeps.include = ['element-resize-detector']
+        }
+      },
       // viteVuePluginOptions: {},
 
       vitePlugins: [
