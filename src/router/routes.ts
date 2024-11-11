@@ -102,6 +102,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/FullPageLayout.vue'),
     children: [{path: '', component: () => import('src/tabsets/pages/TabsetPage.vue')}],
   },
+  {
+    path: '/tabsets',
+    component: () => import('layouts/FullPageLayout.vue'),
+    children: [{path: '', component: () => import('src/tabsets/pages/TabsetPage.vue')}],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
