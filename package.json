@@ -14,6 +14,7 @@
     "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
     "build": "quasar build",
+    "firebase build & deploy pwa": "quasar build -m pwa && firebase deploy --only hosting",
     "info": "yarn list > docs/yarn.list.txt && quasar info > docs/quasar.info.txt"
   },
   "dependencies": {
