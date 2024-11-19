@@ -42,155 +42,7 @@
 
   <div v-if="tab === 'appearance'">
 
-    <div class="q-pa-md q-gutter-sm">
-      <q-banner rounded style="border:1px solid orange">
-        {{ t('settings_adjust_general_appearance')}}
-      </q-banner>
-
-      <div class="row items-baseline q-ma-md q-gutter-md">
-
-        <InfoLine :label="t('title')">
-          <q-input type="text" color="primary" filled v-model="installationTitle" label="">
-            <template v-slot:prepend>
-              <q-icon name="o_edit_note"/>
-            </template>
-          </q-input>
-        </InfoLine>
-
-        <InfoLine :label="t('dark_mode')">
-          <q-radio v-model="darkMode" val="auto" :label="t('Auto')"/>
-          <q-radio v-model="darkMode" val="true" :label="t('Enabled')"/>
-          <q-radio v-model="darkMode" val="false" :label="t('Disabled')"/>
-          &nbsp;&nbsp;&nbsp;{{t('changing_needs_restart')}}
-        </InfoLine>
-
-        <div class="col-3">
-          {{ t('language') }} ({{ t('experimental') }})
-        </div>
-        <div class="col-7">
-          <q-select
-            v-model="locale"
-            :options="localeOptions"
-            dense
-            borderless
-            emit-value
-            map-options
-            options-dense
-            style="min-width: 150px"
-          />
-        </div>
-        <div class="col"></div>
-
-        <InfoLine :label="t('tab_info_detail_level', {detailLevelPerTabset: (detailLevelPerTabset ? ' (Default)' : '')})">
-          <q-radio v-model="detailLevel" :val="ListDetailLevel.MINIMAL" label="Minimal Details"/>
-          <q-radio v-model="detailLevel" :val="ListDetailLevel.SOME" label="Some Details"/>
-          <q-radio v-model="detailLevel" :val="ListDetailLevel.MAXIMAL" label="All Details"/>
-        </InfoLine>
-
-        <InfoLine label="">
-          <q-checkbox v-model="detailLevelPerTabset" :label="t('individually_per_tabset')"/>
-        </InfoLine>
-
-        <InfoLine label="URLs">
-          <q-checkbox v-model="fullUrls" :label="t('show_full_url')"/>
-        </InfoLine>
-
-<!--        <InfoLine label="Ignore Browser Extensions as tabs">-->
-<!--          <q-toggle v-model="ignoreExtensionsEnabled"-->
-<!--                    @click="updateSettings('extensionsAsTabs', ignoreExtensionsEnabled)"/>-->
-<!--        </InfoLine>-->
-
-      </div>
-
-      <div class="row items-baseline q-ma-md q-gutter-md"
-           v-if="useFeaturesStore().hasFeature(FeatureIdent.AUTO_TAB_SWITCHER)">
-        <div class="col-3">
-          {{t('tab_switching_time')}}
-        </div>
-        <div class="col-9">
-          <q-select
-            :label="t('tab_switcher_settings')"
-            filled
-            v-model="autoSwitcherOption"
-            :options="autoSwitcherOptions"
-            map-options
-            emit-value
-            style="width: 250px"
-          />
-        </div>
-      </div>
-
-      <div class="row items-baseline q-ma-md q-gutter-md">
-        <div class="col-3">
-          {{ t('restore_info_msg')}}
-        </div>
-        <div class="col-3">
-          {{t('accidentally_closed_info_msgs')}}
-        </div>
-        <div class="col-1"></div>
-        <div class="col">
-          <q-btn :label="t('restore_hints')" @click.stop="restoreHints"/>
-        </div>
-      </div>
-
-      <div class="row items-baseline q-ma-md q-gutter-md"
-           v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD)">
-        <div class="col-3">
-          {{ t('warning_thresholds')}}
-        </div>
-        <div class="col-3">
-          {{t('warnings_info')}}
-        </div>
-        <div class="col q-ma-xl">
-          <q-range
-            v-model="settingsStore.thresholds"
-            :step=10
-            marker-labels
-            :min=0
-            :max=100
-          />
-        </div>
-      </div>
-
-      <div class="row items-baseline q-ma-md q-gutter-md">
-        <div class="col-3">
-          {{t('thumbnail_quality')}}
-        </div>
-        <div class="col-3">
-          {{t('larger_thumbs_info')}}
-        </div>
-        <div class="col q-ma-xl">
-          <q-slider v-model="settingsStore.thumbnailQuality"
-                    marker-labels
-                    :min="0" :max="100" :inner-min="10" :inner-max="100" :step=10></q-slider>
-        </div>
-      </div>
-
-      <div class="row items-baseline q-ma-md q-gutter-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
-        <div class="col-3">
-          New Version Simulation
-        </div>
-        <div class="col-3">
-          Simulate that there is a new version available
-        </div>
-        <div class="col q-ma-xl">
-          <span class="text-blue cursor-pointer" @click="simulateNewVersion('0.2.12')">Simulate</span>
-        </div>
-      </div>
-
-      <div class="row items-baseline q-ma-md q-gutter-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
-        <div class="col-3">
-          New Suggestion Simulation
-        </div>
-        <div class="col-3">
-          Simulate that there is a new suggestion to use a (new) feature (refresh sidebar for effects)
-        </div>
-        <div class="col q-ma-xl">
-          <span class="text-blue cursor-pointer" @click="simulateStaticSuggestion()">Simulate</span>
-        </div>
-      </div>
-
-    </div>
+    <AppearanceSettings />
 
   </div>
 
@@ -338,6 +190,12 @@
           <span class="text-blue cursor-pointer" @click="clearIndex">[clear Index]</span>&nbsp;
         </div>
       </div>
+      <div class="row">
+        <vue-json-pretty style="font-size: 80%" :show-length="true" :deep="2"
+                         v-model:data="state.data"
+                         :show-double-quotes="true"
+        />
+    </div>
     </div>
 
   </div>
@@ -421,7 +279,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, watch, watchEffect} from "vue";
+import {onMounted, reactive, ref, watch, watchEffect} from "vue";
 import {LocalStorage, useQuasar} from "quasar";
 import {useSearchStore} from "src/search/stores/searchStore";
 import TabsetService from "src/tabsets/services/TabsetService"; // import ExportDialog from "components/dialogues/ExportDialog.vue";
@@ -437,8 +295,6 @@ import {useSettingsStore} from "src/stores/settingsStore"
 import OpenRightDrawerWidget from "components/widgets/OpenRightDrawerWidget.vue";
 import {useUtils} from "src/core/services/Utils";
 import Analytics from "src/core/utils/google-analytics";
-import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
-import {StaticSuggestionIdent, Suggestion} from "src/suggestions/models/Suggestion";
 import {useRoute} from "vue-router";
 import {STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT} from "boot/constants";
 import {Account} from "src/models/Account";
@@ -449,13 +305,15 @@ import {getAuth} from "firebase/auth";
 import SubscriptionSettings from "pages/helper/SubscriptionSettings.vue";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
-import InfoLine from "pages/helper/InfoLine.vue";
+import VueJsonPretty from "vue-json-pretty";
+import 'vue-json-pretty/lib/styles.css';
 import SharingSettings from "pages/helper/SharingSettings.vue";
 import ImportDialog from "src/tabsets/dialogues/ImportDialog.vue";
 import ExportDialog from "src/tabsets/dialogues/ExportDialog.vue";
 import BackupSettings from "src/tabsets/pages/settings/BackupSettings.vue";
 import DeleteAccountCommand from "src/account/commands/DeleteAccountCommand.ts";
+import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
+import AppearanceSettings from "pages/helper/AppearanceSettings.vue";
 
 const { t } = useI18n()
 
@@ -472,14 +330,12 @@ useUiStore().rightDrawerSetActiveTab(DrawerTabs.FEATURES)
 
 const view = ref('grid')
 const indexSize = ref(0)
+const searchIndexAsJson = ref(null)
 
-const { locale } = useI18n({locale: navigator.language, useScope: "global"})
-
-const localeOptions = ref([
-  {value: 'en', label: 'English'},
-  {value: 'de', label: 'German'},
-  {value: 'bg', label: 'Bulgarian'}
-])
+const state = reactive({
+  val: JSON.stringify(searchIndexAsJson),
+  data: searchIndexAsJson
+})
 
 const ddgEnabled = ref<boolean>(!settingsStore.isEnabled('noDDG'))
 const ignoreExtensionsEnabled = ref<boolean>(!settingsStore.isEnabled('extensionsAsTabs'))
@@ -503,24 +359,15 @@ const tab = ref<string>(route.query['tab'] ? route.query['tab'] as string : 'app
 
 const autoSwitcherOption = ref<number>(localStorage.getItem('ui.tabSwitcher') as number || 5000)
 
-const autoSwitcherOptions = [
-  {label: '1 sec.', value: 1000},
-  {label: '2 sec.', value: 2000},
-  {label: '3 sec.', value: 3000},
-  {label: '5 sec.', value: 5000},
-  {label: '10 sec.', value: 10000},
-  {label: '30 sec.', value: 30000},
-  {label: '1 min.', value: 60000},
-  {label: '2 min.', value: 120000},
-  {label: '5 min.', value: 300000}
-]
-
 onMounted(() => {
   Analytics.firePageViewEvent('SettingsPage', document.location.href);
   account.value = useAuthStore().getAccount()
 })
 
-let suggestionsCounter = 0
+watchEffect(() => {
+  const data = JSON.stringify(searchStore?.getIndex())
+  searchIndexAsJson.value = JSON.parse(data)
+})
 
 watchEffect(() => {
   //console.log("watching settingsStore.activeToggles...", settingsStore.activeToggles)
@@ -635,26 +482,11 @@ const unarchive = (tabset: Tabset) =>
 
 // const ignoredUrls = () => useTabsStore().ignoredTabset?.tabs
 
-const simulateNewVersion = (version: string) => {
-  // NavigationService.updateAvailable({version: version})
-}
-
-const restoreHints = () => useUiStore().restoreHints()
-
 const showExportDialog = () => {
   $q.dialog({component: ExportDialog, componentProps: {inSidePanel: true}})
 }
 const showImportDialog = () => {
   $q.dialog({component: ImportDialog, componentProps: {inSidePanel: true}})
-}
-
-const simulateStaticSuggestion = () => {
-  const suggestions: [Suggestion] = [
-    // @ts-ignore
-    Suggestion.getStaticSuggestion(StaticSuggestionIdent.TRY_SPACES_FEATURE),
-    Suggestion.getStaticSuggestion(StaticSuggestionIdent.TRY_BOOKMARKS_FEATURE)
-  ]
-  useSuggestionsStore().addSuggestion(suggestions[suggestionsCounter++ % 2])
 }
 
 const deleteAccount = () => {

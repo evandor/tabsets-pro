@@ -4,6 +4,7 @@ import {MetaLink} from "src/models/MetaLink";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useGroupsStore} from "src/tabsets/stores/groupsStore";
 import NavigationService from "src/services/NavigationService";
+import ContentUtils from "src/core/utils/ContentUtils";
 import {useUiStore} from "src/ui/stores/uiStore";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {Tab} from "src/tabsets/models/Tab";
@@ -19,7 +20,8 @@ import {SidePanelViews} from "src/models/SidePanelViews";
 import {useTabsetsUiStore} from "src/tabsets/stores/tabsetsUiStore";
 import BrowserApi from "src/app/BrowserApi";
 import {useContentStore} from "src/content/stores/contentStore";
-import ContentUtils from "src/core/utils/ContentUtils.ts";
+import {useContentService} from "src/content/services/ContentService";
+import {ContentItem} from "src/content/models/ContentItem";
 
 const {
   saveText,
@@ -66,7 +68,7 @@ function inIgnoredMessages(request: any) {
     request.name === 'feature-activated' ||
     request.name === 'feature-deactivated' ||
     request.name === 'tabsets-imported' ||
-    request.name === 'fullUrls-changed' ||
+    request.name === 'settings-changed' ||
     request.name === 'reload-suggestions' ||
     request.name === 'reload-tabset' ||
     request.name === 'reload-spaces' ||
@@ -245,11 +247,25 @@ class BrowserListeners {
     if (info.status === "complete") {
       console.debug(`onUpdated:   tab ${number}: >>> ${JSON.stringify(info)} <<<`)
 
-      if (chromeTab.id) {
+      if (chromeTab.id && chromeTab.url) {
         try {
           const contentRequest = await chrome.tabs.sendMessage(chromeTab.id, 'getExcerpt')
-          useContentStore().setBrowserTabData(chromeTab, contentRequest)
-        } catch (err) {} // ignore
+
+          // updating (transient) content in contentstore
+          useContentStore().setCurrentTabContent(contentRequest['html' as keyof object])
+          useContentStore().setCurrentTabUrl(chromeTab.url)
+
+          // update (persistent) content in content db if exists
+          const existing: ContentItem | undefined = await useContentService().getContentFor(chromeTab.url)
+          if (existing) {
+            const dummyTab = new Tab(existing.id, BrowserApi.createChromeTabObject(chromeTab.title || '', chromeTab.url))
+            const tokens = ContentUtils.html2tokens(contentRequest['html' as keyof object] || '')
+            useContentService().saveContent(dummyTab, [...tokens].join(" "), contentRequest['metas' as keyof object], chromeTab.title || '', [])
+              .catch((err: any) => console.log("err", err))
+          }
+        } catch (err) {
+          //console.log("got error", err)
+        } // ignore
       }
 
       this.handleUpdateInjectScripts(info, chromeTab)
@@ -292,7 +308,9 @@ class BrowserListeners {
       return
     }
 
-    BrowserApi.addIndicatorIcon(tab.id, tab.url)
+    if (!useUiStore().hideIndicatorIcon) {
+      BrowserApi.addIndicatorIcon(tab.id, tab.url)
+    }
   }
 
   onRemoved(number: number, info: chrome.tabs.TabRemoveInfo) {
@@ -300,7 +318,7 @@ class BrowserListeners {
     console.debug("onRemoved tab event: ", number, info)
     //useWindowsStore().refreshCurrentWindows()
     useWindowsStore().refreshTabsetWindow(info.windowId)
-    useContentStore().removeBrowserTabData(number)
+    //useContentStore().removeBrowserTabData(number)
     //sendMsg('window-updated', {initiated: "ChromeListeners#onRemoved"})
   }
 
@@ -315,24 +333,14 @@ class BrowserListeners {
 
     await setCurrentTab()
 
-    if (info.tabId) {
-      const found = useContentStore().tabActivated(info.tabId)
-      if (!found) {
-        try {
-          const contentRequest = await chrome.tabs.sendMessage(info.tabId, 'getExcerpt')
-          useContentStore().currentTabContent = contentRequest['html' as keyof object] || ''
-        } catch (err) {
-          // ignore
-        }
-      }
-    }
-
     chrome.tabs.get(info.tabId, tab => {
       if (chrome.runtime.lastError) {
         console.warn("got runtime error:" + chrome.runtime.lastError);
       }
       const url = tab.url
       if (url) {
+        useContentStore().setCurrentTabUrl(tab.url)
+
         useTabsetService().urlWasActivated(url)
 
         // matching tabs for url

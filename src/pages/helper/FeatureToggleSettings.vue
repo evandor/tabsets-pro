@@ -21,17 +21,35 @@
       </div>
       <div class="col-1"></div>
       <div class="col-5">
-        <q-toggle v-model="devEnabled" @click="updateSettings('dev', devEnabled)"/>
+        <q-toggle v-model="devEnabled" @click="updateSettings(FeatureIdent.DEV_MODE.toString(), devEnabled)"/>
       </div>
     </div>
 
     <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
-      <div class="col-3"><b>Trigger Error Handler</b></div>
-      <div class="col-3">this should initiate a rollbar error message.
+      <div class="col-3"><b>Trigger CommandExecution Error Handler</b></div>
+      <div class="col-3">this should initiate a sentry error message like the ones happening when running into a problem executing a command.
       </div>
       <div class="col-1"></div>
       <div class="col-5">
         <q-btn label="Trigger Error" no-caps @click="triggerErrorHandler()"/>
+      </div>
+    </div>
+    <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+      <div class="col-3"><b>Trigger Catch-All Error Handler</b></div>
+      <div class="col-3">this should initiate a sentry error message from the vue error interceptor.
+      </div>
+      <div class="col-1"></div>
+      <div class="col-5">
+        <q-btn label="Trigger Error" no-caps @click="triggerCatchAll()"/>
+      </div>
+    </div>
+    <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+      <div class="col-3"><b>Collect User Feedback</b></div>
+      <div class="col-3">
+      </div>
+      <div class="col-1"></div>
+      <div class="col-5">
+        <q-btn label="User Feedback" no-caps @click="collectUserFeedback()"/>
       </div>
     </div>
     <!--    </template>-->
@@ -45,32 +63,49 @@ import {useSettingsStore} from "stores/settingsStore";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {DeactivateFeatureCommand} from "src/features/commands/DeactivateFeatureCommand";
+import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
-import {useFeaturesStore} from "src/features/stores/featuresStore.ts";
+import {captureFeedback, captureMessage} from "@sentry/browser";
 import {ActivateFeatureCommand} from "src/features/commands/ActivateFeatureCommand.ts";
 
 const settingsStore = useSettingsStore()
 const {handleError} = useNotificationHandler()
 
-const devEnabled = ref<boolean>(settingsStore.isEnabled('dev'))
+const devEnabled = ref<boolean>(useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE) || false)
 
 watchEffect(() => {
-  devEnabled.value = settingsStore.isEnabled('dev')
+  devEnabled.value = useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)
 })
 
 const updateSettings = (ident: string, val: boolean) => {
   console.log("settings updated to", ident, val)
   if (val) {
-    useCommandExecutor().execute(new ActivateFeatureCommand(FeatureIdent.DEV_MODE.toString()))
+    useCommandExecutor().execute(new ActivateFeatureCommand(ident))
   } else {
-    useCommandExecutor().execute(new DeactivateFeatureCommand(FeatureIdent.DEV_MODE.toString()))
+    useCommandExecutor().execute(new DeactivateFeatureCommand(ident))
   }
   // TODO deprecated
   settingsStore.setFeatureToggle(ident, val)
 }
 
 const triggerErrorHandler = () =>
-  handleError("an user-initated error message from tabsets-pro at " + new Date().getTime())
+  handleError("an user-initiated error message from tabsets at " + new Date().getTime())
 
+const triggerCatchAll = () => {
+  throw new Error('user triggered catch-all-Error at' + new Date().getTime())
+}
+
+const collectUserFeedback = async () => {
+  const eventId = captureMessage("User Feedback");
+// OR: const eventId = Sentry.lastEventId();
+
+  const userFeedback = {
+    name: "John Doe",
+    email: "john@doe.com",
+    message: "I really like your App, thanks!",
+    associatedEventId: eventId,
+  };
+  captureFeedback(userFeedback);
+}
 
 </script>

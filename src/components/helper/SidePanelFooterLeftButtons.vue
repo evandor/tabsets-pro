@@ -7,7 +7,7 @@
          flat
          color="warning"
          :size="props.size">
-    <q-tooltip class="tooltip">{{ suggestionsLabel() }}</q-tooltip>
+    <q-tooltip class="tooltip-small">{{ suggestionsLabel() }}</q-tooltip>
   </q-btn>
 
   <q-btn v-if="showViewMenu()"
@@ -98,6 +98,7 @@
 </template>
 <script setup lang="ts">
 import {useUiStore} from "src/ui/stores/uiStore";
+import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {ref, watchEffect} from "vue";
 import {SuggestionState} from "src/suggestions/models/Suggestion";
@@ -106,7 +107,6 @@ import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {SidePanelViews} from "src/models/SidePanelViews";
 import SidePanelFooterViewMenuItem from "src/ui/components/SidePanelFooterViewMenuItem.vue";
 import SidePanelFooterLeftButton from "src/ui/components/SidePanelFooterLeftButton.vue";
-import {FeatureIdent} from "src/app/models/FeatureIdent.ts";
 
 const props = defineProps({
   showSuggestionIcon: {type: Boolean, required: true},

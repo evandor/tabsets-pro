@@ -80,7 +80,7 @@
         <span>
         <input
           class="q-ma-none q-pa-none"
-          v-if="useFeaturesStore().hasFeature(FeatureIdent.HTML_SNIPPETS) && useContentStore().currentTabUrl"
+          v-if="useFeaturesStore().hasFeature(FeatureIdent.HTML_SNIPPETS) && useContentStore().getCurrentTabUrl"
           v-model="ignored"
           style="border:1px dotted grey;border-radius:3px;max-width:30px;max-height:20px"
           @drop="drop($event)"/>
@@ -102,13 +102,17 @@
                 <q-item-section>Open Settings</q-item-section>
               </q-item>
               <q-separator/>
+              <q-item clickable v-close-popup @click="openURL('https://docs.tabsets.net')">
+                Documentation
+              </q-item>
+              <q-separator/>
               <q-item clickable v-close-popup
                       @click="openURL('https://docs.google.com/forms/d/e/1FAIpQLSdUtiKIyhqmNoNkXXzZOEhnzTCXRKT-Ju83SyyEovnfx1Mapw/viewform?usp=pp_url')">
                 Feedback
               </q-item>
-              <q-separator/>
-              <q-item clickable v-close-popup @click="openURL('https://docs.tabsets.net')">
-                Documentation
+              <q-item clickable v-close-popup
+                      @click="openURL('https://github.com/evandor/tabsets/issues')">
+                Issues
               </q-item>
             </q-list>
           </q-menu>
@@ -227,28 +231,28 @@ import _ from "lodash";
 import {Suggestion, SuggestionState} from "src/suggestions/models/Suggestion";
 import SuggestionDialog from "src/suggestions/dialogues/SuggestionDialog.vue";
 import {Tabset} from "src/tabsets/models/Tabset";
+import {ToastType} from "src/core/models/Toast";
 import SidePanelFooterLeftButtons from "components/helper/SidePanelFooterLeftButtons.vue";
 import {useAuthStore} from "stores/authStore";
 import {Account} from "src/models/Account";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
-import SidePanelLoginWidget from "components/helper/SidePanelLoginWidget.vue";
+import SidePanelLoginWidget from "components/helper/SidePanelLoginWidget.vue"
+import SidePanelStatsMarkupTable from "components/helper/SidePanelStatsMarkupTable.vue"
 import {Window} from "src/windows/models/Window"
 import WindowsMarkupTable from "src/windows/components/WindowsMarkupTable.vue";
 import {WindowAction, WindowHolder} from "src/windows/models/WindowHolder";
 import NewTabsetDialog from "src/tabsets/dialogues/NewTabsetDialog.vue";
 import {useSpacesStore} from "src/spaces/stores/spacesStore";
+import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {ToastType} from "src/core/models/Toast";
 import {SidePanelViews} from "src/models/SidePanelViews";
 import {TabAndTabsetId} from "src/tabsets/models/TabAndTabsetId";
-import {useTabsStore2} from "src/tabsets/stores/tabsStore2.ts";
-import {useContentStore} from "src/content/stores/contentStore.ts";
-import {Tab, TabSnippet} from "src/tabsets/models/Tab.ts";
-import BrowserApi from "src/app/BrowserApi.ts";
-import {useCommandExecutor} from "src/core/services/CommandExecutor.ts";
-import {AddTabToTabsetCommand} from "src/tabsets/commands/AddTabToTabsetCommand.ts";
-import SidePanelStatsMarkupTable from "components/helper/SidePanelStatsMarkupTable.vue";
+import {useCommandExecutor} from "src/core/services/CommandExecutor";
+import {AddTabToTabsetCommand} from "src/tabsets/commands/AddTabToTabsetCommand";
+import {Tab, TabSnippet} from "src/tabsets/models/Tab";
+import BrowserApi from "src/app/BrowserApi";
+import {useContentStore} from "src/content/stores/contentStore";
 
 const {handleError} = useNotificationHandler()
 
@@ -569,7 +573,7 @@ const drop = (evt: any) => {
   evt.preventDefault()
   var text = evt.dataTransfer.getData('text')
   var html = evt.dataTransfer.getData('text/html')
-  const currentTabUrl = useContentStore().currentTabUrl
+  const currentTabUrl = useContentStore().getCurrentTabUrl
   console.log("===>", evt, text, html, currentTabUrl)
   if (currentTabUrl) {
     const existing: Tab | undefined = useTabsetsStore().tabForUrlInSelectedTabset(currentTabUrl!)

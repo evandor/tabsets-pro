@@ -98,6 +98,11 @@ const routes: RouteRecordRaw[] = [
     children: [{path: '', component: () => import('src/snapshots/pages/MainPanelPdfPage.vue')}],
   },
   {
+    path: '/mainpanel/tab/:id',// TODO combine with Tag page
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('pages/TabPage.vue')}],
+  },
+  {
     path: '/tabsets/:tabsetId',
     component: () => import('layouts/FullPageLayout.vue'),
     children: [{path: '', component: () => import('src/tabsets/pages/TabsetPage.vue')}],

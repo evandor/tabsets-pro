@@ -36,9 +36,11 @@
 
       <div class="col-12">
         <div class="text-overline ellipsis text-blue-10 cursor-pointer"
-             @click.stop="NavigationService.openOrCreateTab([tab!.url || ''] )">
-          {{ tab?.url }}&nbsp;<q-icon name="launch" color="secondary"
-                                      class="cursor-pointer"></q-icon>
+             @click.stop="NavigationService.openOrCreateTab([tab?.url || ''] )">
+          {{ tab?.url }}&nbsp;<q-icon name="launch" color="secondary" class="cursor-pointer"></q-icon>
+        </div>
+        <div class="text-body2 ellipsis">
+          {{ tab?.id }}
         </div>
       </div>
 
@@ -51,7 +53,7 @@
       <div class="col-7 text-right">
         <q-chip v-for="chip in tabsetChips()"
                 class="cursor-pointer q-ml-xs" size="8px" clickable icon="tab" @click="openTabset(chip)">
-           chip.label
+          {{ chip['label' as keyof object] }}
         </q-chip>
       </div>
     </div>
@@ -67,7 +69,7 @@
 
     <div class="row q-ma-sm">
 
-      <div class="col-12" v-if="hasAllUrlsPermission">
+      <div class="col-12" v-if="true">
         <q-img :src="thumbnail" style="border:1px dotted grey;border-radius: 5px;" no-native-menu/>
       </div>
       <div class="col-12 bg-amber-1" v-else-if="!inBexMode()">
@@ -110,9 +112,9 @@
 
         <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
           <q-btn
-              @click.stop="savePng(tab as Tab)"
-              flat round color="primary" size="11px" icon="image"
-              :disabled="!isOpen(tab as Tab)">
+            @click.stop="savePng(tab as Tab)"
+            flat round color="primary" size="11px" icon="image"
+            :disabled="!isOpen(tab as Tab)">
             <q-tooltip v-if="isOpen(tab as Tab)">Save this tab as PNG</q-tooltip>
             <q-tooltip v-else>The tab must be open if you want to save it. Click on the link and come back here to save
               it.
@@ -121,41 +123,16 @@
         </template>
 
         <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+<!--            @click.stop="savePdf(tab as Tab)"-->
           <q-btn
-              @click.stop="savePdf(tab as Tab)"
-              flat round color="primary" size="11px" icon="o_picture_as_pdf"
-              :disabled="!isOpen(tab as Tab)">
+            flat round color="primary" size="11px" icon="o_picture_as_pdf"
+            :disabled="!isOpen(tab as Tab)">
             <q-tooltip v-if="isOpen(tab as Tab)">Save this tab as a PDF File</q-tooltip>
             <q-tooltip v-else>The tab must be open if you want to save it. Click on the link and come back here to save
               it.
             </q-tooltip>
           </q-btn>
         </template>
-
-        <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
-          <q-btn
-            @click.stop="saveWarc(tab as Tab)"
-            flat round color="primary" size="11px" icon="o_picture_as_pdf"
-            :disabled="!isOpen(tab as Tab)">
-            <q-tooltip v-if="isOpen(tab as Tab)">Save this tab as a Warc File</q-tooltip>
-            <q-tooltip v-else>The tab must be open if you want to save it. Click on the link and come back here to save
-              it.
-            </q-tooltip>
-          </q-btn>
-        </template>
-
-<!--        <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SAVE_TAB)">-->
-<!--          <q-btn-->
-<!--              @click.stop="saveTab(tab)"-->
-<!--              flat round color="primary" size="11px" icon="save"-->
-<!--              :disabled="!isOpen(tab)">-->
-<!--            <q-tooltip v-if="isOpen(tab)">Save this tab</q-tooltip>-->
-<!--            <q-tooltip v-else>The tab must be open if you want to save it. Click on the link and come back here to save-->
-<!--              it.-->
-<!--            </q-tooltip>-->
-<!--          </q-btn>-->
-<!--        </template>-->
-
 
       </div>
 
@@ -171,32 +148,32 @@
       <q-card>
         <q-card-section>
           <q-select
-              filled
-              v-model="tags"
-              use-input
-              use-chips
-              multiple
-              hide-dropdown-icon
-              input-debounce="0"
-              new-value-mode="add-unique"
-              @update:model-value="val => updatedTags(val)"
-              style="width: 250px"
+            filled
+            v-model="tags"
+            use-input
+            use-chips
+            multiple
+            hide-dropdown-icon
+            input-debounce="0"
+            new-value-mode="add-unique"
+            @update:model-value="val => updatedTags(val)"
+            style="width: 250px"
           />
         </q-card-section>
       </q-card>
     </q-expansion-item>
 
-<!--    <q-expansion-item label="Archived Snapshots"-->
-<!--                      v-if="useFeaturesStore().hasFeature(FeatureIdent.SAVE_TAB) && tab?.mhtmls?.length > 0"-->
-<!--                      :default-opened="true">-->
-<!--      <q-card>-->
-<!--        <q-card-section>-->
-<!--          <div class="row q-mx-sm q-mt-xs" v-for="mhtml in tab?.mhtmls">-->
-<!--&lt;!&ndash;            <MHtmlViewHelper :mhtmlId="mhtml" :tabId="tab?.id || 'unknown'"/>&ndash;&gt;-->
-<!--          </div>-->
-<!--        </q-card-section>-->
-<!--      </q-card>-->
-<!--    </q-expansion-item>-->
+    <!--    <q-expansion-item label="Archived Snapshots"-->
+    <!--                      v-if="useFeaturesStore().hasFeature(FeatureIdent.SAVE_TAB) && tab?.mhtmls?.length > 0"-->
+    <!--                      :default-opened="true">-->
+    <!--      <q-card>-->
+    <!--        <q-card-section>-->
+    <!--          <div class="row q-mx-sm q-mt-xs" v-for="mhtml in tab?.mhtmls">-->
+    <!--&lt;!&ndash;            <MHtmlViewHelper :mhtmlId="mhtml" :tabId="tab?.id || 'unknown'"/>&ndash;&gt;-->
+    <!--          </div>-->
+    <!--        </q-card-section>-->
+    <!--      </q-card>-->
+    <!--    </q-expansion-item>-->
 
     <q-expansion-item label="Archived Images"
                       v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE) && pngs.length > 0">
@@ -304,42 +281,116 @@
       </q-card>
     </q-expansion-item>
 
-<!--    <q-expansion-item label="Selections" v-if="tab?.selections?.length > 0"-->
-<!--                      group="somegroup">-->
-<!--      <q-card>-->
-<!--        <q-card-section>-->
-<!--          <div class="row q-mx-sm q-mt-none">-->
-<!--            <div class="col-5 text-caption text-bold">Selections</div>-->
-<!--            <div class="col-7 text-right text-caption">{{ tab?.selections?.length }}</div>-->
-<!--          </div>-->
-<!--          <div class="row q-mx-sm q-mt-none" v-for="selection in tab?.selections">-->
-<!--            <div class="col-12 text-caption">{{ selection.text }}</div>-->
-<!--          </div>-->
-<!--        </q-card-section>-->
-<!--      </q-card>-->
-<!--    </q-expansion-item>-->
+    <q-expansion-item label="Tab References Status" group="tabrefgroup" v-if="tab && tab.tabReferences">
+      <div class="q-ma-sm q-ml-lg" v-for="ref in tab.tabReferences">
+        <template v-if="ref.type === TabReferenceType.RSS">
+          <div class="text-caption text-bold">found RSS:</div>
+          <div class="text-caption ellipsis text-blue-8 cursor-pointer"
+               @click="useNavigationService().browserTabFor(ref.href || '')">{{ ref.href }}
+          </div>
+        </template>
+        <template v-else-if="ref.type === TabReferenceType.META_DATA">
+          <div class="text-caption text-bold">found Meta Data:</div>
+          <div class="text-caption ellipsis">
+            <div class="row" v-for="item in ref.data">
+              <div class="col-4 ellipsis">
+                {{ item['name' as keyof object] }}:
+              </div>
+              <div class="col ellipsis">
+                {{ item['content' as keyof object] }}
+              </div>
+            </div>
+          </div>
+        </template>
+        <template v-else-if="ref.type === TabReferenceType.OPEN_SEARCH">
+          <div class="text-caption text-bold">found Open Search Description:</div>
+          <!--          <div class="text-caption">-->
+          <!--            {{ ref.data }}-->
+          <!--          </div>-->
+          <div>
+            <div class="row" v-if="ref.data">
+              <div class="col-10 ellipsis">
+                <q-input dense v-model="opensearchterm" type="text"/>
+              </div>
+              <div class="col">
+                <q-btn dense icon="search" size="sm" @click="openSearch()"/>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template v-else-if="ref.type === TabReferenceType.OPEN_GRAPH">
+          <div class="text-caption text-bold">found Open Graph Data:</div>
+          <div class="text-caption ellipsis">
+            <div class="row" v-for="item in ref.data">
+              <div class="col-4 ellipsis">
+                {{ item['property' as keyof object] }}:
+              </div>
+              <div class="col ellipsis">
+                {{ item['content' as keyof object] }}
+              </div>
+            </div>
+          </div>
+        </template>
+        <template v-else-if="ref.type === TabReferenceType.READING_MODE">
+          <div class="text-caption text-bold">found Reading Mode Article:</div>
+          <div class="text-caption ellipsis">
+            <div class="row">
+              <div class="col-12 ellipsis">
+                {{ ref.data[0]['title' as keyof object] }}:
+              </div>
+            </div>
+          </div>
+        </template>
+        <template v-else-if="ref.type === TabReferenceType.LINKING_DATA">
+          <div class="text-caption text-bold">found Linking Data:</div>
+          <div class="text-caption">
+            <div class="cursor-pointer" @click="openInJsonCrackEditor(JSON.stringify(ref.data))">
+              {{ linkingHeading(ref.data) }}
+            </div>
+          </div>
+        </template>
+        <template v-else-if="ref.type === TabReferenceType.PARENT_CHAIN">
+          <div class="text-caption text-bold">found Parents in Path:</div>
+          <div class="text-caption">
+            <div class="cursor-pointer" @click="openInJsonCrackEditor(JSON.stringify(ref.data))">
+              {{ ref.title }}
+            </div>
+            <ul>
+              <li v-for="p in ref.data" class="ellipsis"
+                  @click="useNavigationService().browserTabFor(p['parent' as keyof object])">
+                {{ p['parent' as keyof object] }}
+              </li>
+            </ul>
+          </div>
+        </template>
+        <template v-else>
+          <div
+            class="text-caption">{{ ref.type }}:<br> {{ ref }}
+          </div>
+        </template>
+      </div>
+    </q-expansion-item>
+
+    <!--    <q-expansion-item label="Selections" v-if="tab?.selections?.length > 0"-->
+    <!--                      group="somegroup">-->
+    <!--      <q-card>-->
+    <!--        <q-card-section>-->
+    <!--          <div class="row q-mx-sm q-mt-none">-->
+    <!--            <div class="col-5 text-caption text-bold">Selections</div>-->
+    <!--            <div class="col-7 text-right text-caption">{{ tab?.selections?.length }}</div>-->
+    <!--          </div>-->
+    <!--          <div class="row q-mx-sm q-mt-none" v-for="selection in tab?.selections">-->
+    <!--            <div class="col-12 text-caption">{{ selection.text }}</div>-->
+    <!--          </div>-->
+    <!--        </q-card-section>-->
+    <!--      </q-card>-->
+    <!--    </q-expansion-item>-->
 
     <q-expansion-item group="somegroup" label="Search Index">
       <q-card>
         <q-card-section>
           <div class="row q-mx-sm">
-            <div class="col-12 text-caption">
-              <!-- @vue-ignore -->
-              <div v-for="(k,index) in searchIndex">
-                <div class="row" v-if="searchIndex.get(index)['v']">
-                  <div class="col-4 q-ml-sm text-bold">
-                    {{ searchIndex.get(index)['name'] }}
-                  </div>
-                  <div class="col-7 ellipsis">
-                    {{ searchIndex.get(index)['v'] }}
-                    <q-tooltip class="tooltip">{{ searchIndex.get(index)['v'] }}</q-tooltip>
-                  </div>
-                  <div class="col text-right">
-                    <q-icon name="o_check_circle" color="primary"/>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TabDetailsSearchIndex v-if="tab" :tab="tab"/>
           </div>
         </q-card-section>
       </q-card>
@@ -362,7 +413,6 @@ import {Tab} from "src/tabsets/models/Tab";
 import {formatDistance} from "date-fns";
 import {useUtils} from "src/core/services/Utils";
 import NavigationService from "src/services/NavigationService";
-import {useSearchStore} from "src/search/stores/searchStore";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
@@ -370,11 +420,14 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {BlobMetadata} from "src/snapshots/models/BlobMetadata";
-import {SavePdfCommand} from "src/snapshots/commands/SavePdfCommand";
-import {SaveWarcCommand} from "src/snapshots/commands/SaveWarcCommand";
+import {useNavigationService} from "src/core/services/NavigationService.ts";
+import {useQuasar} from "quasar";
+import {useSnapshotsService} from "src/snapshots/services/SnapshotsService.ts";
+import {TabReferenceType} from "src/content/models/TabReference.ts";
 
 const {inBexMode} = useUtils()
 
+const $q = useQuasar()
 const router = useRouter()
 const route = useRoute()
 
@@ -382,30 +435,29 @@ const hasAllUrlsPermission = ref<boolean | undefined>(false)
 
 const thumbnail = ref('')
 const content = ref('')
-const searchIndex = ref<any>()
 const metaRows = ref<object[]>([])
 const tab = ref<Tab | undefined>(undefined)
 const pngs = ref<BlobMetadata[]>([])
 const pdfs = ref<BlobMetadata[]>([])
+const tabId = ref<string | undefined>(undefined)
+const opensearchterm = ref<string | undefined>(undefined)
 
 const tags = ref<string[]>([])
 
 watchEffect(() => {
-  const tabId = route.params.tabId as unknown as string
-  console.log("tabid", tabId)
-  const tabObject = useTabsetsStore().getTabAndTabsetId(tabId)
-      //.then((tabObject: TabAndTabsetId | undefined) => {
-        if (tabObject) {
-          tab.value = tabObject.tab
-          tags.value = tab.value.tags
-        }
-     // })
+  tabId.value = route.params.tabId as unknown as string
+  console.log("tabid", tabId.value)
 
-  // const selectedTab = tab.value
-  // console.log("selectedTab", selectedTab)
-  // if (selectedTab) {
-  //   tags.value = selectedTab.tags
-  // }
+  const tabObject = useTabsetsStore().getTabAndTabsetId(tabId.value)
+  if (tabObject) {
+    tab.value = tabObject.tab
+    if (tab.value.tags.constructor === Array) {
+      tags.value = tab.value.tags
+    } else {
+      tags.value = []
+    }
+  }
+
 })
 
 
@@ -414,33 +466,41 @@ watchEffect(() => hasAllUrlsPermission.value = usePermissionsStore().hasAllOrigi
 watchEffect(() => {
   if (tab.value) {
     useThumbnailsService().getThumbnailFor(tab.value.url)
-        .then(data => {
-          if (data) {
-            thumbnail.value = data
-          } else {
-            thumbnail.value = ''
-          }
-        })
+      .then(data => {
+        if (data) {
+          thumbnail.value = data['thumbnail' as keyof object]
+        } else {
+          thumbnail.value = ''
+        }
+      })
     TabsetService.getContentFor(tab.value as Tab)
-        .then(data => {
-          if (data) {
-            content.value = data['content' as keyof object]
-            //metas.value = data['metas' as keyof object]
-            metaRows.value = []
-            _.forEach(Object.keys(data['metas' as keyof object]), (k:any) => {
-              //console.log("k", k, data.metas[k])
-              metaRows.value.push({
-                name: k,
-                value: data['metas' as keyof object][k]
-              })
+      .then(data => {
+        if (data) {
+          content.value = data['content' as keyof object]
+          //metas.value = data['metas' as keyof object]
+          metaRows.value = []
+          _.forEach(Object.keys(data['metas' as keyof object]), (k:any) => {
+            //console.log("k", k, data.metas[k])
+            metaRows.value.push({
+              name: k,
+              value: data['metas' as keyof object][k]
             })
-            metaRows.value = _.sortBy(metaRows.value, (s:any) => s['name' as keyof object])
-          }
-        })
+          })
+          metaRows.value = _.sortBy(metaRows.value, (s: any) => s['name' as keyof object])
+        }
+      })
+    useSnapshotsService().getMetadataFor(tab.value.id)
+      .then((mds: BlobMetadata[]) => {
+        console.log("no op")
+        //htmls.value = mds
+      })
+
     // useSnapshotsService().getPngsForTab(tab.value.id)
     //     .then((blobs: SavedBlob[]) => pngs.value = blobs)
     // useSnapshotsService().getPdfsForTab(tab.value.id)
     //     .then((blobs: SavedBlob[]) => pdfs.value = blobs)
+    // useSnapshotsService().getBlobForTab(tab.value.id, BlobType.HTML)
+    //   .then((blobs: SavedBlob[]) => htmls.value = blobs)
   }
 })
 
@@ -452,7 +512,7 @@ const tabsetChips = (): object[] => {
   const badges: object[] = []
   const url = tab.value?.url
   if (url) {
-    _.forEach(useTabsetService().tabsetsFor(url), (ts:string) => badges.push({
+    _.forEach(useTabsetService().tabsetsFor(url), (ts: string) => badges.push({
       label: TabsetService.nameForTabsetId(ts),
       tabsetId: ts,
       encodedUrl: btoa(url || '')
@@ -489,38 +549,10 @@ function getHost(urlAsString: string, shorten: Boolean = true): string {
 }
 
 const formatDate = (timestamp: number | undefined) =>
-    timestamp ? formatDistance(timestamp, new Date(), {addSuffix: true}) : ""
+  timestamp ? formatDistance(timestamp, new Date(), {addSuffix: true}) : ""
 
 const showTabDetails = () =>
-    NavigationService.openOrCreateTab([chrome.runtime.getURL("/www/index.html#/mainpanel/tab/" + tab.value?.id)])
-
-watchEffect(() => {
-  const fuseIndex = useSearchStore().getIndex()
-  if (fuseIndex) {
-    const keyMaps = fuseIndex['_keysMap' as keyof object]
-    const res = _.filter(fuseIndex['records' as keyof object], (r: any) => {
-      return tab.value?.url === r.$[2]?.v
-    })
-    const keys: Map<number, object> = new Map()
-    Object.keys(keyMaps).forEach((k: any) => {
-      keys.set(keyMaps[k], {
-        name: k
-      })
-    })
-
-    if (res && res.length > 0) {
-      Object.keys(res[0]['$' as keyof object]).forEach(k => {
-        const tmp = res[0]['$' as keyof object][k as keyof object]
-        const v: any = keys.get(+k)
-        v.n = tmp['n' as keyof object]
-        const c = tmp['v' as keyof object]
-        v.v = c //? (c.length > 100 ? c.substring(0,98) + "..." : c) : ''
-        keys.set(+k, v)
-      })
-      searchIndex.value = keys
-    }
-  }
-})
+  NavigationService.openOrCreateTab([chrome.runtime.getURL("/www/index.html#/mainpanel/tab/" + tab.value?.id)])
 
 const savePng = (tab: Tab | undefined) => {
   if (tab) {
@@ -528,31 +560,45 @@ const savePng = (tab: Tab | undefined) => {
   }
 }
 
-const savePdf = (tab: Tab | undefined) => {
-  if (tab) {
-    useCommandExecutor().execute(new SavePdfCommand(tab.id, "saved by user"))
-  }
-}
-
-const saveWarc = (tab: Tab | undefined) => {
-  if (tab) {
-    useCommandExecutor().execute(new SaveWarcCommand(tab.id, "saved by user"))
-  }
-}
-
 const updatedTags = (val: string[]) => {
+  console.log("val", val)
   if (tab.value) {
     console.log("updating tag", val)
     tab.value.tags = val
     useTabsetService().saveCurrentTabset()
-        .catch((err) => console.error(err))
+      .catch((err) => console.error(err))
   }
 }
 
 const openTabset = (chip: any) => {
   console.log("chip", chip)
   useCommandExecutor()
-      .execute(new SelectTabsetCommand(chip['tabsetId']))
+    .execute(new SelectTabsetCommand(chip['tabsetId']))
 }
 
+const openInJsonCrackEditor = (data: string) => {
+  $q.dialog({
+    title: 'Open in external Editor?',
+    message: 'The current JSON-LD Data will be copied to your clipboard to be added by you to the external editor',
+    cancel: true,
+    persistent: true
+  }).onOk(() => {
+    navigator.clipboard.writeText(data)
+      .then(() => {
+        useNavigationService().browserTabFor('https://jsoncrack.com/editor')
+      })
+  })
+}
+
+const linkingHeading = (data: object | undefined) => {
+  console.log("data", data)
+  if (!data) {
+    return "---"
+  }
+  return data['@type' as keyof object] || 'unknown'
+}
+
+const openSearch = () => {
+  useNavigationService().browserTabFor("https://github.com/search?q={searchTerms}&amp;ref=opensearch".replace("{searchTerms}", opensearchterm.value || ''))
+}
 </script>
