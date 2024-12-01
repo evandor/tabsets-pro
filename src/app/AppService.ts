@@ -59,19 +59,15 @@ class AppService {
 
     useAppStore().init()
 
-    // init of stores and some listeners
-    // await usePermissionsStore().initialize(useDB(quasar).localDb)
-
-
     await ChromeListeners.initListeners()
+    console.debug('')
 
     // Bookmarks
     ChromeBookmarkListeners.initListeners()
-    await useBookmarksStore().init()
+
+    useBookmarksStore().init()
     await BookmarksService.init()
     console.debug('')
-
-    //settingsStore.initialize(quasar.localStorage);
 
     // Snapshots
     await useSnapshotsStore().initialize(useDB().snapshotsDb)
@@ -80,14 +76,19 @@ class AppService {
 
     // should be initialized before search submodule
     await useThumbnailsService().init(useDB().thumbnailsDb)
+    console.debug('')
+
     await useContentService().init(IndexedDbContentPersistence)
     console.debug('')
 
-    await useSearchStore().init().catch((err:any) => console.error(err))
+    // await useRequestsService().init(IndexedDbRequestPersistence)
+    // console.debug('')
+
+    await useSearchStore().init().catch((err: any) => console.error(err))
+    console.debug('')
 
 
     // init services
-    //await useNotificationsStore().initialize(useDB(undefined).db)
     await useSuggestionsStore().init()
     console.debug('')
 
@@ -134,7 +135,10 @@ class AppService {
     console.log(`%cinitializing AppService: initCoreSerivces`, "font-weight:bold")
 
     await useWindowsStore().initialize()
+    console.debug("")
+
     useWindowsStore().initListeners()
+    console.debug("")
 
     /**
      * features store: passing storage for better testing.
@@ -142,6 +146,7 @@ class AppService {
      */
     const featuresStorage = useDB().featuresDb
     await useFeaturesStore().initialize(featuresStorage)
+    console.debug("")
 
     await useNotesStore().initialize(useDB().notesDb)
     console.debug('')
@@ -153,7 +158,7 @@ class AppService {
      * no persistence for service!
      */
 
-    watch(useSpacesStore().spaces, (newSpaces:Map<string,any>) => {
+    watch(useSpacesStore().spaces, (newSpaces: Map<string, any>) => {
       const spacesInfo = _.map([...newSpaces.values()], (ts: any) => new SpaceInfo(ts.id, ts.name))
       useEntityRegistryStore().spacesRegistry = spacesInfo
     })
@@ -172,11 +177,10 @@ class AppService {
     await useTabsStore2().initialize()
     console.debug('')
 
-    //await useGroupsStore().initialize(useDB().groupsIndexedDb)
 
     const existingUrls = useTabsetsStore().getAllUrls()
     await useContentService().populateSearch(existingUrls)
-    useTabsetService().populateSearch()
+    await useTabsetService().populateSearch()
     console.debug('')
 
     ChromeApi.init(router)
@@ -189,6 +193,7 @@ class AppService {
     useUiStore().appLoading = undefined
     console.debug('')
   }
+
 
 }
 

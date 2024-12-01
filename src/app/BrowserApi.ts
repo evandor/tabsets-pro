@@ -1,95 +1,35 @@
 import {Tabset} from "src/tabsets/models/Tabset";
 import {CLEANUP_PERIOD_IN_MINUTES, GITHUB_AUTO_BACKUP, MONITORING_PERIOD_IN_MINUTES} from "boot/constants";
 import _ from "lodash"
-import {useSearchStore} from "src/search/stores/searchStore";
-import {SearchDoc} from "src/search/models/SearchDoc";
-import {usePermissionsStore} from "src/stores/permissionsStore";
+import NavigationService from "src/services/NavigationService";
+import {usePermissionsStore} from "src/stores/usePermissionsStore";
 import {Tab} from "src/tabsets/models/Tab";
 import {LocalStorage, uid} from "quasar";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {Router} from "vue-router";
-
-//import "rangy/lib/rangy-serializer";
-import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
-import {useContentService} from "src/content/services/ContentService";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import NavigationService from "src/services/NavigationService";
-import {GithubBackupCommand} from "src/tabsets/commands/github/GithubBackupCommand.ts";
-import {useCommandExecutor} from "src/core/services/CommandExecutor.ts";
+import {useCommandExecutor} from "src/core/services/CommandExecutor";
+import {GithubBackupCommand} from "src/tabsets/commands/github/GithubBackupCommand";
+import {useRequestsService} from "src/requests/services/RequestsService";
+import {useRequestsStore} from "src/requests/stores/requestsStore";
 
 
 function runHousekeeping() {
-  //housekeeping()
-
-  console.log("housekeeping now...")
-
-  // persistenceService.cleanUpTabsets()
-  //
-  // persistenceService.cleanUpRequests()
-  //
-  // persistenceService.cleanUpMetaLinks()
-  //
-  // persistenceService.cleanUpLinks()
-
-  // TODO
-  //TabService.checkScheduled()
+  //console.log("housekeeping now...")
 }
-
-function runThumbnailsHousekeeping(fnc: (url:string) => boolean) {
-  console.log("housekeeping thumbnails now...")
-  useThumbnailsService().cleanUpThumbnails(fnc)
-}
-
-function runContentHousekeeping(fnc: (url:string) => boolean) {
-  console.log("housekeeping content now...")
-  useContentService().cleanUpContent(fnc)
-    .then((searchDocs:object[]) => {
-      _.forEach(searchDocs, (d:object) => {
-        //console.log("got document", d)
-        useSearchStore().remove((doc: SearchDoc) => {
-          if (doc.url === d['url' as keyof object]) {
-            console.debug("removing", doc)
-          }
-          return doc.url === d['url' as keyof object]
-        })
-        useSearchStore().addObjectToIndex(d)
-      })
-    })
-}
-
-async function checkMonitors(router: Router) {
-  const monitoredContentHash: string[] = []
-  // for (const ts of useTabsetsStore().tabsets.values()) {
-  //   for (const tab of ts.tabs) {
-  //     if (tab.monitor && tab.monitor.type === MonitoringType.CONTENT_HASH && tab.url) {
-  //       monitoredContentHash.push(tab.url)
-  //     }
-  //   }
-  // }
-
-  if (monitoredContentHash.length > 0) {
-    //console.log("%croute", "color:orange", router, router.currentRoute.value.path)
-    // if (router.currentRoute.value.path.startsWith("/sidepanel")) {
-    //   useWindowsStore().openThrottledInWindow(monitoredContentHash, {focused: false, state: "minimized"})
-    // } else {
-    console.warn("not running openThrottledInWindow due to path not starting with /sidepanel", router.currentRoute.value.path)
-    // }
-  }
-}
-
-// const persistenceService = IndexedDbPersistenceService
-
 
 class BrowserApi {
 
-  onHeadersReceivedListener = function (details: any) {
+  onHeadersReceivedListener = function (details: chrome.webRequest.WebResponseHeadersDetails) {
     if (details.url) {
-      // persistenceService.saveRequest(details.url, new RequestInfo(details.statusCode as number, details.responseHeaders || []))
-      //   .then(() => console.debug("added request"))
-      //   .catch(err => console.warn("err", err))
+      // store transient information
+      useRequestsStore().setCurrentTabRequest(details)
+
+      // save to db for existing tabs
+      useRequestsService().logWebRequest(details)
     }
   }
 
@@ -111,12 +51,12 @@ class BrowserApi {
       (alarm: chrome.alarms.Alarm) => {
         if (alarm.name === "housekeeping") {
           runHousekeeping()
-          runThumbnailsHousekeeping(useTabsetService().urlExistsInATabset)
-          runContentHousekeeping(useTabsetService().urlExistsInATabset)
+          //runThumbnailsHousekeeping(useTabsetService().urlExistsInATabset)
+          //runContentHousekeeping(useTabsetService().urlExistsInATabset)
         } else if (alarm.name === "monitoring") {
-          if (useFeaturesStore().hasFeature(FeatureIdent.MONITORING)) {
-            checkMonitors(router)
-          }
+          // if (useFeaturesStore().hasFeature(FeatureIdent.MONITORING)) {
+          //   checkMonitors(router)
+          // }
         } else if (alarm.name === "hourlyTasks") {
           if (LocalStorage.getItem(GITHUB_AUTO_BACKUP) as boolean) {
             useCommandExecutor().execute(new GithubBackupCommand());
@@ -141,7 +81,7 @@ class BrowserApi {
   }
 
   startWebRequestListener() {
-    console.log("adding WebRequestListener")
+    console.log(" ...adding WebRequestListener")
     chrome.webRequest.onHeadersReceived.addListener(
       this.onHeadersReceivedListener,
       {urls: ['*://*/*'], types: ['main_frame']},
@@ -342,25 +282,6 @@ class BrowserApi {
     })
   }
 
-  async closeAllTabs() {
-    console.log(" --- closing all tabs: start ---")
-    const currentTab = await this.getCurrentTab()
-    // @ts-ignore
-    const t: chrome.tabs.Tab[] = await chrome.tabs.query({currentWindow: true})//, (t: chrome.tabs.Tab[]) => {
-    const ids: number[] = t.filter((r: chrome.tabs.Tab) => r.id !== currentTab.id)
-      .filter(r => r.id !== undefined)
-      .map(r => r.id || 0);
-    console.log("ids to close", ids)
-    ids.forEach(id => {
-      try {
-        chrome.tabs.remove(id)
-      } catch (err) {
-        console.warn("got error removing tabs", err, ids)
-      }
-    })
-    console.log(" --- closing all tabs: end ---")
-  }
-
   restore(tabset: Tabset, windowName: string | undefined = undefined, inNewWindow: boolean = true) {
     console.log("restoring tabset ", tabset.id, windowName, inNewWindow)
 
@@ -426,12 +347,6 @@ class BrowserApi {
     return chrome.bookmarks.getChildren(bookmarkFolderId)
   }
 
-  async getTab(tabId: number): Promise<chrome.tabs.Tab> {
-    console.log("call to chromeapi get tab", tabId)
-    // @ts-ignore
-    return chrome.tabs.get(tabId)
-  }
-
   createChromeTabObject(title: string, url: string, favIconUrl: string = "https://tabsets.web.app/icons/favicon-128x128.png") {
     return {
       active: false,
@@ -446,26 +361,6 @@ class BrowserApi {
       pinned: false,
       url: url,
       name: '',
-      windowId: 0,
-      incognito: false,
-      selected: false
-    }
-  }
-
-  createChromeBookmarkObject(title: string, url: string, favIconUrl: string) {
-    return {
-      id: uid(),
-      active: false,
-      discarded: true,
-      // @ts-ignore
-      groupId: -1,
-      autoDiscardable: true,
-      favIconUrl: favIconUrl,
-      index: 0,
-      highlighted: false,
-      title: title,
-      pinned: false,
-      url: url,
       windowId: 0,
       incognito: false,
       selected: false
@@ -491,16 +386,6 @@ class BrowserApi {
       title,
       url: url,
       children
-    }
-  }
-
-  createChromeTabGroupObject(id: number, title: string, color: chrome.tabGroups.ColorEnum) {
-    return {
-      id: id,
-      title: title,
-      color: color,
-      collapsed: false,
-      windowId: 1
     }
   }
 
@@ -537,13 +422,6 @@ class BrowserApi {
         files: ['clipping.js']
       });
     });
-  }
-
-  executeAnnotationJS(tabId: number) {
-    // chrome.scripting.executeScript({
-    //   target: {tabId: tabId},
-    //   files: ['annotation.js']
-    // });
   }
 
   async executeMoveToWindow(tabId: number, windowId: number) {
@@ -625,7 +503,6 @@ class BrowserApi {
   }
 
   addIndicatorIcon(tabId: number, tabUrl: string | undefined, color: string = 'orange', tooltip: string = 'managed by tabsets') {
-    console.log("addIndicatorIcon", tabId, tabUrl)
     if (tabUrl && chrome && chrome.scripting) {
       const tabsetIds = useTabsetService().tabsetsFor(tabUrl)
       if (tabsetIds.length > 0 && tabId) {
@@ -633,6 +510,7 @@ class BrowserApi {
         if (currentTabsetId && tabsetIds.indexOf(currentTabsetId) >= 0) {
           color = "green"
         }
+        console.log("adding indicator icon", tabId, tabUrl)
         chrome.scripting
           .executeScript({
             target: {tabId: tabId},

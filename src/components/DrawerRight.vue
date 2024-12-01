@@ -16,6 +16,7 @@
         <q-icon
           v-if="!route.path.startsWith('/sidepanel/')"
           class="cursor-pointer" size="2em"
+          id="closeRightDrawerIcon"
           name="chevron_right" @click="closeRightDrawer()">
           <q-tooltip class="tooltip">Hide this view</q-tooltip>
         </q-icon>
@@ -31,24 +32,23 @@
               <q-tooltip v-if="filter">Apply Filter: '{{ filter }}'</q-tooltip>
               <q-tooltip v-else>Apply Filter</q-tooltip>
             </q-btn>
-<!--            <q-popup-edit v-model="filter" v-slot="scope">-->
-<!--              <q-input-->
-<!--                autofocus-->
-<!--                dense-->
-<!--                maxlength="9"-->
-<!--                v-model="scope.value"-->
-<!--                :model-value="scope.value"-->
-<!--                @update:model-value="(val:string) => setFilter2(val)"-->
-<!--                hint="Filter open Tabs"-->
-<!--                @keyup.enter="scope.set">-->
-<!--                <template v-slot:after>-->
-<!--                  <q-btn-->
-<!--                    flat dense color="warning" icon="cancel" v-close-popup-->
-<!--                    @click="cancelFilter()"-->
-<!--                  />-->
-<!--                </template>-->
-<!--              </q-input>-->
-<!--            </q-popup-edit>-->
+            <q-popup-edit v-model="filter" v-slot="scope">
+              <q-input
+                autofocus
+                dense
+                maxlength="9"
+                v-model="scope.value"
+                @update:model-value="val => setFilter2( val ? val.toString() : '')"
+                hint="Filter open Tabs"
+                @keyup.enter="scope.set">
+                <template v-slot:after>
+                  <q-btn
+                    flat dense color="warning" icon="cancel" v-close-popup
+                    @click="cancelFilter()"
+                  />
+                </template>
+              </q-input>
+            </q-popup-edit>
           </div>
         </div>
 
@@ -58,32 +58,32 @@
 
   <div class="row greyBorderTop"></div>
 
-<!--  <UnassignedAndOpenTabs v-if="tab === DrawerTabs.UNASSIGNED_TABS"/>-->
-<!--  <OpenTabsView v-if="tab === DrawerTabs.OPEN_TABS"/>-->
+  <!--  <UnassignedAndOpenTabs v-if="tab === DrawerTabs.UNASSIGNED_TABS"/>-->
+  <OpenTabsView v-if="tab === DrawerTabs.OPEN_TABS"/>
 
-  <BookmarksTree v-if="tab === DrawerTabs.BOOKMARKS"
-    :nodes="showOnlyFolders ? useBookmarksStore().nonLeafNodes : useBookmarksStore().bookmarksNodes2"
-    :show-only-folders="showOnlyFolders"
-    @toggle-show-only-folders="toggleShowOnlyFolders()"
-    :in-side-panel="true"/>
+  <BookmarksTree v-else-if="tab === DrawerTabs.BOOKMARKS"
+                 :nodes="showOnlyFolders ? useBookmarksStore().nonLeafNodes : useBookmarksStore().bookmarksNodes2"
+                 :show-only-folders="showOnlyFolders"
+                 @toggle-show-only-folders="toggleShowOnlyFolders()"
+                 :in-side-panel="true"/>
 
   <!--      <OpenTabs v-else-if="tab ===  DrawerTabs.OPEN_TABS" :filter="filter"/>-->
   <!--      <UnassignedTabs v-else-if="tab ===  DrawerTabs.UNASSIGNED_TABS" :filter="filter"/>-->
   <ByDomainList v-else-if="tab ===  DrawerTabs.GROUP_BY_HOST_TABS"/>
-<!--  <SavedTabs v-else-if="tab ===  DrawerTabs.SAVED_TABS"/>-->
-<!--  <SavedPdfs v-else-if="tab ===  DrawerTabs.SAVED_TABS_AS_PDF"/>-->
-<!--  <TabsetAsSidebar v-else-if="tab ===  DrawerTabs.SIDEBAR"/>-->
-<!--  <NewTabUrls v-else-if="tab ===  DrawerTabs.NEW_TAB_URLS"/>-->
-<!--  <RssTabs v-else-if="tab ===  DrawerTabs.RSS"/>-->
+  <!--  <SavedTabs v-else-if="tab ===  DrawerTabs.SAVED_TABS"/>-->
+  <!--  <SavedPdfs v-else-if="tab ===  DrawerTabs.SAVED_TABS_AS_PDF"/>-->
+  <!--  <TabsetAsSidebar v-else-if="tab ===  DrawerTabs.SIDEBAR"/>-->
+  <!--  <NewTabUrls v-else-if="tab ===  DrawerTabs.NEW_TAB_URLS"/>-->
+  <!--  <RssTabs v-else-if="tab ===  DrawerTabs.RSS"/>-->
   <!--      <ScheduledTabs v-else-if="tab ===  DrawerTabs.SCHEDULED"/>-->
   <Features v-else-if="tab ===  DrawerTabs.FEATURES"/>
-<!--  <TabDetails v-else-if="tab ===  DrawerTabs.TAB_DETAILS"/>-->
-<!--  <TabsetDetails v-else-if="tab ===  DrawerTabs.TABSET_DETAILS"/>-->
+  <!--  <TabDetails v-else-if="tab ===  DrawerTabs.TAB_DETAILS"/>
+    <TabsetDetails v-else-if="tab ===  DrawerTabs.TABSET_DETAILS"/>-->
 
 <!--  <TagsListViewer v-else-if="tab ===  DrawerTabs.TAGS_VIEWER"/>-->
-<!--  <TagListViewer v-else-if="tab ===  DrawerTabs.TAG_VIEWER"/>-->
+  <TagListViewer v-else-if="tab ===  DrawerTabs.TAG_VIEWER"/>
 
-<!--  <TabsetHelp v-else-if="tab ===  DrawerTabs.HELP"/>-->
+  <!--  <TabsetHelp v-else-if="tab ===  DrawerTabs.HELP"/>-->
 
   <!-- only in sidepanel in chrome extension-->
   <!--  <TagsViewer v-else-if="tab ===  DrawerTabs.TAGS_VIEWER"/>-->
@@ -100,9 +100,10 @@ import {DrawerTabs, useUiStore} from "src/ui/stores/uiStore";
 import BookmarksTree from "src/bookmarks/components/BookmarksTree.vue";
 import ByDomainList from "src/tabsets/components/ByDomainList.vue";
 import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
-import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import Features from "src/features/components/Features.vue";
+import OpenTabsView from "src/opentabs/views/OpenTabsView.vue";
+import TagListViewer from "components/views/TagListViewer.vue";
 
 const route = useRoute()
 
@@ -110,7 +111,6 @@ const settingsStore = useSettingsStore()
 
 const openTabsCountRatio = ref(0)
 const tab = ref<DrawerTabs>(useUiStore().rightDrawer.activeTab)
-const rssTabsCount = ref(0)
 const filter = ref<string>('')
 
 const showOnlyFolders = ref(true)
@@ -120,8 +120,6 @@ watchEffect(() => tab.value = useUiStore().rightDrawer.activeTab)
 watchEffect(() => {
   openTabsCountRatio.value = Math.min((useTabsStore2().browserTabs?.length || 0) / settingsStore.thresholds['max' as keyof object], 1)
 })
-
-watchEffect(() => rssTabsCount.value = useTabsetsStore().rssTabs?.length)
 
 const toggleShowOnlyFolders = () => {
   console.log("****")
@@ -145,8 +143,6 @@ const drawerLabel = () => {
       return "Saved PDFs"
     case DrawerTabs.SAVED_TABS_AS_PNG:
       return "Saved Images"
-    case DrawerTabs.RSS:
-      return "RSS Sidebar"
     case DrawerTabs.SCHEDULED:
       return "Scheduled"
     case DrawerTabs.HISTORY:
@@ -170,6 +166,15 @@ const drawerLabel = () => {
   }
 }
 
+const cancelFilter = () => {
+  console.log("cancelFilter")
+  filter.value = ''
+}
+const setFilter2 = (newVal: string) => {
+  console.log("newVal2", newVal)
+  filter.value = newVal
+}
+// const closeCurrentView = () => useUiService().closeCurrentView()
 const closeRightDrawer = () => useUiStore().rightDrawerOpen = false
 
 </script>

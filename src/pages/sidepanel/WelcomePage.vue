@@ -18,8 +18,8 @@
           <q-card class="my-card fit">
             <q-card-section>
               <span class="text-subtitle2">{{ t('create_your_first_ts') }}</span>
-              <br>
-              {{ t('provide_name_add_later')}}
+<!--              <br>-->
+<!--              {{ t('provide_name_add_later')}}-->
             </q-card-section>
             <q-card-section class="q-pb-none">
               <q-input v-model="tabsetName"
@@ -31,9 +31,10 @@
                        :error="!newTabsetNameIsValid()"
                        data-testid="newTabsetName"
                        @keydown.enter="addFirstTabset()"
+                       hint="e.g. Music, Holidays,..."
                        :label="t('tabset_name')"/>
             </q-card-section>
-            <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none">
+            <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none q-mt-md">
               <DialogButton
                 :label="t('add_tabset')"
                 @was-clicked="addFirstTabset"
@@ -83,7 +84,7 @@ import {AppFeatures} from "src/app/models/AppFeatures";
 import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SidePanelViews} from "src/models/SidePanelViews";
+import {SidePanelViews} from "src/app/models/SidePanelViews";
 
 const {t} = useI18n()
 const router = useRouter()

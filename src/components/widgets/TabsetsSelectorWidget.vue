@@ -47,7 +47,6 @@
 <script lang="ts" setup>
 
 import {ref, watchEffect} from "vue";
-import {useQuasar} from "quasar";
 import _ from "lodash";
 import NewTabsetDialog from "src/tabsets/dialogues/NewTabsetDialog.vue";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
@@ -58,10 +57,11 @@ import DeleteTabsetDialog from "src/tabsets/dialogues/DeleteTabsetDialog.vue";
 import {useUiStore} from "src/ui/stores/uiStore";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SidePanelViews} from "src/models/SidePanelViews";
+import {SidePanelViews} from "src/app/models/SidePanelViews";
+import {useQuasar} from "quasar";
 
-const spacesStore = useSpacesStore()
 const $q = useQuasar()
+const spacesStore = useSpacesStore()
 
 const tabsetsOptions = ref<object[]>([])
 

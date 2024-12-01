@@ -22,22 +22,20 @@
 
         </div>
 
-        <div class="col-7 text-subtitle1 text-right q-ma-none q-pa-none q-pr-none">
+        <div class="col-7 text-subtitle1 text-right q-ma-none q-pa-none q-pr-none q-pt-sm">
 
           <slot name="iconsRight">
             <SidePanelToolbarTabNavigationHelper/>
-            <div class="q-mt-md q-ma-none q-qa-none">
-              <q-btn outline dense
-                     icon="add"
-                     label="Collection"
-                     color="primary"
-                     size="sm"
-                     :class="{ shake: annimateNewTabsetButton }"
-                     data-testid="addTabsetBtn"
-                     @click="openNewTabsetDialog()"
-                     class="q-ma-none q-pl-xs q-pr-sm q-py-xs"
-                     name="o_bookmark_add"/>
-            </div>
+            <q-btn outline dense
+                   icon="add"
+                   label="Collection"
+                   color="primary"
+                   size="sm"
+                   :class="{ shake: annimateNewTabsetButton }"
+                   data-testid="addTabsetBtn"
+                   @click="openNewTabsetDialog()"
+                   class="q-ma-none q-pl-xs q-pr-sm q-py-xs"
+                   name="o_bookmark_add"/>
           </slot>
         </div>
       </div>
@@ -58,7 +56,7 @@ import {useQuasar} from "quasar";
 import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SidePanelViews} from "src/models/SidePanelViews";
+import {SidePanelViews} from "src/app/models/SidePanelViews";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {Tabset} from "src/tabsets/models/Tabset";

@@ -126,8 +126,8 @@ export class AppFeatures {
       'Browser Notifications',
       'Allow Tabsets to send Notifications via your Browser. Recommended.',
       'o_notifications', '', ['all']),
-    // .setActivateCommands([new GrantPermissionCommand('notifications')])
-    // .setDeactivateCommands([ne0w RevokePermissionCommand('notifications')]),
+      // .setActivateCommands([new GrantPermissionCommand('notifications')])
+      // .setDeactivateCommands([ne0w RevokePermissionCommand('notifications')]),
 
     // permissions notification
     new Feature(FeatureIdent.WEBSITE_CLIP, FeatureType.EXPERIMENTAL,
@@ -167,7 +167,7 @@ export class AppFeatures {
       'its links and the received http headers are taken into account. ' +
       'Please note that only tabs that you visit (or revisit) after the activation of this feature are going to be analysed.',
       'o_tab', 'analyse.png', ['bex'])
-      //.setActivateCommands([new GrantPermissionCommand('webRequest')])
+      .setActivateCommands([new GrantPermissionCommand('webRequest')])
       .setImageWidth("700px"),
 
     new Feature(FeatureIdent.TAB_GROUPS, FeatureType.EXPERIMENTAL,

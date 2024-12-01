@@ -97,18 +97,6 @@
         </q-btn>
       </div>
       <div class="col-9 text-right">
-        <!--        <q-btn round size="11px"-->
-        <!--               :color="tab?.note && tab.note.length > 0 ? 'white' : 'warning'"-->
-        <!--               :style="tab?.note && tab.note.length > 0 ? 'background: #FFBF46' : 'background: #ffffff'"-->
-        <!--               flat-->
-        <!--               icon="edit_note"-->
-        <!--               @click.stop="editNoteDialog(tab)">-->
-        <!--          <q-tooltip>Add a note to this tab or edit it</q-tooltip>-->
-        <!--        </q-btn>-->
-
-        <!--        <q-btn flat round color="primary" size="11px" icon="o_schedule" @click.stop="scheduleTab()">-->
-        <!--          <q-tooltip>Schedule this tab</q-tooltip>-->
-        <!--        </q-btn>-->
 
         <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
           <q-btn
@@ -407,7 +395,6 @@ import _ from "lodash";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import TabsetService from "src/tabsets/services/TabsetService";
 import {ref, watchEffect} from "vue";
-import {usePermissionsStore} from "src/stores/permissionsStore";
 import {useRoute, useRouter} from "vue-router";
 import {Tab} from "src/tabsets/models/Tab";
 import {formatDistance} from "date-fns";
@@ -420,10 +407,11 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {BlobMetadata} from "src/snapshots/models/BlobMetadata";
-import {useNavigationService} from "src/core/services/NavigationService.ts";
+import {useNavigationService} from "src/core/services/NavigationService";
 import {useQuasar} from "quasar";
-import {useSnapshotsService} from "src/snapshots/services/SnapshotsService.ts";
-import {TabReferenceType} from "src/content/models/TabReference.ts";
+import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
+import {TabReferenceType} from "src/content/models/TabReference";
+import {usePermissionsStore} from "stores/usePermissionsStore.ts";
 
 const {inBexMode} = useUtils()
 

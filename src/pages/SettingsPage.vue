@@ -195,7 +195,7 @@
                          v-model:data="state.data"
                          :show-double-quotes="true"
         />
-    </div>
+      </div>
     </div>
 
   </div>
@@ -228,44 +228,8 @@
 
   <div v-if="tab === 'importExport'">
 
-    <div class="q-pa-md q-gutter-sm">
+    <ImportExportSettings @show-tab="(t:string) => setTab(t)"/>
 
-      <q-banner rounded style="border:1px solid orange">You can export your data in various formats and re-import them
-        from json. Please
-        note that it is not guaranteed that older exports can be imported with newer versions of the tabsets
-        extension.
-      </q-banner>
-
-      <div class="row q-pa-md">
-        <div class="col-3"><b>Export</b></div>
-        <div class="col-3">json or as bookmarks</div>
-        <div class="col-1"></div>
-        <div class="col-5">
-          <q-btn
-            @click="showExportDialog"
-            flat round dense icon="file_download" color="primary">
-            <q-tooltip>Export your tabsets</q-tooltip>
-          </q-btn>
-        </div>
-      </div>
-
-      <div class="row q-pa-md">
-        <div class="col-3"><b>Import</b></div>
-        <div class="col-3">
-          from json<br>
-          You might need to restart tabsets.
-        </div>
-        <div class="col-1"></div>
-        <div class="col-5">
-          <q-btn
-            @click="showImportDialog"
-            flat round dense icon="file_upload" color="primary">
-            <q-tooltip>Import your tabsets backup</q-tooltip>
-          </q-btn>
-        </div>
-      </div>
-
-    </div>
   </div>
 
   <div v-if="tab === 'backup'">
@@ -279,17 +243,22 @@
 </template>
 
 <script setup lang="ts">
+
+
+/**
+ * refactoring remark: uses many other modules, needs to be one-per-application
+ *
+ */
+
 import {onMounted, reactive, ref, watch, watchEffect} from "vue";
 import {LocalStorage, useQuasar} from "quasar";
 import {useSearchStore} from "src/search/stores/searchStore";
-import TabsetService from "src/tabsets/services/TabsetService"; // import ExportDialog from "components/dialogues/ExportDialog.vue";
-// import ImportDialog from "components/dialogues/ImportDialog.vue";
+import TabsetService from "src/tabsets/services/TabsetService";
 import _ from "lodash";
 import {Tabset, TabsetStatus} from "src/tabsets/models/Tabset";
 import {MarkTabsetAsDefaultCommand} from "src/tabsets/commands/MarkTabsetAsDefault";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {DrawerTabs, ListDetailLevel, useUiStore} from "src/ui/stores/uiStore";
-import {usePermissionsStore} from "src/stores/permissionsStore";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useSettingsStore} from "src/stores/settingsStore"
 import OpenRightDrawerWidget from "components/widgets/OpenRightDrawerWidget.vue";
@@ -308,12 +277,12 @@ import {useFeaturesStore} from "src/features/stores/featuresStore";
 import VueJsonPretty from "vue-json-pretty";
 import 'vue-json-pretty/lib/styles.css';
 import SharingSettings from "pages/helper/SharingSettings.vue";
-import ImportDialog from "src/tabsets/dialogues/ImportDialog.vue";
-import ExportDialog from "src/tabsets/dialogues/ExportDialog.vue";
+import ImportExportSettings from "pages/helper/ImportExportSettings.vue";
 import BackupSettings from "src/tabsets/pages/settings/BackupSettings.vue";
 import DeleteAccountCommand from "src/account/commands/DeleteAccountCommand.ts";
 import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
 import AppearanceSettings from "pages/helper/AppearanceSettings.vue";
+import {usePermissionsStore} from "src/stores/usePermissionsStore.ts";
 
 const { t } = useI18n()
 
@@ -343,8 +312,6 @@ const permissionsList = ref<string[]>([])
 
 const darkMode = ref<string>(localStorage.getItem('darkMode') || "auto")
 const detailLevel = ref<ListDetailLevel>(localStorage.getItem('ui.detailLevel') || ListDetailLevel.MAXIMAL)
-
-//const installationId = ref<string>(localStorage.getItem(APP_INSTALLATION_ID) as string || '---')
 
 const bookmarksPermissionGranted = ref<boolean | undefined>(usePermissionsStore().hasPermission('bookmarks'))
 const pageCapturePermissionGranted = ref<boolean | undefined>(usePermissionsStore().hasPermission('history'))
@@ -379,38 +346,6 @@ watchEffect(() => permissionsList.value = usePermissionsStore().permissions?.per
 
 watchEffect(() => bookmarksPermissionGranted.value = usePermissionsStore().hasPermission('bookmarks'))
 watchEffect(() => pageCapturePermissionGranted.value = usePermissionsStore().hasPermission('pageCapture'))
-
-watch(() => bookmarksPermissionGranted.value, (newValue, oldValue) => {
-  if (newValue === oldValue) {
-    return
-  }
-  if (bookmarksPermissionGranted.value && !usePermissionsStore().hasPermission('bookmarks')) {
-    // useCommandExecutor()
-    //   .executeFromUi(new GrantPermissionCommand("bookmarks"))
-    //   .then((res: ExecutionResult<boolean>) => bookmarksPermissionGranted.value = res.result)
-  } else if (!bookmarksPermissionGranted.value) {
-    // useCommandExecutor()
-    //   .executeFromUi(new RevokePermissionCommand("bookmarks"))
-    //   .then(() => {
-    //     useBookmarksStore().loadBookmarks()
-    //   })
-  }
-})
-
-
-watch(() => pageCapturePermissionGranted.value, (newValue, oldValue) => {
-  if (newValue === oldValue) {
-    return
-  }
-  if (pageCapturePermissionGranted.value && !usePermissionsStore().hasPermission('pageCapture')) {
-    // useCommandExecutor()
-    //   .executeFromUi(new GrantPermissionCommand("pageCapture"))
-    //   .then((res: ExecutionResult<boolean>) => pageCapturePermissionGranted.value = res.result)
-  } else if (!pageCapturePermissionGranted.value) {
-    // useCommandExecutor()
-    //   .executeFromUi(new RevokePermissionCommand("pageCapture"))
-  }
-})
 
 watchEffect(() => {
   //console.log("***setting dark mode to ", typeof darkMode.value, darkMode.value)
@@ -480,36 +415,14 @@ const unarchive = (tabset: Tabset) =>
       sendMsg('reload-tabset', {tabsetId: tabset.id})
     })
 
-// const ignoredUrls = () => useTabsStore().ignoredTabset?.tabs
 
-const showExportDialog = () => {
-  $q.dialog({component: ExportDialog, componentProps: {inSidePanel: true}})
-}
-const showImportDialog = () => {
-  $q.dialog({component: ImportDialog, componentProps: {inSidePanel: true}})
-}
+const setTab = (t: string) => tab.value = t
 
 const deleteAccount = () => {
   const auth = getAuth();
   const user2 = auth.currentUser;
   if (user2) {
     useCommandExecutor().executeFromUi(new DeleteAccountCommand())
-    // deleteUser(user2).then(() => {
-    //   //chrome.storage.local.clear()
-    //   localStorage.clear()
-    //   useTabsetsStore().tabsets = new Map<string, Tabset>()
-    //   useSpacesStore().spaces = new Map<string, Space>()
-    //   // FirebaseServices.getFirestore().clearPersistence().catch(error => {
-    //   //   console.error('Could not enable persistence:', error.code);
-    //   // })
-    //   alert("user account has been deleted")
-    //   sendMsg('restart-application', {initiatedBy: "FeatureToggleSettings"})
-    //   setTimeout(() => {
-    //     window.close()
-    //   }, 1000)
-    // }).catch((error) => {
-    //   console.error("got error", error)
-    // });
   }
 }
 </script>

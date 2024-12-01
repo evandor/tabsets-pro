@@ -199,7 +199,7 @@ import {useSpacesStore} from "src/spaces/stores/spacesStore"
 import SpacesSelectorWidget from 'src/spaces/widgets/SpacesSelectorWidget.vue'
 import {DrawerTabs, useUiStore} from "src/ui/stores/uiStore";
 import NotificationDialog from "components/dialogues/NotificationDialog.vue"
-import {Notification, NotificationStatus} from "src/models/Notification";
+import {Notification} from "src/core/models/Notification";
 import {useUtils} from "src/core/services/Utils";
 import DrawerRight from "components/DrawerRight.vue";
 import {Suggestion, SuggestionState} from "src/suggestions/models/Suggestion";
@@ -213,6 +213,7 @@ import OpenTabsThresholdWidget from "src/opentabs/widgets/OpenTabsThresholdWidge
 import ExportDialog from "src/tabsets/dialogues/ExportDialog.vue";
 import ImportDialog from "src/tabsets/dialogues/ImportDialog.vue";
 import SearchWidget from "src/search/widgets/SearchWidget.vue";
+import {NotificationStatus} from "src/core/models/Notification.ts";
 
 const $q = useQuasar()
 const router = useRouter()

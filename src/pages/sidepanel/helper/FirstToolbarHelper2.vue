@@ -1,5 +1,5 @@
 <template>
-  <!-- FirstToolbarHelper -->
+  <!-- FirstToolbarHelper2 -->
   <q-toolbar class="text-primary q-pa-none q-pl-sm q-pr-xs q-pb-none greyBorderBottom" :style="offsetTop()">
     <q-toolbar-title>
       <div class="row q-ma-none q-pa-none">
@@ -37,6 +37,7 @@
                   <template v-if="currentTabset">
                     {{ currentTabset?.name }}
                     <q-icon name="arrow_drop_down" class="q-ma-none q-pa-none" color="grey-5" size="xs"/>
+                    <q-tooltip class="tooltip-small" :delay="5000" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">{{currentTabset?.id}}</q-tooltip>
                   </template>
                   <template v-else>
                     <q-spinner
@@ -108,7 +109,7 @@ import {useQuasar} from "quasar";
 import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SidePanelViews} from "src/models/SidePanelViews";
+import {SidePanelViews} from "src/app/models/SidePanelViews";
 import FilterWithTransitionHelper from "src/core/widget/FilterWithTransitionHelper.vue";
 import SpecialUrlAddToTabsetComponent from "src/tabsets/actionHandling/SpecialUrlAddToTabsetComponent.vue";
 import {useWindowsStore} from "src/windows/stores/windowsStore";
@@ -117,6 +118,7 @@ import {ActionHandlerButtonClickedHolder} from "src/tabsets/actionHandling/model
 import {useActionHandlers} from "src/tabsets/actionHandling/ActionHandlers";
 import {Tabset} from "src/tabsets/models/Tabset";
 import SidePanelPageContextMenu from "pages/sidepanel/SidePanelPageContextMenu.vue";
+import {useTabsetService} from "src/tabsets/services/TabsetService2";
 
 const {t} = useI18n({useScope: 'global'})
 
@@ -198,9 +200,16 @@ const title = (): string => {
   // return tabsets.length > 6 ? title + ' (' + tabsets.length.toString() + ')' : title
 }
 
+function getActiveFolder(tabset: Tabset) {
+  return tabset.folderActive
+    ? useTabsetService().findFolder([tabset], tabset.folderActive)
+    : undefined
+}
+
 const handleButtonClicked = async (tabset: Tabset, args: ActionHandlerButtonClickedHolder, folder?: Tabset) => {
-  console.log(`button clicked: tsId=${tabset.id}, folderId=${folder?.id}, args=...`)
-  await useActionHandlers(undefined).handleClick(tabset, currentChromeTab.value!, args, folder)
+  const useFolder: Tabset | undefined = folder ? folder : getActiveFolder(tabset)
+  console.log(`button clicked: tsId=${tabset.id}, folderId=${useFolder?.id}, args=...`)
+  await useActionHandlers(undefined).handleClick(tabset, currentChromeTab.value!, args, useFolder)
 }
 
 const offsetTop = () => ($q.platform.is.capacitor || $q.platform.is.cordova) ? 'margin-top:40px;' : ''

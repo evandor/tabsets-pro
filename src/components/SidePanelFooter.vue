@@ -114,6 +114,9 @@
                       @click="openURL('https://github.com/evandor/tabsets/issues')">
                 Issues
               </q-item>
+              <q-item clickable v-close-popup @click="reload()" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+                Restart
+              </q-item>
             </q-list>
           </q-menu>
         </span>
@@ -246,7 +249,7 @@ import {useSpacesStore} from "src/spaces/stores/spacesStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SidePanelViews} from "src/models/SidePanelViews";
+import {SidePanelViews} from "src/app/models/SidePanelViews";
 import {TabAndTabsetId} from "src/tabsets/models/TabAndTabsetId";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {AddTabToTabsetCommand} from "src/tabsets/commands/AddTabToTabsetCommand";
@@ -592,6 +595,8 @@ const drop = (evt: any) => {
     }
   }
 }
+
+const reload = () => window.location.reload()
 
 </script>
 

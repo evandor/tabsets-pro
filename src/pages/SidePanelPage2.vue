@@ -75,7 +75,7 @@ import StartingHint from "pages/widgets/StartingHint.vue";
 import SidePanelNotesView from "src/notes/views/sidepanel/SidePanelNotesView.vue";
 import SidePanelFoldersView from "src/tabsets/views/sidepanel/SidePanelFoldersView.vue";
 import FirstToolbarHelper2 from "pages/sidepanel/helper/FirstToolbarHelper2.vue";
-import AppService from "src/services/AppService.ts";
+import AppService from "src/app/AppService.ts";
 
 // const {t} = useI18n({locale: navigator.language, useScope: "global"})
 
@@ -257,9 +257,6 @@ if (inBexMode()) {
     } else if (message.name === "detail-level-perTabset-changed") {
       console.log("setting list detail perTabset level to ", message.data.level)
       useUiStore().showDetailsPerTabset = message.data.level
-    // } else if (message.name === "fullUrls-changed") {
-    //   console.log("setting fullUrls to ", message.data.value)
-    //   useUiStore().setShowFullUrls(message.data.value)
     } else if (message.name === "settings-changed") {
       console.log(`setting ${message.data.identifier} to ${message.data.value}`)
       switch (message.data.identifier) {
@@ -267,7 +264,10 @@ if (inBexMode()) {
           useUiStore().setHideIndicatorIcon(message.data.value)
           break;
         case "ui.fullUrls":
-      useUiStore().setShowFullUrls(message.data.value)
+          useUiStore().setShowFullUrls(message.data.value)
+          break;
+        case "ui.contentScriptLoggingOff":
+          useUiStore().setContentScriptLoggingOff(message.data.value)
           break;
         default: console.log(`unknown message identifier ${message.data.identifier}`)
       }

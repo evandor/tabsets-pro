@@ -5,7 +5,6 @@
 <script setup lang="ts">
 
 import {setCssVar, useQuasar} from "quasar";
-import AppService from "src/services/AppService";
 import {onAuthStateChanged} from "firebase/auth";
 import {useRouter} from "vue-router";
 import FirebaseServices from "src/services/firebase/FirebaseServices";
@@ -15,6 +14,7 @@ import {CURRENT_USER_ID} from "boot/constants";
 import {useSettingsStore} from "stores/settingsStore.ts";
 import {useAppStore} from "stores/appStore.ts";
 import {useLogger} from "src/services/Logger.ts";
+import AppService from "src/app/AppService.ts";
 
 const $q = useQuasar()
 const router = useRouter()

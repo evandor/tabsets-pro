@@ -62,6 +62,40 @@
     </q-menu>
   </q-btn>
 
+  <template v-if="!showViewMenu()">
+
+    <SidePanelFooterLeftButton
+      :side-panel-view="SidePanelViews.BY_DOMAIN_LIST"
+      :size="props.size"
+      icon="o_dns"
+      tooltip="List all your tabs URLs by domain"/>
+
+    <SidePanelFooterLeftButton
+      :side-panel-view="SidePanelViews.TAGS_LIST"
+      :size="props.size"
+      icon="o_label"
+      tooltip="Tags List"/>
+
+    <SidePanelFooterLeftButton
+      :side-panel-view="SidePanelViews.NEWEST_TABS_LIST"
+      :size="props.size"
+      icon="o_schedule"
+      tooltip="Latest Tabs List"/>
+
+    <SidePanelFooterLeftButton
+      :side-panel-view="SidePanelViews.TABS_AS_TREE"
+      :size="props.size"
+      icon="o_account_tree"
+      tooltip="Show a tree view of your tabs"/>
+
+    <SidePanelFooterLeftButton
+      :side-panel-view="SidePanelViews.TOP_10_TABS_LIST"
+      :size="props.size"
+      icon="o_workspace_premium"
+      tooltip="Top 10 Tabs List (by access)"/>
+
+  </template>
+
   <SidePanelFooterLeftButton
     :side-panel-view="SidePanelViews.TABS_LIST"
     :size="props.size"
@@ -88,12 +122,12 @@
                              :size="props.size"
                              tooltip="List all your RSS feeds"/>
 
-<!--  <span class="q-ma-none"-->
-<!--        v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD) && useTabsetsStore().tabsets?.size > 0">-->
-<!--            <OpenTabsThresholdWidget :showLabel="false" :in-side-panel="true">-->
-<!--              <q-tooltip>{{ useTabsStore2().browserTabs?.length }} open tabs</q-tooltip>-->
-<!--            </OpenTabsThresholdWidget>-->
-<!--          </span>-->
+  <span class="q-ma-none"
+        v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD) && useTabsetsStore().tabsets?.size > 0">
+            <OpenTabsThresholdWidget :showLabel="false" :in-side-panel="true">
+              <q-tooltip>{{ useTabsStore2().browserTabs?.length }} open tabs</q-tooltip>
+            </OpenTabsThresholdWidget>
+          </span>
 
 </template>
 <script setup lang="ts">
@@ -104,7 +138,9 @@ import {ref, watchEffect} from "vue";
 import {SuggestionState} from "src/suggestions/models/Suggestion";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SidePanelViews} from "src/models/SidePanelViews";
+import {SidePanelViews} from "src/app/models/SidePanelViews";
+import OpenTabsThresholdWidget from "src/opentabs/widgets/OpenTabsThresholdWidget.vue";
+import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import SidePanelFooterViewMenuItem from "src/ui/components/SidePanelFooterViewMenuItem.vue";
 import SidePanelFooterLeftButton from "src/ui/components/SidePanelFooterLeftButton.vue";
 

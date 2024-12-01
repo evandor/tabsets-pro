@@ -1,6 +1,5 @@
 import _ from "lodash";
 import {uid} from "quasar";
-import {MetaLink} from "src/models/MetaLink";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useGroupsStore} from "src/tabsets/stores/groupsStore";
 import NavigationService from "src/services/NavigationService";
@@ -11,12 +10,12 @@ import {Tab} from "src/tabsets/models/Tab";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {Extractor, Extractors, ExtractorType} from "src/core/config/Extractors";
 import {useUtils} from "src/core/services/Utils";
-import {Suggestion, SuggestionState, SuggestionType} from "src/suggestions/models/Suggestion";
+import {SuggestionState} from "src/suggestions/models/Suggestion";
 import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
 import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
-import {SidePanelViews} from "src/models/SidePanelViews";
+import {SidePanelViews} from "src/app/models/SidePanelViews";
 import {useTabsetsUiStore} from "src/tabsets/stores/tabsetsUiStore";
 import BrowserApi from "src/app/BrowserApi";
 import {useContentStore} from "src/content/stores/contentStore";
@@ -25,8 +24,6 @@ import {ContentItem} from "src/content/models/ContentItem";
 
 const {
   saveText,
-  saveMetaLinksFor,
-  saveLinksFor,
   addToTabsetId
 } = useTabsetService()
 
@@ -238,29 +235,27 @@ class BrowserListeners {
 
     const selfUrl = chrome.runtime.getURL("")
     if (chromeTab.url?.startsWith(selfUrl)) {
-      console.debug(`onUpdated:   tab ${number}: >>> .url starts with '${selfUrl}' <<<`)
+      console.debug(`onUpdated:   tab ${number}: >>> .url starts with '${selfUrl}'`)
       return
     }
 
     this.eventTriggered()
 
     if (info.status === "complete") {
-      console.debug(`onUpdated:   tab ${number}: >>> ${JSON.stringify(info)} <<<`)
+      console.debug(`onUpdated:   tab ${number}: >>> ${JSON.stringify(info)}`)
 
       if (chromeTab.id && chromeTab.url) {
         try {
           const contentRequest = await chrome.tabs.sendMessage(chromeTab.id, 'getExcerpt')
-
-          // updating (transient) content in contentstore
+          // updating (transient) content in contentStore
           useContentStore().setCurrentTabContent(contentRequest['html' as keyof object])
           useContentStore().setCurrentTabUrl(chromeTab.url)
 
           // update (persistent) content in content db if exists
           const existing: ContentItem | undefined = await useContentService().getContentFor(chromeTab.url)
           if (existing) {
-            const dummyTab = new Tab(existing.id, BrowserApi.createChromeTabObject(chromeTab.title || '', chromeTab.url))
             const tokens = ContentUtils.html2tokens(contentRequest['html' as keyof object] || '')
-            useContentService().saveContent(dummyTab, [...tokens].join(" "), contentRequest['metas' as keyof object], chromeTab.title || '', [])
+            useContentService().saveContent(existing.id, chromeTab.url, [...tokens].join(" "), contentRequest['metas' as keyof object], chromeTab.title || '', [])
               .catch((err: any) => console.log("err", err))
           }
         } catch (err) {
@@ -329,8 +324,7 @@ class BrowserListeners {
 
   async onActivated(info: chrome.tabs.TabActiveInfo) {
     this.eventTriggered()
-    console.debug(`onActivated: tab ${info.tabId} activated: >>> ${JSON.stringify(info)}`)
-
+    console.debug(`onActivated: tab ${info.tabId}: >>> ${JSON.stringify(info)}`)
     await setCurrentTab()
 
     chrome.tabs.get(info.tabId, tab => {
@@ -460,17 +454,17 @@ class BrowserListeners {
   private handleHtml2Links(request: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
     if (sender.tab) {
       console.debug("handleHtml2Links")
-      saveMetaLinksFor(sender.tab, request.links)
-      saveLinksFor(sender.tab, request.anchors)
-
-      if (useFeaturesStore().hasFeature(FeatureIdent.RSS)) {
-        request.links.forEach((metaLink: MetaLink) => {
-          if ("application/rss+xml" === metaLink.type) {
-            console.log("hier!!!", metaLink)
-            useSuggestionsStore().addSuggestion(new Suggestion(uid(), metaLink.title || 'Found RSS Feed', "An RSS Link was found in one of your tabs", metaLink.href, SuggestionType.RSS))
-          }
-        })
-      }
+      // saveMetaLinksFor(sender.tab, request.links)
+      // saveLinksFor(sender.tab, request.anchors)
+      //
+      // if (useFeaturesStore().hasFeature(FeatureIdent.RSS)) {
+      //   request.links.forEach((metaLink: MetaLink) => {
+      //     if ("application/rss+xml" === metaLink.type) {
+      //       console.log("hier!!!", metaLink)
+      //       useSuggestionsStore().addSuggestion(new Suggestion(uid(), metaLink.title || 'Found RSS Feed', "An RSS Link was found in one of your tabs", metaLink.href, SuggestionType.RSS))
+      //     }
+      //   })
+      // }
     }
     sendResponse({html2links: 'done'});
   }
@@ -552,7 +546,7 @@ class BrowserListeners {
     const currentTS = useTabsetsStore().getCurrentTabset
     if (sender.tab && currentTS) {
       const url = sender.tab.url || ''
-      const t = _.find(currentTS.tabs, (t:Tab) => t.url === url)
+      const t = _.find(currentTS.tabs, (t: Tab) => t.url === url)
       if (!t) {
         sendResponse({error: 'could not find tab for url ' + url})
         return

@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {Notification} from "src/models/Notification"
+import {Notification} from "src/core/models/Notification"
 import _ from "lodash"
 import {ref} from "vue";
 import PersistenceService from "src/services/PersistenceService";

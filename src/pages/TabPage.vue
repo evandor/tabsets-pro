@@ -55,8 +55,8 @@
 
         <div class="col-12">
           <div class="text-overline ellipsis">
-            <!--  @click.stop="NavigationService.openOrCreateTab([tab.url!] )" -->
-            {{ selectedTab?.url }}&nbsp;<q-icon name="launch" color="secondary"></q-icon>
+            {{ selectedTab?.url }}&nbsp;<q-icon name="launch" color="secondary"
+                                                @click.stop="NavigationService.openOrCreateTab([selectedTab?.url || ''] )"></q-icon>
           </div>
         </div>
       </div>
@@ -235,118 +235,6 @@
 
   </div>
 
-<!--  <div v-else-if="tab === 'request'">-->
-<!--    <div class="q-pa-md q-gutter-sm">-->
-<!--      <q-banner rounded>This is a data derived from the request to the tabs content. This-->
-<!--        data is collected if the 'analyse tabs' feature is active.-->
-<!--      </q-banner>-->
-
-<!--      Status Code: {{ request['statusCode'] }}<br><br>-->
-
-<!--      <q-table-->
-<!--        title="Request data"-->
-<!--        :rows="requestRows"-->
-<!--        :columns="metaColumns"-->
-<!--        row-key="name"-->
-<!--        :pagination="metaInitialPagination"-->
-<!--        :filter="filterRequest"-->
-<!--        dense-->
-<!--      >-->
-<!--        <template v-slot:top-right>-->
-<!--          <q-input borderless dense debounce="300" v-model="filterRequest" placeholder="Search">-->
-<!--            <template v-slot:append>-->
-<!--              <q-icon name="search"/>-->
-<!--            </template>-->
-<!--          </q-input>-->
-<!--        </template>-->
-
-<!--        <template v-slot:body-cell-name="props">-->
-<!--          <q-td :props="props">-->
-<!--            <div>-->
-<!--              <q-badge color="grey" class="cursor-pointer" @click="openNameLink(props.value)" :label="props.value"/>-->
-<!--            </div>-->
-<!--          </q-td>-->
-<!--        </template>-->
-
-<!--      </q-table>-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--  <div v-else-if="tab === 'metalinks'">-->
-<!--    <div class="q-pa-md q-gutter-sm">-->
-<!--      <q-banner rounded>This is a data derived from the tab's content link tags. This-->
-<!--        data is collected if the 'analyse tabs' feature is active.-->
-<!--        If this does not work as expected, you might have to refresh or reinstall the tabsets extension.-->
-<!--      </q-banner>-->
-
-<!--      <q-table-->
-<!--        title="Meta Links"-->
-<!--        :rows="metaLinkRows"-->
-<!--        :columns="metaLinkColumns"-->
-<!--        row-key="name"-->
-<!--        :pagination="metaInitialPagination"-->
-<!--        :filter="filterMetaLinks"-->
-<!--        dense>-->
-<!--        <template v-slot:top-right>-->
-<!--          <q-input borderless dense debounce="300" v-model="filterMetaLinks" placeholder="Search">-->
-<!--            <template v-slot:append>-->
-<!--              <q-icon name="search"/>-->
-<!--            </template>-->
-<!--          </q-input>-->
-<!--        </template>-->
-
-<!--        <template v-slot:body-cell-href="props">-->
-<!--          <q-td :props="props">-->
-<!--            <div class="cursor-pointer text-blue-10">-->
-<!--              <span v-if="props.row.href.length > 0 && props.row.href.startsWith('/')"-->
-<!--                    @click="openLink(selectedTab.url + '/' + props.row.href.substring(1))">-->
-<!--                {{ props.row.href }}-->
-<!--              </span>-->
-<!--              <span v-else @click="openLink(props.row.href)">{{ props.row.href }}</span>-->
-<!--            </div>-->
-<!--          </q-td>-->
-<!--        </template>-->
-
-<!--      </q-table>-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--  <div v-else-if="tab === 'links'">-->
-<!--    <div class="q-pa-md q-gutter-sm">-->
-<!--      <q-banner rounded>This is data derived from the tab's html content</q-banner>-->
-
-<!--      <q-table-->
-<!--        title="Links"-->
-<!--        :rows="links()"-->
-<!--        :columns="linkColumns"-->
-<!--        row-key="name"-->
-<!--        :pagination="metaInitialPagination"-->
-<!--        :filter="filterMetaLinks"-->
-<!--        dense>-->
-<!--        <template v-slot:top-right>-->
-<!--          <q-input borderless dense debounce="300" v-model="filterMetaLinks" placeholder="Search">-->
-<!--            <template v-slot:append>-->
-<!--              <q-icon name="search"/>-->
-<!--            </template>-->
-<!--          </q-input>-->
-<!--        </template>-->
-
-<!--        <template v-slot:body-cell-link="props">-->
-<!--          <q-td :props="props">-->
-<!--            <div class="cursor-pointer text-blue-10">-->
-<!--              <span v-if="props.row.link.length > 0 && props.row.link.startsWith('/')"-->
-<!--                    @click="openLink(domain + '/' + props.row.link.substring(1))">-->
-<!--                {{ props.row.link }}-->
-<!--              </span>-->
-<!--              <span v-else @click="openLink(props.row.link)">{{ props.row.link }}</span>-->
-<!--            </div>-->
-<!--          </q-td>-->
-<!--        </template>-->
-
-<!--      </q-table>-->
-<!--    </div>-->
-<!--  </div>-->
-
   <div v-else-if="tab === 'history'">
     <div class="q-pa-md q-gutter-sm">
       <q-banner rounded>To be done</q-banner>
@@ -391,6 +279,7 @@ import {Tab} from "src/tabsets/models/Tab";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
+import NavigationService from "src/services/NavigationService.ts";
 
 const route = useRoute()
 
