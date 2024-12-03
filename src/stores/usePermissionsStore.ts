@@ -49,26 +49,12 @@ export const usePermissionsStore = defineStore('permissions', () => {
       .then(() => Promise.resolve(granted))
   }
 
-  // async function grantAllOrigins(): Promise<boolean> {
-  //   // @ts-ignore
-  //   const granted: boolean = await chrome.permissions.request({origins: ["*://*/*", "<all_urls>"]})
-  //   return load()
-  //     .then(() => Promise.resolve(granted))
-  // }
-
   async function revokePermission(permission: string): Promise<void> {
     // @ts-ignore
     await chrome.permissions.remove({permissions: [permission]})
     await load()
     return Promise.resolve()
   }
-
-  // async function revokeAllOrigins(): Promise<void> {
-  //   // @ts-ignore
-  //   await chrome.permissions.remove({origins: ["*://*/*", "<all_urls>"]})
-  //   await load()
-  //   return Promise.resolve()
-  // }
 
   return {
     initialize,

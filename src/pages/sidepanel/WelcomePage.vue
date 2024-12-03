@@ -23,15 +23,15 @@
             </q-card-section>
             <q-card-section class="q-pb-none">
               <q-input v-model="tabsetName"
+                       id="addTabsetSubmitBtn"
                        class="input-box"
-                       dense
                        autofocus
                        ref="tabsetNameRef"
                        :error-message="t('no_special_chars_and_length')"
                        :error="!newTabsetNameIsValid()"
                        data-testid="newTabsetName"
                        @keydown.enter="addFirstTabset()"
-                       hint="e.g. Music, Holidays,..."
+                       hint="e.g. Music, Holidays, News..."
                        :label="t('tabset_name')"/>
             </q-card-section>
             <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none q-mt-md">
@@ -39,10 +39,6 @@
                 :label="t('add_tabset')"
                 @was-clicked="addFirstTabset"
                 :disable="tabsetName.trim().length === 0 || !newTabsetNameIsValid()"/>
-            </q-card-actions>
-            <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none">
-              <span class="q-mx-none cursor-pointer text-primary" style="font-size:smaller"
-                    @click.stop="openBookmarksView">or open Bookmark Manager</span>
             </q-card-actions>
           </q-card>
         </div>
@@ -59,9 +55,6 @@
           </div>
         </div>
 
-        <br><br>
-
-
       </div>
     </q-page>
   </q-page-container>
@@ -70,20 +63,16 @@
 <script lang="ts" setup>
 
 import {useUiStore} from "src/ui/stores/uiStore";
-import {onMounted, ref, UnwrapRef, watchEffect} from "vue";
+import {onMounted, ref, watchEffect} from "vue";
 import {useRouter} from "vue-router";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {CreateTabsetCommand} from "src/tabsets/commands/CreateTabsetCommand";
 import {STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT} from "boot/constants";
 import Analytics from "src/core/utils/google-analytics";
 import DialogButton from "src/core/dialog/buttons/DialogButton.vue";
-import {useAuthStore} from "stores/authStore";
 import {LocalStorage, openURL} from "quasar";
-import {FeatureIdent} from "src/app/models/FeatureIdent";
-import {AppFeatures} from "src/app/models/AppFeatures";
 import {useI18n} from 'vue-i18n'
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
-import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {SidePanelViews} from "src/app/models/SidePanelViews";
 
 const {t} = useI18n()
@@ -92,7 +81,6 @@ const router = useRouter()
 const tabsetName = ref('')
 const tabsetNameRef = ref<HTMLElement>(null as unknown as HTMLInputElement)
 const windowLocation = ref('---')
-const activateFullPageApp = ref(false)
 const login = ref(false)
 
 
@@ -102,42 +90,23 @@ onMounted(() => {
   LocalStorage.set(TITLE_IDENT, 'Tabsets' + stageIdentifier())
 })
 
-function setFeature(featureIdent: FeatureIdent, val: UnwrapRef<boolean>) {
-  const feature = new AppFeatures().getFeature(featureIdent)
-  console.log("feeature", feature)
-  if (val && feature) {
-    console.log("activating", featureIdent)
-    useFeaturesStore().activateFeature(featureIdent.toLowerCase())
-  } else if (!val && feature) {
-    console.log("deactivateing", featureIdent)
-    useFeaturesStore().deactivateFeature(featureIdent.toLowerCase())
-  }
-}
+// function setFeature(featureIdent: FeatureIdent, val: UnwrapRef<boolean>) {
+//   const feature = new AppFeatures().getFeature(featureIdent)
+//   if (val && feature) {
+//     console.log("activating", featureIdent)
+//     useFeaturesStore().activateFeature(featureIdent.toLowerCase())
+//   } else if (!val && feature) {
+//     console.log("deactivateing", featureIdent)
+//     useFeaturesStore().deactivateFeature(featureIdent.toLowerCase())
+//   }
+// }
 
-watchEffect(async () => {
-  setFeature(FeatureIdent.STANDALONE_APP, activateFullPageApp.value)
-})
+// watchEffect(async () => {
+//   setFeature(FeatureIdent.STANDALONE_APP, activateFullPageApp.value)
+// })
 
 watchEffect(() => {
   useUiStore().showLoginTable = login.value
-})
-
-watchEffect(() => {
-  const ar = useAuthStore().useAuthRequest
-  if (ar) {
-    console.log(">>> authRequest received @", window.location.href)
-    const baseLocation = window.location.href.split("?")[0]
-    if (window.location.href.indexOf("?") < 0) {
-      const tsIframe = window.parent.frames[0]
-      //console.log("iframe", tsIframe)
-      if (tsIframe) {
-        console.debug(">>> new window.location.href", baseLocation + "?" + ar)
-        tsIframe.location.href = baseLocation + "?" + ar
-        tsIframe.location.reload()
-      }
-    }
-    useAuthStore().setAuthRequest(null as unknown as string)
-  }
 })
 
 watchEffect(() => {
@@ -167,11 +136,6 @@ const selected = () => tabsetNameRef.value.focus()
 const stageIdentifier = () => process.env.TABSETS_STAGE !== 'PRD' ? ' (' + process.env.TABSETS_STAGE + ')' : ''
 
 const clicked = (url: string) => openURL(url)
-
-const openBookmarksView = () => {
-  useUiStore().sidePanelSetActiveView(SidePanelViews.BOOKMARKS)
-  router.push("/sidepanel/" + SidePanelViews.BOOKMARKS)
-}
 
 </script>
 

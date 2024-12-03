@@ -46,13 +46,13 @@
     <!-- place QPageSticky at end of page -->
     <q-page-sticky expand position="top" class="darkInDarkMode brightInBrightMode">
 
-      <FirstToolbarHelper title="Tags List">
+      <FirstToolbarHelper2 title="Tags List">
         <template v-slot:iconsRight>
 
           <SidePanelToolbarTabNavigationHelper/>
           <CloseSidePanelViewButton/>
         </template>
-      </FirstToolbarHelper>
+      </FirstToolbarHelper2>
 
     </q-page-sticky>
 
@@ -63,7 +63,7 @@
 <script lang="ts" setup>
 
 import {useUiStore} from "src/ui/stores/uiStore";
-import FirstToolbarHelper from "pages/sidepanel/helper/FirstToolbarHelper.vue";
+import FirstToolbarHelper2 from "pages/sidepanel/helper/FirstToolbarHelper2.vue";
 import InfoMessageWidget from "src/ui/widgets/InfoMessageWidget.vue";
 import CloseSidePanelViewButton from "src/ui/components/CloseSidePanelViewButton.vue";
 import SidePanelToolbarTabNavigationHelper from "src/opentabs/pages/SidePanelToolbarTabNavigationHelper.vue";
@@ -112,7 +112,7 @@ watchEffect(() => {
   })
   t = new Map([...t.entries()].sort((a, b) => b[1] - a[1]))
   tags.value = t
-  console.log("tags", t)
+  // console.log("tags", t)
 
   const sliced: [string, number][] = Array.from(t).slice(0, 100)
   const limitedMap = new Map<string, number>()
@@ -129,8 +129,8 @@ watchEffect(() => {
     for (let [key, value] of wordCloud.value) {
       words.push({key, value})
     }
-    console.log("heier", words.map((d) => d.key))
-    console.log("heier", words.map((d) => 10 + d.value * 2))
+    // console.log("heier", words.map((d) => d.key))
+    // console.log("heier", words.map((d) => 10 + d.value * 2))
     // const ctx = document.getElementById("myCanvas")
     // console.log("ctx", ctx)
     new Chart(myCanvas.value, {

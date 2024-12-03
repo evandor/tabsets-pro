@@ -873,10 +873,15 @@
   dependencies:
     "@editorjs/helpers" "^0.0.4"
 
-"@editorjs/editorjs@^2.26.5", "@editorjs/editorjs@^2.29.1", "@editorjs/editorjs@^2.30.6":
+"@editorjs/editorjs@^2.26.5", "@editorjs/editorjs@^2.29.1":
   version "2.30.6"
   resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.30.6.tgz#a77292da7433bc912e4beaf359b13812cab89c4d"
   integrity sha512-6eQMc4Di3Hz9p4o+NGRgKaCeAF7eAk106m+bsDLc4eo94VGYO1M163OiGFdmanE+w503qTmXOzycWff5blEOAQ==
+
+"@editorjs/editorjs@^2.30.7":
+  version "2.30.7"
+  resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.30.7.tgz#6ba210490c1040c55ef7e5ef040c4c6e3dc722e7"
+  integrity sha512-FfdeUqrgcKWC+Cy2GW6Dxup6s2TaRKokR4FL+HKXshu6h9Y//rrx4SQkURgkZOCSbV77t9btbmAXdFXWGB+diw==
 
 "@editorjs/header@^2.8.7":
   version "2.8.8"
@@ -1654,10 +1659,10 @@
     drag-event-service "^2.0.0"
     helper-js "^3.1.2"
 
-"@he-tree/vue@^2.8.7":
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/@he-tree/vue/-/vue-2.9.1.tgz#39967ec36c7cceb7057436d65c3cd09007cd8c35"
-  integrity sha512-twdq+BjHtCPpsSp+AiI4YpusuLIHM2khg6Wy+r6FZxvTpSMV8ILQRL9IquIfjwjUk8C/fMQW2fi8lQwXne4IMA==
+"@he-tree/vue@^2.9.2":
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/@he-tree/vue/-/vue-2.9.3.tgz#86be39c454278101b51a016c3a0b120e056a046a"
+  integrity sha512-8hM635PNFpRCLzZ+atSbpSVi278+cpZk46J3AnfppDLc+4rRgkTELn4jxfQICSXOamlleijhzg18QErJRy5p5g==
   dependencies:
     "@he-tree/dnd-utils" "^0.1.0-alpha.4"
     "@he-tree/tree-utils" "^0.1.0-alpha.6"
@@ -2082,10 +2087,10 @@
     vite "^5.4.5"
     webpack-merge "^6.0.1"
 
-"@quasar/extras@^1.16.12":
-  version "1.16.13"
-  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.16.13.tgz#6c1aa00b815055c060df35e1e18e92af91c589d2"
-  integrity sha512-6QdnYbFYhgeWFAwytUWTDgpP/mcJxydBmgO91cHr9MMTx0GLaVJY6d10m/G/XS9TzMnSsZgqO7kbVHf3Hvml3w==
+"@quasar/extras@^1.16.14":
+  version "1.16.14"
+  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.16.14.tgz#3e9506280d199f22d7ef8452aa5dffe7c7b7061f"
+  integrity sha512-kXVCX9GAV2l/av9EQJFRhJ3yp/sshOvc6quo+hGJYnCYj47061sxHXP6amw1vCIlVnyCFjBPeqZP2WcKmGwsOw==
 
 "@quasar/render-ssr-error@^1.0.3":
   version "1.0.3"
@@ -2272,61 +2277,51 @@
     domhandler "^5.0.3"
     selderee "^0.11.0"
 
-"@sentry-internal/browser-utils@8.39.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/browser-utils/-/browser-utils-8.39.0.tgz#26739f7485aa55d92c66e1c8c2e252c3540d9ca6"
-  integrity sha512-5jcO3os1aQIMNZptniMUCCkZ3KOvyUPSyrQeGB7NxhJoieIwmopo5qIXyeRLHu0htL7H7A1gPYln6Ji3d/KUUA==
+"@sentry-internal/browser-utils@8.42.0":
+  version "8.42.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/browser-utils/-/browser-utils-8.42.0.tgz#18155ea3d01ddb0234a6e9f59a2c6c329ff09dde"
+  integrity sha512-xzgRI0wglKYsPrna574w1t38aftuvo44gjOKFvPNGPnYfiW9y4m+64kUz3JFbtanvOrKPcaITpdYiB4DeJXEbA==
   dependencies:
-    "@sentry/core" "8.39.0"
-    "@sentry/types" "8.39.0"
-    "@sentry/utils" "8.39.0"
+    "@sentry/core" "8.42.0"
 
-"@sentry-internal/feedback@8.39.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/feedback/-/feedback-8.39.0.tgz#54f14d7d08c8cb241c7ca1418b502b1e5b9cff8d"
-  integrity sha512-V5J/tnzAK8bXdXQzY7lnlYMqfTKgI+9BD7L7oHxQnDUzlShsV14xFGZVhEbPsjYficdIN9wpoYIyWDxwrFX1Qg==
+"@sentry-internal/feedback@8.42.0":
+  version "8.42.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/feedback/-/feedback-8.42.0.tgz#20275774ab81b9cf776a2ab2f8b17269b8f5f62f"
+  integrity sha512-dkIw5Wdukwzngg5gNJ0QcK48LyJaMAnBspqTqZ3ItR01STi6Z+6+/Bt5XgmrvDgRD+FNBinflc5zMmfdFXXhvw==
   dependencies:
-    "@sentry/core" "8.39.0"
-    "@sentry/types" "8.39.0"
-    "@sentry/utils" "8.39.0"
+    "@sentry/core" "8.42.0"
 
-"@sentry-internal/replay-canvas@8.39.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/replay-canvas/-/replay-canvas-8.39.0.tgz#d3e6b95afddc32f32873eb4bdae812766fad8849"
-  integrity sha512-NCp4E60SFfg9pXdMgcdpctYENFOvJ58UPGllGjO3xpYoMkd4DGZQp947Tgw9hATTCDnyYNIy5v/zYbDV4Wbw3w==
+"@sentry-internal/replay-canvas@8.42.0":
+  version "8.42.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay-canvas/-/replay-canvas-8.42.0.tgz#4b8cf2e6e390a697038123f80208368bf507fb5d"
+  integrity sha512-XrPErqVhPsPh/oFLVKvz7Wb+Fi2J1zCPLeZCxWqFuPWI2agRyLVu0KvqJyzSpSrRAEJC/XFzuSVILlYlXXSfgA==
   dependencies:
-    "@sentry-internal/replay" "8.39.0"
-    "@sentry/core" "8.39.0"
-    "@sentry/types" "8.39.0"
-    "@sentry/utils" "8.39.0"
+    "@sentry-internal/replay" "8.42.0"
+    "@sentry/core" "8.42.0"
 
-"@sentry-internal/replay@8.39.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry-internal/replay/-/replay-8.39.0.tgz#cf1098103dd6b383318335d82f4ff5f988d897e2"
-  integrity sha512-1IEXhg2XuKC1hx/Pf5p2L7McKjQPfVOWyQhjNUH2mHWbpOyvc1BhZoZKCgbbspwOAVuvj4n40PvOVyjfzU5Yew==
+"@sentry-internal/replay@8.42.0":
+  version "8.42.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/replay/-/replay-8.42.0.tgz#9024eb254e60295d303899c904db8ba933e17d05"
+  integrity sha512-oNcJEBlDfXnRFYC5Mxj5fairyZHNqlnU4g8kPuztB9G5zlsyLgWfPxzcn1ixVQunth2/WZRklDi4o1ZfyHww7w==
   dependencies:
-    "@sentry-internal/browser-utils" "8.39.0"
-    "@sentry/core" "8.39.0"
-    "@sentry/types" "8.39.0"
-    "@sentry/utils" "8.39.0"
+    "@sentry-internal/browser-utils" "8.42.0"
+    "@sentry/core" "8.42.0"
 
 "@sentry/babel-plugin-component-annotate@2.22.6":
   version "2.22.6"
   resolved "https://registry.yarnpkg.com/@sentry/babel-plugin-component-annotate/-/babel-plugin-component-annotate-2.22.6.tgz#829d6caf2c95c1c46108336de4e1049e6521435e"
   integrity sha512-V2g1Y1I5eSe7dtUVMBvAJr8BaLRr4CLrgNgtPaZyMT4Rnps82SrZ5zqmEkLXPumlXhLUWR6qzoMNN2u+RXVXfQ==
 
-"@sentry/browser@^8.32.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-8.39.0.tgz#0b5f8aa24addebafa9703eaed219987b6c269bf3"
-  integrity sha512-Xpqh84MnqoFID0owbugTeq/3QXgNwc3EdHAN/HFUdxEAyJS4j7Wi1DIBXN+ZRzMYX3m2QHOAymCWjnFtv+H8WQ==
+"@sentry/browser@^8.41.0":
+  version "8.42.0"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-8.42.0.tgz#2408a627f263adf2466b5a304957aa6c00d8351f"
+  integrity sha512-lStrEk609KJHwXfDrOgoYVVoFFExixHywxSExk7ZDtwj2YPv6r6Y1gogvgr7dAZj7jWzadHkxZ33l9EOSJBfug==
   dependencies:
-    "@sentry-internal/browser-utils" "8.39.0"
-    "@sentry-internal/feedback" "8.39.0"
-    "@sentry-internal/replay" "8.39.0"
-    "@sentry-internal/replay-canvas" "8.39.0"
-    "@sentry/core" "8.39.0"
-    "@sentry/types" "8.39.0"
-    "@sentry/utils" "8.39.0"
+    "@sentry-internal/browser-utils" "8.42.0"
+    "@sentry-internal/feedback" "8.42.0"
+    "@sentry-internal/replay" "8.42.0"
+    "@sentry-internal/replay-canvas" "8.42.0"
+    "@sentry/core" "8.42.0"
 
 "@sentry/bundler-plugin-core@2.22.6":
   version "2.22.6"
@@ -2347,37 +2342,72 @@
   resolved "https://registry.yarnpkg.com/@sentry/cli-darwin/-/cli-darwin-2.38.2.tgz#2a53028e143d0cfed607588b87e04906ef5317e7"
   integrity sha512-21ywIcJCCFrCTyiF1o1PaT7rbelFC2fWmayKYgFElnQ55IzNYkcn8BYhbh/QknE0l1NBRaeWMXwTTdeoqETCCg==
 
+"@sentry/cli-darwin@2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli-darwin/-/cli-darwin-2.39.1.tgz#75c338a53834b4cf72f57599f4c72ffb36cf0781"
+  integrity sha512-kiNGNSAkg46LNGatfNH5tfsmI/kCAaPA62KQuFZloZiemTNzhy9/6NJP8HZ/GxGs8GDMxic6wNrV9CkVEgFLJQ==
+
 "@sentry/cli-linux-arm64@2.38.2":
   version "2.38.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli-linux-arm64/-/cli-linux-arm64-2.38.2.tgz#1b45de7e4f5e1a953b88b0b811d789de1fc708aa"
   integrity sha512-4Fp/jjQpNZj4Th+ZckMQvldAuuP0ZcyJ9tJCP1CCOn5poIKPYtY6zcbTP036R7Te14PS4ALOcDNX3VNKfpsifA==
+
+"@sentry/cli-linux-arm64@2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli-linux-arm64/-/cli-linux-arm64-2.39.1.tgz#27db44700c33fcb1e8966257020b43f8494373e6"
+  integrity sha512-5VbVJDatolDrWOgaffsEM7znjs0cR8bHt9Bq0mStM3tBolgAeSDHE89NgHggfZR+DJ2VWOy4vgCwkObrUD6NQw==
 
 "@sentry/cli-linux-arm@2.38.2":
   version "2.38.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli-linux-arm/-/cli-linux-arm-2.38.2.tgz#91f73c251f1d4b591fa98af10ee3889c9b93d208"
   integrity sha512-+AiKDBQKIdQe4NhBiHSHGl0KR+b//HHTrnfK1SaTrOm9HtM4ELXAkjkRF3bmbpSzSQCS5WzcbIxxCJOeaUaO0A==
 
+"@sentry/cli-linux-arm@2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli-linux-arm/-/cli-linux-arm-2.39.1.tgz#451683fa9a5a60b1359d104ec71334ed16f4b63c"
+  integrity sha512-DkENbxyRxUrfLnJLXTA4s5UL/GoctU5Cm4ER1eB7XN7p9WsamFJd/yf2KpltkjEyiTuplv0yAbdjl1KX3vKmEQ==
+
 "@sentry/cli-linux-i686@2.38.2":
   version "2.38.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli-linux-i686/-/cli-linux-i686-2.38.2.tgz#26e30a9bc358f910e21d812359294dd4c6103fda"
   integrity sha512-6zVJN10dHIn4R1v+fxuzlblzVBhIVwsaN/S7aBED6Vn1HhAyAcNG2tIzeCLGeDfieYjXlE2sCI82sZkQBCbAGw==
+
+"@sentry/cli-linux-i686@2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli-linux-i686/-/cli-linux-i686-2.39.1.tgz#9965a81f97a94e8b6d1d15589e43fee158e35201"
+  integrity sha512-pXWVoKXCRrY7N8vc9H7mETiV9ZCz+zSnX65JQCzZxgYrayQPJTc+NPRnZTdYdk5RlAupXaFicBI2GwOCRqVRkg==
 
 "@sentry/cli-linux-x64@2.38.2":
   version "2.38.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli-linux-x64/-/cli-linux-x64-2.38.2.tgz#18728bbb20e28315c4368baded677786f2dba70a"
   integrity sha512-4UiLu9zdVtqPeltELR5MDGKcuqAdQY9xz3emISuA6bm+MXGbt2W1WgX+XY3GElwjZbmH8qpyLUEd34sw6sdcbQ==
 
+"@sentry/cli-linux-x64@2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli-linux-x64/-/cli-linux-x64-2.39.1.tgz#31fe008b02f92769543dc9919e2a5cbc4cda7889"
+  integrity sha512-IwayNZy+it7FWG4M9LayyUmG1a/8kT9+/IEm67sT5+7dkMIMcpmHDqL8rWcPojOXuTKaOBBjkVdNMBTXy0mXlA==
+
 "@sentry/cli-win32-i686@2.38.2":
   version "2.38.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli-win32-i686/-/cli-win32-i686-2.38.2.tgz#dfe268b041c3e3db556290dba745455d0b2c0d72"
   integrity sha512-DYfSvd5qLPerLpIxj3Xu2rRe3CIlpGOOfGSNI6xvJ5D8j6hqbOHlCzvfC4oBWYVYGtxnwQLMeDGJ7o7RMYulig==
+
+"@sentry/cli-win32-i686@2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli-win32-i686/-/cli-win32-i686-2.39.1.tgz#609e8790c49414011445e397130560c777850b35"
+  integrity sha512-NglnNoqHSmE+Dz/wHeIVRnV2bLMx7tIn3IQ8vXGO5HWA2f8zYJGktbkLq1Lg23PaQmeZLPGlja3gBQfZYSG10Q==
 
 "@sentry/cli-win32-x64@2.38.2":
   version "2.38.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli-win32-x64/-/cli-win32-x64-2.38.2.tgz#e7b5744026ff5f7e84971512bee228620ba5857d"
   integrity sha512-W5UX58PKY1hNUHo9YJxWNhGvgvv2uOYHI27KchRiUvFYBIqlUUcIdPZDfyzetDfd8qBCxlAsFnkL2VJSNdpA9A==
 
-"@sentry/cli@^2.3.1", "@sentry/cli@^2.36.1", "@sentry/cli@^2.36.3":
+"@sentry/cli-win32-x64@2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli-win32-x64/-/cli-win32-x64-2.39.1.tgz#1a874a5570c6d162b35d9d001c96e5389d07d2cb"
+  integrity sha512-xv0R2CMf/X1Fte3cMWie1NXuHmUyQPDBfCyIt6k6RPFPxAYUgcqgMPznYwVMwWEA1W43PaOkSn3d8ZylsDaETw==
+
+"@sentry/cli@^2.3.1", "@sentry/cli@^2.36.1":
   version "2.38.2"
   resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.38.2.tgz#e9a7a9bbeaaade4557de91704d50d131760345d3"
   integrity sha512-CR0oujpAnhegK2pBAv6ZReMqbFTuNJLDZLvoD1B+syrKZX+R+oxkgT2e1htsBbht+wGxAsluVWsIAydSws1GAA==
@@ -2396,25 +2426,29 @@
     "@sentry/cli-win32-i686" "2.38.2"
     "@sentry/cli-win32-x64" "2.38.2"
 
-"@sentry/core@8.39.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-8.39.0.tgz#1529d9349495661b96c52711ff7d35309a4ee13b"
-  integrity sha512-rg2mHtwdCaedqub7bd+ht08vZgtwPO7el5m5sPNeb7V75GcQwSziu6G02vGxCBCsAHpoFn1A+0JLEajaYzZI7w==
+"@sentry/cli@^2.39.1":
+  version "2.39.1"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.39.1.tgz#916bb5b7567ccf7fdf94ef6cf8a2b9ab78370d29"
+  integrity sha512-JIb3e9vh0+OmQ0KxmexMXg9oZsR/G7HMwxt5BUIKAXZ9m17Xll4ETXTRnRUBT3sf7EpNGAmlQk1xEmVN9pYZYQ==
   dependencies:
-    "@sentry/types" "8.39.0"
-    "@sentry/utils" "8.39.0"
+    https-proxy-agent "^5.0.0"
+    node-fetch "^2.6.7"
+    progress "^2.0.3"
+    proxy-from-env "^1.1.0"
+    which "^2.0.2"
+  optionalDependencies:
+    "@sentry/cli-darwin" "2.39.1"
+    "@sentry/cli-linux-arm" "2.39.1"
+    "@sentry/cli-linux-arm64" "2.39.1"
+    "@sentry/cli-linux-i686" "2.39.1"
+    "@sentry/cli-linux-x64" "2.39.1"
+    "@sentry/cli-win32-i686" "2.39.1"
+    "@sentry/cli-win32-x64" "2.39.1"
 
-"@sentry/types@8.39.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-8.39.0.tgz#aa11bdcf0c6a027592d4e7eabb8d7b3cfd2358e0"
-  integrity sha512-/n1bGkbJcSLZQpzd1Oksi8LFAMbcO8j/d+N8mcXS74GuhGgkxQiEwHF2CKTz6SHt8J4hrlyzqIwVzCevUOxZ2Q==
-
-"@sentry/utils@8.39.0":
-  version "8.39.0"
-  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-8.39.0.tgz#69ebebb0f82098e0bb0c610505838bcb4dbb133b"
-  integrity sha512-pIBnr/cROds92CcYWBW3z1zFH4uJkMPL2AxEv/ZcLg/NTb1Okz/ZaDP+NMzUfzriYvFBOFk0wPk0h5sYx6Umqw==
-  dependencies:
-    "@sentry/types" "8.39.0"
+"@sentry/core@8.42.0":
+  version "8.42.0"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-8.42.0.tgz#9fc0db6794186dc2d1167cf82e579e387198ba77"
+  integrity sha512-ac6O3pgoIbU6rpwz6LlwW0wp3/GAHuSI0C5IsTgIY6baN8rOBnlAtG6KrHDDkGmUQ2srxkDJu9n1O6Td3cBCqw==
 
 "@sentry/vite-plugin@^2.22.4":
   version "2.22.6"
@@ -3179,10 +3213,10 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.13.2.tgz#0aa167216965ac9474ccfa83892cfb6b3e1e52ef"
   integrity sha512-lHe62zvbTB5eEABUVi/AwVh0ZKY9rMMDhmm+eeyuuUQbQ3+J+fONVQOZyj+DdrvD4BY33uYniyRJ4UJIaSKAfw==
 
-axios@^1.7.7:
-  version "1.7.7"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.7.tgz#2f554296f9892a72ac8d8e4c5b79c14a91d0a47f"
-  integrity sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==
+axios@^1.7.8:
+  version "1.7.8"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.8.tgz#1997b1496b394c21953e68c14aaa51b7b5de3d6e"
+  integrity sha512-Uu0wb7KNqK2t5K+YQyVCLM76prD5sRFjKHbJYCP1J7JFGEQ6nN7HWn9+04LAeiJ3ji54lgS/gZCH1oxyrf1SPw==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -5688,7 +5722,7 @@ jsonfile@^6.0.1:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonpath-plus@^10.0.7:
+jsonpath-plus@^10.2.0:
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/jsonpath-plus/-/jsonpath-plus-10.2.0.tgz#84d680544d9868579cc7c8f59bbe153a5aad54c4"
   integrity sha512-T9V+8iNYKFL2n2rF+w02LBOT2JjDnTjioaNFrxRy0Bv1y/hNsqR/EBK7Ojy2ythRHwmz2cRIls+9JitQGZC/sw==
@@ -6611,10 +6645,10 @@ picomatch@^4.0.2:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-4.0.2.tgz#77c742931e8f3b8820946c76cd0c1f13730d1dab"
   integrity sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==
 
-pinia@^2.2.2:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.2.6.tgz#ff93f35b8c02033eaedc8c92ad5f10f215d6c804"
-  integrity sha512-vIsR8JkDN5Ga2vAxqOE2cJj4VtsHnzpR1Fz30kClxlh0yCHfec6uoMeM3e/ddqmwFUejK3NlrcQa/shnpyT4hA==
+pinia@^2.2.8:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.2.8.tgz#78bccede31f39e0119188fdaf705c31a93da6d5f"
+  integrity sha512-NRTYy2g+kju5tBRe0oNlriZIbMNvma8ZJrpHsp3qudyiMEA8jMmPPKQ2QMHg0Oc4BkUyQYWagACabrwriCK9HQ==
   dependencies:
     "@vue/devtools-api" "^6.6.3"
     vue-demi "^0.14.10"
@@ -6750,10 +6784,10 @@ qs@~6.5.2:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.3.tgz#3aeeffc91967ef6e35c0e488ef46fb296ab76aad"
   integrity sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==
 
-quasar@^2.16.0:
-  version "2.17.2"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.17.2.tgz#7700786182fb76da84631b1b4a0167206463ae03"
-  integrity sha512-wycJcrjXsNxyNFYaw7eviKAo0I3LaQap0GCHXUEiaAi4H+a9LJbgkoZSZKCP4M0UO4iVnkWVkQzsFodyHk5uHQ==
+quasar@^2.16.11:
+  version "2.17.4"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.17.4.tgz#28da646532ae91b919ede0297358e95e194d9973"
+  integrity sha512-EqfV7taxfHIGN9gTwpwRayF6VMxk2I7ztapTwr+A1h22Jop4gNpl40HDuNtjpKbXaw/ZsIBK9cbch0aXDCGhNg==
 
 queue-microtask@^1.2.2:
   version "1.2.3"

@@ -269,7 +269,8 @@ if (inBexMode()) {
         case "ui.contentScriptLoggingOff":
           useUiStore().setContentScriptLoggingOff(message.data.value)
           break;
-        default: console.log(`unknown message identifier ${message.data.identifier}`)
+        default:
+          console.log(`unknown message identifier ${message.data.identifier}`)
       }
     } else if (message.name === "reload-suggestions") {
       console.log("reload-suggestions message received")

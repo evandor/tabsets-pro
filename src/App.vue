@@ -5,16 +5,17 @@
 <script setup lang="ts">
 
 import {setCssVar, useQuasar} from "quasar";
+import AppService from "src/app/AppService.ts";
 import {onAuthStateChanged} from "firebase/auth";
 import {useRouter} from "vue-router";
+import {useLogger} from "src/services/Logger.ts";
 import FirebaseServices from "src/services/firebase/FirebaseServices";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {useUtils} from "src/core/services/Utils";
+import {useSettingsStore} from "stores/settingsStore";
+import {useAppStore} from "stores/appStore";
 import {CURRENT_USER_ID} from "boot/constants";
-import {useSettingsStore} from "stores/settingsStore.ts";
-import {useAppStore} from "stores/appStore.ts";
-import {useLogger} from "src/services/Logger.ts";
-import AppService from "src/app/AppService.ts";
+import {usePermissionsStore} from "stores/usePermissionsStore";
 
 const $q = useQuasar()
 const router = useRouter()
@@ -24,16 +25,14 @@ const {handleError} = useNotificationHandler()
 
 const settingsStore = useSettingsStore()
 settingsStore.initialize($q.localStorage)
-//const localMode = settingsStore.isEnabled('localMode')
-//console.log(` ...config: localMode=${localMode}`)
+console.log("")
+
+usePermissionsStore().initialize()
+console.log("")
 
 useAppStore().init()
 
 const {info} = useLogger()
-
-// https://stackoverflow.com/questions/9768444/possible-eventemitter-memory-leak-detected
-// const emitter = new EventEmitter()
-// emitter.setMaxListeners(12)
 
 FirebaseServices.init()
 

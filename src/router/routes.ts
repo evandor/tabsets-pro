@@ -28,6 +28,11 @@ const routes: RouteRecordRaw[] = [
     children: [{path: '', component: () => import('pages/SidePanelCollectionsPage.vue')}],
   },
   {
+    path: '/sidepanel/welcome',
+    component: () => import('layouts/SidePanelNoFooterLayout.vue'),
+    children: [{path: '', component: () => import('pages/sidepanel/WelcomePage.vue')}],
+  },
+  {
     path: '/sidepanel/spaces',
     component: () => import('layouts/SidePanelLayout.vue'),
     children: [{path: '', component: () => import('src/spaces/pages/SidePanelSpacesPage.vue')}],
@@ -38,9 +43,9 @@ const routes: RouteRecordRaw[] = [
     children: [{path: '', component: () => import('pages/sidepanel/SidePanelTabDetails.vue')}],
   },
   {
-    path: '/sidepanel/welcome',
+    path: '/sidepanel/bookmarks',
     component: () => import('layouts/SidePanelLayout.vue'),
-    children: [{path: '', component: () => import('pages/sidepanel/WelcomePage.vue')}],
+    children: [{path: '', component: () => import('pages/sidepanel/SidePanelBookmarksPage.vue')}],
   },
   {
     path: '/sidepanel/research/:sourceId',
@@ -101,6 +106,11 @@ const routes: RouteRecordRaw[] = [
     path: '/mainpanel/tab/:id',// TODO combine with Tag page
     component: () => import('layouts/PlainLayout.vue'),
     children: [{path: '', component: () => import('pages/TabPage.vue')}],
+  },
+  {
+    path: '/mainpanel/bookmarks/:id',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{path: '', component: () => import('src/bookmarks/pages/MainPanelBookmarksPage.vue')}],
   },
   {
     path: '/tabsets/:tabsetId',

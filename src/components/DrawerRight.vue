@@ -80,7 +80,7 @@
   <!--  <TabDetails v-else-if="tab ===  DrawerTabs.TAB_DETAILS"/>
     <TabsetDetails v-else-if="tab ===  DrawerTabs.TABSET_DETAILS"/>-->
 
-<!--  <TagsListViewer v-else-if="tab ===  DrawerTabs.TAGS_VIEWER"/>-->
+  <!--  <TagsListViewer v-else-if="tab ===  DrawerTabs.TAGS_VIEWER"/>-->
   <TagListViewer v-else-if="tab ===  DrawerTabs.TAG_VIEWER"/>
 
   <!--  <TabsetHelp v-else-if="tab ===  DrawerTabs.HELP"/>-->

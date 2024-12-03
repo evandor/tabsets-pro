@@ -45,20 +45,20 @@
           </div>
         </Transition>
 
-        <div v-if="unreadNotifications().length > 0">
-          <q-btn flat icon="o_notifications" class="q-mr-md cursor-pointer">
-            <q-badge floating color="red" rounded/>
-          </q-btn>
-          <q-menu :offset="[0, 7]">
-            <q-list style="min-width: 200px">
-              <q-item>New Notifications:</q-item>
-              <q-item v-for="n in unreadNotifications()"
-                      clickable v-close-popup @click="showNotificationDialog(n.id)">
-                <q-item-section>{{ n.title }}</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </div>
+<!--        <div v-if="unreadNotifications().length > 0">-->
+<!--          <q-btn flat icon="o_notifications" class="q-mr-md cursor-pointer">-->
+<!--            <q-badge floating color="red" rounded/>-->
+<!--          </q-btn>-->
+<!--          <q-menu :offset="[0, 7]">-->
+<!--            <q-list style="min-width: 200px">-->
+<!--              <q-item>New Notifications:</q-item>-->
+<!--              <q-item v-for="n in unreadNotifications()"-->
+<!--                      clickable v-close-popup @click="showNotificationDialog(n.id)">-->
+<!--                <q-item-section>{{ n.title }}</q-item-section>-->
+<!--              </q-item>-->
+<!--            </q-list>-->
+<!--          </q-menu>-->
+<!--        </div>-->
 
         <span
           v-if="useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED]).length > 0">
@@ -161,12 +161,12 @@
           </q-menu>
         </div>
 
-        <div class="cursor-pointer" @click="router.push('/')" v-if="notificationsStore.updateToVersion !== ''">
-          <q-btn
-            class="text-primary bg-warning"
-            @click="installNewVersion(notificationsStore.updateToVersion)"
-            :label="'New Version ' + notificationsStore.updateToVersion + ' available. Click here to update'"/>
-        </div>
+<!--        <div class="cursor-pointer" @click="router.push('/')" v-if="notificationsStore.updateToVersion !== ''">-->
+<!--          <q-btn-->
+<!--            class="text-primary bg-warning"-->
+<!--            @click="installNewVersion(notificationsStore.updateToVersion)"-->
+<!--            :label="'New Version ' + notificationsStore.updateToVersion + ' available. Click here to update'"/>-->
+<!--        </div>-->
       </q-toolbar>
     </q-header>
 
@@ -192,14 +192,11 @@
 import {ref, watchEffect} from 'vue';
 import {useMeta, useQuasar} from "quasar";
 import {useRouter} from "vue-router";
-import {useNotificationsStore} from "src/stores/notificationsStore";
 import Navigation from "src/components/Navigation.vue"
 import _ from "lodash";
 import {useSpacesStore} from "src/spaces/stores/spacesStore"
 import SpacesSelectorWidget from 'src/spaces/widgets/SpacesSelectorWidget.vue'
 import {DrawerTabs, useUiStore} from "src/ui/stores/uiStore";
-import NotificationDialog from "components/dialogues/NotificationDialog.vue"
-import {Notification} from "src/core/models/Notification";
 import {useUtils} from "src/core/services/Utils";
 import DrawerRight from "components/DrawerRight.vue";
 import {Suggestion, SuggestionState} from "src/suggestions/models/Suggestion";
@@ -213,14 +210,12 @@ import OpenTabsThresholdWidget from "src/opentabs/widgets/OpenTabsThresholdWidge
 import ExportDialog from "src/tabsets/dialogues/ExportDialog.vue";
 import ImportDialog from "src/tabsets/dialogues/ImportDialog.vue";
 import SearchWidget from "src/search/widgets/SearchWidget.vue";
-import {NotificationStatus} from "src/core/models/Notification.ts";
 
 const $q = useQuasar()
 const router = useRouter()
 
 const leftDrawerOpen = ref($q.screen.gt.md)
 
-const notificationsStore = useNotificationsStore()
 const spacesStore = useSpacesStore()
 
 const spacesOptions = ref<object[]>([])
@@ -271,23 +266,6 @@ const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
   useUiStore().toggleLeftDrawer()
 }
-
-const installNewVersion = (version: string) => {
-  notificationsStore.updateAvailable(false)
-  chrome.tabs.create({
-    active: true,
-    url: "https://tabsets.web.app/#/updatedTo/" + version
-  })
-  chrome.runtime.reload()
-}
-
-const unreadNotifications = () => _.filter(notificationsStore.notifications, (n: Notification) => n.status === NotificationStatus.UNREAD)
-
-const showNotificationDialog = (nId: string) => $q.dialog({
-  component: NotificationDialog, componentProps: {
-    notificationId: nId
-  }
-})
 
 const tabsClicked = (tab: DrawerTabs, data: object = {}) => {}//useUiStore().rightDrawerSetActiveTab(tab, data)
 

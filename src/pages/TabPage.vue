@@ -4,7 +4,7 @@
     <div class="row fit">
       <q-toolbar-title>
         <div class="row justify-start items-baseline">
-          Tab Info for '{{ selectedTab?.url }}' (experimental)
+          Tab Info for '{{ selectedTab?.url }}' (for testing purposes)
         </div>
       </q-toolbar-title>
     </div>
@@ -15,14 +15,13 @@
     <q-tabs align="left"
             v-model="tab"
             no-caps>
-      <q-tab name="tabdata" label="Tab Details"/>
-      <q-tab name="meta" :label="metaDataLabel()"/>
+      <q-tab name="tabdata" label="Tab Details" id="tabdataTab"/>
+      <q-tab name="content" label="Content" id="contentTab"/>
+      <!--      <q-tab name="meta" :label="metaDataLabel()"/>-->
       <q-tab name="request" :label="requestDataLabel()"/>
       <q-tab name="metalinks" :label="metaLinksDataLabel()"/>
       <q-tab name="links" :label="linksDataLabel()"/>
-      <q-tab name="history" label="History"/>
-      <q-tab name="content" label="Content"/>
-      <q-tab name="debug" label="Debug"/>
+      <q-tab name="debug" label="Debug" id="debugTab"/>
     </q-tabs>
   </div>
 
@@ -47,7 +46,7 @@
           </q-img>
         </div>
         <div class="col-10 text-body1 ellipsis">
-          {{ getHost(selectedTab!.url || '', true) }}
+          {{ getHost(selectedTab?.url || '', true) }}
         </div>
         <div class="col-12 text-body2 ellipsis">
           {{ selectedTab?.title }}
@@ -325,7 +324,6 @@ watchEffect(() => {
   // })
 })
 
-const metaRows = ref<object[]>([])
 const requestRows = ref<object[]>([])
 const metaLinkRows = ref<object[]>([])
 const linkRows = ref<object[]>([])
@@ -420,7 +418,6 @@ function getHost(urlAsString: string, shorten: Boolean = true): string {
   }
 }
 
-const metaDataLabel = () => "Meta Data (" + metaRows.value.length + ")"
 const requestDataLabel = () => "Request Header (" + requestRows.value.length + ")"
 const metaLinksDataLabel = () => "Meta Links (" + metaLinkRows.value.length + ")"
 const linksDataLabel = () => "Links (" + Object.keys(linkRows.value || []).length + ")"

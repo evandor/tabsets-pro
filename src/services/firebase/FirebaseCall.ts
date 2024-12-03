@@ -3,36 +3,6 @@ import {useAuthStore} from "src/stores/authStore";
 
 export abstract class FirebaseCall<T> {
 
-
-  // static async get<T>(path: string, useAuth: boolean = true): Promise<T> {
-  //   try {
-  //     if (useAuth) {
-  //       const token = await useAuthStore().getToken(api)
-  //       const response = await api.get<T>(`${process.env.BACKEND_URL}${path}`, {headers: {'AuthToken': token}})
-  //       return response.data;
-  //     } else {
-  //       const response = await api.get<T>(`${process.env.BACKEND_URL}${path}`)
-  //       return response.data
-  //     }
-  //   } catch (err) {
-  //     FirebaseCall.handleError(err)
-  //     return Promise.reject("user not authenticated")
-  //   }
-  // }
-
-  // static async delete<T>(path: string): Promise<T> {
-  //   try {
-  //     useAuthStore().user.getIdToken()
-  //       .then((idToken) => {
-  //         const response = api.delete<T>(`${process.env.BACKEND_URL}${path}`, {headers: {'AuthToken': token}})
-  //         return response.data;
-  //       })
-  //   } catch (err) {
-  //     FirebaseCall.handleError(err)
-  //     return Promise.reject("user not authenticated")
-  //   }
-  // }
-
   static async post(path: string, data: object, resType = "json", fullPath = false) {
     console.log("firebase call to ", path)
     const idToken = "token-to-be-done" //await useAuthStore().user.getIdToken()
