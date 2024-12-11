@@ -1,10 +1,10 @@
-import Command from "src/core/domain/Command.ts";
-import {ExecutionResult} from "src/core/domain/ExecutionResult.ts";
+import Command from "src/core/domain/Command";
+import {ExecutionResult} from "src/core/domain/ExecutionResult";
 import {deleteUser, getAuth} from "firebase/auth";
-import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore.ts";
-import {Tabset} from "src/tabsets/models/Tabset.ts";
-import {useSpacesStore} from "src/spaces/stores/spacesStore.ts";
-import {Space} from "src/spaces/models/Space.ts";
+import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
+import {Tabset} from "src/tabsets/models/Tabset";
+import {useSpacesStore} from "src/spaces/stores/spacesStore";
+import {Space} from "src/spaces/models/Space";
 
 export default class DeleteAccountCommand implements Command<any> {
 

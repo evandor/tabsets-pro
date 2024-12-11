@@ -2,7 +2,7 @@ import Command from "src/core/domain/Command";
 import {ExecutionResult} from "src/core/domain/ExecutionResult";
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {Tabset} from "src/tabsets/models/Tabset";
-import {DeleteTabsetCommand} from "src/tabsets/commands/DeleteTabset";
+import {DeleteTabsetCommand} from "src/tabsets/commands/DeleteTabsetCommand";
 
 class UndoCopyTabsetCommand implements Command<object> {
 
@@ -11,7 +11,7 @@ class UndoCopyTabsetCommand implements Command<object> {
 
   execute(): Promise<ExecutionResult<object>> {
     return new DeleteTabsetCommand(this.tabsetId).execute()
-      .then(res => Promise.resolve(new ExecutionResult(res, "Tabset was deleted again")))
+      .then((res:any) => Promise.resolve(new ExecutionResult(res, "Tabset was deleted again")))
   }
 
 }

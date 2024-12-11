@@ -278,7 +278,7 @@ import {Tab} from "src/tabsets/models/Tab";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
-import NavigationService from "src/services/NavigationService.ts";
+import NavigationService from "src/services/NavigationService";
 
 const route = useRoute()
 
@@ -302,7 +302,7 @@ onMounted(() => {
 })
 
 watchEffect(() => {
-  const tabId = route.params.id.toString() || ''
+  const tabId = route.params.id?.toString() || ''
   console.log("got tabId", tabId)
   const tabInfo = useTabsetsStore().getTabAndTabsetId(tabId)
   //.then((tabInfo: TabAndTabsetId | undefined) => {

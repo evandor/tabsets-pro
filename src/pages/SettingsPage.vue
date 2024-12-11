@@ -265,10 +265,10 @@ import 'vue-json-pretty/lib/styles.css';
 import SharingSettings from "pages/helper/SharingSettings.vue";
 import ImportExportSettings from "pages/helper/ImportExportSettings.vue";
 import BackupSettings from "src/tabsets/pages/settings/BackupSettings.vue";
-import DeleteAccountCommand from "src/account/commands/DeleteAccountCommand.ts";
-import {useGroupsStore} from "../tabsets/stores/groupsStore.ts";
+import DeleteAccountCommand from "src/account/commands/DeleteAccountCommand";
+import {useGroupsStore} from "../tabsets/stores/groupsStore";
 import AppearanceSettings from "pages/helper/AppearanceSettings.vue";
-import {usePermissionsStore} from "src/stores/usePermissionsStore.ts";
+import {usePermissionsStore} from "src/stores/usePermissionsStore";
 
 const { t } = useI18n()
 

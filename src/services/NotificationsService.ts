@@ -1,4 +1,4 @@
-import {Notification} from 'src/core/models/Notification.ts'
+import {Notification} from 'src/core/models/Notification'
 
 
 class NotificationsService {

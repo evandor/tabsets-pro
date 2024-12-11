@@ -22,13 +22,13 @@ import ChromeListeners from "src/app/listeners/BrowserListeners";
 import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
 import {useSnapshotsStore} from "src/snapshots/stores/SnapshotsStore";
 import {watch} from "vue";
-import {useEntityRegistryStore} from "src/core/stores/entityRegistryStore.ts";
-import {useNotesStore} from "src/notes/stores/NotesStore.ts";
-import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore.ts";
+import {useEntityRegistryStore} from "src/core/stores/entityRegistryStore";
+import {useNotesStore} from "src/notes/stores/NotesStore";
+import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import _ from "lodash"
 import {TabsetInfo} from "src/core/models/TabsetInfo";
-import ChromeBookmarkListeners from "src/services/ChromeBookmarkListeners.ts";
-import {SpaceInfo} from "src/core/models/SpaceInfo.ts";
+import ChromeBookmarkListeners from "src/services/ChromeBookmarkListeners";
+import {SpaceInfo} from "src/core/models/SpaceInfo";
 
 
 class AppService {

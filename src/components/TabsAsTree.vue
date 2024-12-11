@@ -61,7 +61,7 @@ import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import Highlighter from 'vue-highlight-words'
 import {useSettingsStore} from "stores/settingsStore";
 import {useUtils} from "src/core/services/Utils";
-import {Tab} from "src/tabsets/models/Tab.ts";
+import {Tab} from "src/tabsets/models/Tab";
 
 const {favIconFromUrl} = useUtils()
 
@@ -88,7 +88,7 @@ function createNodes(tabs: object[], level = 0): TreeNode[] {
     if (segments && segments.length > level) {
       const name = segments[level]
       //console.log("got name", name)
-      levelIdents.set(name, e)
+      levelIdents.set(name!, e)
     }
   }
 

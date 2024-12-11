@@ -5,10 +5,10 @@
 <script setup lang="ts">
 
 import {setCssVar, useQuasar} from "quasar";
-import AppService from "src/app/AppService.ts";
+import AppService from "src/app/AppService";
 import {onAuthStateChanged} from "firebase/auth";
 import {useRouter} from "vue-router";
-import {useLogger} from "src/services/Logger.ts";
+import {useLogger} from "src/services/Logger";
 import FirebaseServices from "src/services/firebase/FirebaseServices";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {useUtils} from "src/core/services/Utils";

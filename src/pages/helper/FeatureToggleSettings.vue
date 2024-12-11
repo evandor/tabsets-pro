@@ -66,7 +66,7 @@ import {DeactivateFeatureCommand} from "src/features/commands/DeactivateFeatureC
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {useNotificationHandler} from "src/core/services/ErrorHandler";
 import {captureFeedback, captureMessage} from "@sentry/browser";
-import {ActivateFeatureCommand} from "src/features/commands/ActivateFeatureCommand.ts";
+import {ActivateFeatureCommand} from "src/features/commands/ActivateFeatureCommand";
 
 const settingsStore = useSettingsStore()
 const {handleError} = useNotificationHandler()

@@ -259,7 +259,7 @@ class BrowserApi {
             const tabId = tab?.id || 0
             const tabsetId = e.menuItemId.toString().split("|")[1]
             console.log("got tabsetId", tabsetId, e.menuItemId)
-            this.executeAddToTS(tabId, tabsetId)
+            this.executeAddToTS(tabId, tabsetId!)
           } else if (e.menuItemId.toString().startsWith("move_to|")) {
             console.log("got", e, e.menuItemId.toString().split("|"))
             const tabId = tab?.id || 0
@@ -327,7 +327,7 @@ class BrowserApi {
       try {
         chrome.tabs.query(queryOptions, function (tabs) {
           //console.log("got tab", tabs[0])
-          resolve(tabs[0]);
+          resolve(tabs[0]!);
         })
       } catch (e) {
         reject(e);

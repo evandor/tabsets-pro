@@ -6,11 +6,11 @@ import FirestoreSpacesPersistence from "src/spaces/persistence/FirestoreSpacesPe
 import FeaturesPersistence from "src/features/persistence/FeaturesPersistence";
 import FirestoreFeaturesPersistence from "src/features/persistence/FirestoreFeaturesPersistence";
 import SnapshotsPersistence from "src/snapshots/persistence/SnapshotsPersistence";
-import FirestoreSnapshotsPersistence from "src/snapshots/persistence/FirestoreSnapshotsPersistence.ts";
-import FirestoreNotesPersistence from "src/notes/persistence/FirestoreNotesPersistence.ts";
-import NotesPersistence from "src/notes/persistence/NotesPersistence.ts";
-import ThumbnailsPersistence from "src/thumbnails/persistence/ThumbnailsPersistence.ts";
-import FirestoreThumbnailsPersistence from "src/thumbnails/persistence/FirestoreThumbnailsPersistence.ts";
+import FirestoreSnapshotsPersistence from "src/snapshots/persistence/FirestoreSnapshotsPersistence";
+import FirestoreNotesPersistence from "src/notes/persistence/FirestoreNotesPersistence";
+import NotesPersistence from "src/notes/persistence/NotesPersistence";
+import ThumbnailsPersistence from "src/thumbnails/persistence/ThumbnailsPersistence";
+import FirestoreThumbnailsPersistence from "src/thumbnails/persistence/FirestoreThumbnailsPersistence";
 
 export function useDB() {
 

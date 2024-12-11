@@ -324,7 +324,7 @@
           <div class="text-caption ellipsis">
             <div class="row">
               <div class="col-12 ellipsis">
-                {{ ref.data[0]['title' as keyof object] }}:
+                {{ ref.data[0]!['title' as keyof object] }}:
               </div>
             </div>
           </div>
@@ -404,14 +404,14 @@ import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
-import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {BlobMetadata} from "src/snapshots/models/BlobMetadata";
 import {useNavigationService} from "src/core/services/NavigationService";
 import {useQuasar} from "quasar";
 import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
 import {TabReferenceType} from "src/content/models/TabReference";
-import {usePermissionsStore} from "stores/usePermissionsStore.ts";
+import {usePermissionsStore} from "stores/usePermissionsStore";
+import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabsetCommand";
 
 const {inBexMode} = useUtils()
 
@@ -456,7 +456,7 @@ watchEffect(() => {
     useThumbnailsService().getThumbnailFor(tab.value.url)
       .then(data => {
         if (data) {
-          thumbnail.value = data['thumbnail' as keyof object]
+          thumbnail.value = data['thumbnail' as keyof object]!
         } else {
           thumbnail.value = ''
         }

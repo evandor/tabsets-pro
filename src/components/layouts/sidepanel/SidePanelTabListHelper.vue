@@ -14,7 +14,7 @@
                                :sorting="props.sorting"
                                :show-tabsets="props.showTabsets"
                                :preventDragAndDrop="props.preventDragAndDrop"
-                               :tabset="props.tabset"
+                               :tabset="props.tabset!"
                                :hide-menu="props.hideMenu"/>
 
   </q-item>

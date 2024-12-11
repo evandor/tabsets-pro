@@ -91,10 +91,10 @@ import {ListDetailLevel, useUiStore} from "src/ui/stores/uiStore";
 import ShortUrl from "src/core/utils/ShortUrl.vue";
 import {FeatureIdent} from "src/app/models/FeatureIdent";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
-import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
 import {useFeaturesStore} from "src/features/stores/featuresStore";
 import {useSpacesStore} from "src/spaces/stores/spacesStore";
+import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabsetCommand";
 
 const props = defineProps({
   hit: {type: Hit, required: true},
@@ -188,15 +188,15 @@ const open = (hit: Hit) => {
   if (hit.id.startsWith("tabset|")) {
     const tabsetId = hit.tabsets[0]
     if (useFeaturesStore().hasFeature(FeatureIdent.SPACES)) {
-      const tabset = useTabsetsStore().getTabset(tabsetId)
+      const tabset = useTabsetsStore().getTabset(tabsetId!)
       const spaceId =  (tabset && tabset.spaces.length > 0) ? tabset.spaces[0] : undefined
       console.log("selecting tabset/space", tabsetId, spaceId)
-      useCommandExecutor().execute(new SelectTabsetCommand(tabsetId, spaceId))
+      useCommandExecutor().execute(new SelectTabsetCommand(tabsetId!, spaceId))
       useSpacesStore().setSpace(spaceId)
     } else {
-      useCommandExecutor().execute(new SelectTabsetCommand(tabsetId))
+      useCommandExecutor().execute(new SelectTabsetCommand(tabsetId!))
     }
-    openTabset(tabsetId)
+    openTabset(tabsetId!)
   } else {
     NavigationService.openOrCreateTab([hit.url || ''])
   }

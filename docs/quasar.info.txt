@@ -12,21 +12,20 @@ Global packages
   cordova - 12.0.0 (cordova-lib@12.0.1)
 
 Important local packages
-  quasar - 2.17.2 -- Build high-performance VueJS user interfaces (SPA, PWA, SSR, Mobile and Desktop) in record time
-  @quasar/app-vite - 2.0.0-beta.24 -- Quasar Framework App CLI with Vite
-  @quasar/extras - 1.16.13 -- Quasar Framework fonts, icons and animations
+  quasar - 2.17.4 -- Build high-performance VueJS user interfaces (SPA, PWA, SSR, Mobile and Desktop) in record time
+  @quasar/app-vite - 2.0.1 -- Quasar Framework App CLI with Vite
+  @quasar/extras - 1.16.15 -- Quasar Framework fonts, icons and animations
   eslint-plugin-quasar - Not installed
-  vue - 3.5.12 -- The progressive JavaScript framework for building modern web UI.
-  vue-router - 4.4.5
-  pinia - 2.2.6 -- Intuitive, type safe and flexible Store for Vue
-  vuex - Not installed
-  vite - 5.4.10 -- Native-ESM powered web dev build tool
+  vue - 3.5.13 -- The progressive JavaScript framework for building modern web UI.
+  vue-router - 4.5.0
+  pinia - 2.3.0 -- Intuitive, type safe and flexible Store for Vue
+  vite - 6.0.3 -- Native-ESM powered web dev build tool
   vite-plugin-checker - Not installed
-  eslint - 9.14.0 -- An AST-based pattern checker for JavaScript.
+  eslint - 9.16.0 -- An AST-based pattern checker for JavaScript.
   esbuild - 0.24.0 -- An extremely fast JavaScript and CSS bundler and minifier.
-  typescript - 5.6.3 -- TypeScript is a language for application scale JavaScript development
-  workbox-build - Not installed
-  register-service-worker - Not installed
+  typescript - 5.5.4 -- TypeScript is a language for application scale JavaScript development
+  workbox-build - 7.3.0 -- A module that integrates into your build process, helping you generate a manifest of local files that workbox-sw should precache.
+  register-service-worker - 1.7.2 -- Script for registering service worker, with hooks
   electron - Not installed
   @electron/packager - Not installed
   electron-builder - Not installed
@@ -39,6 +38,7 @@ Quasar App Extensions
   *None installed*
 
 Networking
-  Host - 96c214ea-21f1-4e07-8bd7-c63f9afdc951.fritz.box
-  en0 - 192.168.178.54
+  Host - Carstens-MacBook-Pro.fritz.box
+  en0 - 192.168.194.22
+  en0 - 192.168.178.128
 

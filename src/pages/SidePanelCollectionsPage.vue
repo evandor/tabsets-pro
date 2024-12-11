@@ -45,7 +45,6 @@ import Analytics from "src/core/utils/google-analytics";
 import {Tabset, TabsetStatus} from "src/tabsets/models/Tabset";
 import _ from "lodash"
 import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
-import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabset";
 import {useCommandExecutor} from "src/core/services/CommandExecutor";
 import {ExecutionResult} from "src/core/domain/ExecutionResult";
 import {useRouter} from "vue-router";
@@ -57,6 +56,7 @@ import {dragContext, Draggable, OpenIcon} from "@he-tree/vue";
 import '@he-tree/vue/style/default.css'
 import {useTabsetService} from "src/tabsets/services/TabsetService2";
 import {DeleteTabsetFolderCommand} from "src/tabsets/commands/DeleteTabsetFolderCommand";
+import {SelectTabsetCommand} from "src/tabsets/commands/SelectTabsetCommand";
 
 type NodeTreeObject = { text: string, id: string, tsId: string, level: number, url: string, children: NodeTreeObject[] }
 

@@ -75,7 +75,7 @@ import StartingHint from "pages/widgets/StartingHint.vue";
 import SidePanelNotesView from "src/notes/views/sidepanel/SidePanelNotesView.vue";
 import SidePanelFoldersView from "src/tabsets/views/sidepanel/SidePanelFoldersView.vue";
 import FirstToolbarHelper2 from "pages/sidepanel/helper/FirstToolbarHelper2.vue";
-import AppService from "src/app/AppService.ts";
+import AppService from "src/app/AppService";
 
 // const {t} = useI18n({locale: navigator.language, useScope: "global"})
 
