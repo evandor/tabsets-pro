@@ -68,10 +68,10 @@ export class AppFeatures {
       'The "RSS View" list all your RSS Pages. It is recommended to enable the "analyse Tabs" feature as well to automatically find linked rss feeds from your tabsets.',
       'o_rss_feed', 'rss.png', ['bex', 'spa']),
 
-    new Feature(FeatureIdent.SESSIONS, FeatureType.DISABLED,
+    new Feature(FeatureIdent.SESSIONS, FeatureType.EXPERIMENTAL,
       'Sessions',
-      'A session is a special type of tabsets where your newly opened tabs will be tracked automatically',
-      'o_explore', '', ['all']),
+      'You want to start something in-between without losing your already opened tabs? Start a new session and come back to your old tabs whenever needed.',
+      'sym_o_new_window', '', ['all']),
 
     new Feature(FeatureIdent.SPACES, FeatureType.OPTIONAL,
       'Spaces',
@@ -209,6 +209,11 @@ export class AppFeatures {
       'HTML Snippets',
       'Drag and drop Text and Images to the sidebar to create Website Snippets',
       'text_snippet', '', ['bex']),
+
+    new Feature(FeatureIdent.TABSET_LIST, FeatureType.EXPERIMENTAL,
+      'List of recent Tabsets',
+      'Switch beetween recent and favorite tabsets quickly',
+      'list', '', ['bex']),
 
   ]
 

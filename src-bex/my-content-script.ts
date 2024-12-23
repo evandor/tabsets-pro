@@ -5,7 +5,7 @@
  *   Do not remove the import statement below. It is required for the extension to work.
  *   If you don't need createBridge(), leave it as "import '#q-app/bex/content'".
  */
-import { createBridge } from '#q-app/bex/content';
+import {createBridge} from '#q-app/bex/content';
 
 // The use of the bridge is optional.
 const bridge = createBridge({ debug: false });
@@ -19,9 +19,9 @@ const bridge = createBridge({ debug: false });
 
 declare module '@quasar/app-vite' {
   interface BexEventMap {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
+    // / eslint-disable @typescript-eslint/no-explicit-any */
     'some.event': [{ someProp: string }, void];
-    /* eslint-enable @typescript-eslint/no-explicit-any */
+    // / eslint-enable @typescript-eslint/no-explicit-any */
   }
 }
 

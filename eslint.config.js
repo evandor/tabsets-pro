@@ -72,7 +72,7 @@ export default [
     rules: {
       "@typescript-eslint/no-misused-promises": "off",
       "@typescript-eslint/no-floating-promises": "off",
-      //"@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off",
       'prefer-promise-reject-errors': 'off',
       '@typescript-eslint/consistent-type-imports': [
         'off',
