@@ -1,24 +1,19 @@
-import { Tabset } from 'src/tabsets/models/Tabset'
-import {
-  CLEANUP_PERIOD_IN_MINUTES,
-  GITHUB_AUTO_BACKUP,
-  MONITORING_PERIOD_IN_MINUTES,
-} from 'boot/constants'
+import {Tabset} from 'src/tabsets/models/Tabset'
+import {CLEANUP_PERIOD_IN_MINUTES, GITHUB_AUTO_BACKUP, MONITORING_PERIOD_IN_MINUTES,} from 'src/boot/constants'
 import _ from 'lodash'
 import NavigationService from 'src/services/NavigationService'
-import { usePermissionsStore } from 'src/stores/usePermissionsStore'
-import { Tab } from 'src/tabsets/models/Tab'
-import { LocalStorage, uid } from 'quasar'
-import { FeatureIdent } from 'src/app/models/FeatureIdent'
-import { useWindowsStore } from 'src/windows/stores/windowsStore'
-import { Router } from 'vue-router'
-import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
-import { useTabsetService } from 'src/tabsets/services/TabsetService2'
-import { useFeaturesStore } from 'src/features/stores/featuresStore'
-import { useCommandExecutor } from 'src/core/services/CommandExecutor'
-import { GithubBackupCommand } from 'src/tabsets/commands/github/GithubBackupCommand'
-import { useRequestsService } from 'src/requests/services/RequestsService'
-import { useRequestsStore } from 'src/requests/stores/requestsStore'
+import {Tab} from 'src/tabsets/models/Tab'
+import {LocalStorage, uid} from 'quasar'
+import {FeatureIdent} from 'src/app/models/FeatureIdent'
+import {useWindowsStore} from 'src/windows/stores/windowsStore'
+import {Router} from 'vue-router'
+import {useTabsetsStore} from 'src/tabsets/stores/tabsetsStore'
+import {useTabsetService} from 'src/tabsets/services/TabsetService2'
+import {useFeaturesStore} from 'src/features/stores/featuresStore'
+import {useCommandExecutor} from 'src/core/services/CommandExecutor'
+import {GithubBackupCommand} from 'src/tabsets/commands/github/GithubBackupCommand'
+import {useRequestsService} from 'src/requests/services/RequestsService'
+import {useRequestsStore} from 'src/requests/stores/requestsStore'
 
 function runHousekeeping() {
   //console.log("housekeeping now...")
@@ -70,10 +65,7 @@ class BrowserApi {
       // NavigationService.updateAvailable(details)
     })
 
-    if (
-      usePermissionsStore().hasAllOrigins() &&
-      useFeaturesStore().hasFeature(FeatureIdent.ANALYSE_TABS)
-    ) {
+    if (useFeaturesStore().hasFeature(FeatureIdent.ANALYSE_TABS)) {
       this.startWebRequestListener()
     } else {
       this.stopWebRequestListener()
@@ -346,8 +338,7 @@ class BrowserApi {
 
   async childrenFor(bookmarkFolderId: string): Promise<chrome.bookmarks.BookmarkTreeNode[]> {
     console.log('bookmarkFolderId', bookmarkFolderId)
-    // @ts-ignore
-    return chrome.bookmarks.getChildren(bookmarkFolderId)
+    return chrome.bookmarks.getChildren('' + bookmarkFolderId)
   }
 
   createChromeTabObject(
@@ -358,7 +349,6 @@ class BrowserApi {
     return {
       active: false,
       discarded: true,
-      // @ts-ignore
       groupId: -1,
       autoDiscardable: true,
       favIconUrl: favIconUrl,
@@ -420,7 +410,6 @@ class BrowserApi {
   }
 
   executeClippingJS(tabId: number) {
-    // @ts-ignore
     chrome.scripting.insertCSS(
       {
         target: { tabId: tabId },
@@ -432,7 +421,6 @@ class BrowserApi {
           alert(JSON.stringify(lastError))
           return
         }
-        // @ts-ignore
         chrome.scripting.executeScript({
           target: { tabId: tabId },
           files: ['clipping.js'],
@@ -459,7 +447,6 @@ class BrowserApi {
   }
 
   executeAddToTS(tabId: number, tabsetId: string) {
-    // @ts-ignore
     chrome.scripting.executeScript({
       target: { tabId: tabId, allFrames: true },
       args: [tabId, tabsetId],
@@ -535,6 +522,14 @@ class BrowserApi {
           .catch((res) => console.log('err', res))
       }
     }
+  }
+
+  async closeAllTabs(includingPinnedOnes: boolean = true) {
+    const tabIds = (await chrome.tabs.query({}))
+      .filter((t: chrome.tabs.Tab) => (includingPinnedOnes ? true : !t.pinned))
+      .map((t: chrome.tabs.Tab) => t.id || 0)
+    await chrome.tabs.create({})
+    await chrome.tabs.remove(tabIds)
   }
 }
 

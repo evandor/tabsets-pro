@@ -10,12 +10,13 @@
   <!--  </q-item>-->
 
   <!--  <q-separator inset/>-->
+  <div></div>
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue'
-import { Tab } from 'src/tabsets/models/Tab'
-import { Tabset } from 'src/tabsets/models/Tabset'
+import {PropType} from 'vue'
+import {Tab} from 'src/tabsets/models/Tab'
+import {Tabset} from 'src/tabsets/models/Tabset'
 
 // @ts-ignore
 const props = defineProps({

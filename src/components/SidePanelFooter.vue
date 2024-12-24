@@ -1,14 +1,33 @@
 <template>
   <q-footer
-    class="q-pa-xs q-mt-sm darkInDarkMode brightInBrightMode"
+    class="q-pa-none q-mt-sm darkInDarkMode brightInBrightMode"
     style="border-top: 1px solid lightgrey"
     :style="offsetBottom()"
   >
-    <div class="row fit q-mb-sm" v-if="showLogin">
-      <keep-alive>
-        <SidePanelLoginWidget @hide-login="showLogin = false" />
-      </keep-alive>
-    </div>
+    <template v-if="checkToasts()">
+      <Transition name="fade" appear>
+        <q-banner
+          inline-actions
+          dense
+          rounded
+          style="font-size: smaller; text-align: center"
+          :class="toastBannerClass()"
+        >
+          {{ useUiStore().toasts[0]?.msg }}
+          <template v-slot:action v-if="useUiStore().toasts[0]?.actions[0]">
+            <q-btn
+              flat
+              :label="useUiStore().toasts[0]!.actions[0].label"
+              @click="useUiStore().callUndoActionFromCurrentToast()"
+            />
+          </template>
+        </q-banner>
+      </Transition>
+    </template>
+
+    <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSET_LIST)">
+      <SidePanelTabsetListMarkup />
+    </template>
 
     <div class="row fit q-mb-sm" v-if="showWindowTable">
       <!-- https://michaelnthiessen.com/force-re-render -->
@@ -43,28 +62,22 @@
 
     <div class="row fit q-ma-none q-pa-none">
       <div class="col-6">
-        <Transition name="fade" appear>
-          <q-banner
-            v-if="checkToasts()"
-            inline-actions
-            dense
-            rounded
-            style="font-size: smaller; text-align: center"
-            :class="toastBannerClass()"
-          >
-            {{ useUiStore().toasts[0]?.msg }}
-            <template v-slot:action v-if="useUiStore().toasts[0]?.actions[0]">
-              <q-btn
-                flat
-                :label="useUiStore().toasts[0]!.actions[0].label"
-                @click="useUiStore().callUndoActionFromCurrentToast()"
-              />
-            </template>
-          </q-banner>
-        </Transition>
+        <!--        <Transition name="fade" appear>-->
+        <!--          <q-banner-->
+        <!--            v-if="checkToasts()"-->
+        <!--            inline-actions dense rounded-->
+        <!--            style="font-size: smaller;text-align: center"-->
+        <!--            :class="toastBannerClass()">-->
+        <!--            {{ useUiStore().toasts[0]?.msg }}-->
+        <!--            <template v-slot:action v-if="useUiStore().toasts[0]?.actions[0]">-->
+        <!--              <q-btn flat :label="useUiStore().toasts[0].actions[0].label"-->
+        <!--                     @click="useUiStore().callUndoActionFromCurrentToast()"/>-->
+        <!--            </template>-->
+        <!--          </q-banner>-->
+        <!--        </Transition>-->
 
         <q-btn
-          v-if="!checkToasts() && !transitionGraceTime && showSuggestionButton"
+          v-if="!transitionGraceTime && showSuggestionButton"
           outline
           icon="o_lightbulb"
           :label="suggestionsLabel()"
@@ -75,7 +88,7 @@
         >
         </q-btn>
 
-        <template v-if="!checkToasts() && !transitionGraceTime && !showSuggestionButton">
+        <template v-if="!transitionGraceTime && !showSuggestionButton">
           <SidePanelFooterLeftButtons
             @was-clicked="doShowSuggestionButton = true"
             :size="getButtonSize()"
@@ -115,40 +128,62 @@
           </q-btn>
           <q-menu :offset="[-10, 0]">
             <q-list dense>
-              <q-item clickable v-close-popup @click="openOptionsPage()">
-                <q-item-section>Open Settings</q-item-section>
-              </q-item>
-              <q-separator />
-              <q-item clickable v-close-popup @click="openURL('https://docs.tabsets.net')">
-                Documentation
-              </q-item>
-              <q-separator />
-              <q-item
-                clickable
+              <ContextMenuItem
                 v-close-popup
-                @click="
+                @was-clicked="openOptionsPage()"
+                icon="o_settings"
+                label="Open Settings"
+              />
+
+              <q-separator />
+
+              <ContextMenuItem
+                v-close-popup
+                @was-clicked="openURL('https://docs.tabsets.net')"
+                icon="o_open_in_new"
+                label="Documentation"
+              />
+
+              <ContextMenuItem
+                v-close-popup
+                @was-clicked="
                   openURL(
                     'https://docs.google.com/forms/d/e/1FAIpQLSdUtiKIyhqmNoNkXXzZOEhnzTCXRKT-Ju83SyyEovnfx1Mapw/viewform?usp=pp_url',
                   )
                 "
-              >
-                Feedback
-              </q-item>
-              <q-item
-                clickable
+                icon="o_open_in_new"
+                label="Feedback"
+              />
+
+              <ContextMenuItem
                 v-close-popup
-                @click="openURL('https://github.com/evandor/tabsets/issues')"
-              >
-                Issues
-              </q-item>
-              <q-item
-                clickable
+                @was-clicked="openURL('https://github.com/evandor/tabsets/issues')"
+                icon="o_open_in_new"
+                label="Issues"
+              />
+
+              <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SESSIONS)">
+                <q-separator />
+
+                <ContextMenuItem
+                  :disable="useTabsetsStore().getCurrentTabset?.type !== TabsetType.DEFAULT"
                 v-close-popup
-                @click="reload()"
-                v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-              >
-                Restart
-              </q-item>
+                  @was-clicked="startSession()"
+                  color="warning"
+                  icon="sym_o_new_window"
+                  label="Start new Session..."
+                />
+              </template>
+
+              <q-separator />
+
+              <ContextMenuItem
+                v-close-popup
+                @was-clicked="reload()"
+                color="negative"
+                icon="o_replay"
+                label="Restart Tabsets"
+              />
             </q-list>
           </q-menu>
         </span>
@@ -180,32 +215,30 @@
           >
         </q-btn>
 
-        <span v-if="useFeaturesStore().hasFeature(FeatureIdent.STANDALONE_APP)">
-          <q-icon
-            name="o_open_in_new"
-            @click="openExtensionTab()"
-            :class="rightButtonClass()"
-            class="cursor-pointer"
-            flat
-            size="20px"
-          >
-            <q-tooltip :delay="2000" anchor="center left" self="center right" class="tooltip-small"
-              >Tabsets as full-page app</q-tooltip
-            >
-          </q-icon>
-          <!--          <q-menu :offset="[0, 7]" fit>-->
-          <!--            <q-list dense style="min-width: 200px;min-height:50px">-->
-          <!--              <q-item clickable v-close-popup>-->
-          <!--                <q-item-section @click="openExtensionTab()">Tabsets as full-page app</q-item-section>-->
-          <!--              </q-item>-->
-          <!--              <q-item clickable v-close-popup>-->
-          <!--                <q-item-section @click="openPwaUrl()">Tabsets Online Access</q-item-section>-->
-          <!--              </q-item>-->
-          <!--            </q-list>-->
-          <!--          </q-menu>-->
-        </span>
+        <!--        <span v-if="useFeaturesStore().hasFeature(FeatureIdent.STANDALONE_APP)">-->
+        <!--          <q-icon-->
+        <!--            name="o_open_in_new"-->
+        <!--            @click="openExtensionTab()"-->
+        <!--            :class="rightButtonClass()"-->
+        <!--            class="cursor-pointer"-->
+        <!--            flat-->
+        <!--            size="20px">-->
+        <!--            <q-tooltip :delay="2000" anchor="center left" self="center right"-->
+        <!--                       class="tooltip-small">Tabsets as full-page app</q-tooltip>-->
+        <!--          </q-icon>-->
+        <!--          &lt;!&ndash;          <q-menu :offset="[0, 7]" fit>&ndash;&gt;-->
+        <!--          &lt;!&ndash;            <q-list dense style="min-width: 200px;min-height:50px">&ndash;&gt;-->
+        <!--          &lt;!&ndash;              <q-item clickable v-close-popup>&ndash;&gt;-->
+        <!--          &lt;!&ndash;                <q-item-section @click="openExtensionTab()">Tabsets as full-page app</q-item-section>&ndash;&gt;-->
+        <!--          &lt;!&ndash;              </q-item>&ndash;&gt;-->
+        <!--          &lt;!&ndash;              <q-item clickable v-close-popup>&ndash;&gt;-->
+        <!--          &lt;!&ndash;                <q-item-section @click="openPwaUrl()">Tabsets Online Access</q-item-section>&ndash;&gt;-->
+        <!--          &lt;!&ndash;              </q-item>&ndash;&gt;-->
+        <!--          &lt;!&ndash;            </q-list>&ndash;&gt;-->
+        <!--          &lt;!&ndash;          </q-menu>&ndash;&gt;-->
+        <!--        </span>-->
         <q-btn
-          v-else-if="useFeaturesStore().hasFeature(FeatureIdent.STANDALONE_APP)"
+          v-if="useFeaturesStore().hasFeature(FeatureIdent.STANDALONE_APP)"
           icon="o_open_in_new"
           :class="rightButtonClass()"
           flat
@@ -265,41 +298,47 @@
   </q-footer>
 </template>
 <script setup lang="ts">
-import { useUiStore } from 'src/ui/stores/uiStore'
-import { onMounted, ref, watch, watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import {useUiStore} from 'src/ui/stores/uiStore'
+import {onMounted, ref, watch, watchEffect} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {FeatureIdent} from 'src/app/models/FeatureIdent'
 import NavigationService from 'src/services/NavigationService'
-import { openURL, uid, useQuasar } from 'quasar'
-import { useUtils } from 'src/core/services/Utils'
-import { useWindowsStore } from 'src/windows/stores/windowsStore'
-import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
+import {openURL, uid, useQuasar} from 'quasar'
+import {useUtils} from 'src/core/services/Utils'
+import {useWindowsStore} from 'src/windows/stores/windowsStore'
+import {useSuggestionsStore} from 'src/suggestions/stores/suggestionsStore'
 import _ from 'lodash'
-import { Suggestion, SuggestionState } from 'src/suggestions/models/Suggestion'
+import {Suggestion, SuggestionState} from 'src/suggestions/models/Suggestion'
 import SuggestionDialog from 'src/suggestions/dialogues/SuggestionDialog.vue'
-import { Tabset } from 'src/tabsets/models/Tabset'
-import { ToastType } from 'src/core/models/Toast'
+import {Tabset, TabsetType} from 'src/tabsets/models/Tabset'
+import {ToastType} from 'src/core/models/Toast'
 import SidePanelFooterLeftButtons from 'components/helper/SidePanelFooterLeftButtons.vue'
-import { useAuthStore } from 'stores/authStore'
-import { Account } from 'src/models/Account'
-import { useNotificationHandler } from 'src/core/services/ErrorHandler'
-import SidePanelLoginWidget from 'components/helper/SidePanelLoginWidget.vue'
+import {useAuthStore} from 'stores/authStore'
+import {Account} from 'src/models/Account'
+import {useNotificationHandler} from 'src/core/services/ErrorHandler'
 import SidePanelStatsMarkupTable from 'components/helper/SidePanelStatsMarkupTable.vue'
-import { Window } from 'src/windows/models/Window'
+import {Window} from 'src/windows/models/Window'
 import WindowsMarkupTable from 'src/windows/components/WindowsMarkupTable.vue'
-import { WindowAction, WindowHolder } from 'src/windows/models/WindowHolder'
+import {WindowAction, WindowHolder} from 'src/windows/models/WindowHolder'
 import NewTabsetDialog from 'src/tabsets/dialogues/NewTabsetDialog.vue'
-import { useSpacesStore } from 'src/spaces/stores/spacesStore'
-import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
-import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
-import { useFeaturesStore } from 'src/features/stores/featuresStore'
-import { SidePanelViews } from 'src/app/models/SidePanelViews'
-import { TabAndTabsetId } from 'src/tabsets/models/TabAndTabsetId'
-import { useCommandExecutor } from 'src/core/services/CommandExecutor'
-import { AddTabToTabsetCommand } from 'src/tabsets/commands/AddTabToTabsetCommand'
-import { Tab, TabSnippet } from 'src/tabsets/models/Tab'
+import {useSpacesStore} from 'src/spaces/stores/spacesStore'
+import {useTabsStore2} from 'src/tabsets/stores/tabsStore2'
+import {useTabsetsStore} from 'src/tabsets/stores/tabsetsStore'
+import {useFeaturesStore} from 'src/features/stores/featuresStore'
+import {SidePanelViews} from 'src/app/models/SidePanelViews'
+import {TabAndTabsetId} from 'src/tabsets/models/TabAndTabsetId'
+import {useCommandExecutor} from 'src/core/services/CommandExecutor'
+import {AddTabToTabsetCommand} from 'src/tabsets/commands/AddTabToTabsetCommand'
+import {Tab, TabSnippet} from 'src/tabsets/models/Tab'
 import BrowserApi from 'src/app/BrowserApi'
-import { useContentStore } from 'src/content/stores/contentStore'
+import {useContentStore} from 'src/content/stores/contentStore'
+import ContextMenuItem from 'src/core/components/helper/ContextMenuItem.vue'
+import {useTabsetsUiStore} from '../tabsets/stores/tabsetsUiStore'
+import SidePanelTabsetListMarkup from 'src/components/helper/SidePanelTabsetListMarkup.vue'
+import StartSessionDialog from 'src/tabsets/dialogues/StartSessionDialog.vue'
+import {CreateTabsetCommand} from 'src/tabsets/commands/CreateTabsetCommand'
+import {ExecutionResult} from 'src/core/domain/ExecutionResult'
+import {SaveOrReplaceResult} from 'src/tabsets/models/SaveOrReplaceResult'
 
 const { handleError } = useNotificationHandler()
 
@@ -334,6 +373,14 @@ const tabsetsMangedWindows = ref<object[]>([])
 onMounted(() => {
   windowHolderRows.value = calcWindowHolderRows()
 })
+
+watch(
+  () => useSpacesStore().space,
+  (now: any, before: any) => {
+    console.log(`space switched from ${before?.id} to ${now?.id}`)
+    useTabsetsUiStore().load()
+  },
+)
 
 watchEffect(() => {
   const windowId = useWindowsStore().currentChromeWindow?.id || 0
@@ -692,6 +739,29 @@ const drop = (evt: any) => {
 }
 
 const reload = () => window.location.reload()
+
+const startSession = () => {
+  $q.dialog({
+    component: StartSessionDialog,
+  }).onOk((callback: object) => {
+    console.log('callback', callback)
+    const tabsToUse = useTabsStore2().browserTabs
+    useCommandExecutor()
+      .execute(new CreateTabsetCommand(callback['oldSessionName' as keyof object], tabsToUse))
+      .then((res: ExecutionResult<SaveOrReplaceResult>) => {
+        console.log('res', res.result.tabset)
+        const ts = res.result.tabset
+        ts.type = TabsetType.SESSION
+        useTabsetsStore().saveTabset(ts)
+        BrowserApi.closeAllTabs(false)
+      })
+      .then(() => {
+        useCommandExecutor().executeFromUi(
+          new CreateTabsetCommand(callback['sessionName' as keyof object], []),
+        )
+      })
+  })
+}
 </script>
 
 <style>

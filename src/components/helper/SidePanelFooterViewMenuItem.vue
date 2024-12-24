@@ -15,10 +15,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useUiStore } from 'src/ui/stores/uiStore'
-import { PropType } from 'vue'
-import { useRouter } from 'vue-router'
-import { SidePanelViews } from 'src/app/models/SidePanelViews'
+import {useUiStore} from 'src/ui/stores/uiStore'
+import {PropType} from 'vue'
+import {useRouter} from 'vue-router'
+import {SidePanelViews} from 'src/app/models/SidePanelViews'
 
 const props = defineProps({
   sidePanelView: { type: Object as PropType<SidePanelViews>, required: true },
@@ -44,7 +44,7 @@ const toggleView = () => {
     activateView(props.sidePanelView)
     props.sidePanelView === SidePanelViews.MAIN
       ? router.push('/sidepanel')
-      : router.push('/sidepanel/' + props.sidePanelView)
+      : router.push('/sidepanel/' + props.sidePanelView?.toString())
   }
 }
 </script>

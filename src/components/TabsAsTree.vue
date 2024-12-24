@@ -47,17 +47,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, watchEffect } from 'vue'
-import { uid, useQuasar } from 'quasar'
-import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
+import {ref, watch, watchEffect} from 'vue'
+import {uid, useQuasar} from 'quasar'
+import {useBookmarksStore} from 'src/bookmarks/stores/bookmarksStore'
 import NavigationService from 'src/services/NavigationService'
 import _ from 'lodash'
-import { TreeNode } from 'src/bookmarks/models/Tree'
-import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
+import {TreeNode} from 'src/bookmarks/models/Tree'
+import {useTabsetsStore} from 'src/tabsets/stores/tabsetsStore'
 import Highlighter from 'vue-highlight-words'
-import { useSettingsStore } from 'stores/settingsStore'
-import { useUtils } from 'src/core/services/Utils'
-import { Tab } from 'src/tabsets/models/Tab'
+import {useSettingsStore} from 'stores/settingsStore'
+import {useUtils} from 'src/core/services/Utils'
+import {Tab} from 'src/tabsets/models/Tab'
 
 const { favIconFromUrl } = useUtils()
 
@@ -99,9 +99,9 @@ function createNodes(tabs: object[], level = 0): TreeNode[] {
     const children: TreeNode[] = createNodes(filteredTabs, level + 1)
     // console.log("calculated children", children.length)
     const newNodeId = uid()
-    let url: string = t['protocol' as keyof object] + '//' + t['hostname' as keyof object]
+    let url: string = (t['protocol' as keyof object] as string) + '//' + (t['hostname' as keyof object] as string)
     for (let i = 1; i <= level; i++) {
-      url += '/' + t['segments' as keyof object][i]
+      url += '/' + (t['segments' as keyof object][i] as string)
     }
     children.length === 0
       ? nodesToUrl.value.set(newNodeId, t['url' as keyof object])
