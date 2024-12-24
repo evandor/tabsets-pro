@@ -16,27 +16,21 @@
       "contextMenus",
       "bookmarks"
     ],
-    "optional_permissions": [
-      "pageCapture",
-      "notifications",
-      "webRequest",
-      "tabGroups"
-    ],
-    "host_permissions": [
-      "<all_urls>",
-      "*://*/*"
+    "optional_permissions": ["pageCapture", "notifications", "webRequest", "tabGroups"],
+    "host_permissions": ["<all_urls>", "*://*/*"],
+    "content_scripts": [
+      {
+        "matches": ["*://*/*"],
+        "js": ["tabsets-content-script.ts"]
+      }
     ],
     "content_security_policy": {
       "extension_pages": "script-src 'self'; object-src 'self';"
     },
     "web_accessible_resources": [
       {
-        "resources": [
-          "*"
-        ],
-        "matches": [
-          "*://*/*"
-        ]
+        "resources": ["*"],
+        "matches": ["*://*/*"]
       }
     ],
     "omnibox": {
@@ -74,18 +68,16 @@
     "options_page": "www/index.html#/mainpanel/settings"
   },
   "chrome": {
-    "background": {
-      "service_worker": "background.ts"
-    },
     "side_panel": {
       "default_path": "www/index.html"
+    },
+    "background": {
+      "service_worker": "background.ts"
     }
   },
   "firefox": {
     "background": {
-      "scripts": [
-        "background.ts"
-      ]
+      "scripts": ["background.ts"]
     }
   }
 }

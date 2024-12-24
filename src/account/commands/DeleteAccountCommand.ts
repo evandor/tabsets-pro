@@ -1,16 +1,15 @@
-import Command from "src/core/domain/Command";
-import {ExecutionResult} from "src/core/domain/ExecutionResult";
-import {deleteUser, getAuth} from "firebase/auth";
-import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
-import {Tabset} from "src/tabsets/models/Tabset";
-import {useSpacesStore} from "src/spaces/stores/spacesStore";
-import {Space} from "src/spaces/models/Space";
+import Command from 'src/core/domain/Command'
+import { ExecutionResult } from 'src/core/domain/ExecutionResult'
+import { deleteUser, getAuth } from 'firebase/auth'
+import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
+import { Tabset } from 'src/tabsets/models/Tabset'
+import { useSpacesStore } from 'src/spaces/stores/spacesStore'
+import { Space } from 'src/spaces/models/Space'
 
 export default class DeleteAccountCommand implements Command<any> {
-
   async execute(): Promise<ExecutionResult<any>> {
-    const auth = getAuth();
-    const user2 = auth.currentUser;
+    const auth = getAuth()
+    const user2 = auth.currentUser
     if (user2) {
       try {
         await deleteUser(user2)
@@ -27,7 +26,7 @@ export default class DeleteAccountCommand implements Command<any> {
 
         useTabsetsStore().tabsets = new Map<string, Tabset>()
         useSpacesStore().spaces = new Map<string, Space>()
-        alert("user account has been deleted")
+        alert('user account has been deleted')
         // sendMsg('restart-application', {initiatedBy: "FeatureToggleSettings"})
         // setTimeout(() => {
         //   window.close()
@@ -42,16 +41,13 @@ export default class DeleteAccountCommand implements Command<any> {
       //   console.error('Could not enable persistence:', error.code);
       // })
 
-      return Promise.resolve(new ExecutionResult("", "done"))
-
-
+      return Promise.resolve(new ExecutionResult('', 'done'))
     } else {
-      return Promise.reject("could not find current user")
+      return Promise.reject('could not find current user')
     }
   }
-
 }
 
 DeleteAccountCommand.prototype.toString = function cmdToString() {
-  return `DeleteAccountCommand: {}`;
-};
+  return `DeleteAccountCommand: {}`
+}

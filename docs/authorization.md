@@ -46,17 +46,16 @@ In SidePanelPage.vue and WelcomePage.vue, there is a watch on the authRequest:
 watchEffect(() => {
   const ar = useAuthStore().useAuthRequest
   if (ar) {
-    if (window.location.href.indexOf("?") < 0) {
+    if (window.location.href.indexOf('?') < 0) {
       const tsIframe = window.parent.frames[0]
-      console.log("iframe", tsIframe)
+      console.log('iframe', tsIframe)
       if (tsIframe) {
-        tsIframe.location.href = window.location.href + "?" + ar
+        tsIframe.location.href = window.location.href + '?' + ar
         tsIframe.location.reload()
       }
     }
   }
 })
-
 ```
 
 "useAuthRequest" will retrieve the authRequest once (by setting it to null)

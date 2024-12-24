@@ -1,37 +1,33 @@
-import Command from "src/core/domain/Command";
-import {ExecutionResult} from "src/core/domain/ExecutionResult";
-import {Tab} from "src/tabsets/models/Tab";
-import {Tabset, TabsetSharing} from "src/tabsets/models/Tabset";
-import {useTabsetService} from "src/tabsets/services/TabsetService2";
-import {useUtils} from "src/core/services/Utils";
+import Command from 'src/core/domain/Command'
+import { ExecutionResult } from 'src/core/domain/ExecutionResult'
+import { Tab } from 'src/tabsets/models/Tab'
+import { Tabset, TabsetSharing } from 'src/tabsets/models/Tabset'
+import { useTabsetService } from 'src/tabsets/services/TabsetService2'
+import { useUtils } from 'src/core/services/Utils'
 
-const {addToTabset, deleteTab} = useTabsetService()
-const {sendMsg} = useUtils()
+const { addToTabset, deleteTab } = useTabsetService()
+const { sendMsg } = useUtils()
 
 class UndoCommand implements Command<any> {
-
-
-  constructor(public tabset: Tabset, public tab: Tab) {
-  }
+  constructor(
+    public tabset: Tabset,
+    public tab: Tab,
+  ) {}
 
   execute(): Promise<ExecutionResult<any>> {
-    console.log("execution undo command", this.tab, this.tabset)
-    return addToTabset(this.tabset, this.tab)
-      .then((res) => {
-        useTabsetService().saveCurrentTabset()
-        return new ExecutionResult(res, "Tab has been restored again")
-      })
+    console.log('execution undo command', this.tab, this.tabset)
+    return addToTabset(this.tabset, this.tab).then((res) => {
+      useTabsetService().saveCurrentTabset()
+      return new ExecutionResult(res, 'Tab has been restored again')
+    })
   }
-
 }
 
 export class DeleteTabCommand implements Command<Tabset> {
-
   constructor(
     public tab: Tab,
-    public tabset: Tabset
-  ) {
-  }
+    public tabset: Tabset,
+  ) {}
 
   async execute(): Promise<ExecutionResult<Tabset>> {
     return deleteTab(this.tab, this.tabset)
@@ -43,19 +39,23 @@ export class DeleteTabCommand implements Command<Tabset> {
         }
         return tabset
       })
-      .then(tabset => Promise.resolve(new ExecutionResult(
-        tabset,
-        "Tab was deleted",
-        new Map([["Undo", new UndoCommand(tabset, this.tab)]]))))
+      .then((tabset) =>
+        Promise.resolve(
+          new ExecutionResult(
+            tabset,
+            'Tab was deleted',
+            new Map([['Undo', new UndoCommand(tabset, this.tab)]]),
+          ),
+        ),
+      )
       .then((res) => {
-        sendMsg('tab-deleted', {tabsetId: res.result.id})
+        sendMsg('tab-deleted', { tabsetId: res.result.id })
         return res
       })
-      .catch(err => Promise.reject(err))
+      .catch((err) => Promise.reject(err))
   }
 }
 
-
 DeleteTabCommand.prototype.toString = function cmdToString() {
-  return `DeleteTabCommand: {tab.id=${this.tab.id}, tab.url=${this.tab.url}}`;
-};
+  return `DeleteTabCommand: {tab.id=${this.tab.id}, tab.url=${this.tab.url}}`
+}

@@ -1,24 +1,23 @@
-import {defineStore} from 'pinia';
-import {getAuth, signOut, User} from "firebase/auth";
-import {LocalStorage} from "quasar";
-import {computed, ref} from "vue";
-import {Account, UserData} from "src/models/Account";
-import {CURRENT_USER_ID} from "boot/constants";
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
-import FirebaseServices from "src/services/firebase/FirebaseServices";
-import PersistenceService from "src/services/PersistenceService";
-import {useSettingsStore} from "stores/settingsStore";
-import {sha256} from 'js-sha256';
+import { defineStore } from 'pinia'
+import { getAuth, signOut, User } from 'firebase/auth'
+import { LocalStorage } from 'quasar'
+import { computed, ref } from 'vue'
+import { Account, UserData } from 'src/models/Account'
+import { CURRENT_USER_ID } from 'boot/constants'
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
+import FirebaseServices from 'src/services/firebase/FirebaseServices'
+import PersistenceService from 'src/services/PersistenceService'
+import { useSettingsStore } from 'stores/settingsStore'
+import { sha256 } from 'js-sha256'
 
 export enum AccessItem {
-  TABSETS = "TABSETS",
-  SYNC = "SYNC",
-  SHARE = "SHARE",
-  FEATURE_TOGGLES = "FEATURE_TOGGLES"
+  TABSETS = 'TABSETS',
+  SYNC = 'SYNC',
+  SHARE = 'SHARE',
+  FEATURE_TOGGLES = 'FEATURE_TOGGLES',
 }
 
 export const useAuthStore = defineStore('auth', () => {
-
   let storage = null as unknown as PersistenceService
 
   const authenticated = ref(false)
@@ -30,21 +29,20 @@ export const useAuthStore = defineStore('auth', () => {
   const products = ref<string[]>([])
   const avatar = ref('https://www.gravatar.com/avatar/unknown')
 
-
   // --- init ---
   async function initialize(ps: PersistenceService) {
-    console.debug(" ...initializing AuthStore")
+    console.debug(' ...initializing AuthStore')
     storage = ps
 
     //check stored user info
     const userId = LocalStorage.getItem(CURRENT_USER_ID) as string
     if (userId) {
       try {
-        console.log("getting account info for user", userId)
+        console.log('getting account info for user', userId)
         const a: Account = await storage.getAccount(userId)
         account.value = a
       } catch (err) {
-        console.warn("could not get account:", err)
+        console.warn('could not get account:', err)
       }
     }
   }
@@ -59,9 +57,9 @@ export const useAuthStore = defineStore('auth', () => {
   const getUsername = computed(() => {
     if (authenticated.value) {
       // @ts-ignore
-      return user.value?.displayName || "undefined";
+      return user.value?.displayName || 'undefined'
     }
-    return "anonymous"
+    return 'anonymous'
   })
 
   const getAccount = computed(() => {
@@ -71,10 +69,10 @@ export const useAuthStore = defineStore('auth', () => {
   const getAccessTokenSilently = computed(async () => {
     if (process.env.MODE === 'electron') {
       // @ts-ignore
-      const accessToken = await window.electronAPI.getAccessToken();
+      const accessToken = await window.electronAPI.getAccessToken()
       return accessToken
     }
-    return "await auth0.getAccessTokenSilently()"
+    return 'await auth0.getAccessTokenSilently()'
   })
 
   const useAuthRequest = computed(() => {
@@ -85,7 +83,6 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   const limitExceeded = computed(() => {
-
     function hasRole(role: string) {
       return roles.value.indexOf(role) >= 0
     }
@@ -112,10 +109,10 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   async function getCustomClaimRoles(): Promise<string[]> {
-    await FirebaseServices.getAuth().currentUser!.getIdToken(true);
-    const decodedToken = await FirebaseServices.getAuth().currentUser!.getIdTokenResult();
+    await FirebaseServices.getAuth().currentUser!.getIdToken(true)
+    const decodedToken = await FirebaseServices.getAuth().currentUser!.getIdTokenResult()
     //console.log("decodedToken", decodedToken)
-    return decodedToken.claims.stripeRole as string[] || []
+    return (decodedToken.claims.stripeRole as string[]) || []
   }
 
   const userMayAccess = computed(() => {
@@ -129,7 +126,7 @@ export const useAuthStore = defineStore('auth', () => {
       switch (item) {
         case AccessItem.SYNC:
           // return products.value.indexOf("prod_PLJipUG1Zfw7pC") >= 0
-          return account.value ? account.value.products.indexOf("skysailSync") >= 0 : false
+          return account.value ? account.value.products.indexOf('skysailSync') >= 0 : false
         case AccessItem.SHARE:
           return account.value !== undefined
         case AccessItem.FEATURE_TOGGLES:
@@ -143,19 +140,21 @@ export const useAuthStore = defineStore('auth', () => {
   // --- actions ---
   async function setUser(u: User | undefined) {
     if (u) {
-      console.log("setting user id to", u.uid, await getCustomClaimRoles())
+      console.log('setting user id to', u.uid, await getCustomClaimRoles())
       LocalStorage.set(CURRENT_USER_ID, u.uid)
-      authenticated.value = true;
+      authenticated.value = true
       user.value = JSON.parse(JSON.stringify(u))
       roles.value = await getCustomClaimRoles()
-      console.log("user has roles: ", roles.value)
+      console.log('user has roles: ', roles.value)
       const fs = FirebaseServices.getFirestore()
-      const d = doc(fs, "users", u.uid)
+      const d = doc(fs, 'users', u.uid)
       const userDoc = await getDoc(d)
       const userData = userDoc.data() as UserData
       const account = new Account(u.uid, userData)
-      console.debug("created account object", account)
-      const querySnapshot = await getDocs(collection(FirebaseServices.getFirestore(), "users", u.uid, "subscriptions"))
+      console.debug('created account object', account)
+      const querySnapshot = await getDocs(
+        collection(FirebaseServices.getFirestore(), 'users', u.uid, 'subscriptions'),
+      )
       const products = new Set<string>()
       querySnapshot.forEach((doc) => {
         const subscriptionData = doc.data()
@@ -171,32 +170,30 @@ export const useAuthStore = defineStore('auth', () => {
         const hashedEmail = sha256(user.value.email.trim().toLowerCase())
         avatar.value = `https://www.gravatar.com/avatar/${hashedEmail}`
       }
-
     } else {
       LocalStorage.remove(CURRENT_USER_ID)
-      authenticated.value = false;
-      user.value = null as unknown as User;
+      authenticated.value = false
+      user.value = null as unknown as User
       console.log(` ...setting user id to <null>`)
       products.value = []
     }
   }
 
   function setAuthRequest(ar: string) {
-    console.log("setting auth request to", ar)
+    console.log('setting auth request to', ar)
     authRequest.value = ar
   }
 
   function logout(): Promise<any> {
-    console.log("logging out user")
+    console.log('logging out user')
     avatar.value = 'https://www.gravatar.com/avatar/unknown'
-    return signOut(getAuth())
-      .then(() => {
-        authenticated.value = false
-        user.value = null as unknown as User
-        LocalStorage.remove(CURRENT_USER_ID)
-        //console.log("logout", (process.env.MODE === 'bex') ? window.location.origin + "/www/index.html" : window.location.origin)
-        return Promise.resolve("")
-      })
+    return signOut(getAuth()).then(() => {
+      authenticated.value = false
+      user.value = null as unknown as User
+      LocalStorage.remove(CURRENT_USER_ID)
+      //console.log("logout", (process.env.MODE === 'bex') ? window.location.origin + "/www/index.html" : window.location.origin)
+      return Promise.resolve('')
+    })
   }
 
   function upsertAccount(acc: Account | undefined) {
@@ -225,6 +222,6 @@ export const useAuthStore = defineStore('auth', () => {
     setProducts,
     userMayAccess,
     limitExceeded,
-    avatar
+    avatar,
   }
 })

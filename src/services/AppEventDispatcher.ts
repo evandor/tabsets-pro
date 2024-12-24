@@ -1,4 +1,4 @@
-import {useSearchStore} from "src/search/stores/searchStore";
+import { useSearchStore } from 'src/search/stores/searchStore'
 
 /**
  * meant for inter-submodule communication.
@@ -10,11 +10,9 @@ import {useSearchStore} from "src/search/stores/searchStore";
  * This class has to be implemented once-per-application if this kind of dispatch is needed.
  */
 class AppEventDispatcher {
-
   dispatchEvent(name: string, params: object) {
-    console.debug(" >>> dispatching event", name, params)
+    console.debug(' >>> dispatching event', name, params)
     try {
-
       switch (name) {
         case 'add-to-search':
           useSearchStore().addObjectToIndex(params)
@@ -26,10 +24,9 @@ class AppEventDispatcher {
           console.log(`unknown event ${name}`)
       }
     } catch (err) {
-      console.warn("problem dispatching event: ", err)
+      console.warn('problem dispatching event: ', err)
     }
   }
-
 }
 
-export default new AppEventDispatcher();
+export default new AppEventDispatcher()

@@ -1,33 +1,34 @@
-import {api} from "boot/axios";
-import {useAuthStore} from "src/stores/authStore";
+import { api } from 'boot/axios'
+import { useAuthStore } from 'src/stores/authStore'
 
 export abstract class FirebaseCall<T> {
-
-  static async post(path: string, data: object, resType = "json", fullPath = false) {
-    console.log("firebase call to ", path)
-    const idToken = "token-to-be-done" //await useAuthStore().user.getIdToken()
+  static async post(path: string, data: object, resType = 'json', fullPath = false) {
+    console.log('firebase call to ', path)
+    const idToken = 'token-to-be-done' //await useAuthStore().user.getIdToken()
     //console.log("got idTOken", idToken)
     const urlToUse = fullPath ? path : `${process.env.BACKEND_URL}${path}`
-    console.log("posting to", urlToUse)
+    console.log('posting to', urlToUse)
     // @ts-ignore
-    return api.post(urlToUse, data, {headers: {'AuthToken': idToken}, responseType: resType})
+    return api
+      .post(urlToUse, data, { headers: { AuthToken: idToken }, responseType: resType })
       .catch((err: any) => {
         FirebaseCall.handleError(err)
         return Promise.reject(err)
       })
   }
 
-
-  static patch(path: string, data: object, resType = "json", fullPath = false) {
-    console.log("firebase call to ", path)
+  static patch(path: string, data: object, resType = 'json', fullPath = false) {
+    console.log('firebase call to ', path)
     // TODO use approach as in onAuthStateChanged?
-    useAuthStore().user.getIdToken()
+    useAuthStore()
+      .user.getIdToken()
       .then((idToken: string) => {
         //console.log("got idTOken", idToken)
         const urlToUse = fullPath ? path : `${process.env.BACKEND_URL}${path}`
-        console.log("posting to", urlToUse)
+        console.log('posting to', urlToUse)
         // @ts-ignore
-        return api.patch(urlToUse, data, {headers: {'AuthToken': idToken}, responseType: resType})
+        return api
+          .patch(urlToUse, data, { headers: { AuthToken: idToken }, responseType: resType })
           .catch((err: any) => {
             FirebaseCall.handleError(err)
             return Promise.reject(err)
@@ -48,11 +49,11 @@ export abstract class FirebaseCall<T> {
   private static handleError(err: any) {
     // if (axios.isAxiosError(err)) {
     //   const axiosError = err as AxiosError
-     // if (axiosError.response?.status === 403) {
-        console.warn("logging out due to invalid token (potentially expired)")
-        //useAuthStore().logout();
-        //Logz.info({"message": "logging out due to invalid token (potentially expired)"})
-      //}
+    // if (axiosError.response?.status === 403) {
+    console.warn('logging out due to invalid token (potentially expired)')
+    //useAuthStore().logout();
+    //Logz.info({"message": "logging out due to invalid token (potentially expired)"})
+    //}
     // } else {
     //   console.error("error in firebase call", err)
     //   //Logz.info({"message": "error in firebase call" + err})

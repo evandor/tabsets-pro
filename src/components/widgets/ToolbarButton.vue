@@ -1,13 +1,19 @@
 <template>
-
   <template v-if="restricted">
     <Transition name="colorized-appear">
-      <q-btn v-if="!props.feature || useFeaturesStore().hasFeature(FeatureIdent[props.feature as keyof typeof FeatureIdent])"
-             :flat="!outlinedIfActive()"
-             :outline="outlinedIfActive()"
-             name="sidebar" :icon="props.icon" :size="btnSize"
-             >
-        <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200">{{ props.tooltip }}
+      <q-btn
+        v-if="
+          !props.feature ||
+          useFeaturesStore().hasFeature(FeatureIdent[props.feature as keyof typeof FeatureIdent])
+        "
+        :flat="!outlinedIfActive()"
+        :outline="outlinedIfActive()"
+        name="sidebar"
+        :icon="props.icon"
+        :size="btnSize"
+      >
+        <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200"
+          >{{ props.tooltip }}
         </q-tooltip>
       </q-btn>
     </Transition>
@@ -16,29 +22,30 @@
     <q-btn
       :flat="!outlinedIfActive()"
       :outline="outlinedIfActive()"
-      name="sidebar" :icon="props.icon"
+      name="sidebar"
+      :icon="props.icon"
       :size="btnSize"
-      >
-      <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200">{{ props.tooltip }}
+    >
+      <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200"
+        >{{ props.tooltip }}
       </q-tooltip>
     </q-btn>
   </template>
-
 </template>
 
 <script lang="ts" setup>
-import {FeatureIdent} from "src/app/models/FeatureIdent";
-import {useFeaturesStore} from "src/features/stores/featuresStore";
+import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import { useFeaturesStore } from 'src/features/stores/featuresStore'
 
 const props = defineProps({
-  feature: {type: String, required: false},
-  drawer: {type: String, required: true},
-  restricted: {type: Boolean, default: true},
-  icon: {type: String, required: true},
-  tooltip: {type: String, required: true}
+  feature: { type: String, required: false },
+  drawer: { type: String, required: true },
+  restricted: { type: Boolean, default: true },
+  icon: { type: String, required: true },
+  tooltip: { type: String, required: true },
 })
 
-const btnSize = "12px"
+const btnSize = '12px'
 
 const outlinedIfActive = (): boolean => {
   // const stack = useUiStore().rightDrawerViewStack
@@ -47,5 +54,4 @@ const outlinedIfActive = (): boolean => {
   // }
   return false
 }
-
 </script>

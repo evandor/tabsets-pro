@@ -5,10 +5,10 @@
  *   Do not remove the import statement below. It is required for the extension to work.
  *   If you don't need createBridge(), leave it as "import '#q-app/bex/content'".
  */
-import {createBridge} from '#q-app/bex/content';
+import { createBridge } from '#q-app/bex/content'
 
 // The use of the bridge is optional.
-const bridge = createBridge({ debug: false });
+const bridge = createBridge({ debug: false })
 /**
  * bridge.portName is 'content@<path>-<number>'
  *   where <path> is the relative path of this content script
@@ -20,7 +20,7 @@ const bridge = createBridge({ debug: false });
 declare module '@quasar/app-vite' {
   interface BexEventMap {
     // / eslint-disable @typescript-eslint/no-explicit-any */
-    'some.event': [{ someProp: string }, void];
+    'some.event': [{ someProp: string }, void]
     // / eslint-enable @typescript-eslint/no-explicit-any */
   }
 }
@@ -30,12 +30,12 @@ bridge.on('some.event', ({ payload }) => {
   if (payload.someProp) {
     // Access a DOM element from here.
     // Document in this instance is the underlying website the contentScript runs on
-    const el = document.getElementById('some-id');
+    const el = document.getElementById('some-id')
     if (el) {
-      el.innerText = 'Quasar Rocks!';
-    };
-  };
-});
+      el.innerText = 'Quasar Rocks!'
+    }
+  }
+})
 
 /**
  * Leave this AFTER you attach your initial listeners
@@ -46,13 +46,14 @@ bridge.on('some.event', ({ payload }) => {
  *
  * To check connection status, access bridge.isConnected
  */
-bridge.connectToBackground()
+bridge
+  .connectToBackground()
   .then(() => {
-    console.log('Connected to background');
+    console.log('Connected to background')
   })
-  .catch(err => {
-    console.error('Failed to connect to background:', err);
-  });
+  .catch((err) => {
+    console.error('Failed to connect to background:', err)
+  })
 
 /*
 // More examples:

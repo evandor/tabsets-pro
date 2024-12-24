@@ -1,6 +1,3 @@
-class IDrawUtils {
+class IDrawUtils {}
 
-
-}
-
-export default new IDrawUtils();
+export default new IDrawUtils()

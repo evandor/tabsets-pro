@@ -17,57 +17,66 @@
   </div>
 
   <div class="q-pa-md q-mt-xl row items-start justify-center q-gutter-md">
-
     <PricingCard>
       <template v-slot:overline>Support Bibbly</template>
       <template v-slot:title>Free</template>
       <template v-slot:price>0 &euro; <span class="text-body1">/month</span></template>
-      <template v-slot:teaser>
-        Limited number of tabsets and links.
-      </template>
+      <template v-slot:teaser> Limited number of tabsets and links. </template>
       <template v-slot:features>
         <div class="text-subtitle2 q-mb-md">
-          <q-icon name="shim" class="q-mr-sm"/>
+          <q-icon name="shim" class="q-mr-sm" />
         </div>
         <PlanFeature
-          :features="['share tabsets publicly','optional newsletter','feature request form','access to experimental features']"/>
+          :features="[
+            'share tabsets publicly',
+            'optional newsletter',
+            'feature request form',
+            'access to experimental features',
+          ]"
+        />
       </template>
       <template v-slot:actions>
-        <q-btn v-if="!useAuthStore().isAuthenticated"
-               color="primary" class="cursor-pointer" style="width:200px;" @click="router.push('/login')">
+        <q-btn
+          v-if="!useAuthStore().isAuthenticated"
+          color="primary"
+          class="cursor-pointer"
+          style="width: 200px"
+          @click="router.push('/login')"
+        >
           Sign up for free
         </q-btn>
-        <q-btn v-else color="grey-5" disable style="width:200px;">
-          Already got it
-        </q-btn>
+        <q-btn v-else color="grey-5" disable style="width: 200px"> Already got it </q-btn>
       </template>
     </PricingCard>
 
     <PricingCard v-for="p in plans">
       <template v-slot:overline>Getting more serious</template>
-      <template v-slot:title>Bibbly User {{p}}</template>
+      <template v-slot:title>Bibbly User {{ p }}</template>
       <template v-slot:price>0,99 &euro; <span class="text-body1">/month</span></template>
       <template v-slot:teaser>
         Synchronize your bibbly data across browsers and computers.
       </template>
       <template v-slot:features>
         <div class="text-subtitle2 q-mb-md">
-          <q-icon name="shim" class="q-mr-sm"/>
+          <q-icon name="shim" class="q-mr-sm" />
           As in 'Free', plus
         </div>
-        <PlanFeature :features="['synchronized tabsets','PDF generation']"/>
+        <PlanFeature :features="['synchronized tabsets', 'PDF generation']" />
       </template>
       <template v-slot:actions>
-        <q-btn color="primary" class="cursor-pointer" style="width:200px;" @click="openPaymentLink()">
+        <q-btn
+          color="primary"
+          class="cursor-pointer"
+          style="width: 200px"
+          @click="openPaymentLink()"
+        >
           Choose Bibbly User
         </q-btn>
       </template>
     </PricingCard>
-
   </div>
 
   <div class="row items-baseline q-ma-md q-gutter-lg">
-
     <!--    <div class="col-3">-->
     <!--      Authorize to subscribe or check your subscriptions-->
     <!--    </div>-->
@@ -78,20 +87,16 @@
     <!--      Authorized as: {{ userCredentials?.user.email || '-&#45;&#45;' }}-->
     <!--    </div>-->
 
-    <div class="col-3">
-      Logged in as
-    </div>
+    <div class="col-3">Logged in as</div>
     <div class="col-7">
       {{ useAuthStore().user?.email || '---' }}
     </div>
     <div class="col"></div>
 
     <template v-if="!emailVerified && useAuthStore().isAuthenticated">
-      <div class="col-3">
-        Please verify your email first
-      </div>
+      <div class="col-3">Please verify your email first</div>
       <div class="col-7">
-        <q-btn label="Verify" @click="verifyEmail()"/>
+        <q-btn label="Verify" @click="verifyEmail()" />
       </div>
       <div class="col"></div>
     </template>
@@ -102,7 +107,6 @@
     <!--      </div>-->
     <!--      <div class="col-7">-->
     <!--&lt;!&ndash;        <q-btn label="Subscribe" @click="subscribe()" :disable="!emailVerified" :class="emailVerified ? '':'text-grey-5'"/>&ndash;&gt;-->
-
 
     <!--      </div>-->
     <!--      <div class="col">{{ claims }}</div>-->
@@ -138,16 +142,14 @@
 </template>
 
 <script lang="ts" setup>
-
-import {onMounted, ref} from "vue";
-import {EMAIL_LINK_REDIRECT_DOMAIN} from "boot/constants";
-import {addDoc, collection, getDocs, onSnapshot, query, where} from "firebase/firestore";
-import {useRouter} from "vue-router";
-import PricingCard from "pages/helper/PricingCard.vue";
-import PlanFeature from "pages/helper/PlanFeature.vue";
-import FirebaseServices from "src/services/firebase/FirebaseServices";
-import {useAuthStore} from "stores/authStore";
-
+import { onMounted, ref } from 'vue'
+import { EMAIL_LINK_REDIRECT_DOMAIN } from 'boot/constants'
+import { addDoc, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore'
+import { useRouter } from 'vue-router'
+import PricingCard from 'pages/helper/PricingCard.vue'
+import PlanFeature from 'pages/helper/PlanFeature.vue'
+import FirebaseServices from 'src/services/firebase/FirebaseServices'
+import { useAuthStore } from 'stores/authStore'
 
 const emailVerified = ref(false)
 const plans = ref<any[]>([])
@@ -157,27 +159,32 @@ const router = useRouter()
 onMounted(() => {
   emailVerified.value = useAuthStore().user?.emailVerified || false
 
-  console.log("------>")
+  console.log('------>')
   plans.value = []
-  getDocs(query(collection(FirebaseServices.getFirestore(), 'products'), where("active", "==", true)))
-    .then((productSnapshots: any) => {
-      productSnapshots.forEach((doc: any) => {
-        console.log("***", doc.id, ' => ', doc.data());
-        const p: { [k: string]: any } = {name: doc.data().name, id: doc.id}
-        //const p = {name: doc.data().name, id: doc.id}
-        getDocs(query(collection(FirebaseServices.getFirestore(), 'products', doc.id, 'prices'), where("active", "==", true)))
-          .then((r: any) => {
-            const prices: object[] = []
-            r.forEach((d: any) => {
-              console.log("price", d.id, d.data())
-              prices.push({priceId: d.id, price: d.data().unit_amount})
-            })
-            p.prices = prices
-          })
-
-        plans.value.push(p)
+  getDocs(
+    query(collection(FirebaseServices.getFirestore(), 'products'), where('active', '==', true)),
+  ).then((productSnapshots: any) => {
+    productSnapshots.forEach((doc: any) => {
+      console.log('***', doc.id, ' => ', doc.data())
+      const p: { [k: string]: any } = { name: doc.data().name, id: doc.id }
+      //const p = {name: doc.data().name, id: doc.id}
+      getDocs(
+        query(
+          collection(FirebaseServices.getFirestore(), 'products', doc.id, 'prices'),
+          where('active', '==', true),
+        ),
+      ).then((r: any) => {
+        const prices: object[] = []
+        r.forEach((d: any) => {
+          console.log('price', d.id, d.data())
+          prices.push({ priceId: d.id, price: d.data().unit_amount })
+        })
+        p.prices = prices
       })
+
+      plans.value.push(p)
     })
+  })
 
   // db.collection('products')
   //   .where('active', '==', true)
@@ -198,7 +205,6 @@ onMounted(() => {
 //     LocalStorage.set(SUBSCRIPTION_ID_IDENT, subscription.value) :
 //     LocalStorage.remove(SUBSCRIPTION_ID_IDENT)
 // })
-
 
 // const subscribe = async () => openURL('https://shared.tabsets.net/#/settings?tab=subscription')
 //
@@ -258,37 +264,41 @@ const verifyEmail = () => {
     url: EMAIL_LINK_REDIRECT_DOMAIN,
     handleCodeInApp: true,
   }
-  console.log("sending verification link to", email, actionCodeSettings)
-
-
+  console.log('sending verification link to', email, actionCodeSettings)
 }
 
 const openPaymentLink = async () => {
   //openURL(process.env.STRIPE_SYNC_PRODUCT_LINK + '?prefilled_email=' + (useAuthStore().user?.email || ''))
 
-  const sessionRef = await addDoc(collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'checkout_sessions'), {
-    price: plans.value[0].prices[0].priceId,//'price_1PfKwdCRr6mfm8sfCLKbBtDu',
-    success_url: "https://bibbly.me/",//window.location.origin,
-    cancel_url: "https://bibbly.me/"//window.location.origin
-  })
+  const sessionRef = await addDoc(
+    collection(
+      FirebaseServices.getFirestore(),
+      'users',
+      useAuthStore().user.uid,
+      'checkout_sessions',
+    ),
+    {
+      price: plans.value[0].prices[0].priceId, //'price_1PfKwdCRr6mfm8sfCLKbBtDu',
+      success_url: 'https://bibbly.me/', //window.location.origin,
+      cancel_url: 'https://bibbly.me/', //window.location.origin
+    },
+  )
 
-// Wait for the CheckoutSession to get attached by the extension
+  // Wait for the CheckoutSession to get attached by the extension
   onSnapshot(sessionRef, (snap: any) => {
-    const {error, url} = snap.data();
+    const { error, url } = snap.data()
     if (error) {
       // Show an error to your customer and
       // inspect your Cloud Function logs in the Firebase console.
-      alert(`An error occured: ${error.message}`);
+      alert(`An error occured: ${error.message}`)
     }
     if (url) {
       // We have a Stripe Checkout URL, let's redirect.
-      window.location.assign(url);
+      window.location.assign(url)
     }
   })
   //sessionRef.onSnapshot((snap:any) => {
 
   //});
 }
-
-
 </script>

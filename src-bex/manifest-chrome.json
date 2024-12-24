@@ -15,33 +15,19 @@
     "contextMenus",
     "bookmarks"
   ],
-  "optional_permissions": [
-    "pageCapture",
-    "notifications",
-    "webRequest",
-    "tabGroups"
-  ],
-  "host_permissions": [
-    "<all_urls>",
-    "*://*/*"
-  ],
+  "optional_permissions": ["pageCapture", "notifications", "webRequest", "tabGroups"],
+  "host_permissions": ["<all_urls>", "*://*/*"],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://excalidraw.com/*"],
-      "js": [
-        "tabsets-excalidraw-script.js"
-      ]
+      "js": ["tabsets-excalidraw-script.js"]
     },
     {
-      "matches": [
-        "*://*/*"
-      ],
-      "js": [
-        "tabsets-content-script.js"
-      ]
+      "matches": ["*://*/*"],
+      "js": ["tabsets-content-script.js"]
     }
   ],
   "content_security_policy": {
@@ -49,12 +35,8 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "*"
-      ],
-      "matches": [
-        "*://*/*"
-      ]
+      "resources": ["*"],
+      "matches": ["*://*/*"]
     }
   ],
   "omnibox": { "keyword": "ts" },

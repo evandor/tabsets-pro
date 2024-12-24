@@ -1,10 +1,8 @@
 export class SyncSettings {
-
   constructor(
     public type: undefined,
     public url: string | undefined,
-  ) {
-  }
+  ) {}
 }
 
 export class UserData {
@@ -17,7 +15,7 @@ export class Account {
   constructor(
     public id: string,
     public userData: UserData | undefined,
-    public products: string[] = []
+    public products: string[] = [],
   ) {
     this.created = new Date().getTime()
   }

@@ -1,20 +1,17 @@
 // Deprecated
-import {Account} from "src/models/Account";
+import { Account } from 'src/models/Account'
 
 interface PersistenceService {
-
   getServiceName(): string
 
   cleanUpRequests(): Promise<void>
 
   compactDb(): Promise<any>
 
-
   getAccount(accountId: string): Promise<Account>
-  upsertAccount(account: Account):void
+  upsertAccount(account: Account): void
 
-  clear(name: string):any
-
+  clear(name: string): any
 }
 
 export default PersistenceService

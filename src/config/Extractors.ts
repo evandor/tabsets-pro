@@ -1,11 +1,10 @@
-
 export enum ExtractorType {
-  REGEX = "REGEX",
-  HTML_SELECTOR = "HTML_SELECTOR"
+  REGEX = 'REGEX',
+  HTML_SELECTOR = 'HTML_SELECTOR',
 }
 
 export enum ExtractorTarget {
-  LONG_DESCRIPTION = "tabsets:longDescription"
+  LONG_DESCRIPTION = 'tabsets:longDescription',
 }
 
 export class Extractor {
@@ -14,17 +13,32 @@ export class Extractor {
     public type: ExtractorType,
     public target: ExtractorTarget,
     public regex: RegExp | undefined = undefined,
-    public selector: string | undefined = undefined
-  ) {
-
-  }
+    public selector: string | undefined = undefined,
+  ) {}
 }
 
 export class Extractors {
   extractors: Extractor[] = [
-    new Extractor(".youtube.com", ExtractorType.REGEX, ExtractorTarget.LONG_DESCRIPTION, /"shortDescription":"([^"]*)/mg),
-    new Extractor(".wikipedia.org", ExtractorType.HTML_SELECTOR, ExtractorTarget.LONG_DESCRIPTION, undefined, "#mw-content-text > div.mw-parser-output > p:nth-child(10)"),
-    new Extractor("stackoverflow.com", ExtractorType.HTML_SELECTOR, ExtractorTarget.LONG_DESCRIPTION, undefined, "#question > div > div.postcell.post-layout--right > div.s-prose.js-post-body"),
+    new Extractor(
+      '.youtube.com',
+      ExtractorType.REGEX,
+      ExtractorTarget.LONG_DESCRIPTION,
+      /"shortDescription":"([^"]*)/gm,
+    ),
+    new Extractor(
+      '.wikipedia.org',
+      ExtractorType.HTML_SELECTOR,
+      ExtractorTarget.LONG_DESCRIPTION,
+      undefined,
+      '#mw-content-text > div.mw-parser-output > p:nth-child(10)',
+    ),
+    new Extractor(
+      'stackoverflow.com',
+      ExtractorType.HTML_SELECTOR,
+      ExtractorTarget.LONG_DESCRIPTION,
+      undefined,
+      '#question > div > div.postcell.post-layout--right > div.s-prose.js-post-body',
+    ),
   ]
 
   // getFeature(f: FeatureIdent): AppFeature | undefined {

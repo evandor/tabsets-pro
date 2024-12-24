@@ -1,47 +1,54 @@
-import BookmarksService from "src/bookmarks/services/BookmarksService";
-import {useDB} from "src/services/usePersistenceService";
-import {useSuggestionsStore} from "src/suggestions/stores/suggestionsStore";
-import tabsetService from "src/tabsets/services/TabsetService";
-import {useTabsetService} from "src/tabsets/services/TabsetService2";
-import ChromeApi from "src/app/BrowserApi";
-import {useSpacesStore} from "src/spaces/stores/spacesStore";
-import {useBookmarksStore} from "src/bookmarks/stores/bookmarksStore";
-import {useWindowsStore} from "src/windows/stores/windowsStore";
-import {useSearchStore} from "src/search/stores/searchStore";
-import {Router} from "vue-router";
-import {useAppStore} from "stores/appStore";
-import {useAuthStore} from "stores/authStore";
-import {useUiStore} from "src/ui/stores/uiStore";
-import {User} from "firebase/auth";
-import {useThumbnailsService} from "src/thumbnails/services/ThumbnailsService";
-import {useContentService} from "src/content/services/ContentService";
-import IndexedDbContentPersistence from "src/content/persistence/IndexedDbContentPersistence";
-import {useTabsStore2} from "src/tabsets/stores/tabsStore2";
-import {useFeaturesStore} from "src/features/stores/featuresStore";
-import ChromeListeners from "src/app/listeners/BrowserListeners";
-import {useSnapshotsService} from "src/snapshots/services/SnapshotsService";
-import {useSnapshotsStore} from "src/snapshots/stores/SnapshotsStore";
-import {watch} from "vue";
-import {useEntityRegistryStore} from "src/core/stores/entityRegistryStore";
-import {useNotesStore} from "src/notes/stores/NotesStore";
-import {useTabsetsStore} from "src/tabsets/stores/tabsetsStore";
-import _ from "lodash"
-import {TabsetInfo} from "src/core/models/TabsetInfo";
-import ChromeBookmarkListeners from "src/services/ChromeBookmarkListeners";
-import {SpaceInfo} from "src/core/models/SpaceInfo";
-
+import BookmarksService from 'src/bookmarks/services/BookmarksService'
+import { useDB } from 'src/services/usePersistenceService'
+import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
+import tabsetService from 'src/tabsets/services/TabsetService'
+import { useTabsetService } from 'src/tabsets/services/TabsetService2'
+import ChromeApi from 'src/app/BrowserApi'
+import { useSpacesStore } from 'src/spaces/stores/spacesStore'
+import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
+import { useWindowsStore } from 'src/windows/stores/windowsStore'
+import { useSearchStore } from 'src/search/stores/searchStore'
+import { Router } from 'vue-router'
+import { useAppStore } from 'stores/appStore'
+import { useAuthStore } from 'stores/authStore'
+import { useUiStore } from 'src/ui/stores/uiStore'
+import { User } from 'firebase/auth'
+import { useThumbnailsService } from 'src/thumbnails/services/ThumbnailsService'
+import { useContentService } from 'src/content/services/ContentService'
+import IndexedDbContentPersistence from 'src/content/persistence/IndexedDbContentPersistence'
+import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
+import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import ChromeListeners from 'src/app/listeners/BrowserListeners'
+import { useSnapshotsService } from 'src/snapshots/services/SnapshotsService'
+import { useSnapshotsStore } from 'src/snapshots/stores/SnapshotsStore'
+import { watch } from 'vue'
+import { useEntityRegistryStore } from 'src/core/stores/entityRegistryStore'
+import { useNotesStore } from 'src/notes/stores/NotesStore'
+import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
+import _ from 'lodash'
+import { TabsetInfo } from 'src/core/models/TabsetInfo'
+import ChromeBookmarkListeners from 'src/services/ChromeBookmarkListeners'
+import { SpaceInfo } from 'src/core/models/SpaceInfo'
 
 class AppService {
-
   router: Router = null as unknown as Router
   initialized = false
 
-  async init(quasar: any, router: Router, forceRestart = false, user: User | undefined = undefined) {
-
-    console.log(`%cinitializing AppService: first start=${!this.initialized}, forceRestart=${forceRestart}, quasar set=${quasar !== undefined}, router set=${router !== undefined}`, forceRestart ? "font-weight:bold" : "")
+  async init(
+    quasar: any,
+    router: Router,
+    forceRestart = false,
+    user: User | undefined = undefined,
+  ) {
+    console.log(
+      `%cinitializing AppService: first start=${!this.initialized}, forceRestart=${forceRestart}, quasar set=${quasar !== undefined}, router set=${router !== undefined}`,
+      forceRestart ? 'font-weight:bold' : '',
+    )
 
     if (this.initialized && !forceRestart) {
-      console.debug("stopping AppService initialization; already initialized and not forcing restart")
+      console.debug(
+        'stopping AppService initialization; already initialized and not forcing restart',
+      )
       return Promise.resolve()
     }
 
@@ -55,7 +62,7 @@ class AppService {
 
     this.router = router
 
-    useUiStore().appLoading = "loading tabsets pro..."
+    useUiStore().appLoading = 'loading tabsets pro...'
 
     useAppStore().init()
 
@@ -84,9 +91,10 @@ class AppService {
     // await useRequestsService().init(IndexedDbRequestPersistence)
     // console.debug('')
 
-    await useSearchStore().init().catch((err: any) => console.error(err))
+    await useSearchStore()
+      .init()
+      .catch((err: any) => console.error(err))
     console.debug('')
-
 
     // init services
     await useSuggestionsStore().init()
@@ -95,9 +103,8 @@ class AppService {
     tabsetService.setLocalStorage(localStorage)
 
     if (useAuthStore().isAuthenticated()) {
-
-      if (router.currentRoute.value.query.token === "failed") {
-        console.log("failed login, falling back to indexedDB")
+      if (router.currentRoute.value.query.token === 'failed') {
+        console.log('failed login, falling back to indexedDB')
       }
 
       // console.debug(`%cchecking sync config: persistenceStore=${persistenceStore.getServiceName()}`, "font-weight:bold")
@@ -108,21 +115,19 @@ class AppService {
     }
 
     // useNotificationsStore().bookmarksExpanded = quasar.localStorage.getItem("bookmarks.expanded") || []
-
   }
 
-
   restart(ar: string) {
-    console.log("%crestarting tabsets", "font-weight:bold", window.location.href, ar)
-    const baseLocation = window.location.href.split("?")[0]
-    console.log("%cbaseLocation", "font-weight:bold", baseLocation)
-    console.log("%cwindow.location.href", "font-weight:bold", window.location.href)
-    if (window.location.href.indexOf("?") < 0) {
+    console.log('%crestarting tabsets', 'font-weight:bold', window.location.href, ar)
+    const baseLocation = window.location.href.split('?')[0]
+    console.log('%cbaseLocation', 'font-weight:bold', baseLocation)
+    console.log('%cwindow.location.href', 'font-weight:bold', window.location.href)
+    if (window.location.href.indexOf('?') < 0) {
       const tsIframe = window.parent.frames[0]
       //log("iframe", tsIframe)
       if (tsIframe) {
-        console.debug("%cnew window.location.href", "font-weight:bold", baseLocation + "?" + ar)
-        tsIframe.location.href = baseLocation + "?" + ar
+        console.debug('%cnew window.location.href', 'font-weight:bold', baseLocation + '?' + ar)
+        tsIframe.location.href = baseLocation + '?' + ar
         //tsIframe.location.href = "https://www.skysail.io"
         tsIframe.location.reload()
       }
@@ -131,14 +136,13 @@ class AppService {
   }
 
   private async initCoreSerivces(router: Router) {
-
-    console.log(`%cinitializing AppService: initCoreSerivces`, "font-weight:bold")
+    console.log(`%cinitializing AppService: initCoreSerivces`, 'font-weight:bold')
 
     await useWindowsStore().initialize()
-    console.debug("")
+    console.debug('')
 
     useWindowsStore().initListeners()
-    console.debug("")
+    console.debug('')
 
     /**
      * features store: passing storage for better testing.
@@ -146,7 +150,7 @@ class AppService {
      */
     const featuresStorage = useDB().featuresDb
     await useFeaturesStore().initialize(featuresStorage)
-    console.debug("")
+    console.debug('')
 
     await useNotesStore().initialize(useDB().notesDb)
     console.debug('')
@@ -167,7 +171,10 @@ class AppService {
 
     const tabsetsStore = useTabsetsStore()
     watch(tabsetsStore.tabsets, (newTabsets: Map<string, any>) => {
-      const tsInfo = _.map([...newTabsets.values()], (ts: any) => new TabsetInfo(ts.id, ts.name, ts.window, ts.tabs.length))
+      const tsInfo = _.map(
+        [...newTabsets.values()],
+        (ts: any) => new TabsetInfo(ts.id, ts.name, ts.window, ts.tabs.length),
+      )
       useEntityRegistryStore().tabsetRegistry = tsInfo
     })
     await tabsetsStore.initialize(useDB().tabsetsDb)
@@ -176,7 +183,6 @@ class AppService {
 
     await useTabsStore2().initialize()
     console.debug('')
-
 
     const existingUrls = useTabsetsStore().getAllUrls()
     await useContentService().populateSearch(existingUrls)
@@ -196,19 +202,17 @@ class AppService {
     // probably running an import ("/imp/:sharedId")
     // we do not want to go to the welcome back
     // console.log("checking for welcome page", useTabsetsStore().tabsets.size === 0, quasar.platform.is.bex, !useAuthStore().isAuthenticated)
-    if (useTabsetsStore().tabsets.size === 0 &&
+    if (
+      useTabsetsStore().tabsets.size === 0 &&
       //quasar.platform.is.bex &&
-      !router.currentRoute.value.path.startsWith("/fullpage") &&
-      !router.currentRoute.value.path.startsWith("/mainpanel")) {
-      await router.push("/sidepanel/welcome")
+      !router.currentRoute.value.path.startsWith('/fullpage') &&
+      !router.currentRoute.value.path.startsWith('/mainpanel')
+    ) {
+      await router.push('/sidepanel/welcome')
     }
 
-    ChromeApi.buildContextMenu("AppService")
-
+    ChromeApi.buildContextMenu('AppService')
   }
-
-
 }
 
-export default new AppService();
-
+export default new AppService()

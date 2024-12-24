@@ -1,37 +1,35 @@
 <template>
   <div class="col-12 text-caption">
     <!-- @vue-ignore -->
-    <div v-for="(k,index) in searchIndex">
-      <div class="row" v-if="searchIndex.get(index)['v']" >
+    <div v-for="(k, index) in searchIndex">
+      <div class="row" v-if="searchIndex.get(index)['v']">
         <div class="col-4 q-ml-sm text-bold">
-          {{ searchIndex.get(index)['name'] }} <!-- {{k}} -->
+          {{ searchIndex.get(index)['name'] }}
+          <!-- {{k}} -->
         </div>
         <div class="col-7 ellipsis">
           {{ searchIndex.get(index)['v'] }}
           <q-tooltip class="tooltip">{{ searchIndex.get(index)['v'] }}</q-tooltip>
         </div>
         <div class="col text-right">
-          <q-icon name="o_check_circle" color="primary"/>
+          <q-icon name="o_check_circle" color="primary" />
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script lang="ts" setup>
-
-import {PropType, ref, watchEffect} from "vue";
-import {useSearchStore} from "src/search/stores/searchStore";
-import _ from "lodash";
-import {Tab} from "src/tabsets/models/Tab";
+import { PropType, ref, watchEffect } from 'vue'
+import { useSearchStore } from 'src/search/stores/searchStore'
+import _ from 'lodash'
+import { Tab } from 'src/tabsets/models/Tab'
 
 const props = defineProps({
-  tab: {type: Object as PropType<Tab>, required: true}
+  tab: { type: Object as PropType<Tab>, required: true },
 })
 
 const searchIndex = ref<any>()
-
 
 watchEffect(() => {
   const fuseIndex = useSearchStore().getIndex()
@@ -45,12 +43,12 @@ watchEffect(() => {
     const keys: Map<number, object> = new Map()
     Object.keys(keyMaps).forEach((k: any) => {
       keys.set(keyMaps[k], {
-        name: k
+        name: k,
       })
     })
 
     if (res && res.length > 0) {
-      Object.keys(res[0]['$' as keyof object]).forEach(k => {
+      Object.keys(res[0]['$' as keyof object]).forEach((k) => {
         const tmp = res[0]['$' as keyof object][k as keyof object]
         const v: any = keys.get(+k)
         v.n = tmp['n' as keyof object]
