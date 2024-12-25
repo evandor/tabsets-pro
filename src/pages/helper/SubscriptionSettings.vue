@@ -142,14 +142,14 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
 import { EMAIL_LINK_REDIRECT_DOMAIN } from 'boot/constants'
 import { addDoc, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore'
-import { useRouter } from 'vue-router'
-import PricingCard from 'pages/helper/PricingCard.vue'
 import PlanFeature from 'pages/helper/PlanFeature.vue'
+import PricingCard from 'pages/helper/PricingCard.vue'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useAuthStore } from 'stores/authStore'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const emailVerified = ref(false)
 const plans = ref<any[]>([])

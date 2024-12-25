@@ -70,11 +70,11 @@
 </template>
 
 <script lang="ts" setup>
+import _ from 'lodash'
+import { Tab } from 'src/tabsets/models/Tab'
+import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { onMounted, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import _ from 'lodash'
-import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
-import { Tab } from 'src/tabsets/models/Tab'
 
 const route = useRoute()
 const router = useRouter()

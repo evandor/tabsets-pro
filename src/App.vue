@@ -3,21 +3,21 @@
 </template>
 
 <script setup lang="ts">
+import { CURRENT_USER_ID } from 'boot/constants'
+import { onAuthStateChanged } from 'firebase/auth'
 import { setCssVar, useQuasar } from 'quasar'
 import AppService from 'src/app/AppService'
-import { onAuthStateChanged } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-import { useLogger } from 'src/services/Logger'
-import FirebaseServices from 'src/services/firebase/FirebaseServices'
+import BexFunctions from 'src/core/communication/BexFunctions'
 import { useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useUtils } from 'src/core/services/Utils'
-import { useSettingsStore } from 'stores/settingsStore'
-import { useAppStore } from 'stores/appStore'
-import { CURRENT_USER_ID } from 'boot/constants'
-import { usePermissionsStore } from 'stores/usePermissionsStore'
+import FirebaseServices from 'src/services/firebase/FirebaseServices'
+import { useLogger } from 'src/services/Logger'
 import { useUiStore } from 'src/ui/stores/uiStore'
-import BexFunctions from 'src/core/communication/BexFunctions'
+import { useAppStore } from 'stores/appStore'
+import { useSettingsStore } from 'stores/settingsStore'
+import { usePermissionsStore } from 'stores/usePermissionsStore'
 import { onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -46,7 +46,7 @@ onAuthStateChanged(auth, async (user) => {
 
     try {
       await AppService.init($q, router, true, user)
-     // info(`tabsets-pro started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
+      // info(`tabsets-pro started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
       if (inBexMode()) {
         // @ts-ignore
         $q.bex.send('auth.user.login', { userId: user.uid })

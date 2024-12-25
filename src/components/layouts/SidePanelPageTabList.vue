@@ -47,17 +47,17 @@
 </template>
 
 <script setup lang="ts">
-import { Tab, TabSorting } from 'src/tabsets/models/Tab'
-import TabsetService from 'src/tabsets/services/TabsetService'
-import { PropType, ref, watchEffect } from 'vue'
-import { VueDraggableNext } from 'vue-draggable-next'
-import { Tabset } from 'src/tabsets/models/Tabset'
-import { useTabsetService } from 'src/tabsets/services/TabsetService2'
-import { TabsetColumn } from 'src/tabsets/models/TabsetColumn'
 import { SPECIAL_ID_FOR_NO_GROUP_ASSIGNED } from 'boot/constants'
+import SidePanelTabListHelper from 'components/layouts/sidepanel/SidePanelTabListHelper.vue'
 import _ from 'lodash'
 import { IndexedTab } from 'src/tabsets/models/IndexedTab'
-import SidePanelTabListHelper from 'components/layouts/sidepanel/SidePanelTabListHelper.vue'
+import { Tab, TabSorting } from 'src/tabsets/models/Tab'
+import { Tabset } from 'src/tabsets/models/Tabset'
+import { TabsetColumn } from 'src/tabsets/models/TabsetColumn'
+import TabsetService from 'src/tabsets/services/TabsetService'
+import { useTabsetService } from 'src/tabsets/services/TabsetService2'
+import { PropType, ref, watchEffect } from 'vue'
+import { VueDraggableNext } from 'vue-draggable-next'
 
 const props = defineProps({
   hideMenu: { type: Boolean, default: false },

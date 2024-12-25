@@ -1,14 +1,14 @@
-import { defineStore } from 'pinia'
-import { getAuth, signOut, User } from 'firebase/auth'
-import { LocalStorage } from 'quasar'
-import { computed, ref } from 'vue'
-import { Account, UserData } from 'src/models/Account'
 import { CURRENT_USER_ID } from 'boot/constants'
+import { getAuth, signOut, User } from 'firebase/auth'
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
+import { sha256 } from 'js-sha256'
+import { defineStore } from 'pinia'
+import { LocalStorage } from 'quasar'
+import { Account, UserData } from 'src/models/Account'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import PersistenceService from 'src/services/PersistenceService'
 import { useSettingsStore } from 'stores/settingsStore'
-import { sha256 } from 'js-sha256'
+import { computed, ref } from 'vue'
 
 export enum AccessItem {
   TABSETS = 'TABSETS',

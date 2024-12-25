@@ -1,11 +1,11 @@
+import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
 import Command from 'src/core/domain/Command'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
 import { RevokePermissionCommand } from 'src/domain/commands/RevokePermissionCommand'
-import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
-import ChromeBookmarkListeners from 'src/services/ChromeBookmarkListeners'
-import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
-import { StaticSuggestionIdent } from 'src/suggestions/models/Suggestion'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import ChromeBookmarkListeners from 'src/services/ChromeBookmarkListeners'
+import { StaticSuggestionIdent } from 'src/suggestions/models/Suggestion'
+import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { usePermissionsStore } from 'stores/usePermissionsStore'
 
 class UndoCommand implements Command<boolean> {

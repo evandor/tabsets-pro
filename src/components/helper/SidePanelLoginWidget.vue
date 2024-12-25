@@ -78,9 +78,6 @@
 </template>
 
 <script lang="ts" setup>
-import NavigationService from 'src/services/NavigationService'
-import { ref } from 'vue'
-import { LocalStorage } from 'quasar'
 import { CURRENT_USER_EMAIL } from 'boot/constants'
 import {
   createUserWithEmailAndPassword,
@@ -88,8 +85,11 @@ import {
   signInWithEmailAndPassword,
   UserCredential,
 } from 'firebase/auth'
-import { useAuthStore } from 'stores/authStore'
+import { LocalStorage } from 'quasar'
 import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
+import NavigationService from 'src/services/NavigationService'
+import { useAuthStore } from 'stores/authStore'
+import { ref } from 'vue'
 
 const { handleError } = useNotificationHandler()
 

@@ -44,30 +44,30 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import _ from 'lodash'
-import { Tabset, TabsetStatus } from 'src/tabsets/models/Tabset'
-import { useRouter } from 'vue-router'
-import { useUtils } from 'src/core/services/Utils'
+import FirstToolbarHelper2 from 'pages/sidepanel/helper/FirstToolbarHelper2.vue'
+import StartingHint from 'pages/widgets/StartingHint.vue'
 import { LocalStorage } from 'quasar'
-import { useTabsetService } from 'src/tabsets/services/TabsetService2'
-import { useUiStore } from 'src/ui/stores/uiStore'
-import { useSpacesStore } from 'src/spaces/stores/spacesStore'
+import AppService from 'src/app/AppService'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
-import TabsetService from 'src/tabsets/services/TabsetService'
+import { useUtils } from 'src/core/services/Utils'
 import Analytics from 'src/core/utils/google-analytics'
-import { useAuthStore } from 'stores/authStore'
+import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import SidePanelNotesView from 'src/notes/views/sidepanel/SidePanelNotesView.vue'
+import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
+import SidePanelPageTabList from 'src/tabsets/layouts/SidePanelPageTabList.vue'
+import { Tabset, TabsetStatus } from 'src/tabsets/models/Tabset'
+import TabsetService from 'src/tabsets/services/TabsetService'
+import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
-import { useFeaturesStore } from 'src/features/stores/featuresStore'
-import SidePanelPageTabList from 'src/tabsets/layouts/SidePanelPageTabList.vue'
-import { useWindowsStore } from 'src/windows/stores/windowsStore'
-import StartingHint from 'pages/widgets/StartingHint.vue'
-import SidePanelNotesView from 'src/notes/views/sidepanel/SidePanelNotesView.vue'
 import SidePanelFoldersView from 'src/tabsets/views/sidepanel/SidePanelFoldersView.vue'
-import FirstToolbarHelper2 from 'pages/sidepanel/helper/FirstToolbarHelper2.vue'
-import AppService from 'src/app/AppService'
+import { useUiStore } from 'src/ui/stores/uiStore'
+import { useWindowsStore } from 'src/windows/stores/windowsStore'
+import { useAuthStore } from 'stores/authStore'
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { inBexMode } = useUtils()
 
@@ -116,12 +116,12 @@ watchEffect(() => {
 })
 
 const getTabsetOrder = [
-  function(o: Tabset) {
+  function (o: Tabset) {
     return o.status === TabsetStatus.FAVORITE ? 0 : 1
   },
-  function(o: Tabset) {
+  function (o: Tabset) {
     return o.name?.toLowerCase()
-  }
+  },
 ]
 
 function determineTabsets() {
@@ -131,10 +131,10 @@ function determineTabsets() {
       (ts: Tabset) =>
         ts.status !== TabsetStatus.DELETED &&
         ts.status !== TabsetStatus.HIDDEN &&
-        ts.status !== TabsetStatus.ARCHIVED
+        ts.status !== TabsetStatus.ARCHIVED,
     ),
     getTabsetOrder,
-    ['asc']
+    ['asc'],
   )
 }
 
@@ -155,7 +155,7 @@ watchEffect(() => {
         )
       }),
       getTabsetOrder,
-      ['asc']
+      ['asc'],
     )
     // console.log("tabsets:", tabsets.value)
   } else {
@@ -212,7 +212,7 @@ if (inBexMode()) {
       }
     } else if (message.name === 'tab-added') {
       // hmm - getting this twice...
-      console.log(' > got message \'' + message.name + '\'', message)
+      console.log(" > got message '" + message.name + "'", message)
       useTabsetService().reloadTabset(message.data.tabsetId)
       //updateSelectedTabset(message.data.tabsetId, true)
     } else if (message.name === 'tab-deleted') {

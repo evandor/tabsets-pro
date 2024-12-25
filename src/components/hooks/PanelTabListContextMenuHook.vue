@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue'
 import { Tab } from 'src/tabsets/models/Tab'
 import { Tabset } from 'src/tabsets/models/Tabset'
+import { PropType } from 'vue'
 
 // @ts-ignore
 const props = defineProps({

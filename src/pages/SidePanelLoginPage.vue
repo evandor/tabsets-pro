@@ -149,8 +149,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watchEffect } from 'vue'
-import { LocalStorage, useQuasar } from 'quasar'
+import { CURRENT_USER_EMAIL } from 'boot/constants'
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -158,11 +157,12 @@ import {
   signInWithEmailAndPassword,
   UserCredential,
 } from 'firebase/auth'
-import { CURRENT_USER_EMAIL } from 'boot/constants'
-import { useAuthStore } from 'stores/authStore'
-import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
-import { useRouter } from 'vue-router'
+import { LocalStorage, useQuasar } from 'quasar'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
+import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
+import { useAuthStore } from 'stores/authStore'
+import { ref, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
 

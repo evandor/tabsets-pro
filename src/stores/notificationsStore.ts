@@ -1,9 +1,9 @@
+import _ from 'lodash'
 import { defineStore } from 'pinia'
 import { Notification } from 'src/core/models/Notification'
-import _ from 'lodash'
-import { ref } from 'vue'
-import PersistenceService from 'src/services/PersistenceService'
 import { useUtils } from 'src/core/services/Utils'
+import PersistenceService from 'src/services/PersistenceService'
+import { ref } from 'vue'
 
 export const useNotificationsStore = defineStore('notifications', () => {
   const info = ref('')

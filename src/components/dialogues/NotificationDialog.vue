@@ -21,10 +21,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
-import { useNotificationsStore } from 'src/stores/notificationsStore'
 import NotificationsService from 'src/services/NotificationsService'
+import { useNotificationsStore } from 'src/stores/notificationsStore'
+import { ref } from 'vue'
 
 defineEmits([...useDialogPluginComponent.emits])
 

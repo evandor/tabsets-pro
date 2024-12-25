@@ -81,19 +81,19 @@
 </template>
 
 <script lang="ts" setup>
+import { STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT } from 'boot/constants'
+import { LocalStorage, openURL } from 'quasar'
+import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import { SidePanelViews } from 'src/app/models/SidePanelViews'
+import DialogButton from 'src/core/dialog/buttons/DialogButton.vue'
+import { useCommandExecutor } from 'src/core/services/CommandExecutor'
+import Analytics from 'src/core/utils/google-analytics'
+import { ActivateFeatureCommand } from 'src/features/commands/ActivateFeatureCommand'
+import { CreateTabsetCommand } from 'src/tabsets/commands/CreateTabsetCommand'
+import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { onMounted, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCommandExecutor } from 'src/core/services/CommandExecutor'
-import { CreateTabsetCommand } from 'src/tabsets/commands/CreateTabsetCommand'
-import { STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT } from 'boot/constants'
-import Analytics from 'src/core/utils/google-analytics'
-import DialogButton from 'src/core/dialog/buttons/DialogButton.vue'
-import { LocalStorage, openURL } from 'quasar'
-import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
-import { SidePanelViews } from 'src/app/models/SidePanelViews'
-import { FeatureIdent } from 'src/app/models/FeatureIdent'
-import { ActivateFeatureCommand } from 'src/features/commands/ActivateFeatureCommand'
 
 const router = useRouter()
 

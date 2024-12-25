@@ -29,8 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Tabset } from 'src/tabsets/models/Tabset'
 import ContextMenuItem from 'pages/sidepanel/helper/ContextMenuItem.vue'
+import { Tabset } from 'src/tabsets/models/Tabset'
 import { PropType } from 'vue'
 
 // @ts-ignore
