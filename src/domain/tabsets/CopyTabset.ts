@@ -10,7 +10,7 @@ class UndoCopyTabsetCommand implements Command<object> {
   execute(): Promise<ExecutionResult<object>> {
     return new DeleteTabsetCommand(this.tabsetId)
       .execute()
-      .then((res: any) => Promise.resolve(new ExecutionResult(res, 'Tabset was deleted again')))
+      .then((res) => Promise.resolve(new ExecutionResult(res, 'Tabset was deleted again')))
   }
 }
 

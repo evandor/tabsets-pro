@@ -58,4 +58,4 @@ bridge
   })
   .catch((err) => {
     console.error('[BEX-CT] Failed to connect to background:', err)
-})
+  })

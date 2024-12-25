@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import { Feature } from 'src/features/models/Feature'
 import { FeatureIdent, FeatureType } from 'src/app/models/FeatureIdent'
-import { GrantPermissionCommand } from 'src/domain/commands/GrantPermissionCommand'
-import { RevokePermissionCommand } from 'src/domain/commands/RevokePermissionCommand'
+import { GrantPermissionCommand } from 'src/core/domain/commands/GrantPermissionCommand'
+import { RevokePermissionCommand } from 'src/core/domain/commands/RevokePermissionCommand'
 
 export class AppFeatures {
   features: Feature[] = [
@@ -110,15 +110,10 @@ export class AppFeatures {
       ['bex'],
     ),
 
-    new Feature(
-      FeatureIdent.EXPERIMENTAL_VIEWS,
-      FeatureType.EXPERIMENTAL,
-      'Experimental Views',
-      'The default view of your tabset is a list - but there can be other views as well like grids or even a canvas.',
-      'o_explore',
-      '',
-      ['all'],
-    ),
+    // new Feature(FeatureIdent.EXPERIMENTAL_VIEWS, FeatureType.EXPERIMENTAL,
+    //   'Experimental Views',
+    //   'The default view of your tabset is a list - but there can be other views as well like grids or even a canvas.',
+    //   'o_explore', '', ['all']),
 
     new Feature(
       FeatureIdent.RSS,
@@ -174,7 +169,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.TAGS,
-      FeatureType.RECOMMENDED,
+      FeatureType.OPTIONAL,
       'Use Tags for Tabs',
       'Tabs can be tagged with labels making it easier to be found again',
       'o_label',
@@ -335,6 +330,16 @@ export class AppFeatures {
     // .setActivateCommands([new GrantPermissionCommand('tabGroups')]),
 
     new Feature(
+      FeatureIdent.AUTO_TAB_SWITCHER,
+      FeatureType.EXPERIMENTAL,
+      'Auto Tab Switcher',
+      "Switch the Tab's URL every x Seconds",
+      'o_switch_left',
+      '',
+      ['bex'],
+    ),
+
+    new Feature(
       FeatureIdent.MONITORING,
       FeatureType.EXPERIMENTAL,
       'Monitor Website Changes',
@@ -355,16 +360,6 @@ export class AppFeatures {
         'The Tabsets Helper Icon will appear on all pages you open once activated.',
       'o_article',
       'tabhelper.png',
-      ['bex'],
-    ),
-
-    new Feature(
-      FeatureIdent.AUTO_TAB_SWITCHER,
-      FeatureType.EXPERIMENTAL,
-      'Auto Tab Switcher',
-      "Switch the Tab's URL every x Seconds",
-      'o_switch_left',
-      '',
       ['bex'],
     ),
 

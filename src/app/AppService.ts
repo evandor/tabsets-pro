@@ -29,6 +29,9 @@ import _ from 'lodash'
 import { TabsetInfo } from 'src/core/models/TabsetInfo'
 import ChromeBookmarkListeners from 'src/services/ChromeBookmarkListeners'
 import { SpaceInfo } from 'src/core/models/SpaceInfo'
+import { useRequestsService } from 'src/requests/services/RequestsService'
+import IndexedDbRequestPersistence from 'src/requests/persistence/IndexedDbRequestPersistence'
+import { useTabsetsUiStore } from 'src/tabsets/stores/tabsetsUiStore'
 
 class AppService {
   router: Router = null as unknown as Router
@@ -88,8 +91,8 @@ class AppService {
     await useContentService().init(IndexedDbContentPersistence)
     console.debug('')
 
-    // await useRequestsService().init(IndexedDbRequestPersistence)
-    // console.debug('')
+    await useRequestsService().init(IndexedDbRequestPersistence)
+    console.debug('')
 
     await useSearchStore()
       .init()
@@ -150,6 +153,10 @@ class AppService {
      */
     const featuresStorage = useDB().featuresDb
     await useFeaturesStore().initialize(featuresStorage)
+    console.debug('')
+
+    const localStorageTabsetsDb = useDB().localStorageTabsetsDb
+    await useTabsetsUiStore().initialize(localStorageTabsetsDb)
     console.debug('')
 
     await useNotesStore().initialize(useDB().notesDb)

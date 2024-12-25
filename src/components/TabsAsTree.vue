@@ -47,17 +47,16 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch, watchEffect} from 'vue'
-import {uid, useQuasar} from 'quasar'
-import {useBookmarksStore} from 'src/bookmarks/stores/bookmarksStore'
+import { ref, watch, watchEffect } from 'vue'
+import { uid, useQuasar } from 'quasar'
+import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
 import NavigationService from 'src/services/NavigationService'
 import _ from 'lodash'
-import {TreeNode} from 'src/bookmarks/models/Tree'
-import {useTabsetsStore} from 'src/tabsets/stores/tabsetsStore'
+import { TreeNode } from 'src/bookmarks/models/Tree'
+import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import Highlighter from 'vue-highlight-words'
-import {useSettingsStore} from 'stores/settingsStore'
-import {useUtils} from 'src/core/services/Utils'
-import {Tab} from 'src/tabsets/models/Tab'
+import { useSettingsStore } from 'src/stores/settingsStore'
+import { useUtils } from 'src/core/services/Utils'
 
 const { favIconFromUrl } = useUtils()
 
@@ -91,7 +90,7 @@ function createNodes(tabs: object[], level = 0): TreeNode[] {
   for (const name of _.sortBy([...levelIdents.keys()], (k: any) => k)) {
     //console.log("name", name, level)
     const t: object = levelIdents.get(name) || {}
-    const filteredTabs = _.filter(tabs, (t: Tab) => {
+    const filteredTabs: object[] = _.filter(tabs, (t: object) => {
       const segments = t['segments' as keyof object] as string[]
       //console.log("checking", segments.length, level, segments[level], name)
       return segments && segments.length > level + 1 && segments[level] === name
@@ -99,7 +98,8 @@ function createNodes(tabs: object[], level = 0): TreeNode[] {
     const children: TreeNode[] = createNodes(filteredTabs, level + 1)
     // console.log("calculated children", children.length)
     const newNodeId = uid()
-    let url: string = (t['protocol' as keyof object] as string) + '//' + (t['hostname' as keyof object] as string)
+    let url: string =
+      (t['protocol' as keyof object] as string) + '//' + (t['hostname' as keyof object] as string)
     for (let i = 1; i <= level; i++) {
       url += '/' + (t['segments' as keyof object][i] as string)
     }
@@ -185,7 +185,7 @@ $q.loadingBar.setDefaults({
 const resetFilter = () => {
   filter.value = ''
   if (filterRef.value) {
-    // @ts-ignore
+    // @ts-expect-error TODO
     filterRef.value.focus()
   }
 }

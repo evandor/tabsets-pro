@@ -15,6 +15,9 @@ import { useSettingsStore } from 'stores/settingsStore'
 import { useAppStore } from 'stores/appStore'
 import { CURRENT_USER_ID } from 'boot/constants'
 import { usePermissionsStore } from 'stores/usePermissionsStore'
+import { useUiStore } from 'src/ui/stores/uiStore'
+import BexFunctions from 'src/core/communication/BexFunctions'
+import { onBeforeUnmount } from 'vue'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -43,7 +46,7 @@ onAuthStateChanged(auth, async (user) => {
 
     try {
       await AppService.init($q, router, true, user)
-      info(`tabsets-pro started: mode=${process.env.MODE}, version=${process.env.VERSION}`)
+     // info(`tabsets-pro started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
       if (inBexMode()) {
         // @ts-ignore
         $q.bex.send('auth.user.login', { userId: user.uid })
@@ -95,7 +98,15 @@ if (useDarkMode === 'true') {
   setCssVar('info', '#31CCEC')
   setCssVar('separator', '#AA0099')
   // setCssVar('warning', 'green');
+
+  // $body-font-size   : var(--q-theme-font-size, 20px);
+  // $body-line-height : var(--q-theme-line-height, 1.2);
+  // $typography-font-family: var(--q-theme-font-family, "'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif");
+  // $button-font-size: var(--q-theme-btn-font-size, 16px);
 }
+
+const fontsize = useUiStore().fontsize
+useUiStore().setFontsize(fontsize)
 
 const currentUser = $q.localStorage.getItem(CURRENT_USER_ID)
 if (currentUser) {
@@ -106,9 +117,14 @@ if (currentUser) {
     // triggers, but app should already have been started, no restart enforced
     console.debug('app start fallback after 2000ms')
     AppService.init($q, router, false)
-    info(
-      `tabsets-pro started: timeout=true, mode=${process.env.MODE}, version=${process.env.VERSION}`,
-    )
+    // info(
+    //   `tabsets-pro started: timeout=true, mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`,
+    // )
   }, 2000)
 }
+
+$q.bex.on('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
+onBeforeUnmount(() => {
+  $q.bex.off('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
+})
 </script>

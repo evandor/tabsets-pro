@@ -126,7 +126,7 @@ watchEffect(() => {
     // console.log("heier", words.map((d) => 10 + d.value * 2))
     // const ctx = document.getElementById("myCanvas")
     // console.log("ctx", ctx)
-    new Chart(myCanvas.value, {
+    const chart = new Chart(myCanvas.value, {
       type: 'wordCloud',
       data: {
         labels: words.map((d) => d.key),

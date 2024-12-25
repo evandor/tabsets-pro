@@ -46,7 +46,7 @@ import {
   SHARING_AUTHOR_IDENT,
   SHARING_AVATAR_IDENT,
   STRIP_CHARS_IN_USER_INPUT,
-} from 'boot/constants'
+} from 'src/boot/constants'
 import { LocalStorage } from 'quasar'
 import { useUtils } from 'src/core/services/Utils'
 

@@ -5,19 +5,6 @@
     </q-banner>
 
     <div class="row items-baseline q-ma-md q-gutter-md">
-      <InfoLine :label="t('title')">
-        <q-input type="text" color="primary" filled v-model="installationTitle" label="">
-          <template v-slot:prepend>
-            <q-icon name="o_edit_note" />
-          </template>
-        </q-input>
-      </InfoLine>
-
-      <!--      <InfoLine label="Old Sidepanel Layout">-->
-      <!--        <q-checkbox v-model="oldLayout" label="use the old Sidepanel Layout"/>-->
-      <!--        {{t('changing_needs_restart')}}-->
-      <!--      </InfoLine>-->
-
       <InfoLine :label="t('dark_mode')">
         <q-radio v-model="darkMode" val="auto" :label="t('Auto')" />
         <q-radio v-model="darkMode" val="true" :label="t('Enabled')" />
@@ -27,7 +14,7 @@
 
       <InfoLine :label="t('keyboard_shortcuts')">
         <div
-          class="text-blue-8 cursor-pointer"
+          class="text-accent cursor-pointer"
           @click="NavigationService.openSingleTab('chrome://extensions/shortcuts')"
         >
           {{ t('click_here') }}
@@ -49,6 +36,12 @@
       </div>
       <div class="col"></div>
 
+      <InfoLine label="Font Size">
+        <q-radio v-model="fontsize" :val="FontSize.DEFAULT" label="Default Size" />
+        <q-radio v-model="fontsize" :val="FontSize.LARGE" label="Large" />
+        <q-radio v-model="fontsize" :val="FontSize.LARGER" label="Larger" />
+      </InfoLine>
+
       <InfoLine
         :label="
           t('tab_info_detail_level', {
@@ -69,6 +62,13 @@
         <q-checkbox v-model="fullUrls" :label="t('show_full_url')" />
       </InfoLine>
 
+      <InfoLine label="Show Recent Tabsets list">
+        <q-checkbox
+          v-model="showRecentTabsetsList"
+          label="The last couple of tabsets you opened will be displayed for quick access"
+        />
+      </InfoLine>
+
       <InfoLine
         label="Hide Indicator Icon"
         v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
@@ -86,6 +86,13 @@
         <q-checkbox
           v-model="contentScriptLoggingOff"
           label="No tabset related logging in content scripts"
+        />
+      </InfoLine>
+
+      <InfoLine label="Overlap Indicator">
+        <q-checkbox
+          v-model="overlapIndicator"
+          label="Display how similar the current tabset and your current tabs are"
         />
       </InfoLine>
     </div>
@@ -197,18 +204,21 @@
 
 <script lang="ts" setup>
 import NavigationService from 'src/services/NavigationService'
-import { ListDetailLevel, useUiStore } from 'src/ui/stores/uiStore'
+import { FontSize, ListDetailLevel, useUiStore } from 'src/ui/stores/uiStore'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import InfoLine from 'pages/helper/InfoLine.vue'
 import { useI18n } from 'vue-i18n'
 import { ref, watch, watchEffect } from 'vue'
 import { LocalStorage, useQuasar } from 'quasar'
-import { STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT } from 'boot/constants'
+import { STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT } from 'src/boot/constants'
 import { useUtils } from 'src/core/services/Utils'
-import { useSettingsStore } from 'stores/settingsStore'
+import { useSettingsStore } from 'src/stores/settingsStore'
 import { StaticSuggestionIdent, Suggestion } from 'src/suggestions/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
+import { ActivateFeatureCommand } from 'src/features/commands/ActivateFeatureCommand'
+import { useCommandExecutor } from 'src/core/services/CommandExecutor'
+import { DeactivateFeatureCommand } from 'src/features/commands/DeactivateFeatureCommand'
 
 const { t } = useI18n()
 const { sendMsg } = useUtils()
@@ -222,8 +232,11 @@ const detailLevelPerTabset = ref(LocalStorage.getItem('ui.detailsPerTabset') || 
 const detailLevel = ref<ListDetailLevel>(
   LocalStorage.getItem('ui.detailLevel') || ListDetailLevel.MAXIMAL,
 )
+const fontsize = ref<FontSize>(LocalStorage.getItem('ui.fontsize') || FontSize.DEFAULT)
 const fullUrls = ref(LocalStorage.getItem('ui.fullUrls') || false)
+const overlapIndicator = ref(LocalStorage.getItem('ui.overlapIndicator') || false)
 const hideIndicatorIcon = ref(LocalStorage.getItem('ui.hideIndicatorIcon') || false)
+const showRecentTabsetsList = ref(useFeaturesStore().hasFeature(FeatureIdent.TABSET_LIST))
 const contentScriptLoggingOff = ref(LocalStorage.getItem('ui.contentScriptLoggingOff') || false)
 const oldLayout = ref(LocalStorage.getItem('ui.sidepanel.oldLayout') || false)
 
@@ -289,11 +302,30 @@ watch(
 )
 
 watch(
+  () => fontsize.value,
+  () => {
+    LocalStorage.set('ui.fontsize', fontsize.value)
+    //sendMsg('detail-level-changed', {level: detailLevel.value})
+    sendMsg('settings-changed', { identifier: 'ui.fontsize', value: fontsize.value })
+  },
+)
+
+watch(
   () => fullUrls.value,
   (a: any, b: any) => {
     LocalStorage.set('ui.fullUrls', fullUrls.value)
-    //sendMsg('fullUrls-changed', {value: fullUrls.value})
     sendMsg('settings-changed', { identifier: 'ui.fullUrls', value: fullUrls.value })
+  },
+)
+
+watch(
+  () => overlapIndicator.value,
+  (a: any, b: any) => {
+    LocalStorage.set('ui.overlapIndicator', overlapIndicator.value)
+    sendMsg('settings-changed', {
+      identifier: 'ui.overlapIndicator',
+      value: overlapIndicator.value,
+    })
   },
 )
 
@@ -305,6 +337,19 @@ watch(
       identifier: 'ui.hideIndicatorIcon',
       value: hideIndicatorIcon.value,
     })
+  },
+)
+
+watch(
+  () => showRecentTabsetsList.value,
+  (now: boolean, before: boolean) => {
+    now
+      ? useCommandExecutor().execute(
+          new ActivateFeatureCommand(FeatureIdent.TABSET_LIST.toString()),
+        )
+      : useCommandExecutor().execute(
+          new DeactivateFeatureCommand(FeatureIdent.TABSET_LIST.toString()),
+        )
   },
 )
 
@@ -336,7 +381,7 @@ const restoreHints = () => useUiStore().restoreHints()
 
 const simulateStaticSuggestion = () => {
   const suggestions: [Suggestion] = [
-    // @ts-ignore
+    // @ts-expect-error TODO
     Suggestion.getStaticSuggestion(StaticSuggestionIdent.TRY_SPACES_FEATURE),
     Suggestion.getStaticSuggestion(StaticSuggestionIdent.TRY_BOOKMARKS_FEATURE),
   ]
@@ -344,12 +389,10 @@ const simulateStaticSuggestion = () => {
 }
 
 const openSidePanel = async () => {
-  // @ts-ignore
   if (chrome.sidePanel) {
     const ts: chrome.tabs.Tab[] = await chrome.tabs.query({ active: true, currentWindow: true })
-    // @ts-ignore
+    // @ts-expect-error TODO
     await chrome.sidePanel.open({ windowId: ts[0].windowId })
-    // @ts-ignore
     await chrome.sidePanel.setOptions({
       path: 'www/index.html',
       enabled: true,

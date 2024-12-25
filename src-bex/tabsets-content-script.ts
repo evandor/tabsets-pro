@@ -34,31 +34,31 @@ bridge.on('some.event', ({ payload }) => {
     const el = document.getElementById('some-id')
     if (el) {
       el.innerText = 'Quasar Rocks!'
-      }
     }
-  })
-
-  function getMetas(document: Document) {
-  //console.debug("tabsets: getting metas for document" )
-    const result: { [k: string]: string } = {}
-    //const res: string[] = []
-    const metaNodes: NodeList = document.querySelectorAll('meta')
-    metaNodes.forEach((node: Node) => {
-      const element = <Element>node
-      const nameAttr = element.attributes.getNamedItem('name')
-      const propAttr = element.attributes.getNamedItem('property')
-      const contAttr = element.attributes.getNamedItem('content')
-      const key: string = nameAttr
-        ? nameAttr.value.trim().toLowerCase() || 'undefName'
-        : propAttr?.value || 'undefProp'
-    //console.debug("tabsets: key", key, contAttr?.value || 'x')
-      if (key) {
-        result[key] = contAttr?.value || ''
-      }
-      // res.push((element.attributes.getNamedItem('name')?.textContent) || 'undef')
-    })
-    return result
   }
+})
+
+function getMetas(document: Document) {
+  //console.debug("tabsets: getting metas for document" )
+  const result: { [k: string]: string } = {}
+  //const res: string[] = []
+  const metaNodes: NodeList = document.querySelectorAll('meta')
+  metaNodes.forEach((node: Node) => {
+    const element = <Element>node
+    const nameAttr = element.attributes.getNamedItem('name')
+    const propAttr = element.attributes.getNamedItem('property')
+    const contAttr = element.attributes.getNamedItem('content')
+    const key: string = nameAttr
+      ? nameAttr.value.trim().toLowerCase() || 'undefName'
+      : propAttr?.value || 'undefProp'
+    //console.debug("tabsets: key", key, contAttr?.value || 'x')
+    if (key) {
+      result[key] = contAttr?.value || ''
+    }
+    // res.push((element.attributes.getNamedItem('name')?.textContent) || 'undef')
+  })
+  return result
+}
 
 /**
  * Leave this AFTER you attach your initial listeners
@@ -89,7 +89,7 @@ bridge
       .catch((err: any) => {
         console.log('[BEX-CT] Failed to send message to app', err)
       })
-})
+  })
   .catch((err) => {
     console.error('[BEX-CT] Failed to connect to background:', err)
   })

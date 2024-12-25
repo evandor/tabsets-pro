@@ -17,7 +17,7 @@ class JsUtils {
       allTextNodes.push(currentNode)
       currentNode = treeWalker.nextNode()
     }
-    // @ts-ignore
+
     CSS.highlights.clear()
 
     const ranges = allTextNodes
@@ -44,9 +44,7 @@ class JsUtils {
         })
       })
 
-    // @ts-ignore
     const highlight = new Highlight(...ranges.flat())
-    // @ts-ignore
     CSS.highlights.set('search-result-highlight', highlight)
   }
 

@@ -11,6 +11,7 @@ import FirestoreNotesPersistence from 'src/notes/persistence/FirestoreNotesPersi
 import NotesPersistence from 'src/notes/persistence/NotesPersistence'
 import ThumbnailsPersistence from 'src/thumbnails/persistence/ThumbnailsPersistence'
 import FirestoreThumbnailsPersistence from 'src/thumbnails/persistence/FirestoreThumbnailsPersistence'
+import { LocalStorageTabsetsPersistence } from 'src/tabsets/persistence/LocalStorageTabsetsPersistence'
 
 export function useDB() {
   const spacesDb: SpacesPersistence = FirestoreSpacesPersistence
@@ -24,11 +25,14 @@ export function useDB() {
 
   let localDb = undefined as unknown as PersistenceService
 
+  let localStorageTabsetsDb: LocalStorageTabsetsPersistence = new LocalStorageTabsetsPersistence()
+
   return {
     //db,
     localDb,
     spacesDb,
     tabsetsDb,
+    localStorageTabsetsDb,
     snapshotsDb,
     notesDb,
     thumbnailsDb,

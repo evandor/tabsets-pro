@@ -7,14 +7,14 @@
             <div class="col-12 text-caption">The Art Of Linking</div>
           </div>
           <div class="col-12 text-h6 q-mb-md">
-            {{ t('welcome_to_tabsets') }} {{ stageIdentifier() }}
+            {{ $t('welcome_to_tabsets') }} {{ stageIdentifier() }}
           </div>
         </div>
 
         <div class="q-pa-sm q-mb-none row items-start q-gutter-md" @click.stop="selected()">
           <q-card class="my-card fit">
             <q-card-section>
-              <span class="text-subtitle2">{{ t('create_your_first_ts') }}</span>
+              <span class="text-subtitle2">{{ $t('create_your_first_ts') }}</span>
               <!--              <br>-->
               <!--              {{ t('provide_name_add_later')}}-->
             </q-card-section>
@@ -25,20 +25,29 @@
                 class="input-box"
                 autofocus
                 ref="tabsetNameRef"
-                :error-message="t('no_special_chars_and_length')"
+                :error-message="$t('no_special_chars_and_length')"
                 :error="!newTabsetNameIsValid()"
                 data-testid="newTabsetName"
                 @keydown.enter="addFirstTabset()"
                 hint="e.g. Music, Holidays, News..."
-                :label="t('tabset_name')"
+                :label="$t('tabset_name')"
               />
             </q-card-section>
-            <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none q-mt-md">
+            <q-card-actions align="right" class="q-pr-md q-pb-xs q-ma-none q-mt-md">
               <DialogButton
-                :label="t('add_tabset')"
+                :label="$t('add_tabset')"
                 @was-clicked="addFirstTabset"
                 :disable="tabsetName.trim().length === 0 || !newTabsetNameIsValid()"
               />
+            </q-card-actions>
+            <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none q-mt-none">
+              <div
+                class="text-right q-ma-none q-pa-none text-accent cursor-pointer"
+                style="font-size: smaller"
+                @click="importFromBookmarks()"
+              >
+                or import from...
+              </div>
             </q-card-actions>
           </q-card>
         </div>
@@ -62,7 +71,7 @@
               class="text-grey q-mx-none cursor-pointer"
               style="font-size: smaller"
               @click.stop="clicked('https://docs.tabsets.net')"
-              >{{ t('documentation') }}</span
+              >Documentation</span
             >
           </div>
         </div>
@@ -81,11 +90,11 @@ import { STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT } from 'boot/constants'
 import Analytics from 'src/core/utils/google-analytics'
 import DialogButton from 'src/core/dialog/buttons/DialogButton.vue'
 import { LocalStorage, openURL } from 'quasar'
-import { useI18n } from 'vue-i18n'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { SidePanelViews } from 'src/app/models/SidePanelViews'
+import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import { ActivateFeatureCommand } from 'src/features/commands/ActivateFeatureCommand'
 
-const { t } = useI18n()
 const router = useRouter()
 
 const tabsetName = ref('')
@@ -98,21 +107,6 @@ onMounted(() => {
   windowLocation.value = window.location.href
   LocalStorage.set(TITLE_IDENT, 'Tabsets' + stageIdentifier())
 })
-
-// function setFeature(featureIdent: FeatureIdent, val: UnwrapRef<boolean>) {
-//   const feature = new AppFeatures().getFeature(featureIdent)
-//   if (val && feature) {
-//     console.log("activating", featureIdent)
-//     useFeaturesStore().activateFeature(featureIdent.toLowerCase())
-//   } else if (!val && feature) {
-//     console.log("deactivateing", featureIdent)
-//     useFeaturesStore().deactivateFeature(featureIdent.toLowerCase())
-//   }
-// }
-
-// watchEffect(async () => {
-//   setFeature(FeatureIdent.STANDALONE_APP, activateFullPageApp.value)
-// })
 
 watchEffect(() => {
   useUiStore().showLoginTable = login.value
@@ -146,6 +140,14 @@ const stageIdentifier = () =>
   process.env.TABSETS_STAGE !== 'PRD' ? ' (' + process.env.TABSETS_STAGE + ')' : ''
 
 const clicked = (url: string) => openURL(url)
+
+const importFromBookmarks = () => {
+  useCommandExecutor()
+    .execute(new ActivateFeatureCommand(FeatureIdent.BOOKMARKS))
+    .then(() => {
+      router.push('/sidepanel/bookmarks/import')
+    })
+}
 </script>
 
 <style scoped>

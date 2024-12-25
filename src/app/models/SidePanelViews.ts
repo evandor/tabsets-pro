@@ -60,7 +60,7 @@ export class SidePanelViews {
   private constructor(
     public readonly ident: string,
     public readonly path: any,
-    public readonly showButtonFunction: Function = () => true,
+    public readonly showButtonFunction: Function = (): boolean => true,
   ) {}
 
   toString() {

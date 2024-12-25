@@ -12,6 +12,7 @@
         :icon="props.icon"
         :size="btnSize"
       >
+        <!--             @click="tabsClicked(props.drawer!)">-->
         <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200"
           >{{ props.tooltip }}
         </q-tooltip>
@@ -26,6 +27,7 @@
       :icon="props.icon"
       :size="btnSize"
     >
+      <!--      @click="tabsClicked(props.drawer!)">-->
       <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200"
         >{{ props.tooltip }}
       </q-tooltip>
@@ -34,6 +36,7 @@
 </template>
 
 <script lang="ts" setup>
+import { DrawerTabs, useUiStore } from 'src/ui/stores/uiStore'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 
@@ -54,4 +57,7 @@ const outlinedIfActive = (): boolean => {
   // }
   return false
 }
+
+const tabsClicked = (tab: DrawerTabs, data: object = {}) =>
+  useUiStore().rightDrawerSetActiveTab(tab)
 </script>

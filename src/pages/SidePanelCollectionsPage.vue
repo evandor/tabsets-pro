@@ -18,7 +18,18 @@
             <!--            <q-icon v-else name="remove" color="white"/>-->
             <!--            <span v-else class="q-ma-none q-ml-md" style="background-color:yellow"></span>-->
             <span class="mtl-ml cursor-pointer" @click="handleTreeClick(node)">
-              <q-icon v-if="node.level == 0" name="o_tab" color="primary" class="q-mx-sm" />
+              <q-icon
+                v-if="node.level == 0 && node.type !== TabsetType.SESSION"
+                name="o_tab"
+                color="primary"
+                class="q-mx-sm"
+              />
+              <q-icon
+                v-else-if="node.level == 0 && node.type === TabsetType.SESSION"
+                name="sym_o_new_window"
+                color="secondary"
+                class="q-mx-sm"
+              />
               <q-icon v-else name="o_folder" color="warning" class="q-mx-sm" />
               {{ node.text }}
             </span>
@@ -38,9 +49,10 @@
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import Analytics from 'src/core/utils/google-analytics'
-import { Tabset, TabsetStatus } from 'src/tabsets/models/Tabset'
+import { Tabset, TabsetStatus, TabsetType } from 'src/tabsets/models/Tabset'
 import _ from 'lodash'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
+import { SelectTabsetCommand } from 'src/tabsets/commands/SelectTabsetCommand'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
 import { useRouter } from 'vue-router'
@@ -52,7 +64,6 @@ import { dragContext, Draggable, OpenIcon } from '@he-tree/vue'
 import '@he-tree/vue/style/default.css'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { DeleteTabsetFolderCommand } from 'src/tabsets/commands/DeleteTabsetFolderCommand'
-import { SelectTabsetCommand } from 'src/tabsets/commands/SelectTabsetCommand'
 
 type NodeTreeObject = {
   text: string
@@ -61,6 +72,7 @@ type NodeTreeObject = {
   level: number
   url: string
   children: NodeTreeObject[]
+  type: TabsetType
 }
 
 const router = useRouter()
@@ -87,13 +99,6 @@ onUnmounted(() => {
 })
 
 const ondrop2 = (evt: any) => {
-  // console.log("===> evt", evt)
-  // console.log("===> dragNode2", dragContext.dragNode)
-  // console.log("===> startInfo2", dragContext.startInfo)
-  // console.log("===> startTree2", dragContext.startTree)
-  // console.log("===> targetInfo2", dragContext.targetInfo)
-  // console.log("===> targetTree2", dragContext.targetTree)
-  console.log('')
   const dragged = dragContext?.dragNode?.data
   const draggedTo = dragContext.targetInfo?.parent?.data
   console.log('dragged: ', dragged)
@@ -202,6 +207,7 @@ function treeNodeFromNote(n: Tabset, rootId: string = n.id, level = 0): NodeTree
     children: _.map(n.folders, (f: Tabset) => {
       return treeNodeFromNote(f, rootId, level + 1)
     }),
+    type: n.type,
   }
 }
 
@@ -256,14 +262,18 @@ watchEffect(async () => {
       ['asc'],
     )
   } else {
+    //console.log("loading from ", [...useTabsetsStore().tabsets.values()])
     tabsets.value = [...useTabsetsStore().tabsets.values()]
   }
 })
 
 const handleTreeClick = (node: NodeTreeObject) => {
-  // console.log("clicked", node)
   useCommandExecutor()
     .execute(new SelectTabsetCommand(node.tsId, node.id))
+    .then((res: ExecutionResult<Tabset | undefined>) => {
+      useTabsetService().handleHeadRequests(useTabsetsStore().getTabset(node.tsId)!, node.id)
+      return res
+    })
     .then((res: ExecutionResult<Tabset | undefined>) => {
       if (res.result) {
         router.push('/sidepanel')

@@ -35,7 +35,7 @@
 
       <div class="col-12">
         <div
-          class="text-overline ellipsis text-blue-10 cursor-pointer"
+          class="text-overline ellipsis text-accent cursor-pointer"
           @click.stop="NavigationService.openOrCreateTab([tab?.url || ''])"
         >
           {{ tab?.url }}&nbsp;<q-icon
@@ -109,49 +109,21 @@
           <q-tooltip>Show additional information about this tab (developer mode)</q-tooltip>
         </q-btn>
       </div>
-      <div class="col-9 text-right">
-        <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
-          <q-btn
-            @click.stop="savePng(tab as Tab)"
-            flat
-            round
-            color="primary"
-            size="11px"
-            icon="image"
-            :disabled="!isOpen(tab as Tab)"
-          >
-            <q-tooltip v-if="isOpen(tab as Tab)">Save this tab as PNG</q-tooltip>
-            <q-tooltip v-else
-              >The tab must be open if you want to save it. Click on the link and come back here to
-              save it.
-            </q-tooltip>
-          </q-btn>
-        </template>
-
-        <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
-          <!--            @click.stop="savePdf(tab as Tab)"-->
-          <q-btn
-            flat
-            round
-            color="primary"
-            size="11px"
-            icon="o_picture_as_pdf"
-            :disabled="!isOpen(tab as Tab)"
-          >
-            <q-tooltip v-if="isOpen(tab as Tab)">Save this tab as a PDF File</q-tooltip>
-            <q-tooltip v-else
-              >The tab must be open if you want to save it. Click on the link and come back here to
-              save it.
-            </q-tooltip>
-          </q-btn>
-        </template>
-      </div>
+      <div class="col-9 text-right"></div>
     </div>
   </div>
 
   <q-separator />
 
   <q-list>
+    <q-expansion-item label="Quick Access Shortcut" :default-opened="true">
+      <q-card>
+        <q-card-section>
+          <q-input filled dense v-model="quickaccess" />
+        </q-card-section>
+      </q-card>
+    </q-expansion-item>
+
     <q-expansion-item label="Tags" :default-opened="true">
       <q-card>
         <q-card-section>
@@ -170,49 +142,6 @@
         </q-card-section>
       </q-card>
     </q-expansion-item>
-
-    <!--    <q-expansion-item label="Archived Snapshots"-->
-    <!--                      v-if="useFeaturesStore().hasFeature(FeatureIdent.SAVE_TAB) && tab?.mhtmls?.length > 0"-->
-    <!--                      :default-opened="true">-->
-    <!--      <q-card>-->
-    <!--        <q-card-section>-->
-    <!--          <div class="row q-mx-sm q-mt-xs" v-for="mhtml in tab?.mhtmls">-->
-    <!--&lt;!&ndash;            <MHtmlViewHelper :mhtmlId="mhtml" :tabId="tab?.id || 'unknown'"/>&ndash;&gt;-->
-    <!--          </div>-->
-    <!--        </q-card-section>-->
-    <!--      </q-card>-->
-    <!--    </q-expansion-item>-->
-
-    <q-expansion-item
-      label="Archived Images"
-      v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE) && pngs.length > 0"
-    >
-      <q-card>
-        <q-card-section> </q-card-section>
-      </q-card>
-    </q-expansion-item>
-
-    <q-expansion-item
-      label="Archived PDFs"
-      v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE) && pdfs.length > 0"
-    >
-      <q-card>
-        <q-card-section> </q-card-section>
-      </q-card>
-    </q-expansion-item>
-
-    <!--    <q-expansion-item label="Note"-->
-    <!--                      group="somegroup"-->
-
-    <!--                      :default-opened="false">-->
-    <!--      <q-card>-->
-    <!--        <q-card-section>-->
-    <!--          <div class="text-caption">-->
-    <!--            {{ tab?.note }}-->
-    <!--          </div>-->
-    <!--        </q-card-section>-->
-    <!--      </q-card>-->
-    <!--    </q-expansion-item>-->
 
     <q-expansion-item label="Meta Data" group="somegroup" :default-opened="tab?.note === undefined">
       <q-card>
@@ -279,6 +208,16 @@
             <div class="col-5 text-caption text-bold">Error</div>
             <div class="col-7 text-right text-caption">{{ tab?.httpError }}</div>
           </div>
+          <div class="row q-mx-sm q-mt-none">
+            <div class="col-12 text-caption text-bold">Request Headers</div>
+          </div>
+          <div class="row q-mx-sm" v-for="headerRow in request?.headers">
+            <div class="col-5 text-caption text-bold">{{ headerRow['name' as keyof object] }}</div>
+            <div class="col-7 text-right text-caption ellipsis">
+              {{ headerRow['value' as keyof object] }}
+              <q-tooltip>{{ headerRow }}</q-tooltip>
+            </div>
+          </div>
         </q-card-section>
       </q-card>
     </q-expansion-item>
@@ -292,7 +231,7 @@
         <template v-if="ref.type === TabReferenceType.RSS">
           <div class="text-caption text-bold">found RSS:</div>
           <div
-            class="text-caption ellipsis text-blue-8 cursor-pointer"
+            class="text-caption ellipsis text-accent cursor-pointer"
             @click="useNavigationService().browserTabFor(ref.href || '')"
           >
             {{ ref.href }}
@@ -406,13 +345,15 @@
 </template>
 
 <script lang="ts" setup>
-import TabFaviconWidget from 'components/widgets/TabFaviconWidget.vue'
-import _ from 'lodash'
+
+import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import TabFaviconWidget from 'src/tabsets/widgets/TabFaviconWidget.vue'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import TabsetService from 'src/tabsets/services/TabsetService'
+import { Tab } from 'src/tabsets/models/Tab'
+import _ from 'lodash'
 import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Tab } from 'src/tabsets/models/Tab'
 import { formatDistance } from 'date-fns'
 import { useUtils } from 'src/core/services/Utils'
 import NavigationService from 'src/services/NavigationService'
@@ -420,29 +361,32 @@ import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { useThumbnailsService } from 'src/thumbnails/services/ThumbnailsService'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
-import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import { BlobMetadata } from 'src/snapshots/models/BlobMetadata'
 import { useNavigationService } from 'src/core/services/NavigationService'
 import { useQuasar } from 'quasar'
 import { useSnapshotsService } from 'src/snapshots/services/SnapshotsService'
 import { TabReferenceType } from 'src/content/models/TabReference'
-import { usePermissionsStore } from 'stores/usePermissionsStore'
 import { SelectTabsetCommand } from 'src/tabsets/commands/SelectTabsetCommand'
+import { STRIP_CHARS_IN_USER_INPUT } from 'boot/constants'
+import { useRequestsService } from 'src/requests/services/RequestsService'
+import { useNotificationHandler } from 'src/core/services/ErrorHandler'
+import { RequestInfo } from 'src/requests/models/RequestInfo'
 
 const { inBexMode } = useUtils()
+
+const { handleSuccess, handleError } = useNotificationHandler()
 
 const $q = useQuasar()
 const router = useRouter()
 const route = useRoute()
 
-const hasAllUrlsPermission = ref<boolean | undefined>(false)
-
 const thumbnail = ref('')
 const content = ref('')
+const quickaccess = ref('')
 const metaRows = ref<object[]>([])
 const tab = ref<Tab | undefined>(undefined)
-const pngs = ref<BlobMetadata[]>([])
-const pdfs = ref<BlobMetadata[]>([])
+const htmls = ref<BlobMetadata[]>([])
+const request = ref<RequestInfo | undefined>(undefined)
 const tabId = ref<string | undefined>(undefined)
 const opensearchterm = ref<string | undefined>(undefined)
 
@@ -460,18 +404,34 @@ watchEffect(() => {
     } else {
       tags.value = []
     }
+    quickaccess.value = tab.value.quickaccess
+  }
+  if (tab.value) {
+    useRequestsService()
+      .getWebRequestFor(tab.value.id)
+      .then((res: RequestInfo) => {
+        request.value = res
+      })
   }
 })
 
-watchEffect(() => (hasAllUrlsPermission.value = usePermissionsStore().hasAllOrigins()))
+watchEffect(() => {
+  if (quickaccess.value && tab.value) {
+    quickaccess.value = quickaccess.value.replace(' ', '').replace(STRIP_CHARS_IN_USER_INPUT, '')
+    tab.value.quickaccess = quickaccess.value
+    useTabsetService()
+      .saveCurrentTabset()
+      .catch((err) => console.error(err))
+  }
+})
 
 watchEffect(() => {
   if (tab.value) {
     useThumbnailsService()
-      .getThumbnailFor(tab.value.url)
+      .getThumbnailFor(tab.value.id)
       .then((data) => {
         if (data) {
-          thumbnail.value = data['thumbnail' as keyof object]!
+          thumbnail.value = data
         } else {
           thumbnail.value = ''
         }
@@ -494,8 +454,7 @@ watchEffect(() => {
     useSnapshotsService()
       .getMetadataFor(tab.value.id)
       .then((mds: BlobMetadata[]) => {
-        console.log('no op')
-        //htmls.value = mds
+        htmls.value = mds
       })
 
     // useSnapshotsService().getPngsForTab(tab.value.id)
@@ -560,12 +519,6 @@ const showTabDetails = () =>
   NavigationService.openOrCreateTab([
     chrome.runtime.getURL('/www/index.html#/mainpanel/tab/' + tab.value?.id),
   ])
-
-const savePng = (tab: Tab | undefined) => {
-  if (tab) {
-    //useCommandExecutor().execute(new SavePngCommand(tab, "saved by user"))
-  }
-}
 
 const updatedTags = (val: string[]) => {
   console.log('val', val)

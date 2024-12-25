@@ -1,6 +1,8 @@
 <template>
   <!-- SidePanelPage2 -->
   <q-page class="darkInDarkMode brightInBrightMode" style="padding-top: 50px">
+    <offline-info />
+
     <div class="wrap" v-if="useUiStore().appLoading">
       <div class="loading">
         <div class="bounceball q-mr-lg"></div>
@@ -9,7 +11,7 @@
     </div>
 
     <!-- list of tabs, assuming here we have at least one tabset -->
-    <div class="q-ma-none q-pa-none">
+    <div class="q-ma-none q-pa-none q-pt-xs">
       <template v-if="useTabsetsStore().tabsets.size > 0">
         <div class="row q-ma-none q-pa-none items-start darkInDarkMode brightInBrightMode">
           <!-- optional: notes -->
@@ -36,7 +38,7 @@
 
     <!-- place QPageSticky at end of page -->
     <q-page-sticky expand position="top" class="darkInDarkMode brightInBrightMode">
-      <FirstToolbarHelper2 :showSearchBox="showSearchBox"> </FirstToolbarHelper2>
+      <FirstToolbarHelper2 :showSearchBox="showSearchBox"></FirstToolbarHelper2>
     </q-page-sticky>
   </q-page>
 </template>
@@ -66,8 +68,6 @@ import SidePanelNotesView from 'src/notes/views/sidepanel/SidePanelNotesView.vue
 import SidePanelFoldersView from 'src/tabsets/views/sidepanel/SidePanelFoldersView.vue'
 import FirstToolbarHelper2 from 'pages/sidepanel/helper/FirstToolbarHelper2.vue'
 import AppService from 'src/app/AppService'
-
-// const {t} = useI18n({locale: navigator.language, useScope: "global"})
 
 const { inBexMode } = useUtils()
 
@@ -116,12 +116,12 @@ watchEffect(() => {
 })
 
 const getTabsetOrder = [
-  function (o: Tabset) {
+  function(o: Tabset) {
     return o.status === TabsetStatus.FAVORITE ? 0 : 1
   },
-  function (o: Tabset) {
+  function(o: Tabset) {
     return o.name?.toLowerCase()
-  },
+  }
 ]
 
 function determineTabsets() {
@@ -131,10 +131,10 @@ function determineTabsets() {
       (ts: Tabset) =>
         ts.status !== TabsetStatus.DELETED &&
         ts.status !== TabsetStatus.HIDDEN &&
-        ts.status !== TabsetStatus.ARCHIVED,
+        ts.status !== TabsetStatus.ARCHIVED
     ),
     getTabsetOrder,
-    ['asc'],
+    ['asc']
   )
 }
 
@@ -155,7 +155,7 @@ watchEffect(() => {
         )
       }),
       getTabsetOrder,
-      ['asc'],
+      ['asc']
     )
     // console.log("tabsets:", tabsets.value)
   } else {
@@ -170,14 +170,7 @@ watchEffect(() => {
 })
 
 function inIgnoredMessages(message: any) {
-  return (
-    message.msg === 'html2text' ||
-    message.msg === 'captureThumbnail' ||
-    message.msg === 'capture-annotation' ||
-    message.name === 'reload-spaces' ||
-    // message.name === "window-updated" ||
-    message.msg === 'html2links'
-  )
+  return message.msg === 'captureThumbnail' || message.name === 'reload-spaces'
 }
 
 if (inBexMode()) {
@@ -212,16 +205,6 @@ if (inBexMode()) {
       if (message.data.notebookId) {
         console.log('updating notebook/tabset', message.data.notebookId, message.data.tabsetId)
         useTabsetService().reloadTabset(message.data.tabsetId)
-        // const res = useTabsetsStore().getTabAndTabsetId(message.data.noteId)
-        // //.then((res: TabAndTabsetId | undefined) => {
-        // if (res) {
-        //   const note = res.tab
-        //   note.title = message.data.tab.title
-        //   note.description = message.data.tab.description
-        //   note.longDescription = message.data.tab.longDescription
-        // }
-        // useTabsetService().saveTabset(tabset)
-        //    })
       } else {
         console.log('adding tab', message.data.tab)
         //tabset.tabs.push(message.data.tab)
@@ -229,7 +212,7 @@ if (inBexMode()) {
       }
     } else if (message.name === 'tab-added') {
       // hmm - getting this twice...
-      console.log(" > got message '" + message.name + "'", message)
+      console.log(' > got message \'' + message.name + '\'', message)
       useTabsetService().reloadTabset(message.data.tabsetId)
       //updateSelectedTabset(message.data.tabsetId, true)
     } else if (message.name === 'tab-deleted') {
@@ -246,8 +229,7 @@ if (inBexMode()) {
         // uiStore.progressLabel = message.label
       }
       if (message.status === 'done') {
-        uiStore.progress = undefined
-        // uiStore.progressLabel = undefined
+        uiStore.stopProgress()
       }
       sendResponse('ui store progress set to ' + uiStore.progress)
     } else if (message.name === 'detail-level-changed') {
@@ -265,8 +247,14 @@ if (inBexMode()) {
         case 'ui.fullUrls':
           useUiStore().setShowFullUrls(message.data.value)
           break
+        case 'ui.overlapIndicator':
+          useUiStore().setOverlapIndicator(message.data.value)
+          break
         case 'ui.contentScriptLoggingOff':
           useUiStore().setContentScriptLoggingOff(message.data.value)
+          break
+        case 'ui.fontsize':
+          useUiStore().setFontsize(message.data.value)
           break
         default:
           console.log(`unknown message identifier ${message.data.identifier}`)
@@ -280,6 +268,15 @@ if (inBexMode()) {
         ? message.data.tabsetId
         : useTabsetsStore().getCurrentTabset?.id
       useTabsetService().reloadTabset(tabsetId)
+    } else if (message.name === 'tabsets.app.change.currentTabset') {
+      if (currentTabset.value) {
+        useTabsetService()
+          .reloadTabset(currentTabset.value.id)
+          .then((ts: Tabset) => {
+            currentTabset.value = ts
+            console.log('reloading tabset: ', ts)
+          })
+      }
     } else if (message.name === 'reload-application') {
       AppService.restart('restarted=true')
     } else {
@@ -297,7 +294,7 @@ function checkKeystroke(e: KeyboardEvent) {
     // TODO does not work properly yet
     //showSearchBox.value = true
     // e.preventDefault()
-    // // @ts-ignore
+    // // @ts-expect-error TODO
     // searchBox.value.focus()
     // search.value = ''
   }

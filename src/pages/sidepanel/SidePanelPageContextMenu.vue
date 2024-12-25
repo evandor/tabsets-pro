@@ -1,26 +1,32 @@
 <template>
   <q-menu :offset="[12, 8]">
-    <q-list dense style="min-width: 180px">
+    <q-list dense style="min-width: 200px">
       <ContextMenuItem
         v-close-popup
         @was-clicked="openEditTabsetDialog(tabset)"
         icon="o_note"
-        label="Edit Tabset"
+        :label="tabset.type === TabsetType.SESSION ? 'Edit Session' : 'Edit Tabset'"
       />
 
-      <ContextMenuItem
-        v-close-popup
-        @was-clicked="emits('editHeaderDescription')"
-        icon="o_description"
-        label="Tabset Description..."
-      />
+      <template v-if="tabset.type === TabsetType.SESSION">
+        <q-separator inset />
 
-      <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSET_SUBFOLDER)">
+        <ContextMenuItem
+          v-close-popup
+          @was-clicked="convertToCollection(tabset)"
+          color="warning"
+          icon="o_folder"
+          label="Convert to Collection"
+        />
+      </template>
+
+      <template v-if="tabset.type === TabsetType.DEFAULT">
         <q-separator inset />
 
         <ContextMenuItem
           v-close-popup
           @was-clicked="createSubfolder(tabset)"
+          color="warning"
           icon="o_folder"
           label="Create Subfolder"
         />
@@ -30,9 +36,9 @@
 
       <ContextMenuItem
         v-close-popup
-        v-if="useFeaturesStore().hasFeature(FeatureIdent.NOTES)"
+        v-if="showCreateNoteItem()"
         @was-clicked="startTabsetNote(tabset)"
-        icon="o_add_circle"
+        icon="o_description"
         label="Create Note"
       />
 
@@ -41,7 +47,7 @@
           tabset.tabs.length > 0 && inBexMode() && (!tabset.window || tabset.window === 'current')
         "
       >
-        <ContextMenuItem icon="open_in_new" label="Open all...">
+        <ContextMenuItem icon="open_in_new" label="Open all in...">
           <q-item-section side>
             <q-icon name="keyboard_arrow_right" />
           </q-item-section>
@@ -57,10 +63,10 @@
                 <q-item-section>switching tab</q-item-section>
               </q-item>
               <q-item dense clickable v-close-popup @click="restoreInNewWindow(tabset.id)">
-                <q-item-section>in new window</q-item-section>
+                <q-item-section>new window</q-item-section>
               </q-item>
               <q-item dense clickable v-close-popup @click="restoreInGroup(tabset.id)">
-                <q-item-section>in current window</q-item-section>
+                <q-item-section>this window</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -78,40 +84,18 @@
         />
       </template>
 
-      <template v-if="tabset.tabs.length > 0 && inBexMode()">
+      <template
+        v-if="
+          tabset.tabs.length > 0 &&
+          inBexMode() &&
+          useFeaturesStore().hasFeature(FeatureIdent.GALLERY)
+        "
+      >
         <ContextMenuItem
           v-close-popup
           @was-clicked="openOverviewPage(tabset.id)"
-          icon="open_in_new"
-          label="Show Overview"
-        />
-      </template>
-
-      <ContextMenuItem
-        v-if="useTabsetsStore().tabsets.size > 6"
-        v-close-popup
-        @was-clicked="focus(tabset)"
-        icon="filter_center_focus"
-        color="accent"
-        label="Focus on tabset"
-      />
-
-      <template v-if="tabset.status === TabsetStatus.DEFAULT && useTabsetsStore().tabsets.size > 1">
-        <ContextMenuItem
-          v-close-popup
-          @was-clicked="pin(tabset)"
-          icon="o_push_pin"
-          color="warning"
-          label="Pin"
-        />
-      </template>
-      <template v-else-if="tabset.status === TabsetStatus.FAVORITE">
-        <ContextMenuItem
-          v-close-popup
-          @was-clicked="unpin(tabset)"
-          icon="push_pin"
-          color="warning"
-          label="Unpin"
+          icon="calendar_view_month"
+          label="Show Gallery"
         />
       </template>
 
@@ -186,7 +170,7 @@
         icon="o_delete"
         color="negative"
         :disable="tabset.sharedId !== undefined"
-        label="Delete Tabset"
+        :label="tabset.type === TabsetType.SESSION ? 'Delete Session' : 'Delete Tabset'"
       >
         <q-tooltip class="tooltip-small" v-if="tabset.sharedId !== undefined">
           Stop sharing first if you want to delete this tabset
@@ -198,17 +182,15 @@
 
 <script lang="ts" setup>
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
-import { Tabset, TabsetSharing, TabsetStatus } from 'src/tabsets/models/Tabset'
+import { Tabset, TabsetSharing, TabsetStatus, TabsetType } from 'src/tabsets/models/Tabset'
 import NavigationService from 'src/services/NavigationService'
 import EditTabsetDialog from 'src/tabsets/dialogues/EditTabsetDialog.vue'
 import { LocalStorage, useQuasar } from 'quasar'
 import { useUtils } from 'src/core/services/Utils'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { RestoreTabsetCommand } from 'src/tabsets/commands/RestoreTabset'
-import { MarkTabsetAsFavoriteCommand } from 'src/tabsets/commands/MarkTabsetAsFavorite'
-import { MarkTabsetAsDefaultCommand } from 'src/tabsets/commands/MarkTabsetAsDefault'
 import DeleteTabsetDialog from 'src/tabsets/dialogues/DeleteTabsetDialog.vue'
-import ContextMenuItem from 'pages/sidepanel/helper/ContextMenuItem.vue'
+import ContextMenuItem from 'src/core/components/helper/ContextMenuItem.vue'
 import { PropType } from 'vue'
 import { UnShareTabsetCommand } from 'src/tabsets/commands/UnShareTabsetCommand'
 import ShareTabsetPubliclyDialog from 'src/tabsets/dialogues/ShareTabsetPubliclyDialog.vue'
@@ -216,15 +198,16 @@ import { MarkTabsetAsArchivedCommand } from 'src/tabsets/commands/MarkTabsetAsAr
 import { useRouter } from 'vue-router'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { NotificationType } from 'src/core/services/ErrorHandler'
+import NewSubfolderDialog from 'src/tabsets/dialogues/NewSubfolderDialog.vue'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import { DeleteTabsetCommand } from 'src/tabsets/commands/DeleteTabsetCommand'
 
 const { inBexMode } = useUtils()
 
 const $q = useQuasar()
 const router = useRouter()
 
-// @ts-ignore
 const props = defineProps({
   tabset: { type: Object as PropType<Tabset>, required: true },
 })
@@ -243,13 +226,13 @@ const startTabsetNote = (tabset: Tabset) => {
 }
 
 const createSubfolder = (tabset: Tabset) => {
-  // $q.dialog({
-  //   component: NewSubfolderDialog,
-  //   componentProps: {
-  //     tabsetId: tabset.id,
-  //     parentFolder: undefined
-  //   }
-  // })
+  $q.dialog({
+    component: NewSubfolderDialog,
+    componentProps: {
+      tabsetId: tabset.id,
+      parentFolder: undefined,
+    },
+  })
 }
 
 const openEditTabsetDialog = (tabset: Tabset) => {
@@ -309,11 +292,7 @@ const openOverviewPage = (tabsetId: string) =>
 
 const focus = (tabset: Tabset) => router.push('/sidepanel/tabsets/' + tabset.id)
 
-const pin = (tabset: Tabset) =>
-  useCommandExecutor().executeFromUi(new MarkTabsetAsFavoriteCommand(tabset.id))
-
-const unpin = (tabset: Tabset) =>
-  useCommandExecutor().executeFromUi(new MarkTabsetAsDefaultCommand(tabset.id))
+const showCreateNoteItem = () => useFeaturesStore().hasFeature(FeatureIdent.NOTES)
 
 const removePublicShare = (tabsetId: string, sharedId: string) =>
   useCommandExecutor().executeFromUi(new UnShareTabsetCommand(tabsetId, sharedId))
@@ -324,14 +303,24 @@ const archiveTabset = (tabset: Tabset) =>
     NotificationType.NOTIFY,
   )
 
-const deleteTabsetDialog = (tabset: Tabset) => {
+const deleteTabsetDialog = (tabset: Tabset): void => {
+  if (tabset.tabs.length === 0) {
+    useCommandExecutor().executeFromUi(new DeleteTabsetCommand(tabset.id))
+    return
+  }
   $q.dialog({
     component: DeleteTabsetDialog,
     componentProps: {
       tabsetId: tabset.id,
       tabsetName: tabset.name,
+      tabsCount: tabset.tabs.length,
     },
   })
+}
+
+const convertToCollection = (tabset: Tabset) => {
+  tabset.type = TabsetType.DEFAULT
+  useTabsetsStore().saveTabset(tabset)
 }
 
 const shareTabsetPubliclyDialog = (tabset: Tabset, republish: boolean = false) => {

@@ -46,7 +46,7 @@
       <q-list class="q-mt-none greyBorderTop">
         <NavTabsetsListWidgetNonBex
           :tabsets="tabsets()"
-          :space-id="useSpacesStore().space?.id || ''"
+          :space-id="useSpacesStore().space?.id || '0'"
         />
       </q-list>
 

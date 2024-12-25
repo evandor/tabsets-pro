@@ -309,17 +309,17 @@ class NavigationService {
     groups: string[],
   ) {
     //useWindowsStore().assignWindow(useWindowIdent, window.id || 0)
-    useWindowsStore().upsertWindow(window, useWindowIdent as unknown as number, undefined, index)
-    const ctx = this
-    withUrls.forEach(function (url, i) {
-      if (groups.length > i) {
-        const group = groups[i]
-        if (group && window.id && window.tabs && window.tabs.length > i) {
-          console.log('assiging group', group, i)
-          ctx.handleGroup(group, window.id, window.tabs[i]!)
-        }
-      }
-    })
+    // useWindowsStore().upsertWindow(window, useWindowIdent, index)
+    // const ctx = this
+    // withUrls.forEach(function (url, i) {
+    //   if (groups.length > i) {
+    //     const group = groups[i]
+    //     if (group && window.id && window.tabs && window.tabs.length > i) {
+    //       console.log("assiging group", group, i)
+    //       ctx.handleGroup(group, window.id, window.tabs[i]);
+    //     }
+    //   }
+    // })
   }
 }
 

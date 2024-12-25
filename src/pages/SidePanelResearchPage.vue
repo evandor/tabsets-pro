@@ -140,7 +140,7 @@
 
                 <div class="row q-ma-sm q-ml-lg" v-for="a in md.annotations">
                   <div
-                    class="col-9 ellipsis text-caption text-blue-10 cursor-pointer"
+                    class="col-9 ellipsis text-caption text-accent cursor-pointer"
                     @click="toggleEditAnnotation(a, index)"
                   >
                     {{ a.title }}
@@ -191,7 +191,7 @@
                     v-if="currentSelectionText && !currentSelectionId"
                     :key="randomKey"
                     :metadata="metadatas[currentSelectionIndex]!"
-                    :source-id="sourceId!"
+                    :source-id="sourceId"
                     :snapshotId="currentSnapshotId!"
                     :selectionText="currentSelectionText!"
                     :selectionTitle="currentSelectionTitle!"
@@ -217,9 +217,7 @@
 
     <!-- place QPageSticky at end of page -->
     <q-page-sticky expand position="top" class="darkInDarkMode brightInBrightMode">
-      <FirstToolbarHelper2
-        :title="'Project ' + useTabsetsStore().currentTabsetName || 'Tabsets Pro'"
-      />
+      <FirstToolbarHelper2 :title="'Project ' + useTabsetsStore().currentTabsetName || 'Tabsets'" />
     </q-page-sticky>
   </q-page>
 </template>
@@ -243,7 +241,10 @@ import { Annotation } from 'src/snapshots/models/Annotation'
 import { useUtils } from 'src/core/services/Utils'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
 import SourcePageAnnotation from 'src/pages/helper/SourcePageAnnotation.vue'
+import { SavePngCommand } from 'src/snapshots/commands/SavePngCommand'
 import SnapshotViewHelper from 'pages/sidepanel/helper/SnapshotViewHelper.vue'
+import { SavePdfCommand } from 'src/snapshots/commands/SavePdfCommand'
+import { SaveWarcCommand } from 'src/snapshots/commands/SaveWarcCommand'
 import { SaveHtmlCommand } from 'src/snapshots/commands/SaveHtmlCommand'
 import OfflineInfo from 'src/core/components/helper/offlineInfo.vue'
 import PanelTabListElementWidget from 'src/tabsets/widgets/PanelTabListElementWidget.vue'
@@ -487,6 +488,27 @@ const saveMHtml = (source: Tab | undefined) => {
   console.log('saving mhtml for', source)
   if (source && source.url) {
     useCommandExecutor().executeFromUi(new SaveMHtmlCommand(source.id, source.url))
+  }
+}
+
+const saveWArch = (source: Tab | undefined) => {
+  console.log('saving Warc for', source)
+  if (source && source.url) {
+    useCommandExecutor().executeFromUi(new SaveWarcCommand(source.id, source.url))
+  }
+}
+
+const savePng = (source: Tab | undefined) => {
+  console.log('saving png for', source)
+  if (source && source.url) {
+    useCommandExecutor().executeFromUi(new SavePngCommand(source.id, source.url))
+  }
+}
+
+const savePdf = (source: Tab | undefined) => {
+  console.log('saving PDF for', source)
+  if (source && source.url) {
+    useCommandExecutor().executeFromUi(new SavePdfCommand(source.id, source.url))
   }
 }
 

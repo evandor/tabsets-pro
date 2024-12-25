@@ -1,11 +1,9 @@
 <template>
   <div class="col-12 text-caption">
-    <!-- @vue-ignore -->
     <div v-for="(k, index) in searchIndex">
       <div class="row" v-if="searchIndex.get(index)['v']">
         <div class="col-4 q-ml-sm text-bold">
           {{ searchIndex.get(index)['name'] }}
-          <!-- {{k}} -->
         </div>
         <div class="col-7 ellipsis">
           {{ searchIndex.get(index)['v'] }}
@@ -20,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref, watchEffect } from 'vue'
+import { onMounted, PropType, ref, watchEffect } from 'vue'
 import { useSearchStore } from 'src/search/stores/searchStore'
 import _ from 'lodash'
 import { Tab } from 'src/tabsets/models/Tab'
@@ -29,6 +27,7 @@ const props = defineProps({
   tab: { type: Object as PropType<Tab>, required: true },
 })
 
+const tab = ref<Tab | undefined>(undefined)
 const searchIndex = ref<any>()
 
 watchEffect(() => {

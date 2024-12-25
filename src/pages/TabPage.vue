@@ -150,25 +150,26 @@
     </div>
   </div>
 
-  <div v-else-if="tab === 'meta'">
+  <div v-else-if="tab === 'request'">
     <div class="q-pa-md q-gutter-sm">
       <q-banner rounded
-        >This meta data was derived from the pages provided meta tags. This data is collected if the
-        'analyse tabs' feature is active. If this does not work as expected, you might have to
-        refresh or reinstall the tabsets extension.
+        >This is a data derived from the request to the tabs content. This data is collected if the
+        'analyse tabs' feature is active.
       </q-banner>
 
+      Status Code: {{ request['statusCode' as keyof object] }}<br /><br />
+
       <!--      <q-table-->
-      <!--        title="Meta data from the website source"-->
-      <!--        :rows="metaRows"-->
-      <!--        :columns="metaColumns"-->
+      <!--        title="Request data"-->
+      <!--        :rows="requestRows"-->
+      <!--        :columns="metaColumns!"-->
       <!--        row-key="name"-->
       <!--        :pagination="metaInitialPagination"-->
-      <!--        :filter="filter"-->
-      <!--        dense>-->
-
+      <!--        :filter="filterRequest"-->
+      <!--        dense-->
+      <!--      >-->
       <!--        <template v-slot:top-right>-->
-      <!--          <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">-->
+      <!--          <q-input borderless dense debounce="300" v-model="filterRequest" placeholder="Search">-->
       <!--            <template v-slot:append>-->
       <!--              <q-icon name="search"/>-->
       <!--            </template>-->
@@ -178,20 +179,7 @@
       <!--        <template v-slot:body-cell-name="props">-->
       <!--          <q-td :props="props">-->
       <!--            <div>-->
-      <!--              <q-badge v-if="showNameLink(props.value)"-->
-      <!--                       color="grey" class="cursor-pointer" @click="openNameLink(props.value)" :label="props.value"/>-->
-      <!--              <q-badge v-else-->
-      <!--                       color="grey" @click="openNameLink(props.value)" :label="props.value"/>-->
-      <!--            </div>-->
-      <!--          </q-td>-->
-      <!--        </template>-->
-
-      <!--        <template v-slot:body-cell-value="props">-->
-      <!--          <q-td :props="props">-->
-      <!--            <div>-->
-      <!--              {{ props.value }}-->
-      <!--              <q-icon v-if="showValueLink(props.key)"-->
-      <!--                      name="o_open_in_new" @click="openValueLink(props.key, props.value)"/>-->
+      <!--              <q-badge color="grey" class="cursor-pointer" @click="openNameLink(props.value)" :label="props.value"/>-->
       <!--            </div>-->
       <!--          </q-td>-->
       <!--        </template>-->
@@ -200,19 +188,103 @@
     </div>
   </div>
 
-  <div v-else-if="tab === 'history'">
+  <div v-else-if="tab === 'metalinks'">
     <div class="q-pa-md q-gutter-sm">
-      <q-banner rounded>To be done</q-banner>
+      <q-banner rounded
+        >This is a data derived from the tab's content link tags. This data is collected if the
+        'analyse tabs' feature is active. If this does not work as expected, you might have to
+        refresh or reinstall the tabsets extension.
+      </q-banner>
+
+      <!--      <q-table-->
+      <!--        title="Meta Links"-->
+      <!--        :rows="metaLinkRows"-->
+      <!--        :columns="metaLinkColumns"-->
+      <!--        row-key="name"-->
+      <!--        :pagination="metaInitialPagination"-->
+      <!--        :filter="filterMetaLinks"-->
+      <!--        dense>-->
+      <!--        <template v-slot:top-right>-->
+      <!--          <q-input borderless dense debounce="300" v-model="filterMetaLinks" placeholder="Search">-->
+      <!--            <template v-slot:append>-->
+      <!--              <q-icon name="search"/>-->
+      <!--            </template>-->
+      <!--          </q-input>-->
+      <!--        </template>-->
+
+      <!--        <template v-slot:body-cell-href="props">-->
+      <!--          <q-td :props="props">-->
+      <!--            <div class="cursor-pointer text-accent">-->
+      <!--              <span v-if="props.row.href.length > 0 && props.row.href.startsWith('/')"-->
+      <!--                    @click="openLink(selectedTab?.url + '/' + props.row.href.substring(1))">-->
+      <!--                {{ props.row.href }}-->
+      <!--              </span>-->
+      <!--              <span v-else @click="openLink(props.row.href)">{{ props.row.href }}</span>-->
+      <!--            </div>-->
+      <!--          </q-td>-->
+      <!--        </template>-->
+
+      <!--      </q-table>-->
+    </div>
+  </div>
+
+  <div v-else-if="tab === 'links'">
+    <div class="q-pa-md q-gutter-sm">
+      <q-banner rounded>This is data derived from the tab's html content</q-banner>
+
+      <!--      <q-table-->
+      <!--        title="Links"-->
+      <!--        :rows="links()"-->
+      <!--        :columns="linkColumns"-->
+      <!--        row-key="name"-->
+      <!--        :pagination="metaInitialPagination"-->
+      <!--        :filter="filterMetaLinks"-->
+      <!--        dense>-->
+      <!--        <template v-slot:top-right>-->
+      <!--          <q-input borderless dense debounce="300" v-model="filterMetaLinks" placeholder="Search">-->
+      <!--            <template v-slot:append>-->
+      <!--              <q-icon name="search"/>-->
+      <!--            </template>-->
+      <!--          </q-input>-->
+      <!--        </template>-->
+
+      <!--        <template v-slot:body-cell-link="props">-->
+      <!--          <q-td :props="props">-->
+      <!--            <div class="cursor-pointer text-accent">-->
+      <!--              <span v-if="props.row.link.length > 0 && props.row.link.startsWith('/')"-->
+      <!--                    @click="openLink(domain + '/' + props.row.link.substring(1))">-->
+      <!--                {{ props.row.link }}-->
+      <!--              </span>-->
+      <!--              <span v-else @click="openLink(props.row.link)">{{ props.row.link }}</span>-->
+      <!--            </div>-->
+      <!--          </q-td>-->
+      <!--        </template>-->
+
+      <!--      </q-table>-->
     </div>
   </div>
 
   <div v-else-if="tab === 'content'">
     <div class="q-pa-md q-gutter-sm">
-      <q-banner rounded>This is a text extract derived from the tabs content</q-banner>
+      <q-banner rounded>This is a text extract derived from the tabs content (ContentDB)</q-banner>
 
-      <div class="col-5">Content</div>
-      <div class="col-7">
-        {{ content }}
+      <div class="col-5 text-h6">Title</div>
+      <div class="col-7" data-testid="content-title">
+        {{ content?.title }}
+      </div>
+      <div class="col-5 text-h6">URL</div>
+      <div class="col-7" data-testid="content-url">
+        {{ content?.url }}
+      </div>
+      <div class="col-5 text-h6">Meta</div>
+      <div class="col-7 text-body2" data-testid="content-meta">
+        <pre>
+           {{ JSON.stringify(content?.metas || '{}', null, 2) }}
+        </pre>
+      </div>
+      <div class="col-5 text-h6">Content</div>
+      <div class="col-7" data-testid="content-content">
+        {{ content?.content }}
       </div>
     </div>
   </div>
@@ -231,20 +303,24 @@
 </template>
 
 <script setup lang="ts">
-import {useRoute} from 'vue-router'
-import {onMounted, reactive, ref, watchEffect} from 'vue'
+import { useRoute } from 'vue-router'
+import { onMounted, reactive, ref, watchEffect } from 'vue'
 import TabsetService from 'src/tabsets/services/TabsetService'
-import {date} from 'quasar'
-import {useUtils} from 'src/core/services/Utils'
+import NavigationService from 'src/services/NavigationService'
+import { date, openURL } from 'quasar'
+import { useSearchStore } from 'src/search/stores/searchStore'
+import _ from 'lodash'
+import { useUtils } from 'src/core/services/Utils'
 import VueJsonPretty from 'vue-json-pretty'
 import 'vue-json-pretty/lib/styles.css'
 import Analytics from 'src/core/utils/google-analytics'
-import {Tab} from 'src/tabsets/models/Tab'
-import {useTabsetsStore} from 'src/tabsets/stores/tabsetsStore'
-import {useFeaturesStore} from 'src/features/stores/featuresStore'
-import {FeatureIdent} from 'src/app/models/FeatureIdent'
-import NavigationService from 'src/services/NavigationService'
+import { Tab } from 'src/tabsets/models/Tab'
+import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
+import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import { ContentItem } from 'src/content/models/ContentItem'
 
+const searchStore = useSearchStore()
 const route = useRoute()
 
 const { formatDate } = useUtils()
@@ -252,8 +328,16 @@ const { formatDate } = useUtils()
 const selectedTab = ref<Tab | undefined>(undefined)
 const domain = ref<string | undefined>(undefined)
 const thumbnail = ref('')
-const content = ref('')
+const content = ref<ContentItem | undefined>(undefined)
+const request = ref({})
 const tab = ref('tabdata')
+const keys = ref({})
+const keysMap = ref({})
+const index = ref({})
+const filter = ref('')
+const filterRequest = ref('')
+const filterMetaLinks = ref('')
+
 const json = ref(null)
 const tags = ref<string[]>([])
 
@@ -289,72 +373,121 @@ watchEffect(() => {
   // })
 })
 
+const metaColumns = ref([
+  {
+    name: 'name',
+    required: true,
+    label: 'Key',
+    align: 'left',
+    sortable: true,
+    field: 'name',
+  },
+  { name: 'value', align: 'left', label: 'Value', field: 'value', sortable: true },
+])
+
+const metaLinkColumns = ref([
+  { name: 'title', align: 'left', label: 'Title', field: 'title', sortable: true },
+  { name: 'href', align: 'left', label: 'Link', field: 'href', sortable: true },
+  { name: 'type', align: 'left', label: 'Type', field: 'type', sortable: true },
+  { name: 'rel', align: 'left', label: 'Rel', field: 'rel', sortable: true },
+])
+
+const linkColumns = ref([
+  { name: 'link', align: 'left', label: 'Link', field: 'link', sortable: true },
+  { name: 'count', align: 'left', label: 'Count', field: 'count', sortable: true },
+])
+
+const metaInitialPagination = {
+  sortBy: 'name',
+  descending: false,
+  page: 1,
+  rowsPerPage: 30,
+}
+
+const logsInitialPagination = {
+  sortBy: 'name',
+  descending: false,
+  page: 1,
+  rowsPerPage: 30,
+}
+
+const metaRows = ref<object[]>([])
 const requestRows = ref<object[]>([])
 const metaLinkRows = ref<object[]>([])
 const linkRows = ref<object[]>([])
 
 watchEffect(async () => {
   if (selectedTab.value) {
-    TabsetService.getContentFor(selectedTab.value).then((data) => {
-      // if (data) {
-      //   content.value = data.content
-      //   metas.value = data.metas
-      //   metaRows.value = []
-      //   if (data.metas) {
-      //     _.forEach(Object.keys(data.metas), (k:any) => {
-      //       //console.log("k", k, data.metas[k])
-      //       metaRows.value.push({
-      //         name: k,
-      //         value: data.metas[k]
-      //       })
-      //     })
-      //   }
-      // }
-    })
+    // TabsetService.getThumbnailFor(selectedTab.value)
+    //   .then(data => {
+    //     if (data) {
+    //       thumbnail.value = data.thumbnail
+    //     }
+    //   })
+    const data: ContentItem | undefined = await TabsetService.getContentFor(selectedTab.value)
+    if (data) {
+      content.value = data
+    }
+    // TabsetService.getRequestFor(selectedTab.value)
+    //   .then(data => {
+    //     if (data) {
+    //       //console.log("got data", data)
+    //       request.value = data.requestInfo
+    //
+    //       _.forEach(data.requestInfo['headers'], h => {
+    //         requestRows.value.push({
+    //           name: h.name,
+    //           value: h.value
+    //         })
+    //       })
+    //     }
+    //   })
 
-    TabsetService.getMetaLinksFor(selectedTab.value).then((data) => {
-      if (data) {
-        metaLinkRows.value = data.metaLinks
-      }
-    })
-
-    TabsetService.getLinksFor(selectedTab.value).then((data) => {
-      if (data) {
-        linkRows.value = data.links
-      }
-    })
+    // TabsetService.getMetaLinksFor(selectedTab.value)
+    //   .then(data => {
+    //     if (data) {
+    //       metaLinkRows.value = data.metaLinks
+    //     }
+    //   })
+    //
+    // TabsetService.getLinksFor(selectedTab.value)
+    //   .then(data => {
+    //     if (data) {
+    //       linkRows.value = data.links
+    //     }
+    //   })
   } else {
     //router.push("/tabset")
   }
 })
 
-// const links = (): object[] => {
-//   const result: object[] = []
-//   if (linkRows.value) {
-//     const keys = Object.keys(linkRows.value)
-//     keys.forEach(k => {
-//       result.push({
-//         link: k,
-//         count: linkRows.value[k as keyof object]
-//       })
-//     })
-//   }
-//   return result
-// }
+const links = (): object[] => {
+  const result: object[] = []
+  if (linkRows.value) {
+    const keys = Object.keys(linkRows.value)
+    keys.forEach((k) => {
+      result.push({
+        link: k,
+        count: linkRows.value[k as keyof object],
+      })
+    })
+  }
+  return result
+}
 
-// watchEffect(() => {
-//   const fuseIndex = searchStore?.getIndex()
-//   if (fuseIndex) {
-//     keys.value = fuseIndex['keys' as keyof object] || {}
-//     keysMap.value = fuseIndex['_keysMap' as keyof object]
-//     const res = _.filter(fuseIndex['records' as keyof object], (r: any) => {
-//       return selectedTab!.url === r.$[2]?.v
-//     })
-//     if (res && res.length > 0) {
-//       index.value = res[0]
-//     }
-//   }
-// })
+watchEffect(() => {
+  const fuseIndex = searchStore?.getIndex()
+  if (fuseIndex) {
+    keys.value = fuseIndex['keys' as keyof object] || {}
+    keysMap.value = fuseIndex['_keysMap' as keyof object]
+    const res = _.filter(fuseIndex['records' as keyof object], (r: any) => {
+      return r.$[2]?.v === selectedTab.value?.url
+    })
+    if (res && res.length > 0) {
+      index.value = res[0]
+    }
+  }
+})
 
 function getShortHostname(host: string) {
   const nrOfDots = (host.match(/\./g) || []).length
@@ -376,9 +509,23 @@ function getHost(urlAsString: string, shorten: Boolean = true): string {
   }
 }
 
+const getForKey = (key: any) => {
+  if (
+    (keysMap.value[key as keyof object] || keysMap.value[key as keyof object] === 0) &&
+    index.value['$' as keyof object]
+  ) {
+    return index.value['$' as keyof object][keysMap.value[key as keyof object]]
+  }
+  return ''
+}
+
 const requestDataLabel = () => 'Request Header (' + requestRows.value.length + ')'
 const metaLinksDataLabel = () => 'Meta Links (' + metaLinkRows.value.length + ')'
 const linksDataLabel = () => 'Links (' + Object.keys(linkRows.value || []).length + ')'
+const openNameLink = (key: string) =>
+  NavigationService.openOrCreateTab([
+    'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/' + key,
+  ])
 
 const analyseTab = () => {
   if (selectedTab.value) {
@@ -387,6 +534,8 @@ const analyseTab = () => {
     //   })
   }
 }
+
+const openLink = (url: string) => openURL(url)
 </script>
 
 <style lang="sass" scoped>

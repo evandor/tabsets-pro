@@ -11,7 +11,7 @@
       <div class="col-3">
         as json or as bookmarks<br />
         export to github is available
-        <span class="cursor-pointer text-blue-8" @click="emits('showTab', 'backup')">here</span>.
+        <span class="cursor-pointer text-accent" @click="emits('showTab', 'backup')">here</span>.
       </div>
       <div class="col-1"></div>
       <div class="col-5">
@@ -25,7 +25,7 @@
       <div class="col-3"><b>Import</b></div>
       <div class="col-3">
         from json or
-        <span class="cursor-pointer text-blue-8" @click="emits('showTab', 'backup')"
+        <span class="cursor-pointer text-accent" @click="emits('showTab', 'backup')"
           >github backup</span
         ><br />
         You might need to restart tabsets.
