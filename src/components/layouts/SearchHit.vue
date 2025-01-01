@@ -140,7 +140,6 @@ const tabsetBadges = (hit: Hit): object[] => {
 const openTabset = (tabsetId: string, encodedUrl: string | undefined = undefined) => {
   selectTabset(tabsetId)
   let navigateTo = ''
-  // @ts-ignore
   if (!inBexMode() || !chrome.sidePanel) {
     navigateTo = '/tabsets/' + tabsetId
   } else {
@@ -153,16 +152,16 @@ const openTabset = (tabsetId: string, encodedUrl: string | undefined = undefined
 }
 
 const openBookmark = (badge: any) => {
-  console.log('badge', badge, props.inSidePanel)
+  console.log('badge', badge)
   // BookmarksService.expandTreeForBookmarkId(badge.bookmarkId)
-  //     .then(parentId => {
-  //       if (props.inSidePanel) {
-  //         const url = chrome.runtime.getURL("www/index.html#/mainpanel/bookmarks/" + parentId + "?highlight=" + badge.bookmarkId)
-  //         NavigationService.openOrCreateTab([url])
-  //       } else {
-  //         router.push("/bookmarks/" + parentId + "?highlight=" + badge.bookmarkId)
-  //       }
-  //     })
+  //   .then(parentId => {
+  //     if (props.inSidePanel) {
+  //       const url = chrome.runtime.getURL("www/index.html#/mainpanel/bookmarks/" + parentId + "?highlight=" + badge.bookmarkId)
+  //       NavigationService.openOrCreateTab([url])
+  //     } else {
+  //       router.push("/bookmarks/" + parentId + "?highlight=" + badge.bookmarkId)
+  //     }
+  //   })
 }
 
 const getFaviconUrl = (hitId: string, url: string, favIconUrl: string | undefined) => {
@@ -204,8 +203,8 @@ const open = (hit: Hit) => {
       const tabset = useTabsetsStore().getTabset(tabsetId!)
       const spaceId = tabset && tabset.spaces.length > 0 ? tabset.spaces[0] : undefined
       console.log('selecting tabset/space', tabsetId, spaceId)
-      useCommandExecutor().execute(new SelectTabsetCommand(tabsetId!, spaceId))
       useSpacesStore().setSpace(spaceId)
+      useCommandExecutor().execute(new SelectTabsetCommand(tabsetId!))
     } else {
       useCommandExecutor().execute(new SelectTabsetCommand(tabsetId!))
     }

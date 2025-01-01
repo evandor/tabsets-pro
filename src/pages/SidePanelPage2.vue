@@ -45,15 +45,16 @@
 
 <script lang="ts" setup>
 import _ from 'lodash'
-import FirstToolbarHelper2 from 'pages/sidepanel/helper/FirstToolbarHelper2.vue'
-import StartingHint from 'pages/widgets/StartingHint.vue'
 import { LocalStorage } from 'quasar'
 import AppService from 'src/app/AppService'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import OfflineInfo from 'src/core/components/helper/offlineInfo.vue'
 import { useUtils } from 'src/core/services/Utils'
 import Analytics from 'src/core/utils/google-analytics'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import SidePanelNotesView from 'src/notes/views/sidepanel/SidePanelNotesView.vue'
+import FirstToolbarHelper2 from 'src/pages/sidepanel/helper/FirstToolbarHelper2.vue'
+import StartingHint from 'src/pages/widgets/StartingHint.vue'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import SidePanelPageTabList from 'src/tabsets/layouts/SidePanelPageTabList.vue'

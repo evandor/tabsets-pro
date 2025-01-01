@@ -345,11 +345,12 @@
 </template>
 
 <script lang="ts" setup>
-import { STRIP_CHARS_IN_USER_INPUT } from 'boot/constants'
 import { formatDistance } from 'date-fns'
 import _ from 'lodash'
+import TabDetailsSearchIndex from 'pages/sidepanel/helper/TabDetailsSearchIndex.vue'
 import { useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import { STRIP_CHARS_IN_USER_INPUT } from 'src/boot/constants'
 import { TabReferenceType } from 'src/content/models/TabReference'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { useNotificationHandler } from 'src/core/services/ErrorHandler'

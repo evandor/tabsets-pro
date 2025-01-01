@@ -20,7 +20,6 @@ const location = ref('')
 useMeta(() => {
   //console.debug("using meta...")
   return {
-    // @ts-ignore
     title: 'Tabsets Extension...', //+ appVersion
   }
 })

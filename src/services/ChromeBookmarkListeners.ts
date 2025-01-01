@@ -51,7 +51,6 @@ class ChromeBookmarkListeners {
     this.inProgress = true
   }
 
-  // @ts-ignore
   onCreated(bm: chrome.bookmarks.BookmarkTreeNode) {
     if (!this.inProgress) {
       this.eventTriggered()

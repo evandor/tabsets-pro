@@ -289,7 +289,6 @@ const appVersion = import.meta.env.PACKAGE_VERSION
 
 useMeta(() => {
   return {
-    // @ts-ignore
     title: 'Tabsets Extension', //+ appVersion
   }
 })

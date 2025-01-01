@@ -2507,7 +2507,7 @@
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-3.0.3.tgz#acaab0f919ce69cce629c2d4ed2eb4adc1b6c20c"
   integrity sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==
 
-"@typescript-eslint/eslint-plugin@8.18.2", "@typescript-eslint/eslint-plugin@^8.15.0":
+"@typescript-eslint/eslint-plugin@8.18.2":
   version "8.18.2"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-8.18.2.tgz#c78e363ab5fe3b21dd1c90d8be9581534417f78e"
   integrity sha512-adig4SzPLjeQ0Tm+jvsozSGiCliI2ajeURDGHjZ2llnA+A67HihCQ+a3amtPhUakd1GlwHxSRvzOZktbEvhPPg==
@@ -2758,13 +2758,12 @@
     eslint-plugin-prettier "^5.2.1"
 
 "@vue/eslint-config-typescript@^14.1.4":
-  version "14.1.4"
-  resolved "https://registry.yarnpkg.com/@vue/eslint-config-typescript/-/eslint-config-typescript-14.1.4.tgz#82df2e3ab79ae09a904687db7bbdef6f89ebe858"
-  integrity sha512-NcG1adLFde+t+TCaXlL38PHuZlBEuwDahgrPVyB052m9QeHOswVIAplMD2cXgH8vXieAVNF1+mXvyilpIO3+kg==
+  version "14.2.0"
+  resolved "https://registry.yarnpkg.com/@vue/eslint-config-typescript/-/eslint-config-typescript-14.2.0.tgz#75375eec2a153fbc41d3a9993de68e0d3123b72d"
+  integrity sha512-JJ4wHuTJa2faQsBOUeWzuHOSFizVS7RWG2eH2noABk2LcT4wVcTOMZKM/lFobKBcgwADIPAKVRGFHVKooXImoA==
   dependencies:
-    "@typescript-eslint/eslint-plugin" "^8.15.0"
     fast-glob "^3.3.2"
-    typescript-eslint "^8.15.0"
+    typescript-eslint "^8.18.1"
     vue-eslint-parser "^9.4.3"
 
 "@vue/language-core@2.2.0":
@@ -8557,7 +8556,7 @@ typed-array-length@^1.0.7:
     possible-typed-array-names "^1.0.0"
     reflect.getprototypeof "^1.0.6"
 
-typescript-eslint@^8.15.0:
+typescript-eslint@^8.18.1:
   version "8.18.2"
   resolved "https://registry.yarnpkg.com/typescript-eslint/-/typescript-eslint-8.18.2.tgz#71334dcf843adc3fbb771dce5ade7876aa0d62b7"
   integrity sha512-KuXezG6jHkvC3MvizeXgupZzaG5wjhU3yE8E7e6viOvAvD9xAWYp8/vy0WULTGe9DYDWcQu7aW03YIV3mSitrQ==
