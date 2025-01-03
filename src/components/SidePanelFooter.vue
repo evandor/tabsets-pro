@@ -227,9 +227,7 @@
           flat
           :size="getButtonSize()"
           @click="openExtensionTab()">
-          <q-tooltip class="tooltip_small" anchor="top left" self="bottom left"
-            >Tabsets as full-page app</q-tooltip
-          >
+          <q-tooltip class="tooltip_small" anchor="top left" self="bottom left">Tabsets as full-page app</q-tooltip>
         </q-btn>
 
         <span class="q-my-xs q-ml-xs q-mr-none cursor-pointer" v-if="authStore.isAuthenticated()">
@@ -257,9 +255,7 @@
               <!--                <q-item-section @click="subscribe()">Subscribe</q-item-section>-->
               <!--              </q-item>-->
               <q-item clickable v-close-popup>
-                <q-item-section class="ellipsis" @click="logout()"
-                  >Logout {{ authStore.user?.email }}</q-item-section
-                >
+                <q-item-section class="ellipsis" @click="logout()">Logout {{ authStore.user?.email }}</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
@@ -278,6 +274,7 @@
     </div>
   </q-footer>
 </template>
+
 <script setup lang="ts">
 import SidePanelFooterLeftButtons from 'components/helper/SidePanelFooterLeftButtons.vue'
 import SidePanelStatsMarkupTable from 'components/helper/SidePanelStatsMarkupTable.vue'
@@ -687,13 +684,11 @@ const additionalActionWasClicked = (event: any) => {
   }
 }
 
-const offsetBottom = () =>
-  $q.platform.is.capacitor || $q.platform.is.cordova ? 'margin-bottom:20px;' : ''
-const gotoStripe = () => openURL('https://billing.stripe.com/p/login/test_5kA9EHf2Da596HuaEE')
+const offsetBottom = () => ($q.platform.is.capacitor || $q.platform.is.cordova ? 'margin-bottom:20px;' : '')
+const gotoStripe = () => openURL(process.env.STRIPE_CUSTOMER_PORTAL!)
 // const openPwaUrl = () => NavigationService.openOrCreateTab([process.env.TABSETS_PWA_URL || 'https://www.skysail.io'])
 const showLoginBtn = () => true
-const showSettingsButton = () =>
-  route?.path !== '/sidepanel/welcome' || useAuthStore().isAuthenticated()
+const showSettingsButton = () => route?.path !== '/sidepanel/welcome' || useAuthStore().isAuthenticated()
 
 const drop = (evt: any) => {
   evt.preventDefault()

@@ -5,15 +5,13 @@
         v-close-popup
         @was-clicked="createSubfolder(tabset, folder)"
         icon="o_folder"
-        label="Create Subfolder"
-      />
+        label="Create Subfolder" />
 
       <ContextMenuItem
         v-close-popup
         @was-clicked="renameSubfolder(tabset, folder)"
         icon="o_edit"
-        label="Rename Subfolder"
-      />
+        label="Rename Subfolder" />
 
       <q-separator inset />
 
@@ -22,8 +20,7 @@
         @was-clicked="deleteSubfolder(tabset, folder)"
         color="negative"
         icon="o_delete"
-        label="Delete Folder"
-      />
+        label="Delete Folder" />
     </q-list>
   </q-menu>
 </template>

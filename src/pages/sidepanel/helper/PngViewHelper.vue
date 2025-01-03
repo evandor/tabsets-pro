@@ -21,10 +21,6 @@ const props = defineProps({
 })
 
 const openMhtml = () =>
-  window.open(
-    chrome.runtime.getURL(
-      `www/index.html#/mainpanel/${props.extension}/${props.tabId}/${props.pngId}`,
-    ),
-  )
+  window.open(chrome.runtime.getURL(`www/index.html#/mainpanel/${props.extension}/${props.tabId}/${props.pngId}`))
 const deletePdf = () => useSnapshotsService().deleteBlob(props.tabId, props.pngId)
 </script>

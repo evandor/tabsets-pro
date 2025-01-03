@@ -37,21 +37,14 @@ class AppService {
   router: Router = null as unknown as Router
   initialized = false
 
-  async init(
-    quasar: any,
-    router: Router,
-    forceRestart = false,
-    user: User | undefined = undefined,
-  ) {
+  async init(quasar: any, router: Router, forceRestart = false, user: User | undefined = undefined) {
     console.log(
       `%cinitializing AppService: first start=${!this.initialized}, forceRestart=${forceRestart}, quasar set=${quasar !== undefined}, router set=${router !== undefined}`,
       forceRestart ? 'font-weight:bold' : '',
     )
 
     if (this.initialized && !forceRestart) {
-      console.debug(
-        'stopping AppService initialization; already initialized and not forcing restart',
-      )
+      console.debug('stopping AppService initialization; already initialized and not forcing restart')
       return Promise.resolve()
     }
 
@@ -133,6 +126,8 @@ class AppService {
         tsIframe.location.href = baseLocation + '?' + ar
         //tsIframe.location.href = "https://www.skysail.io"
         tsIframe.location.reload()
+      } else {
+        window.location.reload()
       }
     }
     useAuthStore().setAuthRequest(null as unknown as string)

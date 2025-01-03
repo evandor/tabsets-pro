@@ -10,8 +10,7 @@
           :treeLine="false"
           :tree-line-offset="0"
           :defaultOpen="true"
-          :indent="25"
-        >
+          :indent="25">
           <template #default="{ node, stat }">
             <!-- v-if="stat.children.length"-->
             <OpenIcon :open="stat.open" @click.native="stat.open = !stat.open" />
@@ -22,14 +21,12 @@
                 v-if="node.level == 0 && node.type !== TabsetType.SESSION"
                 name="o_tab"
                 color="primary"
-                class="q-mx-sm"
-              />
+                class="q-mx-sm" />
               <q-icon
                 v-else-if="node.level == 0 && node.type === TabsetType.SESSION"
                 name="sym_o_new_window"
                 color="secondary"
-                class="q-mx-sm"
-              />
+                class="q-mx-sm" />
               <q-icon v-else name="o_folder" color="warning" class="q-mx-sm" />
               {{ node.text }}
             </span>
@@ -131,10 +128,7 @@ const ondrop2 = (evt: any) => {
       const draggedTabset: Tabset | undefined = useTabsetsStore().getTabset(dragged.tsId)
       const draggedToTabset: Tabset | undefined = useTabsetsStore().getTabset(draggedTo.tsId)
       if (draggedTabset && draggedToTabset) {
-        const beingDraggedFolder: Tabset | undefined = useTabsetsStore().getActiveFolder(
-          draggedTabset,
-          dragged.id,
-        )
+        const beingDraggedFolder: Tabset | undefined = useTabsetsStore().getActiveFolder(draggedTabset, dragged.id)
         const beingDraggedToFolder: Tabset | undefined = useTabsetsStore().getActiveFolder(
           draggedToTabset,
           draggedTo.id,
@@ -148,19 +142,14 @@ const ondrop2 = (evt: any) => {
           beingDraggedFolder.folderParent = beingDraggedToFolder.id
           beingDraggedToFolder.folders.push(beingDraggedFolder)
           useTabsetsStore().saveTabset(draggedToTabset)
-          useCommandExecutor().execute(
-            new DeleteTabsetFolderCommand(draggedTabset, beingDraggedFolder),
-          )
+          useCommandExecutor().execute(new DeleteTabsetFolderCommand(draggedTabset, beingDraggedFolder))
         }
       }
     } else if (dragged.id === dragged.tsId && draggedTo.id !== draggedTo.tsId) {
       const draggedTs: Tabset | undefined = useTabsetsStore().getTabset(dragged.id)
       const draggedToTabset: Tabset | undefined = useTabsetsStore().getTabset(draggedTo.tsId)
       if (draggedTs && draggedToTabset) {
-        const draggedToFolder: Tabset | undefined = useTabsetsStore().getActiveFolder(
-          draggedToTabset,
-          draggedTo.id,
-        )
+        const draggedToFolder: Tabset | undefined = useTabsetsStore().getActiveFolder(draggedToTabset, draggedTo.id)
         if (draggedToFolder) {
           draggedTs.folderActive = undefined
           draggedTs.folderParent = draggedToFolder.id
@@ -179,10 +168,7 @@ const ondrop2 = (evt: any) => {
       const tabset: Tabset | undefined = useTabsetsStore().getTabset(dragged.tsId)
       console.log('got tabset', tabset)
       if (tabset) {
-        const beingDraggedTs: Tabset | undefined = useTabsetsStore().getActiveFolder(
-          tabset,
-          dragged.id,
-        )
+        const beingDraggedTs: Tabset | undefined = useTabsetsStore().getActiveFolder(tabset, dragged.id)
         console.log('beingDraggedTs', beingDraggedTs)
         if (beingDraggedTs) {
           beingDraggedTs.folderActive = undefined
@@ -253,9 +239,7 @@ watchEffect(async () => {
           }
         }
         return (
-          ts.status !== TabsetStatus.DELETED &&
-          ts.status !== TabsetStatus.HIDDEN &&
-          ts.status !== TabsetStatus.ARCHIVED
+          ts.status !== TabsetStatus.DELETED && ts.status !== TabsetStatus.HIDDEN && ts.status !== TabsetStatus.ARCHIVED
         )
       }),
       getTabsetOrder,

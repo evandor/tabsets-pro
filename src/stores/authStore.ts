@@ -1,4 +1,9 @@
-import { CURRENT_USER_ID } from 'boot/constants'
+import {
+  CURRENT_USER_ID,
+  SPACES_LIMIT_NO_SUBSCRIPTION,
+  TABS_LIMIT_NO_SUBSCRIPTION,
+  TABSETS_LIMIT_NO_SUBSCRIPTION,
+} from 'boot/constants'
 import { getAuth, signOut, User } from 'firebase/auth'
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
 import { sha256 } from 'js-sha256'
@@ -6,20 +11,12 @@ import { defineStore } from 'pinia'
 import { LocalStorage } from 'quasar'
 import { Account, UserData } from 'src/models/Account'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
-import PersistenceService from 'src/services/PersistenceService'
 import { useSettingsStore } from 'stores/settingsStore'
 import { computed, ref } from 'vue'
 
-export enum AccessItem {
-  TABSETS = 'TABSETS',
-  SYNC = 'SYNC',
-  SHARE = 'SHARE',
-  FEATURE_TOGGLES = 'FEATURE_TOGGLES',
-}
+export type AccessItem = 'TABS' | 'TABSETS' | 'SPACES' | 'SYNC' | 'SHARE' | 'FEATURE_TOGGLES'
 
 export const useAuthStore = defineStore('auth', () => {
-  let storage = null as unknown as PersistenceService
-
   const authenticated = ref(false)
   const user = ref<User>(null as unknown as User)
   const roles = ref<string[]>([])
@@ -30,22 +27,22 @@ export const useAuthStore = defineStore('auth', () => {
   const avatar = ref('https://www.gravatar.com/avatar/unknown')
 
   // --- init ---
-  async function initialize(ps: PersistenceService) {
-    console.debug(' ...initializing AuthStore')
-    storage = ps
-
-    //check stored user info
-    const userId = LocalStorage.getItem(CURRENT_USER_ID) as string
-    if (userId) {
-      try {
-        console.log('getting account info for user', userId)
-        const a: Account = await storage.getAccount(userId)
-        account.value = a
-      } catch (err) {
-        console.warn('could not get account:', err)
-      }
-    }
-  }
+  // async function initialize(ps: PersistenceService) {
+  //   console.debug(' ...initializing AuthStore')
+  //   storage = ps
+  //
+  //   //check stored user info
+  //   const userId = LocalStorage.getItem(CURRENT_USER_ID) as string
+  //   if (userId) {
+  //     try {
+  //       console.log('getting account info for user', userId)
+  //       const a: Account = await storage.getAccount(userId)
+  //       account.value = a
+  //     } catch (err) {
+  //       console.warn('could not get account:', err)
+  //     }
+  //   }
+  // }
 
   // --- getters ---
   const isAuthenticated = computed(() => {
@@ -66,6 +63,10 @@ export const useAuthStore = defineStore('auth', () => {
     return (): Account | undefined => account.value
   })
 
+  const getRoles = computed(() => {
+    return (): string[] => roles.value
+  })
+
   const getAccessTokenSilently = computed(async () => {
     if (process.env.MODE === 'electron') {
       // @ts-ignore
@@ -82,36 +83,55 @@ export const useAuthStore = defineStore('auth', () => {
     return val
   })
 
-  const limitExceeded = computed(() => {
-    function hasRole(role: string) {
-      return roles.value.indexOf(role) >= 0
-    }
-
-    return (item: AccessItem, count: number): boolean => {
-      const localMode = useSettingsStore().isEnabled('localMode')
-      if (localMode) {
-        return false
+  const limitExceeded = computed(
+    (): ((item: AccessItem, count: number) => { exceeded: boolean; limit: number | undefined }) => {
+      function hasRole(role: string) {
+        console.log('all roles', roles.value)
+        return roles.value.indexOf(role) >= 0
       }
 
-      switch (item) {
-        case AccessItem.TABSETS:
-          if (hasRole('bibbly.team')) {
-            return count >= 50
-          } else if (hasRole('bibbly.user')) {
-            return count >= 10
-          } else {
-            return count >= 5
-          }
-        default:
-          return false
+      return (item: AccessItem, count: number): { exceeded: boolean; limit: number | undefined } => {
+        const localMode = useSettingsStore().isEnabled('localMode')
+        if (localMode) {
+          return { exceeded: false, limit: undefined }
+        }
+
+        switch (item) {
+          case 'TABS':
+            if (hasRole('bibbly.team')) {
+              return { exceeded: count >= 50, limit: 50 }
+            } else if (hasRole('bibbly.user')) {
+              return { exceeded: count >= 10, limit: 10 }
+            } else {
+              return { exceeded: count >= TABS_LIMIT_NO_SUBSCRIPTION, limit: TABS_LIMIT_NO_SUBSCRIPTION }
+            }
+          case 'TABSETS':
+            if (hasRole('bibbly.team')) {
+              return { exceeded: count >= 50, limit: 50 }
+            } else if (hasRole('bibbly.user')) {
+              return { exceeded: count >= 10, limit: 10 }
+            } else {
+              return { exceeded: count >= TABSETS_LIMIT_NO_SUBSCRIPTION, limit: TABSETS_LIMIT_NO_SUBSCRIPTION }
+            }
+          case 'SPACES':
+            if (hasRole('bibbly.team')) {
+              return { exceeded: count >= 50, limit: 50 }
+            } else if (hasRole('bibbly.user')) {
+              return { exceeded: count >= 10, limit: 10 }
+            } else {
+              return { exceeded: count >= SPACES_LIMIT_NO_SUBSCRIPTION, limit: SPACES_LIMIT_NO_SUBSCRIPTION }
+            }
+          default:
+            return { exceeded: false, limit: undefined }
+        }
       }
-    }
-  })
+    },
+  )
 
   async function getCustomClaimRoles(): Promise<string[]> {
     await FirebaseServices.getAuth().currentUser!.getIdToken(true)
     const decodedToken = await FirebaseServices.getAuth().currentUser!.getIdTokenResult()
-    //console.log("decodedToken", decodedToken)
+    //console.log('decodedToken', decodedToken)
     return (decodedToken.claims.stripeRole as string[]) || []
   }
 
@@ -124,12 +144,12 @@ export const useAuthStore = defineStore('auth', () => {
       }
       //console.log("checking against account", account.value)
       switch (item) {
-        case AccessItem.SYNC:
+        case 'SYNC':
           // return products.value.indexOf("prod_PLJipUG1Zfw7pC") >= 0
           return account.value ? account.value.products.indexOf('skysailSync') >= 0 : false
-        case AccessItem.SHARE:
+        case 'SHARE':
           return account.value !== undefined
-        case AccessItem.FEATURE_TOGGLES:
+        case 'FEATURE_TOGGLES':
           return true
         default:
           return false
@@ -152,9 +172,7 @@ export const useAuthStore = defineStore('auth', () => {
       const userData = userDoc.data() as UserData
       const account = new Account(u.uid, userData)
       console.debug('created account object', account)
-      const querySnapshot = await getDocs(
-        collection(FirebaseServices.getFirestore(), 'users', u.uid, 'subscriptions'),
-      )
+      const querySnapshot = await getDocs(collection(FirebaseServices.getFirestore(), 'users', u.uid, 'subscriptions'))
       const products = new Set<string>()
       querySnapshot.forEach((doc) => {
         const subscriptionData = doc.data()
@@ -208,7 +226,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return {
-    initialize,
     isAuthenticated,
     getUsername,
     getAccessTokenSilently,
@@ -217,8 +234,8 @@ export const useAuthStore = defineStore('auth', () => {
     setUser,
     logout,
     user,
-    upsertAccount,
     getAccount,
+    getRoles,
     setProducts,
     userMayAccess,
     limitExceeded,

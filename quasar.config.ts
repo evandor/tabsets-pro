@@ -4,12 +4,9 @@
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from '#q-app/wrappers'
 import 'dotenv/config.js'
-// import version from 'vite-plugin-package-version'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
-
-const version = require('./package.json').version
-console.log('version', version)
+import version from 'vite-plugin-package-version'
 
 export default defineConfig((ctx) => {
   return {
@@ -19,7 +16,7 @@ export default defineConfig((ctx) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios'],
+    boot: ['i18n', 'axios', 'errorhandling', 'constants'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
@@ -67,14 +64,14 @@ export default defineConfig((ctx) => {
       // analyze: true,
       env: {
         BUILD_TIMESTAMP: new Date().toISOString().split('T')[0],
-        // BACKEND_URL: process.env.BACKEND_URL,
-        //
-        // TABSETS_PWA_URL: process.env.TABSETS_PWA_URL,
-        TABSETS_STAGE: process.env.STAGE,
+        //BACKEND_URL: process.env.BACKEND_URL,
         HOST: process.env.HOST,
-        VERSION: version,
-        // LOCALE: process.env.LOCALE,
-        // SENTRY_DSN: process.env.SENTRY_DSN
+
+        //TABSETS_PWA_URL: process.env.TABSETS_PWA_URL,
+        TABSETS_STAGE: process.env.STAGE,
+        LOCALE: process.env.LOCALE,
+        SENTRY_DSN: process.env.SENTRY_DSN,
+        STRIPE_CUSTOMER_PORTAL: process.env.STRIPE_CUSTOMER_PORTAL,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -121,7 +118,7 @@ export default defineConfig((ctx) => {
           { server: false },
         ],
         nodePolyfills(), // as of https://stackoverflow.com/questions/76431747/module-has-been-externalized-for-browser-compatibility-error-in-vite-build
-        // version(), having issues right now
+        version(),
         [
           sentryVitePlugin,
           {

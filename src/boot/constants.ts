@@ -23,20 +23,8 @@ const SUBSCRIPTION_ID_IDENT = 'subscription.id'
 const SHARING_AUTHOR_IDENT = 'sharing.author'
 const SHARING_AVATAR_IDENT = 'sharing.avatar'
 
-const SYNC_TYPE = 'sync.type'
-
-const SYNC_GITHUB_TOKEN = 'sync.github.token'
-
-const SYNC_COUCHDB_USERNAME = 'sync.couchdb.username'
-const SYNC_COUCHDB_PASSWORD = 'sync.couchdb.password'
-const SYNC_COUCHDB_URL = 'sync.couchdb.url'
-
-const EMAIL_LINK_REDIRECT_DOMAIN = 'https://tabsets.web.app'
-
 const CURRENT_USER_ID = 'current.user.id'
 const CURRENT_USER_EMAIL = 'current.user.email'
-
-const UI_WINDOWS_ITEMS_PER_PAGE = 'ui.windows.itemsPerPage'
 
 const GITHUB_USERNAME = 'github.username'
 const GITHUB_REPONAME = 'github.reponame'
@@ -44,6 +32,10 @@ const GITHUB_TOKEN = 'github.token'
 const GITHUB_AUTO_BACKUP = 'github.autobackup'
 const GITHUB_LOG = 'github.log'
 const GITHUB_PATH = 'github.path'
+
+const SPACES_LIMIT_NO_SUBSCRIPTION = 2
+const TABS_LIMIT_NO_SUBSCRIPTION = 100
+const TABSETS_LIMIT_NO_SUBSCRIPTION = 5
 
 export default boot(({}) => {})
 
@@ -59,20 +51,16 @@ export {
   SHARING_AUTHOR_IDENT,
   SHARING_AVATAR_IDENT,
   APP_INSTALLATION_ID,
-  SYNC_TYPE,
-  SYNC_GITHUB_TOKEN,
-  SYNC_COUCHDB_USERNAME,
-  SYNC_COUCHDB_PASSWORD,
-  SYNC_COUCHDB_URL,
   TITLE_IDENT,
-  EMAIL_LINK_REDIRECT_DOMAIN,
   CURRENT_USER_ID,
   CURRENT_USER_EMAIL,
-  UI_WINDOWS_ITEMS_PER_PAGE,
   GITHUB_USERNAME,
   GITHUB_REPONAME,
   GITHUB_TOKEN,
   GITHUB_AUTO_BACKUP,
   GITHUB_LOG,
   GITHUB_PATH,
+  SPACES_LIMIT_NO_SUBSCRIPTION,
+  TABSETS_LIMIT_NO_SUBSCRIPTION,
+  TABS_LIMIT_NO_SUBSCRIPTION,
 }

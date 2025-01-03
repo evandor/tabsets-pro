@@ -8,8 +8,7 @@
         class="q-ma-none"
         :list="tabsForColumn() as Array<IndexedTab>"
         :group="{ name: 'tabs', pull: 'clone' }"
-        @change="(event: any) => handleDragAndDrop(event, column)"
-      >
+        @change="(event: any) => handleDragAndDrop(event, column)">
         <SidePanelTabListHelper
           v-for="tab in tabsForColumn() as Array<IndexedTab>"
           :tab="tab.tab as Tab"
@@ -20,8 +19,7 @@
           :preventDragAndDrop="false"
           :tabset="props.tabset!"
           :show-tabsets="props.showTabsets"
-          :hide-menu="props.hideMenu"
-        />
+          :hide-menu="props.hideMenu" />
       </vue-draggable-next>
     </template>
 
@@ -36,8 +34,7 @@
         :preventDragAndDrop="true"
         :tabset="props.tabset!"
         :show-tabsets="props.showTabsets"
-        :hide-menu="props.hideMenu"
-      />
+        :hide-menu="props.hideMenu" />
     </template>
   </q-list>
 
@@ -97,8 +94,7 @@ const handleDragAndDrop = async (event: any, column: TabsetColumn) => {
     )
     const tabsInColumn = tabsForColumn()
     const movedElement: Tab = added.element.tab
-    const realNewIndex =
-      added.newIndex < tabsInColumn.length ? tabsInColumn[added.newIndex]!.index : 0
+    const realNewIndex = added.newIndex < tabsInColumn.length ? tabsInColumn[added.newIndex]!.index : 0
     console.log(`             '${added.element.tab.id}' ${added.oldIndex} -> ${realNewIndex}`)
     movedElement.columnId = column.id
     useTabsetService().saveCurrentTabset()

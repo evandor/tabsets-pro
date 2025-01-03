@@ -7,6 +7,7 @@
 .body--light .brightInBrightMode {
   background-color: white;
   color: black;
+  //font-size:3px;
 }
 
 .body--light .darkBlueInBrightMode {
@@ -146,6 +147,11 @@
 ::highlight(search-result-highlight) {
   background-color: yellow;
   color: black;
+}
+
+::highlight(yellow-highlight) {
+  color: orange;
+  text-decoration: underline;
 }
 
 // for notification (bottom) not to hide the panel footer

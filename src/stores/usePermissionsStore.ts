@@ -21,9 +21,7 @@ export const usePermissionsStore = defineStore('permissions', () => {
       // @ts-ignore
       permissions.value = await chrome.permissions.getAll()
       if (permissions.value) {
-        grantedOptionalPermissions.value = permissions.value.permissions
-          ? permissions.value.permissions
-          : []
+        grantedOptionalPermissions.value = permissions.value.permissions ? permissions.value.permissions : []
         grantedOptionalOrigins.value = permissions.value.origins ? permissions.value.origins : []
       }
     }
@@ -32,17 +30,13 @@ export const usePermissionsStore = defineStore('permissions', () => {
   const hasPermission = computed(() => {
     return (permission: string): boolean | undefined => {
       console.log('query for permission', permission, grantedOptionalPermissions.value)
-      return grantedOptionalPermissions.value
-        ? grantedOptionalPermissions.value.indexOf(permission) >= 0
-        : undefined
+      return grantedOptionalPermissions.value ? grantedOptionalPermissions.value.indexOf(permission) >= 0 : undefined
     }
   })
 
   const hasAllOrigins = computed(() => {
     return (): boolean | undefined => {
-      return grantedOptionalOrigins.value
-        ? grantedOptionalOrigins.value.indexOf('*://*/*') >= 0
-        : undefined
+      return grantedOptionalOrigins.value ? grantedOptionalOrigins.value.indexOf('*://*/*') >= 0 : undefined
     }
   })
 

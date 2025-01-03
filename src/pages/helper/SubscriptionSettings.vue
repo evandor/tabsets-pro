@@ -1,39 +1,33 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
-    <!--    <q-banner rounded  style="border: 1px solid orange">-->
-    <!--      <div class="text-body1">Experimental: Subscribe to Tabsets Pro Features.</div>-->
-    <!--      <div class="text-caption">-->
-    <!--        Some features need a subscription.<br><br>-->
-    <!--        <span class="text-red">This is not working yet. No fees will be charged.</span>-->
-    <!--      </div>-->
-    <!--      <div class="caption">-->
-    <!--        Pro Features will include-->
-    <!--        <ul>-->
-    <!--          <li>Managed Synchronization</li>-->
-    <!--          <li>todo...</li>-->
-    <!--        </ul>-->
-    <!--      </div>-->
-    <!--    </q-banner>-->
+  <info-message-widget v-if="exceededInfo" ident="0">
+    {{ exceededMessage() }}
+  </info-message-widget>
+
+  <div>
+    {{ account }}
+  </div>
+
+  <div>
+    {{ activeSubscriptions }}
   </div>
 
   <div class="q-pa-md q-mt-xl row items-start justify-center q-gutter-md">
-    <PricingCard>
-      <template v-slot:overline>Support Bibbly</template>
+    <PricingCard :active="roles.length === 0">
+      <template v-slot:overline>Support Tabsets</template>
       <template v-slot:title>Free</template>
       <template v-slot:price>0 &euro; <span class="text-body1">/month</span></template>
-      <template v-slot:teaser> Limited number of tabsets and links. </template>
+      <template v-slot:teaser> Limited number of tabsets and links.</template>
       <template v-slot:features>
-        <div class="text-subtitle2 q-mb-md">
-          <q-icon name="shim" class="q-mr-sm" />
-        </div>
         <PlanFeature
           :features="[
-            'share tabsets publicly',
-            'optional newsletter',
-            'feature request form',
-            'access to experimental features',
-          ]"
-        />
+            //'share tabsets publicly',
+            'max. ' + TABS_LIMIT_NO_SUBSCRIPTION + ' Tabs',
+            'max. ' + TABSETS_LIMIT_NO_SUBSCRIPTION + ' Tabsets',
+            'max. ' + SPACES_LIMIT_NO_SUBSCRIPTION + ' Spaces',
+            // 'optional newsletter',
+            // 'feature request form',
+            //'access to experimental features',
+          ]" />
       </template>
       <template v-slot:actions>
         <q-btn
@@ -41,52 +35,41 @@
           color="primary"
           class="cursor-pointer"
           style="width: 200px"
-          @click="router.push('/login')"
-        >
+          @click="router.push('/login')">
           Sign up for free
         </q-btn>
-        <q-btn v-else color="grey-5" disable style="width: 200px"> Already got it </q-btn>
+        <q-btn v-else color="grey-5" disable style="width: 200px"> Already got it</q-btn>
       </template>
     </PricingCard>
 
-    <PricingCard v-for="p in plans">
+    <PricingCard v-for="p in plans" :active="checkPlan(p)">
       <template v-slot:overline>Getting more serious</template>
-      <template v-slot:title>Bibbly User {{ p }}</template>
-      <template v-slot:price>0,99 &euro; <span class="text-body1">/month</span></template>
-      <template v-slot:teaser>
-        Synchronize your bibbly data across browsers and computers.
-      </template>
+      <template v-slot:title>{{ p['name'] }}</template>
+      <template v-slot:price>{{ priceFor(p) }} &euro; <span class="text-body1">/month</span></template>
+      <template v-slot:teaser> Synchronize your Tabsets data across browsers and computers.</template>
       <template v-slot:features>
-        <div class="text-subtitle2 q-mb-md">
-          <q-icon name="shim" class="q-mr-sm" />
-          As in 'Free', plus
-        </div>
-        <PlanFeature :features="['synchronized tabsets', 'PDF generation']" />
+        <PlanFeature
+          :features="
+            ['synchronized tabsets', 'share tabsets publicly', 'access to experimental features'].concat(
+              featureLimitsFor(p),
+            )
+          " />
       </template>
       <template v-slot:actions>
-        <q-btn
-          color="primary"
-          class="cursor-pointer"
-          style="width: 200px"
-          @click="openPaymentLink()"
-        >
-          Choose Bibbly User
-        </q-btn>
+        <template v-if="checkPlan(p)">
+          <q-btn color="primary" @click="openStripeCustomerPortal()">Manage Subscription</q-btn>
+          <div>{{ checkCancelled(p) }}</div>
+        </template>
+        <template v-else>
+          <q-btn color="primary" class="cursor-pointer" style="width: 200px" @click="openPaymentLink()">
+            Choose Tabsets User
+          </q-btn>
+        </template>
       </template>
     </PricingCard>
   </div>
 
   <div class="row items-baseline q-ma-md q-gutter-lg">
-    <!--    <div class="col-3">-->
-    <!--      Authorize to subscribe or check your subscriptions-->
-    <!--    </div>-->
-    <!--    <div class="col-5">-->
-    <!--      <q-btn label="GitHub" @click="authorizeWith(githubAuthProvider)"/>-->
-    <!--    </div>-->
-    <!--    <div class="col">-->
-    <!--      Authorized as: {{ userCredentials?.user.email || '-&#45;&#45;' }}-->
-    <!--    </div>-->
-
     <div class="col-3">Logged in as</div>
     <div class="col-7">
       {{ useAuthStore().user?.email || '---' }}
@@ -100,163 +83,97 @@
       </div>
       <div class="col"></div>
     </template>
-
-    <!--    <template v-if="!subscription">-->
-    <!--      <div class="col-3">-->
-    <!--        Subscribe (delete)-->
-    <!--      </div>-->
-    <!--      <div class="col-7">-->
-    <!--&lt;!&ndash;        <q-btn label="Subscribe" @click="subscribe()" :disable="!emailVerified" :class="emailVerified ? '':'text-grey-5'"/>&ndash;&gt;-->
-
-    <!--      </div>-->
-    <!--      <div class="col">{{ claims }}</div>-->
-    <!--      <div class="col-3"></div>-->
-    <!--      <div class="col-7 text-caption">-->
-    <!--        Click here to get redirected to the available plans.-->
-    <!--      </div>-->
-    <!--    </template>-->
-    <!--    <template v-else>-->
-    <!--      <div class="col-3">-->
-    <!--        Subscription (Git Synchronization)-->
-    <!--      </div>-->
-    <!--      <div class="col-7">-->
-    <!--        <q-btn label="Test Subscription" @click="testSubscription()"/>-->
-    <!--      </div>-->
-    <!--      <div class="col"></div>-->
-    <!--    </template>-->
-
-    <!--    <div class="col-3">-->
-    <!--      Subscription ID-->
-    <!--    </div>-->
-    <!--    <div class="col-7">-->
-    <!--      <q-input type="text" color="primary" filled v-model="subscription" label="" :disable="!emailVerified">-->
-    <!--        <template v-slot:prepend>-->
-    <!--          <q-icon name="o_shopping_bag"/>-->
-    <!--        </template>-->
-    <!--      </q-input>-->
-    <!--    </div>-->
-    <!--    <div class="col" v-if="subscription">-->
-    <!--      <a href="https://billing.stripe.com/p/login/6oE00CenQc3R5IQdQQ" target="_blank">Portal</a>-->
-    <!--    </div>-->
   </div>
 </template>
 
 <script lang="ts" setup>
-import { EMAIL_LINK_REDIRECT_DOMAIN } from 'boot/constants'
-import { addDoc, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore'
+import {
+  EMAIL_LINK_REDIRECT_DOMAIN,
+  SPACES_LIMIT_NO_SUBSCRIPTION,
+  TABS_LIMIT_NO_SUBSCRIPTION,
+  TABSETS_LIMIT_NO_SUBSCRIPTION,
+} from 'boot/constants'
+import InfoMessageWidget from 'components/widgets/InfoMessageWidget.vue'
+import { getAuth, sendEmailVerification } from 'firebase/auth'
+import { addDoc, collection, DocumentData, getDocs, onSnapshot, query, QuerySnapshot, where } from 'firebase/firestore'
 import PlanFeature from 'pages/helper/PlanFeature.vue'
 import PricingCard from 'pages/helper/PricingCard.vue'
+import { ExecutionResult } from 'src/core/domain/ExecutionResult'
+import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
+import { useNavigationService } from 'src/core/services/NavigationService'
+import { Account } from 'src/models/Account'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useAuthStore } from 'stores/authStore'
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, ref, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const emailVerified = ref(false)
 const plans = ref<any[]>([])
+const account = ref<Account | undefined>(undefined)
+const roles = ref<string[]>([])
+const exceededInfo = ref<{ exceeded: string; limit: number | undefined } | undefined>(undefined)
+const activeSubscriptions = ref<object[]>([])
+
+const { handleSuccess, handleError } = useNotificationHandler()
 
 const router = useRouter()
+const route = useRoute()
 
-onMounted(() => {
+onMounted(async () => {
   emailVerified.value = useAuthStore().user?.emailVerified || false
+  // await getSubscriptions()
+})
+
+watchEffect(async () => {
+  account.value = useAuthStore().getAccount()
+  roles.value = useAuthStore().getRoles()
 
   console.log('------>')
   plans.value = []
-  getDocs(
+  const productSnapshots: QuerySnapshot<DocumentData, DocumentData> = await getDocs(
     query(collection(FirebaseServices.getFirestore(), 'products'), where('active', '==', true)),
-  ).then((productSnapshots: any) => {
-    productSnapshots.forEach((doc: any) => {
-      console.log('***', doc.id, ' => ', doc.data())
-      const p: { [k: string]: any } = { name: doc.data().name, id: doc.id }
-      //const p = {name: doc.data().name, id: doc.id}
-      getDocs(
-        query(
-          collection(FirebaseServices.getFirestore(), 'products', doc.id, 'prices'),
-          where('active', '==', true),
-        ),
-      ).then((r: any) => {
-        const prices: object[] = []
-        r.forEach((d: any) => {
-          console.log('price', d.id, d.data())
-          prices.push({ priceId: d.id, price: d.data().unit_amount })
-        })
-        p.prices = prices
-      })
-
-      plans.value.push(p)
+  )
+  for (const doc of productSnapshots.docs) {
+    console.log('***', doc.id, ' => ', doc.data())
+    const p: { [k: string]: any } = { name: doc.data().name, id: doc.id, metadata: doc.data().metadata }
+    const r: any = await getDocs(
+      query(collection(FirebaseServices.getFirestore(), 'products', doc.id, 'prices'), where('active', '==', true)),
+    )
+    const prices: object[] = []
+    r.forEach((d: any) => {
+      console.log('price', d.id, d.data())
+      prices.push({ priceId: d.id, price: d.data().unit_amount })
     })
-  })
+    p.prices = prices
 
-  // db.collection('products')
-  //   .where('active', '==', true)
-  //   .get()
-  //   .then(function (querySnapshot:any) {
-  //     querySnapshot.forEach(async function (doc:any) {
-  //       console.log(doc.id, ' => ', doc.data());
-  //       const priceSnap = await doc.ref.collection('prices').get();
-  //       priceSnap.docs.forEach((doc:any) => {
-  //         console.log(doc.id, ' => ', doc.data());
-  //       });
-  //     });
-  //   });
+    plans.value.push(p)
+  }
+
+  if (route.query['exceeded'] && route.query['limit']) {
+    exceededInfo.value = {
+      exceeded: route.query['exceeded'] as string,
+      limit: route.query['limit'] ? Number(route.query['limit']) : undefined,
+    }
+  }
 })
 
-// watchEffect(() => {
-//   (subscription.value && subscription.value.trim().length > 0) ?
-//     LocalStorage.set(SUBSCRIPTION_ID_IDENT, subscription.value) :
-//     LocalStorage.remove(SUBSCRIPTION_ID_IDENT)
-// })
-
-// const subscribe = async () => openURL('https://shared.tabsets.net/#/settings?tab=subscription')
-//
-// const testSubscription = async () => {
-//   FirebaseCall.post("/stripe/test-subscription/tabsets", {})
-//     .then((res: any) => {
-//       console.log("res", res)
-//       window.location.href = res.data.url
-//     })
-// }
-
-// const authorizeWith = async (githubAuthProvider: any) => {
-//   const auth = FirebaseServices.getAuth()
-//   console.log("auth", auth)
-//   //createUserWithEmailAndPassword(auth, "email", "password")
-//   //const credentials: UserCredential = await signInWithPopup(auth, githubAuthProvider)
-//   const credentials: UserCredential = await signInWithCredential(auth, githubAuthProvider)
-//   //const credentials: UserCredential = await signInWithRedirect(auth, githubAuthProvider)
-//
-//   // const actionCodeSettings = {
-//   //   url: 'https://www.example.com/?email=user@example.com',
-//   //   iOS: {
-//   //     bundleId: 'com.example.ios'
-//   //   },
-//   //   android: {
-//   //     packageName: 'com.example.android',
-//   //     installApp: true,
-//   //     minimumVersion: '12'
-//   //   },
-//   //   handleCodeInApp: true
-//   // };
-//   // await sendSignInLinkToEmail(auth, 'evandor@gmail.com', actionCodeSettings);
-//
-//   //const credentials: UserCredential = await signInWithEmailLink(auth, "evandor@gmail.com")
-//   console.log("userCredentials", credentials)
-//   console.log("userCredentials", {...credentials.user})
-//   userCredentials.value = credentials
-//
-//   try {
-//     await setDoc(doc(FirebaseServices.getFirestore(), "users", credentials.user.uid), {
-//       uid: credentials.user.uid,
-//       email: credentials.user.email,
-//       name: credentials.user.displayName,
-//       provider: credentials.user.providerData[0].providerId,
-//       photoUrl: credentials.user.photoURL
-//     });
-//     //console.log("Document written with ID: ", docRef.id);
-//   } catch (e) {
-//     console.error("Error adding document: ", e);
-//   }
-//
-// }
+watchEffect(async () => {
+  activeSubscriptions.value = []
+  const t = await getDocs(
+    query(
+      collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'subscriptions'),
+      where('status', '==', 'active'),
+    ),
+  )
+  for (const doc of t.docs) {
+    activeSubscriptions.value.push({
+      cancel_at_period_end: doc.data()['cancel_at_period_end' as keyof object],
+      cancel_at: doc.data()['cancel_at' as keyof object],
+      // product: doc.data()['product' as keyof object],
+      role: doc.data()['role' as keyof object],
+    })
+  }
+})
 
 const verifyEmail = () => {
   const email = useAuthStore().user.email
@@ -265,22 +182,23 @@ const verifyEmail = () => {
     handleCodeInApp: true,
   }
   console.log('sending verification link to', email, actionCodeSettings)
+  const auth = getAuth()
+  sendEmailVerification(auth.currentUser!)
+    .then(() => {
+      handleSuccess(new ExecutionResult('', 'Email has been sent'), NotificationType.NOTIFY)
+    })
+    .catch((err: any) => handleError(err))
 }
 
 const openPaymentLink = async () => {
   //openURL(process.env.STRIPE_SYNC_PRODUCT_LINK + '?prefilled_email=' + (useAuthStore().user?.email || ''))
 
   const sessionRef = await addDoc(
-    collection(
-      FirebaseServices.getFirestore(),
-      'users',
-      useAuthStore().user.uid,
-      'checkout_sessions',
-    ),
+    collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'checkout_sessions'),
     {
       price: plans.value[0].prices[0].priceId, //'price_1PfKwdCRr6mfm8sfCLKbBtDu',
-      success_url: 'https://bibbly.me/', //window.location.origin,
-      cancel_url: 'https://bibbly.me/', //window.location.origin
+      success_url: 'https://Tabsets.me/', //window.location.origin,
+      cancel_url: 'https://Tabsets.me/', //window.location.origin
     },
   )
 
@@ -300,5 +218,50 @@ const openPaymentLink = async () => {
   //sessionRef.onSnapshot((snap:any) => {
 
   //});
+}
+
+const featureLimitsFor = (plan: object) => {
+  const limits: string[] = []
+  limits.push('max. ' + (plan['metadata' as keyof object]['tabsLimit'] as string) + ' Tabs')
+  limits.push('max. ' + (plan['metadata' as keyof object]['tabsetsLimit'] as string) + ' Tabsets')
+  limits.push('max. ' + (plan['metadata' as keyof object]['spacesLimit'] as string) + ' Spaces')
+  return limits
+}
+
+const priceFor = (plan: object) => {
+  return (plan['prices' as keyof object][0]['price'] / 100).toLocaleString()
+}
+
+const checkPlan = (plan: object) => {
+  //console.log('plan', plan)
+  const plansRole: string = plan['metadata' as keyof object]['firebaseRole' as keyof object] || '???'
+  return roles.value.indexOf(plansRole) >= 0
+}
+
+const checkCancelled = (plan: object) => {
+  console.log('plan', plan)
+  const plansRole: string = plan['metadata' as keyof object]['firebaseRole' as keyof object] || '???'
+  const cancelled = activeSubscriptions.value.find(
+    (s: object) => s['role' as keyof object] === plansRole && s['cancel_at_period_end' as keyof object],
+  )
+  console.log('cancelled', cancelled)
+  if (cancelled) {
+    return 'cancelled'
+  }
+  return ''
+}
+
+const exceededMessage = () => {
+  return (
+    'You have exceeded a limit for your account type. With your current subscription you are only allowed ' +
+    exceededInfo.value?.limit +
+    ' ' +
+    exceededInfo.value?.exceeded +
+    '. Consider removing some of your data or upgrade your subscription:'
+  )
+}
+
+const openStripeCustomerPortal = () => {
+  useNavigationService().browserTabFor(process.env.STRIPE_CUSTOMER_PORTAL!)
 }
 </script>

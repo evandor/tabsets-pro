@@ -23,16 +23,12 @@ addEventListener('unhandledrejection', async (event) => {
 })
 
 chrome.omnibox.onInputEntered.addListener((text) => {
-  const newURL = chrome.runtime.getURL(
-    '/www/index.html#/searchresult?t=' + encodeURIComponent(text),
-  )
+  const newURL = chrome.runtime.getURL('/www/index.html#/searchresult?t=' + encodeURIComponent(text))
   chrome.tabs.create({ url: newURL }).catch((err) => console.log('[BEX] background.js error', err))
 })
 
 if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
-  chrome.sidePanel
-    .setPanelBehavior({ openPanelOnActionClick: true })
-    .catch((error: any) => console.error(error))
+  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch((error: any) => console.error(error))
 }
 
 declare module '@quasar/app-vite' {

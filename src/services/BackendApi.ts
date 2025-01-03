@@ -13,12 +13,7 @@ export class BackendApi {
 
   createPng(html: string) {
     // return FirebaseCall.post("/screenshot", {"html": html}, "blob")
-    return FirebaseCall.post(
-      'http://carsten.evandor.de:5000/screenshot',
-      { html: html },
-      'blob',
-      true,
-    )
+    return FirebaseCall.post('http://carsten.evandor.de:5000/screenshot', { html: html }, 'blob', true)
   }
 }
 

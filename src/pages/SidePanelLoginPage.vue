@@ -1,17 +1,17 @@
 <template>
   <div class="q-ma-md text-h6">Tabsets Pro</div>
 
-  <form>
-    <div class="q-ma-md example-column-equal-width" style="border: 1px solid #bfbfbf">
-      <q-tabs v-model="tab" dense>
-        <q-tab name="login" label="Login" />
-        <q-tab name="register" label="Create Account" />
-      </q-tabs>
+  <div class="q-ma-md example-column-equal-width" style="border: 1px solid #bfbfbf">
+    <q-tabs v-model="tab" dense>
+      <q-tab name="login" label="Login" />
+      <q-tab name="register" label="Create Account" />
+    </q-tabs>
 
-      <q-separator />
+    <q-separator />
 
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="login">
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="login">
+        <form>
           <div class="col q-mt-sm">
             <div class="row">
               <div class="col-12">Your Email Address</div>
@@ -28,8 +28,7 @@
               dense
               tabindex="1"
               autofocus
-              autocomplete="on"
-            />
+              autocomplete="on" />
           </div>
 
           <div class="col q-mt-sm">
@@ -37,11 +36,8 @@
               <div class="col-6">Your password</div>
               <div
                 class="col-6 text-right"
-                :class="
-                  email && email.indexOf('@') > 0 ? 'text-blue-8 cursor-pointer' : 'text-blue-3'
-                "
-                @click="promptReset()"
-              >
+                :class="email && email.indexOf('@') > 0 ? 'text-blue-8 cursor-pointer' : 'text-blue-3'"
+                @click="promptReset()">
                 Forgot?
               </div>
             </div>
@@ -55,15 +51,13 @@
               v-model="password"
               :rules="[(val) => !!val || 'the password must not be empty']"
               dense
-              tabindex="2"
-            >
+              tabindex="2">
               <template v-slot:append>
                 <q-icon
                   v-if="password"
                   :name="isPwd ? 'visibility_off' : 'visibility'"
                   class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                />
+                  @click="isPwd = !isPwd" />
               </template>
             </q-input>
           </div>
@@ -76,20 +70,17 @@
               color="primary"
               :loading="password.length === 0 && loading"
               :disable="!email || !password"
-              @click="signin(false)"
-            />
+              @click="signin(false)" />
           </div>
 
           <div class="col q-mt-sm text-right">
-            <q-checkbox
-              :disable="email ? email.indexOf('@') < 0 : true"
-              label="Remember Me"
-              v-model="rememberMe"
-            />
+            <q-checkbox :disable="email ? email.indexOf('@') < 0 : true" label="Remember Me" v-model="rememberMe" />
           </div>
-        </q-tab-panel>
+        </form>
+      </q-tab-panel>
 
-        <q-tab-panel name="register">
+      <q-tab-panel name="register">
+        <form>
           <div class="col q-mt-sm">
             <div class="row">
               <div class="col-12">Your Email Address</div>
@@ -106,8 +97,7 @@
               dense
               tabindex="1"
               autofocus
-              autocomplete="on"
-            />
+              autocomplete="on" />
           </div>
 
           <div class="col q-mt-sm">
@@ -116,15 +106,7 @@
             </div>
           </div>
           <div class="col">
-            <q-input
-              id="password"
-              square
-              filled
-              type="password"
-              v-model="password"
-              dense
-              tabindex="2"
-            />
+            <q-input id="password" square filled type="password" v-model="password" dense tabindex="2" />
           </div>
 
           <div class="col q-mt-xl">
@@ -135,17 +117,14 @@
               color="primary"
               :loading="password.length === 0 && loading"
               :disable="!email || !password"
-              @click="signin(true)"
-            />
+              @click="signin(true)" />
           </div>
 
-          <div class="q-ma-sm text-body2">
-            By clicking on <em>Register</em> your comply with the Terms of service.
-          </div>
-        </q-tab-panel>
-      </q-tab-panels>
-    </div>
-  </form>
+          <div class="q-ma-sm text-body2">By clicking on <em>Register</em> your comply with the Terms of service.</div>
+        </form>
+      </q-tab-panel>
+    </q-tab-panels>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -220,11 +199,11 @@ const signin = async (registerMode: boolean) => {
     showResetPassword.value = true
     switch (errorCode) {
       case 'auth/invalid-credential':
-        handleError('Invalid Credentials or No Account', NotificationType.TOAST)
+        handleError('Invalid Credentials or No Account', NotificationType.NOTIFY)
         break
       default:
         console.error('error', error, typeof error, errorCode, errorMessage)
-        handleError(error, NotificationType.TOAST)
+        handleError(error, NotificationType.NOTIFY)
     }
     loading.value = false
   }

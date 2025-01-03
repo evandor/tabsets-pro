@@ -42,15 +42,11 @@ const auth = FirebaseServices.getAuth()
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    console.log('%conAuthStateChanged: about to log in', 'border:1px solid green')
+    console.log('%conAuthStateChanged: about to log in', 'border:1px solid green', user)
 
     try {
       await AppService.init($q, router, true, user)
       // info(`tabsets-pro started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
-      if (inBexMode()) {
-        // @ts-ignore
-        $q.bex.send('auth.user.login', { userId: user.uid })
-      }
       //FirebaseServices.startRealtimeDbListeners(user.uid)
     } catch (error: any) {
       console.log('%ccould not initialize appService due to ' + error, 'background-color:orangered')
@@ -61,15 +57,7 @@ onAuthStateChanged(auth, async (user) => {
   } else {
     // User is signed out
     console.log('%conAuthStateChanged: logged out', 'border:1px solid green')
-    // await AppService.init($q, router, true, undefined)
-    // if (inBexMode()) {
-    //   $q.bex.send('auth.user.logout', {})
-    // }
-    router.push('/sidepanel/login')
-    // if (!router.currentRoute.value.path.startsWith("/mainpanel")) {
-    //   console.log("NOT redirecting to '/'")
-    //   //await router.push("/")
-    // }
+    await router.push('/sidepanel/login')
   }
 })
 

@@ -5,9 +5,7 @@
         <q-toolbar-title>
           <div class="row justify-start items-baseline">
             <div>
-              <span class="text-dark"
-                >Search Results for '{{ searchStore.term }}': {{ tabsetHits.length }} hit(s)</span
-              >
+              <span class="text-dark">Search Results for '{{ searchStore.term }}': {{ tabsetHits.length }} hit(s)</span>
             </div>
             <!--              <div class="text-caption q-mb-md">Not happy with the search results? Try <span-->
             <!--                class="text-blue-9 cursor-pointer" @click="showReindexDialog = true"><u>re-indexing</u></span>.-->
@@ -32,8 +30,7 @@
   <InfoMessageWidget
     :probability="1"
     ident="searchPage_info"
-    hint="Please note that only pages you've visted with Tabsets already active are contained in the search index."
-  />
+    hint="Please note that only pages you've visted with Tabsets already active are contained in the search index." />
 
   <div class="row">
     <div class="col-8 q-ma-md">

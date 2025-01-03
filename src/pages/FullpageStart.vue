@@ -21,8 +21,7 @@ onMounted(() => {
 })
 
 $q.loading.show({
-  message:
-    'Initializing tabsets. The Fullpage View will deactivate the SidePanel for this tab. Please hang on...',
+  message: 'Initializing tabsets. The Fullpage View will deactivate the SidePanel for this tab. Please hang on...',
 })
 setTimeout(() => {
   chrome.tabs.getCurrent((t?: chrome.tabs.Tab) => {

@@ -15,8 +15,7 @@
       <InfoLine :label="t('keyboard_shortcuts')">
         <div
           class="text-accent cursor-pointer"
-          @click="NavigationService.openSingleTab('chrome://extensions/shortcuts')"
-        >
+          @click="NavigationService.openSingleTab('chrome://extensions/shortcuts')">
           {{ t('click_here') }}
         </div>
       </InfoLine>
@@ -31,8 +30,7 @@
           emit-value
           map-options
           options-dense
-          style="min-width: 150px"
-        />
+          style="min-width: 150px" />
       </div>
       <div class="col"></div>
 
@@ -47,8 +45,7 @@
           t('tab_info_detail_level', {
             detailLevelPerTabset: detailLevelPerTabset ? ' (Default)' : '',
           })
-        "
-      >
+        ">
         <q-radio v-model="detailLevel" :val="ListDetailLevel.MINIMAL" label="Minimal Details" />
         <q-radio v-model="detailLevel" :val="ListDetailLevel.SOME" label="Some Details" />
         <q-radio v-model="detailLevel" :val="ListDetailLevel.MAXIMAL" label="All Details" />
@@ -65,42 +62,27 @@
       <InfoLine label="Show Recent Tabsets list">
         <q-checkbox
           v-model="showRecentTabsetsList"
-          label="The last couple of tabsets you opened will be displayed for quick access"
-        />
+          label="The last couple of tabsets you opened will be displayed for quick access" />
       </InfoLine>
 
-      <InfoLine
-        label="Hide Indicator Icon"
-        v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-      >
-        <q-checkbox
-          v-model="hideIndicatorIcon"
-          label="Hide Icon on websites (upper right) when tracked by tabsets"
-        />
+      <InfoLine label="Hide Indicator Icon" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+        <q-checkbox v-model="hideIndicatorIcon" label="Hide Icon on websites (upper right) when tracked by tabsets" />
       </InfoLine>
 
-      <InfoLine
-        label="Switch off content script logging"
-        v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-      >
-        <q-checkbox
-          v-model="contentScriptLoggingOff"
-          label="No tabset related logging in content scripts"
-        />
+      <InfoLine label="Switch off content script logging" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+        <q-checkbox v-model="contentScriptLoggingOff" label="No tabset related logging in content scripts" />
       </InfoLine>
 
       <InfoLine label="Overlap Indicator">
         <q-checkbox
           v-model="overlapIndicator"
-          label="Display how similar the current tabset and your current tabs are"
-        />
+          label="Display how similar the current tabset and your current tabs are" />
       </InfoLine>
     </div>
 
     <div
       class="row items-baseline q-ma-md q-gutter-md"
-      v-if="useFeaturesStore().hasFeature(FeatureIdent.AUTO_TAB_SWITCHER)"
-    >
+      v-if="useFeaturesStore().hasFeature(FeatureIdent.AUTO_TAB_SWITCHER)">
       <div class="col-3">
         {{ t('tab_switching_time') }}
       </div>
@@ -112,8 +94,7 @@
           :options="autoSwitcherOptions"
           map-options
           emit-value
-          style="width: 250px"
-        />
+          style="width: 250px" />
       </div>
     </div>
 
@@ -132,8 +113,7 @@
 
     <div
       class="row items-baseline q-ma-md q-gutter-md"
-      v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD)"
-    >
+      v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD)">
       <div class="col-3">
         {{ t('warning_thresholds') }}
       </div>
@@ -160,8 +140,7 @@
           :max="100"
           :inner-min="10"
           :inner-max="100"
-          :step="10"
-        ></q-slider>
+          :step="10"></q-slider>
       </div>
     </div>
 
@@ -177,10 +156,7 @@
     <!--      </div>-->
     <!--    </div>-->
 
-    <div
-      class="row items-baseline q-ma-md q-gutter-md"
-      v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-    >
+    <div class="row items-baseline q-ma-md q-gutter-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
       <div class="col-3">New Suggestion Simulation</div>
       <div class="col-3">
         Simulate that there is a new suggestion to use a (new) feature (refresh sidebar for effects)
@@ -194,9 +170,7 @@
       <div class="col-3">Sidebar not opened?</div>
       <div class="col-3">CLick here to open the Side Panel</div>
       <div class="col q-ma-xl">
-        <span class="text-blue cursor-pointer" id="openSidePanelSpan" @click="openSidePanel()"
-          >Open Side Panel</span
-        >
+        <span class="text-blue cursor-pointer" id="openSidePanelSpan" @click="openSidePanel()">Open Side Panel</span>
       </div>
     </div>
   </div>
@@ -229,9 +203,7 @@ const settingsStore = useSettingsStore()
 const darkMode = ref<string>(LocalStorage.getItem('darkMode') || 'auto')
 const installationTitle = ref<string>((LocalStorage.getItem(TITLE_IDENT) as string) || 'My Tabsets')
 const detailLevelPerTabset = ref(LocalStorage.getItem('ui.detailsPerTabset') || false)
-const detailLevel = ref<ListDetailLevel>(
-  LocalStorage.getItem('ui.detailLevel') || ListDetailLevel.MAXIMAL,
-)
+const detailLevel = ref<ListDetailLevel>(LocalStorage.getItem('ui.detailLevel') || ListDetailLevel.MAXIMAL)
 const fontsize = ref<FontSize>(LocalStorage.getItem('ui.fontsize') || FontSize.DEFAULT)
 const fullUrls = ref(LocalStorage.getItem('ui.fullUrls') || false)
 const overlapIndicator = ref(LocalStorage.getItem('ui.overlapIndicator') || false)
@@ -344,12 +316,8 @@ watch(
   () => showRecentTabsetsList.value,
   (now: boolean, before: boolean) => {
     now
-      ? useCommandExecutor().execute(
-          new ActivateFeatureCommand(FeatureIdent.TABSET_LIST.toString()),
-        )
-      : useCommandExecutor().execute(
-          new DeactivateFeatureCommand(FeatureIdent.TABSET_LIST.toString()),
-        )
+      ? useCommandExecutor().execute(new ActivateFeatureCommand(FeatureIdent.TABSET_LIST.toString()))
+      : useCommandExecutor().execute(new DeactivateFeatureCommand(FeatureIdent.TABSET_LIST.toString()))
   },
 )
 

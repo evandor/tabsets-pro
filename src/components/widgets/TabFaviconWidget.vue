@@ -9,8 +9,7 @@
     :style="props.preventDragAndDrop ? '' : 'cursor: move'"
     :width="props.width"
     :height="props.height"
-    :src="getFaviconUrl(tab as Tab)"
-  >
+    :src="getFaviconUrl(tab as Tab)">
     <q-tooltip v-if="!props.preventDragAndDrop" class="tooltip">
       drag and drop to reorder in tabset
       {{ useSettingsStore().isEnabled('dev') ? 'Tab#: ' + tab.id : '' }}

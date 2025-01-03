@@ -6,9 +6,7 @@
           <div class="row">
             <div class="col-12 text-caption">The Art Of Linking</div>
           </div>
-          <div class="col-12 text-h6 q-mb-md">
-            {{ $t('welcome_to_tabsets') }} {{ stageIdentifier() }}
-          </div>
+          <div class="col-12 text-h6 q-mb-md">{{ $t('welcome_to_tabsets') }} {{ stageIdentifier() }}</div>
         </div>
 
         <div class="q-pa-sm q-mb-none row items-start q-gutter-md" @click.stop="selected()">
@@ -30,22 +28,19 @@
                 data-testid="newTabsetName"
                 @keydown.enter="addFirstTabset()"
                 hint="e.g. Music, Holidays, News..."
-                :label="$t('tabset_name')"
-              />
+                :label="$t('tabset_name')" />
             </q-card-section>
             <q-card-actions align="right" class="q-pr-md q-pb-xs q-ma-none q-mt-md">
               <DialogButton
                 :label="$t('add_tabset')"
                 @was-clicked="addFirstTabset"
-                :disable="tabsetName.trim().length === 0 || !newTabsetNameIsValid()"
-              />
+                :disable="tabsetName.trim().length === 0 || !newTabsetNameIsValid()" />
             </q-card-actions>
             <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none q-mt-none">
               <div
                 class="text-right q-ma-none q-pa-none text-accent cursor-pointer"
                 style="font-size: smaller"
-                @click="importFromBookmarks()"
-              >
+                @click="importFromBookmarks()">
                 or import from...
               </div>
             </q-card-actions>
@@ -130,14 +125,12 @@ const addFirstTabset = () => {
     })
 }
 
-const newTabsetNameIsValid = () =>
-  tabsetName.value.length <= 32 && !STRIP_CHARS_IN_USER_INPUT.test(tabsetName.value)
+const newTabsetNameIsValid = () => tabsetName.value.length <= 32 && !STRIP_CHARS_IN_USER_INPUT.test(tabsetName.value)
 
 //https://groups.google.com/a/chromium.org/g/chromium-extensions/c/nb058-YrrWc
 const selected = () => tabsetNameRef.value.focus()
 
-const stageIdentifier = () =>
-  process.env.TABSETS_STAGE !== 'PRD' ? ' (' + process.env.TABSETS_STAGE + ')' : ''
+const stageIdentifier = () => (process.env.TABSETS_STAGE !== 'PRD' ? ' (' + process.env.TABSETS_STAGE + ')' : '')
 
 const clicked = (url: string) => openURL(url)
 

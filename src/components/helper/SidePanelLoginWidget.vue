@@ -12,8 +12,7 @@
               label="Your email address"
               dense
               tabindex="1"
-              autofocus
-            />
+              autofocus />
           </div>
           <div class="col-5">
             <!--          <q-btn :label="(!email || email.length === 0) ? 'Sign in' : (password.length > 0 ? 'Sign in':'Send Link')"-->
@@ -23,21 +22,12 @@
               style="width: 110px"
               :loading="password.length === 0 && loading"
               :disable="mailSent"
-              @click="signin(false)"
-            />
+              @click="signin(false)" />
           </div>
         </div>
         <div class="row q-ma-xs">
           <div class="col-7">
-            <q-input
-              id="password"
-              outlined
-              type="password"
-              v-model="password"
-              label="Password"
-              dense
-              tabindex="2"
-            />
+            <q-input id="password" outlined type="password" v-model="password" label="Password" dense tabindex="2" />
           </div>
           <div class="col-5">
             <q-btn
@@ -46,8 +36,7 @@
               style="width: 110px"
               :loading="password.length > 0 && loading"
               :disable="mailSent || password.length === 0"
-              @click="signin(true)"
-            />
+              @click="signin(true)" />
           </div>
         </div>
         <div class="row q-ma-xs q-ml-none">
@@ -79,12 +68,7 @@
 
 <script lang="ts" setup>
 import { CURRENT_USER_EMAIL } from 'boot/constants'
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  signInWithEmailAndPassword,
-  UserCredential,
-} from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
 import { LocalStorage } from 'quasar'
 import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
 import NavigationService from 'src/services/NavigationService'

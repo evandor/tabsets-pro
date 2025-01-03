@@ -83,11 +83,6 @@ export class AppFeatures {
       ['bex'],
     ),
 
-    //  new Feature(FeatureIdent.SAVE_TAB_AS_PNG, FeatureType.EXPERIMENTAL,
-    //    'Save Tab as Image', 'You can save tabs as a PNG Image.<br>Creating an image will utilize an external server.',
-    //    'o_image', '', ['bex'], [], true),
-    // //   .setActivateCommands([new GrantPermissionCommand('pageCapture')]),
-
     new Feature(
       FeatureIdent.GROUP_BY_DOMAIN,
       FeatureType.OPTIONAL,
@@ -158,16 +153,6 @@ export class AppFeatures {
     ),
 
     new Feature(
-      FeatureIdent.IGNORE,
-      FeatureType.EXPERIMENTAL,
-      'Ignore Tabset',
-      'This is a list of urls you want to ignore. This can be normal urls or urls with placeholders to catch all google search results for example',
-      'o_pause_circle',
-      '',
-      ['bex'],
-    ),
-
-    new Feature(
       FeatureIdent.TAGS,
       FeatureType.OPTIONAL,
       'Use Tags for Tabs',
@@ -221,7 +206,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.STANDALONE_APP,
-      FeatureType.EXPERIMENTAL,
+      FeatureType.OPTIONAL,
       'Standalone App',
       'Tabsets as full-page application',
       'o_open_in_new',
@@ -240,28 +225,6 @@ export class AppFeatures {
     ),
     // .setActivateCommands([new GrantPermissionCommand('notifications')])
     // .setDeactivateCommands([ne0w RevokePermissionCommand('notifications')]),
-
-    // permissions notification
-    new Feature(
-      FeatureIdent.WEBSITE_CLIP,
-      FeatureType.EXPERIMENTAL,
-      'Create an image clip from a website and store it',
-      '',
-      'filter_center_focus',
-      '',
-      ['bex'],
-    ),
-    // .setActivateCommands([new GrantPermissionCommand('notifications')]),
-
-    new Feature(
-      FeatureIdent.STANDALONE_APP,
-      FeatureType.RECOMMENDED,
-      'Standalone App',
-      'Tabsets as full-page application',
-      'o_open_in_new',
-      '',
-      ['bex'],
-    ),
 
     new Feature(
       FeatureIdent.ANNOTATIONS,
@@ -340,16 +303,14 @@ export class AppFeatures {
     ),
 
     new Feature(
-      FeatureIdent.MONITORING,
+      FeatureIdent.WEBSITE_CLIP,
       FeatureType.EXPERIMENTAL,
-      'Monitor Website Changes',
-      'Check periodically for changes of a website<br><br>' +
-        'This feature is not reliable, as there are many reasons why a website might change (e.g. if it simply displays a date).' +
-        'But sometimes it can be helpful. Use at your own discretion.',
-      'o_change_circle',
-      'monitor.png',
+      'Website Clip',
+      'Create an image clip from a website and store it',
+      'filter_center_focus',
+      '',
       ['bex'],
-    ),
+    ).setActivateCommands([new GrantPermissionCommand('notifications')]),
 
     new Feature(
       FeatureIdent.TAB_HELPER,
@@ -364,16 +325,15 @@ export class AppFeatures {
     ),
 
     new Feature(
-      FeatureIdent.TABSETS_SHARING,
-      FeatureType.OPTIONAL,
-      'Sharing Tabsets',
-      'Share tabsets publicly.',
-      'o_ios_share',
+      FeatureIdent.DYNAMIC_TABSET,
+      FeatureType.EXPERIMENTAL,
+      'Dynamic Tabset',
+      'Create a "dynamic" tabset which retrieves its tabs by interpreting its "source" URL',
+      'dynamic_feed',
       '',
-      ['all'],
-      [],
-      true,
+      ['bex'],
     ),
+    // .setActivateCommands([new GrantPermissionCommand('notifications')]),
 
     new Feature(
       FeatureIdent.READING_MODE,
@@ -403,6 +363,18 @@ export class AppFeatures {
       'list',
       '',
       ['bex'],
+    ),
+
+    new Feature(
+      FeatureIdent.TABSETS_SHARING,
+      FeatureType.OPTIONAL,
+      'Sharing Tabsets',
+      'Share tabsets publicly.',
+      'o_ios_share',
+      '',
+      ['all'],
+      [],
+      true,
     ),
   ]
 

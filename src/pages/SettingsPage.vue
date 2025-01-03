@@ -1,5 +1,5 @@
 <template>
-  <q-toolbar v-if="useTabsetsStore().tabsets.size > 0">
+  <q-toolbar>
     <div class="row fit">
       <q-toolbar-title>
         <div class="row justify-start items-baseline">
@@ -21,20 +21,11 @@
       <q-tab
         name="archived"
         label="Archived Tabsets"
-        v-if="useFeaturesStore().hasFeature(FeatureIdent.ARCHIVE_TABSET)"
-      />
-      <q-tab
-        name="search"
-        label="Search Engine"
-        v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-      />
+        v-if="useFeaturesStore().hasFeature(FeatureIdent.ARCHIVE_TABSET)" />
+      <q-tab name="search" label="Search Engine" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
       <q-tab name="importExport" label="Import/Export" />
       <q-tab name="backup" label="Backup" />
-      <q-tab
-        name="internals"
-        label="Internals"
-        v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-      />
+      <q-tab name="internals" label="Internals" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
       <!--      <q-tab name="featureToggles" label="Feature Toggles"-->
       <!--             :class="useAuthStore().userMayAccess(AccessItem.FEATURE_TOGGLES) ? 'text-primary':'text-grey'"/>-->
       <q-tab name="featureToggles" label="Feature Toggles" />
@@ -126,8 +117,8 @@
   <div v-if="tab === 'archived'">
     <div class="q-pa-md q-gutter-sm">
       <q-banner rounded style="border: 1px solid orange"
-        >Tabsets can be archived to remove them from direct view. Here's the list of archived
-        tabsets so that they can be restored if needed.
+        >Tabsets can be archived to remove them from direct view. Here's the list of archived tabsets so that they can
+        be restored if needed.
       </q-banner>
 
       <div class="row q-pa-md" v-for="tabset in archivedTabsets()">
@@ -146,8 +137,7 @@
   <div v-if="tab === 'search'">
     <div class="q-pa-md q-gutter-sm">
       <q-banner rounded style="border: 1px solid orange"
-        >This Browser Extension tracks your tabsets and provides a search bar to search for
-        keywords.
+        >This Browser Extension tracks your tabsets and provides a search bar to search for keywords.
       </q-banner>
 
       <div class="row q-pa-md">
@@ -165,8 +155,7 @@
           :show-length="true"
           :deep="2"
           v-model:data="state.data"
-          :show-double-quotes="true"
-        />
+          :show-double-quotes="true" />
       </div>
     </div>
   </div>
@@ -271,16 +260,10 @@ const ignoreExtensionsEnabled = ref<boolean>(!settingsStore.isEnabled('extension
 const permissionsList = ref<string[]>([])
 
 const darkMode = ref<string>(localStorage.getItem('darkMode') || 'auto')
-const detailLevel = ref<ListDetailLevel>(
-  localStorage.getItem('ui.detailLevel') || ListDetailLevel.MAXIMAL,
-)
+const detailLevel = ref<ListDetailLevel>(localStorage.getItem('ui.detailLevel') || ListDetailLevel.MAXIMAL)
 
-const bookmarksPermissionGranted = ref<boolean | undefined>(
-  usePermissionsStore().hasPermission('bookmarks'),
-)
-const pageCapturePermissionGranted = ref<boolean | undefined>(
-  usePermissionsStore().hasPermission('history'),
-)
+const bookmarksPermissionGranted = ref<boolean | undefined>(usePermissionsStore().hasPermission('bookmarks'))
+const pageCapturePermissionGranted = ref<boolean | undefined>(usePermissionsStore().hasPermission('history'))
 const fullUrls = ref(localStorage.getItem('ui.fullUrls') || false)
 const detailLevelPerTabset = ref(localStorage.getItem('ui.detailsPerTabset') || false)
 
@@ -310,12 +293,8 @@ watchEffect(() => {
 
 watchEffect(() => (permissionsList.value = usePermissionsStore().permissions?.permissions || []))
 
-watchEffect(
-  () => (bookmarksPermissionGranted.value = usePermissionsStore().hasPermission('bookmarks')),
-)
-watchEffect(
-  () => (pageCapturePermissionGranted.value = usePermissionsStore().hasPermission('pageCapture')),
-)
+watchEffect(() => (bookmarksPermissionGranted.value = usePermissionsStore().hasPermission('bookmarks')))
+watchEffect(() => (pageCapturePermissionGranted.value = usePermissionsStore().hasPermission('pageCapture')))
 
 watchEffect(() => {
   //console.log("***setting dark mode to ", typeof darkMode.value, darkMode.value)

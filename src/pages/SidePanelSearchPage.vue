@@ -26,8 +26,7 @@
         :show-search-box="true"
         :search-term="searchStore.term"
         :search-hits="tabsetHits.length"
-        :title="'Found ' + searchStore.term + ' ' + tabsetHits.length + ' time(s)'"
-      >
+        :title="'Found ' + searchStore.term + ' ' + tabsetHits.length + ' time(s)'">
         <template v-slot:iconsRight>
           <CloseSidePanelViewButton />
         </template>
@@ -37,7 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import ReindexDialog from 'components/dialogues/ReindexDialog.vue'
 import _ from 'lodash'
 import FirstToolbarHelper2 from 'pages/sidepanel/helper/FirstToolbarHelper2.vue'
 import { uid, useQuasar } from 'quasar'
@@ -175,16 +173,6 @@ watchEffect(() => {
   //console.log("watch effect: searchStore.term", searchStore.term)
   if (searchStore.term?.trim() !== '') {
     newSearch(searchStore.term)
-  }
-})
-
-watchEffect(() => {
-  if (showReindexDialog.value) {
-    $q.dialog({
-      component: ReindexDialog,
-    }).onDismiss(() => {
-      showReindexDialog.value = false
-    })
   }
 })
 </script>
