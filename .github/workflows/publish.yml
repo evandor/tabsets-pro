@@ -1,0 +1,47 @@
+name: Publish
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - '!v*.*.*-firefox'
+      - '!v*.*.*-firefox-test'
+      - '!v*.*.*-edge'
+
+jobs:
+  build:
+    name: Publish webextension
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo STAGE=PRD >> .env
+          echo LOCALE="en" >> .env
+          echo BACKEND_URL="https://tabsets-72089.web.app" >> .env
+          echo TABSETS_PWA_URL="https://pwa.tabsets.net" >> .env
+          echo SENTRY_PROJECT_NAME="tabsets" >> .env
+          echo SENTRY_DSN="${{ secrets.SENTRY_DNS }}" >> .env
+          echo HOST="chrome.extension" >> .env
+      - name: Build
+        run: |
+          yarn install
+          npm run "build bex (publish)"
+      - name: Output
+        run:
+          ls -la /home/runner/work/tabsets/tabsets/dist/bex-chrome
+      - name: Upload & release
+        uses: mnao305/chrome-extension-upload@v4.0.1
+        with:
+          file-path: dist/bex-chrome/Packaged.tabsets.net.zip
+          extension-id: afkknkdbgondbbfjehipnjmojndnjhjg
+          client-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          refresh-token: ${{ secrets.REFRESH_TOKEN }}
+          publish: false
