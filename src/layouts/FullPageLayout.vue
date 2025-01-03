@@ -9,8 +9,7 @@
             @click="toggleLeftDrawer"
             src="favicon.ico"
             height="32px"
-            width="32px"
-          >
+            width="32px">
             <q-tooltip class="tooltip">Toggle the tabset list view by clicking here</q-tooltip>
           </q-img>
           <q-toolbar-title
@@ -18,8 +17,7 @@
             @click.stop="goHome()"
             class="cursor-pointer"
             style="min-width: 200px"
-            shrink
-          >
+            shrink>
             {{ title() }}
             <q-tooltip class="tooltip">Reload Tabsets Extension</q-tooltip>
           </q-toolbar-title>
@@ -29,12 +27,7 @@
         </template>
         <!-- left drawer closed -->
         <template v-else>
-          <q-icon
-            class="q-ml-xs q-mr-none cursor-pointer"
-            name="menu"
-            size="18px"
-            @click="toggleLeftDrawer"
-          >
+          <q-icon class="q-ml-xs q-mr-none cursor-pointer" name="menu" size="18px" @click="toggleLeftDrawer">
             <q-tooltip class="tooltip">Toggle the tabset list view by clicking here</q-tooltip>
           </q-icon>
           <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SPACES)">
@@ -46,19 +39,11 @@
 
         <SearchWidget
           style="position: absolute; left: 300px; top: 5px; max-width: 500px"
-          v-if="
-            useTabsetsStore().tabsets.size > 1 ||
-            useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)
-          "
-        />
+          v-if="useTabsetsStore().tabsets.size > 1 || useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
 
         <Transition name="colorized-appear">
           <div
-            v-if="
-              useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD) &&
-              useTabsetsStore().tabsets.size > 0
-            "
-          >
+            v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD) && useTabsetsStore().tabsets.size > 0">
             <OpenTabsThresholdWidget />
           </div>
         </Transition>
