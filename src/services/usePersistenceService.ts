@@ -8,6 +8,7 @@ import SnapshotsPersistence from 'src/snapshots/persistence/SnapshotsPersistence
 import FirestoreSpacesPersistence from 'src/spaces/persistence/FirestoreSpacesPersistence'
 import SpacesPersistence from 'src/spaces/persistence/SpacesPersistence'
 import FirestoreTabsetsPersistence from 'src/tabsets/persistence/FirestoreTabsetsPersistence'
+import IndexedDbTabsetsPersistence from 'src/tabsets/persistence/IndexedDbTabsetsPersistence'
 import { LocalStorageTabsetsPersistence } from 'src/tabsets/persistence/LocalStorageTabsetsPersistence'
 import TabsetsPersistence from 'src/tabsets/persistence/TabsetsPersistence'
 import FirestoreThumbnailsPersistence from 'src/thumbnails/persistence/FirestoreThumbnailsPersistence'
@@ -16,6 +17,7 @@ import ThumbnailsPersistence from 'src/thumbnails/persistence/ThumbnailsPersiste
 export function useDB() {
   const spacesDb: SpacesPersistence = FirestoreSpacesPersistence
   const tabsetsDb: TabsetsPersistence = FirestoreTabsetsPersistence
+  const localTabsetsDb: TabsetsPersistence = IndexedDbTabsetsPersistence
 
   const featuresDb: FeaturesPersistence = FirestoreFeaturesPersistence
 
@@ -32,6 +34,7 @@ export function useDB() {
     localDb,
     spacesDb,
     tabsetsDb,
+    localTabsetsDb,
     localStorageTabsetsDb,
     snapshotsDb,
     notesDb,

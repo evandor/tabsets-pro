@@ -1,10 +1,10 @@
 import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
 import Command from 'src/core/domain/Command'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
+import { usePermissionsStore } from 'src/core/stores/usePermissionsStore'
 import { GrantPermissionCommand } from 'src/domain/commands/GrantPermissionCommand'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import ChromeBookmarkListeners from 'src/services/ChromeBookmarkListeners'
-import { usePermissionsStore } from 'stores/usePermissionsStore'
 
 class UndoCommand implements Command<boolean> {
   constructor(public permission: string) {}

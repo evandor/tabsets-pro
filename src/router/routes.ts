@@ -324,6 +324,16 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/FullPageLayout.vue'),
     children: [{ path: '', component: () => import('pages/BrowserViewPage.vue') }],
   },
+  {
+    path: '/pwa/imp/:sharedId',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/public/ImportPublicTabsetPage.vue') }],
+  },
+  {
+    path: '/pwa/tabsets/:tabsetId',
+    component: () => import('layouts/PwaPageLayout.vue'),
+    children: [{ path: '', component: () => import('pages/pwa/PwaTabsetPage.vue') }],
+  },
   // {
   //   path: '/help/:ident',
   //   component: () => import('layouts/DefaultLayout.vue'),

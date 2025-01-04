@@ -1,4 +1,22 @@
+import { api } from 'boot/axios'
+
 export abstract class FirebaseCall<T> {
+  static async get<T>(path: string, useAuth: boolean = true): Promise<T> {
+    try {
+      if (useAuth) {
+        const token = 'this approach used auth0' //await useAuthStore().getToken(api)
+        const response = await api.get<T>(`${process.env.BACKEND_URL}${path}`, { headers: { AuthToken: token } })
+        return response.data
+      } else {
+        const response = await api.get<T>(`${process.env.BACKEND_URL}${path}`)
+        return response.data
+      }
+    } catch (err) {
+      FirebaseCall.handleError(err)
+      return Promise.reject('user not authenticated')
+    }
+  }
+
   static async post(path: string, data: object, resType = 'json', fullPath = false) {
     console.log('firebase call to ', path)
     // const idToken = 'token-to-be-done' //await useAuthStore().user.getIdToken()

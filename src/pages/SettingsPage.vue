@@ -161,7 +161,6 @@
  *
  */
 
-import { STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT } from 'boot/constants'
 import OpenRightDrawerWidget from 'components/widgets/OpenRightDrawerWidget.vue'
 import { getAuth } from 'firebase/auth'
 import _ from 'lodash'
@@ -180,9 +179,9 @@ import { MarkTabsetAsDefaultCommand } from 'src/tabsets/commands/MarkTabsetAsDef
 import { Tabset, TabsetStatus } from 'src/tabsets/models/Tabset'
 import TabsetService from 'src/tabsets/services/TabsetService'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
-import { DrawerTabs, ListDetailLevel, useUiStore } from 'src/ui/stores/uiStore'
+import { DrawerTabs, useUiStore } from 'src/ui/stores/uiStore'
 import { useAuthStore } from 'stores/authStore'
-import { onMounted, reactive, ref, watch, watchEffect } from 'vue'
+import { onMounted, reactive, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import VueJsonPretty from 'vue-json-pretty'
 import { useRoute } from 'vue-router'
@@ -192,7 +191,6 @@ import ImportExportSettings from 'pages/helper/ImportExportSettings.vue'
 import InternalSettings from 'pages/helper/InternalSettings.vue'
 import SharingSettings from 'pages/helper/SharingSettings.vue'
 import DeleteAccountCommand from 'src/account/commands/DeleteAccountCommand'
-import { usePermissionsStore } from 'src/stores/usePermissionsStore'
 import BackupSettings from 'src/tabsets/pages/settings/BackupSettings.vue'
 
 const { t } = useI18n()
@@ -219,19 +217,8 @@ const state = reactive({
 
 const ddgEnabled = ref<boolean>(!settingsStore.isEnabled('noDDG'))
 const ignoreExtensionsEnabled = ref<boolean>(!settingsStore.isEnabled('extensionsAsTabs'))
-const permissionsList = ref<string[]>([])
-
-const darkMode = ref<string>(localStorage.getItem('darkMode') || 'auto')
-const detailLevel = ref<ListDetailLevel>(localStorage.getItem('ui.detailLevel') || ListDetailLevel.MAXIMAL)
-
-const bookmarksPermissionGranted = ref<boolean | undefined>(usePermissionsStore().hasPermission('bookmarks'))
-const pageCapturePermissionGranted = ref<boolean | undefined>(usePermissionsStore().hasPermission('history'))
-const fullUrls = ref(localStorage.getItem('ui.fullUrls') || false)
-const detailLevelPerTabset = ref(localStorage.getItem('ui.detailsPerTabset') || false)
 
 const account = ref<Account | undefined>(undefined)
-
-const installationTitle = ref<string>((localStorage.getItem(TITLE_IDENT) as string) || 'My Tabsets')
 
 const tab = ref<string>(route.query['tab'] ? (route.query['tab'] as string) : 'appearance')
 
@@ -252,57 +239,6 @@ watchEffect(() => {
   ddgEnabled.value = settingsStore.isEnabled('noDDG')
   ignoreExtensionsEnabled.value = settingsStore.isEnabled('extensionsAsTabs')
 })
-
-watchEffect(() => (permissionsList.value = usePermissionsStore().permissions?.permissions || []))
-
-watchEffect(() => (bookmarksPermissionGranted.value = usePermissionsStore().hasPermission('bookmarks')))
-watchEffect(() => (pageCapturePermissionGranted.value = usePermissionsStore().hasPermission('pageCapture')))
-
-watchEffect(() => {
-  //console.log("***setting dark mode to ", typeof darkMode.value, darkMode.value)
-  switch (darkMode.value) {
-    case 'true':
-      $q.dark.set(true)
-      break
-    case 'false':
-      $q.dark.set(false)
-      break
-    default:
-      $q.dark.set('auto')
-  }
-  // $q.dark.set(darkMode.value === "true" ? true : (darkMode.value === 'false' ? false : 'auto'))
-  localStorage.set('darkMode', darkMode.value)
-})
-
-watchEffect(() => {
-  installationTitle.value && installationTitle.value.trim().length > 0
-    ? LocalStorage.set(TITLE_IDENT, installationTitle.value.replace(STRIP_CHARS_IN_USER_INPUT, ''))
-    : LocalStorage.remove(TITLE_IDENT)
-})
-
-watch(
-  () => detailLevel.value,
-  () => {
-    localStorage.set('ui.detailLevel', detailLevel.value)
-    sendMsg('detail-level-changed', { level: detailLevel.value })
-  },
-)
-
-watch(
-  () => fullUrls.value,
-  (a: any, b: any) => {
-    localStorage.set('ui.fullUrls', fullUrls.value)
-    sendMsg('fullUrls-changed', { value: fullUrls.value })
-  },
-)
-
-watch(
-  () => detailLevelPerTabset.value,
-  (v: any) => {
-    localStorage.set('ui.detailsPerTabset', detailLevelPerTabset.value)
-    sendMsg('detail-level-perTabset-changed', { level: detailLevelPerTabset.value })
-  },
-)
 
 watchEffect(() => {
   localStorage.set('layout', view.value)

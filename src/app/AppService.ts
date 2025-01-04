@@ -1,5 +1,6 @@
 import { User } from 'firebase/auth'
 import _ from 'lodash'
+import { QVueGlobals } from 'quasar'
 import ChromeApi from 'src/app/BrowserApi'
 import ChromeListeners from 'src/app/listeners/BrowserListeners'
 import BookmarksService from 'src/bookmarks/services/BookmarksService'
@@ -37,7 +38,7 @@ class AppService {
   router: Router = null as unknown as Router
   initialized = false
 
-  async init(quasar: any, router: Router, forceRestart = false, user: User | undefined = undefined) {
+  async init(quasar: QVueGlobals, router: Router, forceRestart = false, user: User | undefined = undefined) {
     console.log(
       `%cinitializing AppService: first start=${!this.initialized}, forceRestart=${forceRestart}, quasar set=${quasar !== undefined}, router set=${router !== undefined}`,
       forceRestart ? 'font-weight:bold' : '',
@@ -98,19 +99,7 @@ class AppService {
 
     tabsetService.setLocalStorage(localStorage)
 
-    if (useAuthStore().isAuthenticated()) {
-      if (router.currentRoute.value.query.token === 'failed') {
-        console.log('failed login, falling back to indexedDB')
-      }
-
-      // console.debug(`%cchecking sync config: persistenceStore=${persistenceStore.getServiceName()}`, "font-weight:bold")
-
-      await this.initCoreSerivces(this.router)
-    } else {
-      //await this.initCoreSerivces(quasar, useDB().localDb, this.router)
-    }
-
-    // useNotificationsStore().bookmarksExpanded = quasar.localStorage.getItem("bookmarks.expanded") || []
+    await this.initCoreSerivces(this.router, quasar)
   }
 
   restart(ar: string) {
@@ -133,8 +122,10 @@ class AppService {
     useAuthStore().setAuthRequest(null as unknown as string)
   }
 
-  private async initCoreSerivces(router: Router) {
+  private async initCoreSerivces(router: Router, quasar: QVueGlobals) {
     console.log(`%cinitializing AppService: initCoreSerivces`, 'font-weight:bold')
+
+    const authenticated = useAuthStore().isAuthenticated()
 
     await useWindowsStore().initialize()
     console.debug('')
@@ -179,7 +170,7 @@ class AppService {
       )
       useEntityRegistryStore().tabsetRegistry = tsInfo
     })
-    await tabsetsStore.initialize(useDB().tabsetsDb)
+    await tabsetsStore.initialize(authenticated ? useDB().tabsetsDb : useDB().localTabsetsDb)
     await useTabsetService().init(false)
     console.debug('')
 
@@ -206,7 +197,7 @@ class AppService {
     // console.log("checking for welcome page", useTabsetsStore().tabsets.size === 0, quasar.platform.is.bex, !useAuthStore().isAuthenticated)
     if (
       useTabsetsStore().tabsets.size === 0 &&
-      //quasar.platform.is.bex &&
+      quasar.platform.is.bex &&
       !router.currentRoute.value.path.startsWith('/fullpage') &&
       !router.currentRoute.value.path.startsWith('/mainpanel')
     ) {

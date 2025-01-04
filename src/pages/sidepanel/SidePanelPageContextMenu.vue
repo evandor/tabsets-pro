@@ -314,6 +314,8 @@ const openPublicShare = (tabsetId: string) => {
 }
 
 const getPublicTabsetLink = (ts: Tabset) => {
+  // https://shared.tabsets.net/#/pwa/imp/2f0f2171-27a6-4d03-a2dd-157ab6ef42ae?n=TXVzaWM=&a=Q2Fyc3Rlbg==
+  // http://localhost:9200/#/pwa/imp/2f0f2171-27a6-4d03-a2dd-157ab6ef42ae?n=TXVzaWM=&a=Q2Fyc3Rlbg==
   let image = 'https://tabsets.web.app/favicon.ico'
   if (ts && ts.sharedId) {
     //return PUBLIC_SHARE_URL + "#/pwa/imp/" + ts.sharedId + "?n=" + btoa(ts.name) + "&a=" + btoa(ts.sharedBy || 'n/a') + "&d=" + ts.sharedAt

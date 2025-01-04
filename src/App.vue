@@ -10,17 +10,18 @@ import AppService from 'src/app/AppService'
 import BexFunctions from 'src/core/communication/BexFunctions'
 import { useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useUtils } from 'src/core/services/Utils'
+import { usePermissionsStore } from 'src/core/stores/usePermissionsStore'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useLogger } from 'src/services/Logger'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { useAppStore } from 'stores/appStore'
 import { useSettingsStore } from 'stores/settingsStore'
-import { usePermissionsStore } from 'stores/usePermissionsStore'
 import { onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const $q = useQuasar()
 const router = useRouter()
+const route = useRoute()
 const { inBexMode } = useUtils()
 
 const { handleError } = useNotificationHandler()
@@ -57,7 +58,10 @@ onAuthStateChanged(auth, async (user) => {
   } else {
     // User is signed out
     console.log('%conAuthStateChanged: logged out', 'border:1px solid green')
-    await router.push('/sidepanel/login')
+    console.log('test', route)
+    if (!route.fullPath.startsWith('/pwa/imp/')) {
+      await router.push('/sidepanel/login')
+    }
   }
 })
 
