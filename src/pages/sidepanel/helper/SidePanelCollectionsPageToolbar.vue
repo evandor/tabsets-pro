@@ -1,6 +1,6 @@
 <template>
-  <!-- FirstToolbarHelper -->
-  <q-toolbar class="text-primary q-pa-none q-pl-sm q-pr-xs q-pb-none greyBorderBottom" :style="offsetTop()">
+  <!-- SidePanelCollectionsPageToolbar -->
+  <q-toolbar class="q-pa-none q-pl-none q-pr-none q-pb-none greyBorderBottom" :style="offsetTop()">
     <q-toolbar-title>
       <div class="row q-ma-none q-pa-none">
         <div class="col-5 q-ma-none q-pa-none">
@@ -14,12 +14,14 @@
               <template v-else>
                 <div class="text-caption">{{ title() }}</div>
               </template>
-              <div class="text-body1 text-bold cursor-pointer">Select a Collection</div>
+              <div class="text-body1 text-bold cursor-pointer" @click="router.push('/sidepanel')">
+                {{ currentTabset?.name }}
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-7 text-subtitle1 text-right q-ma-none q-pa-none q-pr-none q-pt-sm">
+        <div class="col-7 text-subtitle1 text-right q-ma-none q-pa-none q-pr-sm q-pt-sm">
           <slot name="iconsRight">
             <SidePanelToolbarTabNavigationHelper />
             <q-btn
@@ -27,7 +29,6 @@
               dense
               icon="add"
               label="Collection"
-              color="primary"
               size="sm"
               :class="{ shake: annimateNewTabsetButton }"
               data-testid="addTabsetBtn"
@@ -125,7 +126,7 @@ const title = (): string => {
   if (useFeaturesStore().hasFeature(FeatureIdent.SPACES)) {
     return useSpacesStore().space ? useSpacesStore().space.label : 'no_space_selected'
   } else {
-    return 'Collection'
+    return 'Switch Collection'
   }
 }
 

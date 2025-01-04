@@ -87,12 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  EMAIL_LINK_REDIRECT_DOMAIN,
-  SPACES_LIMIT_NO_SUBSCRIPTION,
-  TABS_LIMIT_NO_SUBSCRIPTION,
-  TABSETS_LIMIT_NO_SUBSCRIPTION,
-} from 'boot/constants'
+import { SPACES_LIMIT_NO_SUBSCRIPTION, TABS_LIMIT_NO_SUBSCRIPTION, TABSETS_LIMIT_NO_SUBSCRIPTION } from 'boot/constants'
 import InfoMessageWidget from 'components/widgets/InfoMessageWidget.vue'
 import { getAuth, sendEmailVerification } from 'firebase/auth'
 import { addDoc, collection, DocumentData, getDocs, onSnapshot, query, QuerySnapshot, where } from 'firebase/firestore'
@@ -178,7 +173,7 @@ watchEffect(async () => {
 const verifyEmail = () => {
   const email = useAuthStore().user.email
   const actionCodeSettings = {
-    url: EMAIL_LINK_REDIRECT_DOMAIN,
+    url: 'https://tabsets.me',
     handleCodeInApp: true,
   }
   console.log('sending verification link to', email, actionCodeSettings)

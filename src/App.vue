@@ -111,8 +111,10 @@ if (currentUser) {
   }, 2000)
 }
 
-$q.bex.on('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
-onBeforeUnmount(() => {
-  $q.bex.off('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
-})
+if (inBexMode()) {
+  $q.bex.on('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
+  onBeforeUnmount(() => {
+    $q.bex.off('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
+  })
+}
 </script>

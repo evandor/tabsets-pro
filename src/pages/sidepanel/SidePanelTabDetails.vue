@@ -204,10 +204,10 @@
       </q-card>
     </q-expansion-item>
 
-    <q-expansion-item label="Tab References Status" group="tabrefgroup" v-if="tab && tab.tabReferences">
+    <q-expansion-item label="Tab References" group="tabrefgroup" v-if="tab && tab.tabReferences">
       <div class="q-ma-sm q-ml-lg" v-for="ref in tab.tabReferences">
         <template v-if="ref.type === TabReferenceType.RSS">
-          <div class="text-caption text-bold">found RSS:</div>
+          <div class="text-caption text-bold">found RSS ({{ ref.status }}):</div>
           <div
             class="text-caption ellipsis text-accent cursor-pointer"
             @click="useNavigationService().browserTabFor(ref.href || '')">
@@ -524,7 +524,7 @@ const openInJsonCrackEditor = (data: string) => {
 }
 
 const linkingHeading = (data: object | undefined) => {
-  console.log('data', data)
+  //console.log('data', data)
   if (!data) {
     return '---'
   }

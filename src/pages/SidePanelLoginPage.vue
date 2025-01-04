@@ -1,130 +1,156 @@
 <template>
-  <div class="q-ma-md text-h6">Tabsets Pro</div>
+  <q-page>
+    <div class="q-ma-none q-pa-md text-h6">Tabsets Pro</div>
 
-  <div class="q-ma-md example-column-equal-width" style="border: 1px solid #bfbfbf">
-    <q-tabs v-model="tab" dense>
-      <q-tab name="login" label="Login" />
-      <q-tab name="register" label="Create Account" />
-    </q-tabs>
+    <div class="q-ma-md example-column-equal-width" style="border: 1px solid #bfbfbf">
+      <q-tabs v-model="tab" dense>
+        <q-tab name="login" label="Login" />
+        <q-tab name="register" label="Create Account" />
+      </q-tabs>
 
-    <q-separator />
+      <q-separator />
 
-    <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="login">
-        <form>
-          <div class="col q-mt-sm">
-            <div class="row">
-              <div class="col-12">Your Email Address</div>
-            </div>
-          </div>
-          <div class="col">
-            <q-input
-              id="username"
-              square
-              filled
-              type="email"
-              v-model="email"
-              :rules="[(val) => !!val || 'Please provide a valid email address']"
-              dense
-              tabindex="1"
-              autofocus
-              autocomplete="on" />
-          </div>
-
-          <div class="col q-mt-sm">
-            <div class="row">
-              <div class="col-6">Your password</div>
-              <div
-                class="col-6 text-right"
-                :class="email && email.indexOf('@') > 0 ? 'text-blue-8 cursor-pointer' : 'text-blue-3'"
-                @click="promptReset()">
-                Forgot?
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="login">
+          <form>
+            <div class="col q-mt-sm">
+              <div class="row">
+                <div class="col-12">Your Email Address</div>
               </div>
             </div>
-          </div>
-          <div class="col q-mt-sm">
-            <q-input
-              id="password"
-              square
-              filled
-              :type="isPwd ? 'password' : 'text'"
-              v-model="password"
-              :rules="[(val) => !!val || 'the password must not be empty']"
-              dense
-              tabindex="2">
-              <template v-slot:append>
-                <q-icon
-                  v-if="password"
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd" />
-              </template>
-            </q-input>
-          </div>
-
-          <div class="col q-mt-md">
-            <q-btn
-              label="Log in"
-              style="width: 100%"
-              tabindex="3"
-              color="primary"
-              :loading="password.length === 0 && loading"
-              :disable="!email || !password"
-              @click="signin(false)" />
-          </div>
-
-          <div class="col q-mt-sm text-right">
-            <q-checkbox :disable="email ? email.indexOf('@') < 0 : true" label="Remember Me" v-model="rememberMe" />
-          </div>
-        </form>
-      </q-tab-panel>
-
-      <q-tab-panel name="register">
-        <form>
-          <div class="col q-mt-sm">
-            <div class="row">
-              <div class="col-12">Your Email Address</div>
+            <div class="col">
+              <q-input
+                id="username"
+                square
+                filled
+                type="email"
+                v-model="email"
+                :rules="[(val) => !!val || 'Please provide a valid email address']"
+                dense
+                tabindex="1"
+                autofocus
+                autocomplete="on" />
             </div>
-          </div>
-          <div class="col">
-            <q-input
-              id="username"
-              square
-              filled
-              type="email"
-              v-model="email"
-              :rules="[(val) => !!val || 'Please provide a valid email address']"
-              dense
-              tabindex="1"
-              autofocus
-              autocomplete="on" />
-          </div>
 
-          <div class="col q-mt-sm">
-            <div class="row">
-              <div class="col-12">Provide a password</div>
+            <div class="col q-mt-sm">
+              <div class="row">
+                <div class="col-6">Your password</div>
+                <div
+                  class="col-6 text-right"
+                  :class="email && email.indexOf('@') > 0 ? 'text-blue-8 cursor-pointer' : 'text-blue-3'"
+                  @click="promptReset()">
+                  Forgot?
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col">
-            <q-input id="password" square filled type="password" v-model="password" dense tabindex="2" />
-          </div>
+            <div class="col q-mt-sm">
+              <q-input
+                id="password"
+                square
+                filled
+                :type="isPwd ? 'password' : 'text'"
+                v-model="password"
+                :rules="[(val) => !!val || 'the password must not be empty']"
+                dense
+                tabindex="2">
+                <template v-slot:append>
+                  <q-icon
+                    v-if="password"
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd" />
+                </template>
+              </q-input>
+            </div>
 
-          <div class="col q-mt-xl">
-            <q-btn
-              label="Register"
-              style="width: 100%"
-              tabindex="3"
-              color="primary"
-              :loading="password.length === 0 && loading"
-              :disable="!email || !password"
-              @click="signin(true)" />
-          </div>
+            <div class="col q-mt-md">
+              <q-btn
+                label="Log in"
+                style="width: 100%"
+                tabindex="3"
+                color="primary"
+                :loading="password.length === 0 && loading"
+                :disable="!email || !password"
+                @click="signin(false)" />
+            </div>
 
-          <div class="q-ma-sm text-body2">By clicking on <em>Register</em> your comply with the Terms of service.</div>
-        </form>
-      </q-tab-panel>
-    </q-tab-panels>
-  </div>
+            <div class="col q-mt-sm text-right">
+              <q-checkbox :disable="email ? email.indexOf('@') < 0 : true" label="Remember Me" v-model="rememberMe" />
+            </div>
+          </form>
+        </q-tab-panel>
+
+        <q-tab-panel name="register">
+          <form>
+            <div class="col q-mt-sm">
+              <div class="row">
+                <div class="col-12">Your Email Address</div>
+              </div>
+            </div>
+            <div class="col">
+              <q-input
+                id="username"
+                square
+                filled
+                type="email"
+                v-model="email"
+                :rules="[(val) => !!val || 'Please provide a valid email address']"
+                dense
+                tabindex="1"
+                autofocus
+                autocomplete="on" />
+            </div>
+
+            <div class="col q-mt-sm">
+              <div class="row">
+                <div class="col-12">Provide a password</div>
+              </div>
+            </div>
+            <div class="col">
+              <q-input id="password" square filled type="password" v-model="password" dense tabindex="2" />
+            </div>
+
+            <div class="col q-mt-xl">
+              <q-btn
+                label="Register"
+                style="width: 100%"
+                tabindex="3"
+                color="primary"
+                :loading="password.length === 0 && loading"
+                :disable="!email || !password"
+                @click="signin(true)" />
+            </div>
+
+            <div class="q-ma-sm text-body2">By clicking on <em>Register</em> you comply with the Terms of service.</div>
+          </form>
+        </q-tab-panel>
+      </q-tab-panels>
+    </div>
+    <div class="row q-mr-md">
+      <div class="col-12 text-right">
+        <span
+          class="text-grey q-mx-none cursor-pointer"
+          style="font-size: smaller"
+          @click.stop="clicked('https://tabsets.web.app/#/privacy')"
+          >Privacy</span
+        >
+        <span class="q-ma-none q-pa-none q-mx-xs text-grey-5">|</span>
+        <span
+          class="text-grey q-mx-none cursor-pointer"
+          style="font-size: smaller"
+          @click.stop="clicked('https://tabsets.web.app/#/tos')"
+          >Terms of Service</span
+        >
+        <span class="q-ma-none q-pa-none q-mx-xs text-grey-5">|</span>
+        <span
+          class="text-grey q-mx-none cursor-pointer"
+          style="font-size: smaller"
+          @click.stop="clicked('https://docs.tabsets.net')"
+          >Documentation</span
+        >
+      </div>
+    </div>
+  </q-page>
 </template>
 
 <script lang="ts" setup>
@@ -136,7 +162,7 @@ import {
   signInWithEmailAndPassword,
   UserCredential,
 } from 'firebase/auth'
-import { LocalStorage, useQuasar } from 'quasar'
+import { LocalStorage, openURL, useQuasar } from 'quasar'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
 import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useAuthStore } from 'stores/authStore'
@@ -237,4 +263,6 @@ const promptReset = () => {
     resetPassword()
   })
 }
+
+const clicked = (url: string) => openURL(url)
 </script>

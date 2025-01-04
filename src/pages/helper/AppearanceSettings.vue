@@ -1,36 +1,36 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-banner rounded style="border: 1px solid orange">
-      {{ t('settings_adjust_general_appearance') }}
+      {{ $t('settings_adjust_general_appearance') }}
     </q-banner>
 
     <div class="row items-baseline q-ma-md q-gutter-md">
-      <InfoLine :label="t('dark_mode')">
-        <q-radio v-model="darkMode" val="auto" :label="t('Auto')" />
-        <q-radio v-model="darkMode" val="true" :label="t('Enabled')" />
-        <q-radio v-model="darkMode" val="false" :label="t('Disabled')" />
-        &nbsp;&nbsp;&nbsp;{{ t('changing_needs_restart') }}
+      <InfoLine :label="$t('dark_mode')">
+        <q-radio v-model="darkMode" val="auto" :label="$t('Auto')" />
+        <q-radio v-model="darkMode" val="true" :label="$t('Enabled')" />
+        <q-radio v-model="darkMode" val="false" :label="$t('Disabled')" />
+        &nbsp;&nbsp;&nbsp;{{ $t('changing_needs_restart') }}
       </InfoLine>
 
-      <InfoLine :label="t('keyboard_shortcuts')">
+      <InfoLine :label="$t('keyboard_shortcuts')">
         <div
           class="text-accent cursor-pointer"
           @click="NavigationService.openSingleTab('chrome://extensions/shortcuts')">
-          {{ t('click_here') }}
+          {{ $t('click_here') }}
         </div>
       </InfoLine>
 
-      <div class="col-3">{{ t('language') }} ({{ t('experimental') }})</div>
+      <div class="col-3">{{ $t('language') }} ({{ $t('experimental') }})</div>
       <div class="col-7">
-        <q-select
-          v-model="locale"
-          :options="localeOptions"
-          dense
-          borderless
-          emit-value
-          map-options
-          options-dense
-          style="min-width: 150px" />
+        <!--        <q-select-->
+        <!--          v-model="locale"-->
+        <!--          :options="localeOptions"-->
+        <!--          dense-->
+        <!--          borderless-->
+        <!--          emit-value-->
+        <!--          map-options-->
+        <!--          options-dense-->
+        <!--          style="min-width: 150px" />-->
       </div>
       <div class="col"></div>
 
@@ -42,7 +42,7 @@
 
       <InfoLine
         :label="
-          t('tab_info_detail_level', {
+          $t('tab_info_detail_level', {
             detailLevelPerTabset: detailLevelPerTabset ? ' (Default)' : '',
           })
         ">
@@ -52,11 +52,11 @@
       </InfoLine>
 
       <InfoLine label="">
-        <q-checkbox v-model="detailLevelPerTabset" :label="t('individually_per_tabset')" />
+        <q-checkbox v-model="detailLevelPerTabset" :label="$t('individually_per_tabset')" />
       </InfoLine>
 
       <InfoLine label="URLs">
-        <q-checkbox v-model="fullUrls" :label="t('show_full_url')" />
+        <q-checkbox v-model="fullUrls" :label="$t('show_full_url')" />
       </InfoLine>
 
       <InfoLine label="Show Recent Tabsets list">
@@ -84,11 +84,11 @@
       class="row items-baseline q-ma-md q-gutter-md"
       v-if="useFeaturesStore().hasFeature(FeatureIdent.AUTO_TAB_SWITCHER)">
       <div class="col-3">
-        {{ t('tab_switching_time') }}
+        {{ $t('tab_switching_time') }}
       </div>
       <div class="col-9">
         <q-select
-          :label="t('tab_switcher_settings')"
+          :label="$t('tab_switcher_settings')"
           filled
           v-model="autoSwitcherOption"
           :options="autoSwitcherOptions"
@@ -100,14 +100,14 @@
 
     <div class="row items-baseline q-ma-md q-gutter-md">
       <div class="col-3">
-        {{ t('restore_info_msg') }}
+        {{ $t('restore_info_msg') }}
       </div>
       <div class="col-3">
-        {{ t('accidentally_closed_info_msgs') }}
+        {{ $t('accidentally_closed_info_msgs') }}
       </div>
       <div class="col-1"></div>
       <div class="col">
-        <q-btn :label="t('restore_hints')" @click.stop="restoreHints" />
+        <q-btn :label="$t('restore_hints')" @click.stop="restoreHints" />
       </div>
     </div>
 
@@ -115,10 +115,10 @@
       class="row items-baseline q-ma-md q-gutter-md"
       v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD)">
       <div class="col-3">
-        {{ t('warning_thresholds') }}
+        {{ $t('warning_thresholds') }}
       </div>
       <div class="col-3">
-        {{ t('warnings_info') }}
+        {{ $t('warnings_info') }}
       </div>
       <div class="col q-ma-xl">
         <q-range v-model="settingsStore.thresholds" :step="10" marker-labels :min="0" :max="100" />
@@ -127,10 +127,10 @@
 
     <div class="row items-baseline q-ma-md q-gutter-md">
       <div class="col-3">
-        {{ t('thumbnail_quality') }}
+        {{ $t('thumbnail_quality') }}
       </div>
       <div class="col-3">
-        {{ t('larger_thumbs_info') }}
+        {{ $t('larger_thumbs_info') }}
       </div>
       <div class="col q-ma-xl">
         <q-slider
@@ -192,9 +192,7 @@ import { StaticSuggestionIdent, Suggestion } from 'src/suggestions/models/Sugges
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { FontSize, ListDetailLevel, useUiStore } from 'src/ui/stores/uiStore'
 import { ref, watch, watchEffect } from 'vue'
-import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
 const { sendMsg } = useUtils()
 
 const $q = useQuasar()
@@ -214,7 +212,7 @@ const oldLayout = ref(LocalStorage.getItem('ui.sidepanel.oldLayout') || false)
 
 let suggestionsCounter = 0
 
-const { locale } = useI18n({ locale: navigator.language, useScope: 'global' })
+//const { locale } = useI18n({ locale: navigator.language, useScope: 'global' })
 
 const localeOptions = ref([
   { value: 'en', label: 'English' },

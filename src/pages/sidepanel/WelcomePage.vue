@@ -6,7 +6,9 @@
           <div class="row">
             <div class="col-12 text-caption">The Art Of Linking</div>
           </div>
-          <div class="col-12 text-h6 q-mb-md">{{ $t('welcome_to_tabsets') }} {{ stageIdentifier() }}</div>
+          <div class="col-12 text-h6 q-mb-md">
+            {{ $t('welcome_to_tabsets') }}
+          </div>
         </div>
 
         <div class="q-pa-sm q-mb-none row items-start q-gutter-md" @click.stop="selected()">

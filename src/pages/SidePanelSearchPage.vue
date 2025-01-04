@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import _ from 'lodash'
 import FirstToolbarHelper2 from 'pages/sidepanel/helper/FirstToolbarHelper2.vue'
-import { uid, useQuasar } from 'quasar'
+import { uid } from 'quasar'
 import SearchHit from 'src/components/layouts/SearchHit.vue'
 import Analytics from 'src/core/utils/google-analytics'
 import { Hit } from 'src/search/models/Hit'
@@ -55,9 +55,7 @@ const searchStore = useSearchStore()
 
 const termFromParams = route.query.t as string
 
-const $q = useQuasar()
 const tabsetHits = ref<Hit[]>([])
-const showReindexDialog = ref(false)
 const tabsetIdents = ref<object[]>([])
 const tabIdents = ref<object[]>([])
 

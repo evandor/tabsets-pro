@@ -45,7 +45,6 @@
 </template>
 
 <script setup lang="ts">
-import ReindexDialog from 'components/dialogues/ReindexDialog.vue'
 import _ from 'lodash'
 import { uid, useQuasar } from 'quasar'
 import SearchHit from 'src/components/layouts/SearchHit.vue'
@@ -111,16 +110,6 @@ watchEffect(() => {
   // console.log("watch effect: searchStore.term", searchStore.term)
   if (searchStore.term?.trim() !== '') {
     newSearch(searchStore.term)
-  }
-})
-
-watchEffect(() => {
-  if (showReindexDialog.value) {
-    $q.dialog({
-      component: ReindexDialog,
-    }).onDismiss(() => {
-      showReindexDialog.value = false
-    })
   }
 })
 </script>

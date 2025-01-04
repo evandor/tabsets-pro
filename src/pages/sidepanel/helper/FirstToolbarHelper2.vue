@@ -3,7 +3,7 @@
   <q-toolbar class="q-pa-none q-pl-none q-pr-none q-pb-none greyBorderBottom" :style="offsetTop()">
     <q-toolbar-title>
       <div class="row q-ma-none q-pa-none">
-        <div class="col-7 q-ma-none q-pa-none" style="border: 0 solid red">
+        <div class="col-6 q-ma-none q-pa-none" style="border: 0 solid red">
           <!-- no spaces && searching -->
           <SearchWithTransitionHelper
             v-if="searching"
@@ -49,7 +49,7 @@
         </div>
 
         <div
-          class="col-5 text-subtitle1 text-right q-ma-none q-pa-none q-pr-none"
+          class="col-6 text-subtitle1 text-right q-ma-none q-pa-none q-pr-none"
           v-if="!useUiStore().appLoading"
           style="border: 0 solid green">
           <slot name="iconsRight">
@@ -199,9 +199,12 @@ const title = (): string => {
   } else {
     const currentTs = useTabsetsStore().getCurrentTabset
     if (currentTs) {
-      return currentTs.type !== TabsetType.SESSION
-        ? 'Collection'
-        : `Session (${currentTs.tabs.length} tab${currentTs.tabs.length > 1 ? 's' : ''})`
+      switch (currentTs.type) {
+        case TabsetType.SESSION:
+          return `Session (${currentTs.tabs.length} tab${currentTs.tabs.length > 1 ? 's' : ''})`
+        default:
+          return currentTs.sharedId ? 'Shared Collection' : 'Collection'
+      }
     }
     return 'Collection'
   }

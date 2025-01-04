@@ -45,9 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import ReindexDialog from 'components/dialogues/ReindexDialog.vue'
 import _ from 'lodash'
-import { uid, useQuasar } from 'quasar'
+import { uid } from 'quasar'
 import SearchHit from 'src/components/layouts/SearchHit.vue'
 import { Hit } from 'src/search/models/Hit'
 import { useSearchStore } from 'src/search/stores/searchStore'
@@ -60,9 +59,7 @@ const searchStore = useSearchStore()
 
 const termFromParams = route.query.t as string
 
-const $q = useQuasar()
 const tabsetHits = ref<Hit[]>([])
-const showReindexDialog = ref(false)
 
 const newSearch = (term: string) => {
   tabsetHits.value = []
@@ -111,16 +108,6 @@ watchEffect(() => {
   // console.log("watch effect: searchStore.term", searchStore.term)
   if (searchStore.term?.trim() !== '') {
     newSearch(searchStore.term)
-  }
-})
-
-watchEffect(() => {
-  if (showReindexDialog.value) {
-    $q.dialog({
-      component: ReindexDialog,
-    }).onDismiss(() => {
-      showReindexDialog.value = false
-    })
   }
 })
 </script>

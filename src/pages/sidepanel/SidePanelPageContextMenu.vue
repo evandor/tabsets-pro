@@ -116,6 +116,16 @@
       <ContextMenuItem
         v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
         v-close-popup
+        @was-clicked="openPublicShare(tabset.id)"
+        icon="ios_share"
+        color="warning"
+        label="Open Shared Page">
+        <q-tooltip class="tooltip-small">Open the shared location</q-tooltip>
+      </ContextMenuItem>
+
+      <ContextMenuItem
+        v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
+        v-close-popup
         @was-clicked="removePublicShare(tabset.id, tabset.sharedId || '')"
         icon="ios_share"
         color="warning"
@@ -150,7 +160,7 @@
 </template>
 
 <script lang="ts" setup>
-import { LocalStorage, useQuasar } from 'quasar'
+import { LocalStorage, openURL, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import ContextMenuItem from 'src/core/components/helper/ContextMenuItem.vue'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
@@ -294,5 +304,28 @@ const shareTabsetPubliclyDialog = (tabset: Tabset, republish: boolean = false) =
       republish: republish,
     },
   })
+}
+
+const openPublicShare = (tabsetId: string) => {
+  const ts = useTabsetsStore().getTabset(tabsetId)
+  if (ts && ts.sharedId) {
+    openURL(getPublicTabsetLink(ts))
+  }
+}
+
+const getPublicTabsetLink = (ts: Tabset) => {
+  let image = 'https://tabsets.web.app/favicon.ico'
+  if (ts && ts.sharedId) {
+    //return PUBLIC_SHARE_URL + "#/pwa/imp/" + ts.sharedId + "?n=" + btoa(ts.name) + "&a=" + btoa(ts.sharedBy || 'n/a') + "&d=" + ts.sharedAt
+    return (
+      'https://us-central1-tabsets-backend-prd.cloudfunctions.net/app/share/preview/' +
+      ts.sharedId +
+      '?n=' +
+      btoa(ts.name) +
+      '&a=' +
+      btoa(ts.sharedBy || 'n/a')
+    )
+  }
+  return image
 }
 </script>

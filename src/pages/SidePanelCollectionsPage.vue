@@ -1,21 +1,18 @@
 <template>
   <q-page class="darkInDarkMode brightInBrightMode" style="padding-top: 60px">
-    <div class="row q-ma-none q-pa-none items-start">
+    <div class="row q-ma-none q-pa-none items-start" :class="topLevelSubfolderExist() ? 'q-ml-md' : ''">
       <div>
         <Draggable
           v-if="treeData"
-          class="q-pl-md"
+          class="q-pl-none"
           v-model="treeData"
           @change="ondrop2($event)"
           :treeLine="false"
           :tree-line-offset="0"
-          :defaultOpen="true"
+          :defaultOpen="false"
           :indent="25">
           <template #default="{ node, stat }">
-            <!-- v-if="stat.children.length"-->
-            <OpenIcon :open="stat.open" @click.native="stat.open = !stat.open" />
-            <!--            <q-icon v-else name="remove" color="white"/>-->
-            <!--            <span v-else class="q-ma-none q-ml-md" style="background-color:yellow"></span>-->
+            <q-icon :name="openIndicatorIcon(stat)" @click="stat.open = !stat.open" />
             <span class="mtl-ml cursor-pointer" @click="handleTreeClick(node)">
               <q-icon
                 v-if="node.level == 0 && node.type !== TabsetType.SESSION"
@@ -28,7 +25,7 @@
                 color="secondary"
                 class="q-mx-sm" />
               <q-icon v-else name="o_folder" color="warning" class="q-mx-sm" />
-              {{ node.text }}
+              {{ node.text }} {{ node.id === currentTabset?.id ? ' (current)' : '' }}
             </span>
           </template>
         </Draggable>
@@ -43,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { dragContext, Draggable, OpenIcon } from '@he-tree/vue'
+import { dragContext, Draggable } from '@he-tree/vue'
 import _ from 'lodash'
 import SidePanelCollectionsPageToolbar from 'pages/sidepanel/helper/SidePanelCollectionsPageToolbar.vue'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
@@ -76,6 +73,7 @@ const router = useRouter()
 
 const tabsets = ref<Tabset[]>([])
 const treeData = ref<NodeTreeObject[]>()
+const currentTabset = ref<Tabset | undefined>(undefined)
 
 function updateOnlineStatus(e: any) {
   const { type } = e
@@ -93,6 +91,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   // window.removeEventListener('keypress', checkKeystroke);
+})
+
+watchEffect(() => {
+  currentTabset.value = useTabsetsStore().getCurrentTabset
 })
 
 const ondrop2 = (evt: any) => {
@@ -264,6 +266,16 @@ const handleTreeClick = (node: NodeTreeObject) => {
       }
     })
 }
+
+const openIndicatorIcon = (stat: any) => {
+  if (stat.children.length === 0) {
+    return ''
+  }
+  return stat.open ? 'keyboard_arrow_down' : 'chevron_right'
+}
+
+const topLevelSubfolderExist = () =>
+  treeData.value ? treeData.value.findIndex((nto: NodeTreeObject) => nto.children.length > 0) >= 0 : false
 </script>
 
 <style lang="scss">

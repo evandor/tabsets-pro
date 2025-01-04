@@ -56,45 +56,7 @@
   </div>
 
   <div v-if="tab === 'internals'">
-    <div class="q-pa-md q-gutter-sm">
-      <div class="text-h6">Permissions</div>
-
-      <q-banner rounded>The active permissions for the Tabset Extension</q-banner>
-
-      <div class="row items-baseline q-ma-md">
-        <div class="col-3">Active Permissions</div>
-        <div class="col-9">
-          {{ permissionsList.join(', ') }}
-        </div>
-      </div>
-
-      <div class="row items-baseline q-ma-md">
-        <div class="col-3">Allowed Origins</div>
-        <div class="col-9">
-          {{ usePermissionsStore().permissions?.origins }}
-        </div>
-      </div>
-
-      <div class="text-h6">Groups</div>
-
-      <q-banner rounded>All Chrome Groups, active and non-active</q-banner>
-
-      <div class="row items-baseline q-ma-md">
-        <div class="col-3">All Groups</div>
-        <div class="col-9">
-          {{ useGroupsStore().tabGroups }}
-        </div>
-      </div>
-
-      <q-banner rounded>All active Chrome Groups</q-banner>
-
-      <div class="row items-baseline q-ma-md">
-        <div class="col-3">Active Groups</div>
-        <div class="col-9">
-          {{ useGroupsStore().currentTabGroups }}
-        </div>
-      </div>
-    </div>
+    <InternalSettings />
   </div>
 
   <div v-if="tab === 'ignored'">
@@ -227,11 +189,11 @@ import { useRoute } from 'vue-router'
 import 'vue-json-pretty/lib/styles.css'
 import AppearanceSettings from 'pages/helper/AppearanceSettings.vue'
 import ImportExportSettings from 'pages/helper/ImportExportSettings.vue'
+import InternalSettings from 'pages/helper/InternalSettings.vue'
 import SharingSettings from 'pages/helper/SharingSettings.vue'
 import DeleteAccountCommand from 'src/account/commands/DeleteAccountCommand'
 import { usePermissionsStore } from 'src/stores/usePermissionsStore'
 import BackupSettings from 'src/tabsets/pages/settings/BackupSettings.vue'
-import { useGroupsStore } from '../tabsets/stores/groupsStore'
 
 const { t } = useI18n()
 
