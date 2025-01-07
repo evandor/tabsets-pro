@@ -167,17 +167,18 @@ import { ExecutionResult } from 'src/core/domain/ExecutionResult'
 import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const $q = useQuasar()
 
-const email = ref<string>(LocalStorage.getItem(CURRENT_USER_EMAIL) as string)
 const password = ref('')
 const loading = ref<boolean>(false)
 const isPwd = ref(true)
 const showResetPassword = ref(false)
 const rememberMe = ref(LocalStorage.getItem(CURRENT_USER_EMAIL) !== null)
-const tab = ref('login')
+const invited = ref<string | undefined>(useRoute().query.invited as string | undefined)
+const email = ref<string>(invited.value ? invited.value : (LocalStorage.getItem(CURRENT_USER_EMAIL) as string))
+const tab = ref(invited.value ? 'register' : 'login')
 
 const router = useRouter()
 

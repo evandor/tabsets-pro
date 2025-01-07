@@ -139,6 +139,11 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('src/pages/SidePanelResearchPage.vue') }],
   },
   {
+    path: '/mainpanel/login',
+    component: () => import('layouts/SidePanelNoFooterLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SidePanelLoginPage.vue') }],
+  },
+  {
     path: '/mainpanel/settings',
     component: () => import('layouts/PlainWithRightDrawerLayout.vue'),
     children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
@@ -333,6 +338,13 @@ const routes: RouteRecordRaw[] = [
     path: '/pwa/tabsets/:tabsetId',
     component: () => import('layouts/PwaPageLayout.vue'),
     children: [{ path: '', component: () => import('pages/pwa/PwaTabsetPage.vue') }],
+  },
+  {
+    path: '/invitation',
+    redirect: (to) => ({
+      path: '/mainpanel/login',
+      query: { invited: to.query.email },
+    }),
   },
   // {
   //   path: '/help/:ident',

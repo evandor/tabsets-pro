@@ -65,6 +65,7 @@ export default defineConfig((ctx) => {
       env: {
         BUILD_TIMESTAMP: new Date().toISOString().split('T')[0],
         //BACKEND_URL: process.env.BACKEND_URL,
+        PWA_BACKEND_URL: process.env.PWA_BACKEND_URL,
         HOST: process.env.HOST,
 
         //TABSETS_PWA_URL: process.env.TABSETS_PWA_URL,

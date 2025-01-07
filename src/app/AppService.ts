@@ -198,6 +198,7 @@ class AppService {
     if (
       useTabsetsStore().tabsets.size === 0 &&
       quasar.platform.is.bex &&
+      useAuthStore().isAuthenticated() &&
       !router.currentRoute.value.path.startsWith('/fullpage') &&
       !router.currentRoute.value.path.startsWith('/mainpanel')
     ) {

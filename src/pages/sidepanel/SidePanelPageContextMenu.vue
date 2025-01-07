@@ -1,5 +1,5 @@
 <template>
-  <q-menu :offset="[12, 8]">
+  <q-menu :offset="[23, 8]">
     <q-list dense style="min-width: 200px">
       <ContextMenuItem
         v-close-popup
@@ -92,48 +92,85 @@
 
       <q-separator inset />
 
-      <ContextMenuItem
-        v-if="
-          useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING) &&
-          (tabset.sharing === TabsetSharing.UNSHARED || !tabset.sharing)
-        "
-        v-close-popup
-        @was-clicked="shareTabsetPubliclyDialog(tabset)"
-        icon="ios_share"
-        color="warning"
-        label="Share as link..." />
+      <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING)">
+        <ContextMenuItem
+          v-if="tabset.sharing === TabsetSharing.UNSHARED || !tabset.sharing"
+          v-close-popup
+          @was-clicked="shareTabsetPubliclyDialog(tabset)"
+          icon="ios_share"
+          color="warning"
+          label="Share publicly..." />
 
-      <ContextMenuItem
-        v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
-        v-close-popup
-        @was-clicked="shareTabsetPubliclyDialog(tabset, true)"
-        icon="ios_share"
-        color="warning"
-        label="Republish">
-        <q-tooltip class="tooltip-small">Tabset has changed, republish</q-tooltip>
-      </ContextMenuItem>
+        <ContextMenuItem v-else label="Sharing..." icon="ios_share">
+          <q-item-section side>
+            <q-icon name="keyboard_arrow_right" />
+          </q-item-section>
+          <q-menu anchor="top end" self="top start">
+            <q-list>
+              <q-item
+                v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
+                color="warning"
+                dense
+                clickable
+                v-close-popup
+                @click="shareTabsetPubliclyDialog(tabset, true)">
+                <q-item-section>Republish</q-item-section>
+                <q-tooltip class="tooltip-small">Tabset has changed, republish</q-tooltip>
+              </q-item>
+              <q-item
+                v-if="
+                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
+                "
+                color="warning"
+                dense
+                clickable
+                v-close-popup
+                @click="copyPublicShareToClipboard(tabset.id)">
+                <q-item-section>Copy Share URL</q-item-section>
+                <q-tooltip class="tooltip-small">Copy the link to the shared tabset</q-tooltip>
+              </q-item>
+              <q-item
+                v-if="
+                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
+                "
+                color="warning"
+                dense
+                clickable
+                v-close-popup
+                @click="openPublicShare(tabset.id)">
+                <q-item-section>Open Shared Page</q-item-section>
+                <q-tooltip class="tooltip-small">Open the shared location</q-tooltip>
+              </q-item>
+              <q-item
+                v-if="
+                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
+                "
+                color="warning"
+                dense
+                clickable
+                v-close-popup
+                @click="openShareWithDialog(tabset)">
+                <q-item-section>Share with...</q-item-section>
+                <q-tooltip class="tooltip-small">Share with User or Team</q-tooltip>
+              </q-item>
+              <q-item
+                v-if="
+                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
+                "
+                color="warning"
+                dense
+                clickable
+                v-close-popup
+                @click="removePublicShare(tabset.id, tabset.sharedId || '')">
+                <q-item-section>Stop Sharing</q-item-section>
+                <q-tooltip class="tooltip-small">Delete Shared Link</q-tooltip>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </ContextMenuItem>
 
-      <ContextMenuItem
-        v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
-        v-close-popup
-        @was-clicked="openPublicShare(tabset.id)"
-        icon="ios_share"
-        color="warning"
-        label="Open Shared Page">
-        <q-tooltip class="tooltip-small">Open the shared location</q-tooltip>
-      </ContextMenuItem>
-
-      <ContextMenuItem
-        v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
-        v-close-popup
-        @was-clicked="removePublicShare(tabset.id, tabset.sharedId || '')"
-        icon="ios_share"
-        color="warning"
-        label="Stop Sharing">
-        <q-tooltip class="tooltip-small">Delete Shared Link</q-tooltip>
-      </ContextMenuItem>
-
-      <q-separator inset v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING)" />
+        <q-separator inset />
+      </template>
 
       <!--      <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">-->
       <!--        <ContextMenuItem v-close-popup-->
@@ -163,6 +200,7 @@
 import { LocalStorage, openURL, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import ContextMenuItem from 'src/core/components/helper/ContextMenuItem.vue'
+import { CopyToClipboardCommand } from 'src/core/domain/commands/CopyToClipboard'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { NotificationType } from 'src/core/services/ErrorHandler'
 import { useUtils } from 'src/core/services/Utils'
@@ -175,6 +213,7 @@ import { UnShareTabsetCommand } from 'src/tabsets/commands/UnShareTabsetCommand'
 import DeleteTabsetDialog from 'src/tabsets/dialogues/DeleteTabsetDialog.vue'
 import EditTabsetDialog from 'src/tabsets/dialogues/EditTabsetDialog.vue'
 import NewSubfolderDialog from 'src/tabsets/dialogues/NewSubfolderDialog.vue'
+import ShareTabsetDialog from 'src/tabsets/dialogues/ShareTabsetDialog.vue'
 import ShareTabsetPubliclyDialog from 'src/tabsets/dialogues/ShareTabsetPubliclyDialog.vue'
 import { Tabset, TabsetSharing, TabsetStatus, TabsetType } from 'src/tabsets/models/Tabset'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
@@ -306,6 +345,18 @@ const shareTabsetPubliclyDialog = (tabset: Tabset, republish: boolean = false) =
   })
 }
 
+const openShareWithDialog = (tabset: Tabset, republish: boolean = false) => {
+  $q.dialog({
+    component: ShareTabsetDialog,
+    componentProps: {
+      tabsetId: tabset.id,
+      sharedId: tabset.sharedId,
+      tabsetName: tabset.name,
+      republish: republish,
+    },
+  })
+}
+
 const openPublicShare = (tabsetId: string) => {
   const ts = useTabsetsStore().getTabset(tabsetId)
   if (ts && ts.sharedId) {
@@ -320,7 +371,9 @@ const getPublicTabsetLink = (ts: Tabset) => {
   if (ts && ts.sharedId) {
     //return PUBLIC_SHARE_URL + "#/pwa/imp/" + ts.sharedId + "?n=" + btoa(ts.name) + "&a=" + btoa(ts.sharedBy || 'n/a') + "&d=" + ts.sharedAt
     return (
-      'https://us-central1-tabsets-backend-prd.cloudfunctions.net/app/share/preview/' +
+      // 'https://us-central1-tabsets-backend-prd.cloudfunctions.net/app/share/preview/' +
+      process.env.PWA_BACKEND_URL +
+      '/#/pwa/imp/' +
       ts.sharedId +
       '?n=' +
       btoa(ts.name) +
@@ -329,5 +382,12 @@ const getPublicTabsetLink = (ts: Tabset) => {
     )
   }
   return image
+}
+
+const copyPublicShareToClipboard = (tabsetId: string) => {
+  const ts = useTabsetsStore().getTabset(tabsetId)
+  if (ts && ts.sharedId) {
+    useCommandExecutor().executeFromUi(new CopyToClipboardCommand(getPublicTabsetLink(ts)))
+  }
 }
 </script>

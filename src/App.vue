@@ -59,7 +59,8 @@ onAuthStateChanged(auth, async (user) => {
     // User is signed out
     console.log('%conAuthStateChanged: logged out', 'border:1px solid green')
     console.log('test', route)
-    if (!route.fullPath.startsWith('/pwa/imp/')) {
+    // TODO
+    if (!(route.fullPath.startsWith('/pwa/imp/') || route.fullPath.startsWith('/mainpanel/login'))) {
       await router.push('/sidepanel/login')
     }
   }

@@ -8,7 +8,9 @@
   "private": true,
   "scripts": {
     "dev": "cp envs/env.local ./.env && quasar dev -m bex -T chrome",
+    "dev emulator": "cp envs/env.emulator ./.env && quasar dev -m bex -T chrome",
     "dev pwa": "cp envs/env.local ./.env && quasar dev -m pwa",
+    "dev pwa emulator": "cp envs/env.emulator ./.env && quasar dev -m pwa",
     "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{ts,js,cjs,mjs,vue}\"",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "build": "quasar build -m bex -T chrome",

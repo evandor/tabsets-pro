@@ -59,3 +59,5 @@ docs/.vitepress/cache
 /.env.opera
 /envs/env.local
 /envs/env.prd
+/envs/env.dev
+/envs/env.emulator

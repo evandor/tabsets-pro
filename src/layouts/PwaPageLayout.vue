@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-img
+          @click="toggleLeftDrawer"
           class="q-ml-xs q-mr-none cursor-pointer"
           style="margin-top: -7px"
           src="favicon.ico"

@@ -65,8 +65,8 @@ const date = ref<number>(route.query['d'] as unknown as number)
 let waitCounter = 0
 
 async function setupTabset(importedTS: Tabset) {
-  console.log('setup Tabset', waitCounter)
-  console.log('useTabsetService()', useTabsetService())
+  console.log('setup Tabset')
+  importedTS.id = uid()
   const res = await useTabsetService().saveTabset(importedTS)
   console.log('res', res)
   useTabsetService().selectTabset(importedTS.id)

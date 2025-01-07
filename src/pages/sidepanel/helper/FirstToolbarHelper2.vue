@@ -30,6 +30,14 @@
                   class="text-body1 text-bold cursor-pointer ellipsis"
                   @click="router.push('/sidepanel/collections')">
                   <template v-if="currentTabset">
+                    <q-icon
+                      v-if="currentTabset!.sharedId"
+                      name="ios_share"
+                      class="q-ma-none q-pa-none q-pb-sm"
+                      color="grey-5"
+                      size="xs">
+                      <q-tooltip class="tooltip-small">This tabset is being shared</q-tooltip>
+                    </q-icon>
                     {{ currentTabset.name }}
                     <q-icon name="arrow_drop_down" class="q-ma-none q-pa-none" color="grey-5" size="xs" />
                     <q-tooltip
