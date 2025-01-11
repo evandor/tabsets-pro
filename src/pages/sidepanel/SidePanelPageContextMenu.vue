@@ -93,20 +93,22 @@
       <q-separator inset />
 
       <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING)">
-        <ContextMenuItem
-          v-if="tabset.sharing === TabsetSharing.UNSHARED || !tabset.sharing"
-          v-close-popup
-          @was-clicked="shareTabsetPubliclyDialog(tabset)"
-          icon="ios_share"
-          color="warning"
-          label="Share publicly..." />
-
-        <ContextMenuItem v-else label="Sharing..." icon="ios_share">
+        <ContextMenuItem label="Sharing..." icon="ios_share">
           <q-item-section side>
             <q-icon name="keyboard_arrow_right" />
           </q-item-section>
           <q-menu anchor="top end" self="top start">
             <q-list>
+              <q-item
+                v-if="tabset.sharing === TabsetSharing.UNSHARED || !tabset.sharing"
+                color="warning"
+                dense
+                clickable
+                v-close-popup
+                @click="shareTabsetPubliclyDialog(tabset)">
+                <q-item-section>Publish publicly...</q-item-section>
+                <q-tooltip class="tooltip-small">Publish this tabset</q-tooltip>
+              </q-item>
               <q-item
                 v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
                 color="warning"
@@ -141,15 +143,7 @@
                 <q-item-section>Open Shared Page</q-item-section>
                 <q-tooltip class="tooltip-small">Open the shared location</q-tooltip>
               </q-item>
-              <q-item
-                v-if="
-                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
-                "
-                color="warning"
-                dense
-                clickable
-                v-close-popup
-                @click="openShareWithDialog(tabset)">
+              <q-item color="warning" dense clickable v-close-popup @click="openShareWithDialog(tabset)">
                 <q-item-section>Share with...</q-item-section>
                 <q-tooltip class="tooltip-small">Share with User or Team</q-tooltip>
               </q-item>

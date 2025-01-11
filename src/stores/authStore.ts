@@ -131,7 +131,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function getCustomClaimRoles(): Promise<string[]> {
     await FirebaseServices.getAuth().currentUser!.getIdToken(true)
     const decodedToken = await FirebaseServices.getAuth().currentUser!.getIdTokenResult()
-    //console.log('decodedToken', decodedToken)
+    console.log('decodedToken.claims', decodedToken.claims)
     return (decodedToken.claims.stripeRole as string[]) || []
   }
 

@@ -26,6 +26,10 @@
       <SidePanelTabsetListMarkup />
     </template>
 
+    <SidePanelMessagesMarkup />
+
+    <SidePanelTabsetReferencesMarkup />
+
     <div class="row fit q-mb-sm" v-if="showWindowTable">
       <!-- https://michaelnthiessen.com/force-re-render -->
 
@@ -281,7 +285,9 @@ import { Suggestion, SuggestionState } from 'src/suggestions/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { AddTabToTabsetCommand } from 'src/tabsets/commands/AddTabToTabsetCommand'
 import { CreateTabsetCommand } from 'src/tabsets/commands/CreateTabsetCommand'
+import SidePanelMessagesMarkup from 'src/tabsets/components/helper/SidePanelMessagesMarkup.vue'
 import SidePanelTabsetListMarkup from 'src/tabsets/components/helper/SidePanelTabsetListMarkup.vue'
+import SidePanelTabsetReferencesMarkup from 'src/tabsets/components/helper/SidePanelTabsetReferencesMarkup.vue'
 import NewTabsetDialog from 'src/tabsets/dialogues/NewTabsetDialog.vue'
 import StartSessionDialog from 'src/tabsets/dialogues/StartSessionDialog.vue'
 import { SaveOrReplaceResult } from 'src/tabsets/models/SaveOrReplaceResult'

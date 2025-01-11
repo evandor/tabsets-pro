@@ -2,6 +2,8 @@
   <!-- FirstToolbarHelper2 -->
   <q-toolbar class="q-pa-none q-pl-none q-pr-none q-pb-none greyBorderBottom" :style="offsetTop()">
     <q-toolbar-title>
+      <div v-if="showWatermark" id="watermark">{{ watermark }}</div>
+
       <div class="row q-ma-none q-pa-none">
         <div class="col-6 q-ma-none q-pa-none" style="border: 0 solid red">
           <!-- no spaces && searching -->
@@ -112,7 +114,7 @@ import { useActionHandlers } from 'src/tabsets/actionHandling/ActionHandlers'
 import { ActionHandlerButtonClickedHolder } from 'src/tabsets/actionHandling/model/ActionHandlerButtonClickedHolder'
 import SpecialUrlAddToTabsetComponent from 'src/tabsets/actionHandling/SpecialUrlAddToTabsetComponent.vue'
 import { Tab } from 'src/tabsets/models/Tab'
-import { Tabset, TabsetType } from 'src/tabsets/models/Tabset'
+import { Tabset, TabsetSharing, TabsetType } from 'src/tabsets/models/Tabset'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
@@ -143,6 +145,8 @@ const currentTabset = ref<Tabset | undefined>(undefined)
 const currentChromeTab = ref<chrome.tabs.Tab | undefined>(undefined)
 const overlap = ref(0.5)
 const overlapTooltip = ref('')
+const showWatermark = ref(false)
+const watermark = ref('')
 
 const toggleSearch = () => {
   searching.value = !searching.value
@@ -190,6 +194,11 @@ watchEffect(() => {
   showFilter.value = useUiStore().sidePanelActiveViewIs(SidePanelViews.TABS_LIST) && useUiStore().toolbarFilter
 })
 
+watchEffect(() => {
+  showWatermark.value = useUiStore().getWatermark().length > 0
+  watermark.value = useUiStore().getWatermark()
+})
+
 if ($q.platform.is.chrome && $q.platform.is.bex) {
   chrome.commands.onCommand.addListener((command) => {
     if (command === 'search') {
@@ -211,7 +220,18 @@ const title = (): string => {
         case TabsetType.SESSION:
           return `Session (${currentTs.tabs.length} tab${currentTs.tabs.length > 1 ? 's' : ''})`
         default:
-          return currentTs.sharedId ? 'Shared Collection' : 'Collection'
+          switch (currentTs.sharing) {
+            case TabsetSharing.UNSHARED:
+              return 'Collection'
+            case TabsetSharing.PUBLIC_LINK:
+              return 'Shared Collection'
+            case TabsetSharing.PUBLIC_LINK_OUTDATED:
+              return 'Shared Collection'
+            case TabsetSharing.USER:
+              return currentTs.shareReference ? 'Shared Collection' : 'Sharing Collection'
+            default:
+              return 'Collection'
+          }
       }
     }
     return 'Collection'

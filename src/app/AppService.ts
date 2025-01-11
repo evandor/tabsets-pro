@@ -11,6 +11,7 @@ import { SpaceInfo } from 'src/core/models/SpaceInfo'
 import { TabsetInfo } from 'src/core/models/TabsetInfo'
 import { useEntityRegistryStore } from 'src/core/stores/entityRegistryStore'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import { useMessagesStore } from 'src/messages/stores/messagesStore'
 import { useNotesStore } from 'src/notes/stores/NotesStore'
 import IndexedDbRequestPersistence from 'src/requests/persistence/IndexedDbRequestPersistence'
 import { useRequestsService } from 'src/requests/services/RequestsService'
@@ -51,7 +52,7 @@ class AppService {
 
     if (this.initialized) {
       await ChromeListeners.resetListeners()
-      await useWindowsStore().resetListeners()
+      useWindowsStore().resetListeners()
     }
 
     this.initialized = true
@@ -181,6 +182,8 @@ class AppService {
     await useContentService().populateSearch(existingUrls)
     await useTabsetService().populateSearch()
     console.debug('')
+
+    useMessagesStore().initialize()
 
     ChromeApi.init(router)
 

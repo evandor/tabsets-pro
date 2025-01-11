@@ -2,8 +2,9 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import 'firebase/compat/firestore'
 import { Auth, connectAuthEmulator, getAuth } from 'firebase/auth'
-import { Firestore, getFirestore, initializeFirestore } from 'firebase/firestore'
-import { FirebaseStorage, getStorage } from 'firebase/storage'
+import { connectFirestoreEmulator, Firestore, getFirestore, initializeFirestore } from 'firebase/firestore'
+import { connectStorageEmulator, FirebaseStorage, getStorage } from 'firebase/storage'
+import { useUiStore } from 'src/ui/stores/uiStore'
 
 class FirebaseServices {
   private firebaseApp: firebase.app.App = null as unknown as firebase.app.App
@@ -25,9 +26,13 @@ class FirebaseServices {
       messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
     })
     this.auth = getAuth(this.firebaseApp)
-    if (process.env.FIREBASE_API_KEY === '') {
-      console.warn('using firebase emulator')
+    if (process.env.TABSETS_STAGE === 'EMULATOR') {
+      useUiStore().setWatermark('emulator')
+      console.warn('using firebase emulators for auth, storage and firestore')
       connectAuthEmulator(this.auth, 'http://127.0.0.1:9099')
+      const db = getFirestore()
+      connectFirestoreEmulator(db, '127.0.0.1', 8080)
+      connectStorageEmulator(getStorage(), '127.0.0.1', 9199)
     }
 
     // https://firebase.google.com/docs/firestore/manage-data/enable-offline#web-modular-api
