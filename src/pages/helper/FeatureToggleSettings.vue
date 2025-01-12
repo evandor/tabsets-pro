@@ -23,6 +23,15 @@
     </div>
 
     <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+      <div class="col-3"><b>Send Message to current User</b></div>
+      <div class="col-3">a new message will be created for the current user and should appear in the side panel</div>
+      <div class="col-1"></div>
+      <div class="col-5">
+        <q-btn label="Create Message" no-caps @click="triggerMessage('dummy message triggered by user')" />
+      </div>
+    </div>
+
+    <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
       <div class="col-3"><b>Trigger CommandExecution Error Handler</b></div>
       <div class="col-3">
         this should initiate a sentry error message like the ones happening when running into a problem executing a
@@ -33,6 +42,7 @@
         <q-btn label="Trigger Error" no-caps @click="triggerErrorHandler()" />
       </div>
     </div>
+
     <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
       <div class="col-3"><b>Trigger Catch-All Error Handler</b></div>
       <div class="col-3">this should initiate a sentry error message from the vue error interceptor.</div>
@@ -55,13 +65,18 @@
 
 <script lang="ts" setup>
 import { captureFeedback, captureMessage } from '@sentry/browser'
+import { doc, setDoc } from 'firebase/firestore'
+import { uid } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { ActivateFeatureCommand } from 'src/features/commands/ActivateFeatureCommand'
 import { DeactivateFeatureCommand } from 'src/features/commands/DeactivateFeatureCommand'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
+import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useSettingsStore } from 'src/stores/settingsStore'
+import { Message } from 'src/tabsets/models/Message'
+import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
 
 const settingsStore = useSettingsStore()
@@ -82,6 +97,14 @@ const updateSettings = (ident: string, val: boolean) => {
   }
   // TODO deprecated
   settingsStore.setFeatureToggle(ident, val)
+}
+
+const triggerMessage = (msg: string) => {
+  const message = new Message(uid(), new Date().getTime(), 0, 'new', msg)
+  setDoc(
+    doc(FirebaseServices.getFirestore(), `users/${useAuthStore().user.uid}/messages/${message.id}`),
+    JSON.parse(JSON.stringify(message)),
+  )
 }
 
 const triggerErrorHandler = () => handleError('an user-initiated error message from tabsets at ' + new Date().getTime())

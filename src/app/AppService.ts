@@ -10,6 +10,7 @@ import { useContentService } from 'src/content/services/ContentService'
 import { SpaceInfo } from 'src/core/models/SpaceInfo'
 import { TabsetInfo } from 'src/core/models/TabsetInfo'
 import { useEntityRegistryStore } from 'src/core/stores/entityRegistryStore'
+import { useEventsStore } from 'src/events/stores/eventsStore'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import { useMessagesStore } from 'src/messages/stores/messagesStore'
 import { useNotesStore } from 'src/notes/stores/NotesStore'
@@ -184,6 +185,7 @@ class AppService {
     console.debug('')
 
     useMessagesStore().initialize()
+    useEventsStore().initialize()
 
     ChromeApi.init(router)
 

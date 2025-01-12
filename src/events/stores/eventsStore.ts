@@ -3,40 +3,40 @@ import { defineStore } from 'pinia'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { Message } from 'src/tabsets/models/Message'
 import { useAuthStore } from 'stores/authStore'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
-export const useMessagesStore = defineStore('messages', () => {
+export const useEventsStore = defineStore('events', () => {
   let unsubscribe: any
 
   const lastUpdate = ref<number>(new Date().getTime())
-  const messages = ref<Message[]>([])
+  const events = ref<Message[]>([])
 
   function initialize() {
-    console.debug(` ...initializing messagesStore`)
+    console.debug(` ...initializing eventsStore`)
     setUpSnapshotListener()
   }
 
   function setUpSnapshotListener() {
-    messages.value = []
+    events.value = []
     unsubscribe = onSnapshot(
-      collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'messages'),
+      collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'events'),
       (docs) => {
-        messages.value = []
+        events.value = []
         //const source = doc.metadata.hasPendingWrites ? 'Local' : 'Server'
         docs.forEach((doc: any) => {
-          console.log('onSnapshot data: ', messages.value.length, doc.data())
-          messages.value.push(doc.data())
+          console.log('onSnapshot data event: ', events.value.length, doc.data())
+          events.value.push(doc.data())
           lastUpdate.value = new Date().getTime()
         })
       },
     )
   }
 
-  const getUnreadMessages = computed(() => messages.value.sort((a: Message, b: Message) => b.created - a.created))
+  //const getUnreadMessages = computed(() => events.value.sort((a: Message, b: Message) => b.created - a.created))
 
   return {
     initialize,
     lastUpdate,
-    getUnreadMessages,
+    //getUnreadMessages,
   }
 })
