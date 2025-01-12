@@ -40,13 +40,13 @@
                       size="xs">
                       <q-tooltip class="tooltip-small">This tabset is being shared</q-tooltip>
                     </q-icon>
-                    {{ currentTabset.name }}*
+                    {{ currentTabset.name }}
                     <q-icon name="arrow_drop_down" class="q-ma-none q-pa-none" color="grey-5" size="xs" />
                     <q-tooltip
                       class="tooltip-small"
                       :delay="3000"
                       v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-                      >{{ currentTabset?.id }},{{ currentTabset?.loaded }}
+                      >{{ currentTabset?.id }},{{ currentTabset?.loaded }},{{ currentTabset?.shareReference }}
                     </q-tooltip>
                   </template>
                   <template v-else>
