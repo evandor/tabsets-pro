@@ -12,7 +12,6 @@ import { useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useUtils } from 'src/core/services/Utils'
 import { usePermissionsStore } from 'src/core/stores/usePermissionsStore'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
-import { useLogger } from 'src/services/Logger'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { useAppStore } from 'stores/appStore'
 import { useSettingsStore } from 'stores/settingsStore'
@@ -28,14 +27,10 @@ const { handleError } = useNotificationHandler()
 
 const settingsStore = useSettingsStore()
 settingsStore.initialize($q.localStorage)
-console.debug('')
 
 usePermissionsStore().initialize()
-console.debug('')
 
 useAppStore().init()
-
-const { info } = useLogger()
 
 FirebaseServices.init()
 
@@ -43,7 +38,7 @@ const auth = FirebaseServices.getAuth()
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    console.log('%conAuthStateChanged: about to log in', 'border:1px solid green', user)
+    console.log('%conAuthStateChanged: about to log in', 'border:1px solid green', user?.email)
 
     try {
       await AppService.init($q, router, true, user)

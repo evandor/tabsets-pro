@@ -131,7 +131,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function getCustomClaimRoles(): Promise<string[]> {
     await FirebaseServices.getAuth().currentUser!.getIdToken(true)
     const decodedToken = await FirebaseServices.getAuth().currentUser!.getIdTokenResult()
-    console.log('decodedToken.claims', decodedToken.claims)
+    //console.log('decodedToken.claims', decodedToken.claims)
     return (decodedToken.claims.stripeRole as string[]) || []
   }
 
@@ -160,18 +160,18 @@ export const useAuthStore = defineStore('auth', () => {
   // --- actions ---
   async function setUser(u: User | undefined) {
     if (u) {
-      console.log('setting user id to', u.uid, await getCustomClaimRoles())
+      console.log('setting user id to', u.uid) //, await getCustomClaimRoles())
       LocalStorage.set(CURRENT_USER_ID, u.uid)
       authenticated.value = true
       user.value = JSON.parse(JSON.stringify(u))
       roles.value = await getCustomClaimRoles()
-      console.log('user has roles: ', roles.value)
+      //console.log('user has roles: ', roles.value)
       const fs = FirebaseServices.getFirestore()
       const d = doc(fs, 'users', u.uid)
       const userDoc = await getDoc(d)
       const userData = userDoc.data() as UserData
       const account = new Account(u.uid, userData)
-      console.debug('created account object', account)
+      //console.debug('created account object', account)
       const querySnapshot = await getDocs(collection(FirebaseServices.getFirestore(), 'users', u.uid, 'subscriptions'))
       const products = new Set<string>()
       querySnapshot.forEach((doc) => {

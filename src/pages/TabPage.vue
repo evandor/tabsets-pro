@@ -134,14 +134,14 @@
           <q-img :src="thumbnail" width="512px" style="border: 1px solid grey" />
         </div>
       </div>
-      <hr />
-      <div class="row items-baseline q-ma-lg">
-        <div class="col-12">Not happy with the results?</div>
-        <div class="col-12">
-          <q-btn label="Rerun Analysis" @click="analyseTab" />
-        </div>
-        <div class="col-12">This will open a new window, analyse the page and close it again.</div>
-      </div>
+      <!--      <hr />-->
+      <!--      <div class="row items-baseline q-ma-lg">-->
+      <!--        <div class="col-12">Not happy with the results?</div>-->
+      <!--        <div class="col-12">-->
+      <!--          <q-btn label="Rerun Analysis" @click="analyseTab" />-->
+      <!--        </div>-->
+      <!--        <div class="col-12">This will open a new window, analyse the page and close it again.</div>-->
+      <!--      </div>-->
     </div>
   </div>
 

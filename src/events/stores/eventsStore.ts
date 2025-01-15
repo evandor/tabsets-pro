@@ -13,7 +13,7 @@ export const useEventsStore = defineStore('events', () => {
   const events = ref<Event[]>([])
 
   function initialize() {
-    console.debug(` ...initializing eventsStore`)
+    // console.debug(` ...initializing eventsStore`)
     setUpSnapshotListener()
   }
 

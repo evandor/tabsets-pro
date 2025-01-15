@@ -12,24 +12,29 @@ export const useMessagesStore = defineStore('messages', () => {
   const messages = ref<Message[]>([])
 
   function initialize() {
-    console.debug(` ...initializing messagesStore`)
+    // console.debug(` ...initializing messagesStore`)
     setUpSnapshotListener()
   }
 
   function setUpSnapshotListener() {
     messages.value = []
-    unsubscribe = onSnapshot(
-      collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'messages'),
-      (docs) => {
-        messages.value = []
-        //const source = doc.metadata.hasPendingWrites ? 'Local' : 'Server'
-        docs.forEach((doc: any) => {
-          console.log('onSnapshot data: ', messages.value.length, doc.data())
-          messages.value.push(doc.data())
-          lastUpdate.value = new Date().getTime()
-        })
-      },
-    )
+    const userId = useAuthStore().user.uid
+    if (userId) {
+      unsubscribe = onSnapshot(
+        collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'messages'),
+        (docs) => {
+          messages.value = []
+          //const source = doc.metadata.hasPendingWrites ? 'Local' : 'Server'
+          docs.forEach((doc: any) => {
+            //console.log('onSnapshot data: ', messages.value.length, doc.data())
+            messages.value.push(doc.data())
+            lastUpdate.value = new Date().getTime()
+          })
+        },
+      )
+    } else {
+      console.warn('could not add snapshot listener (yet), no user id available')
+    }
   }
 
   const getUnreadMessages = computed(() => messages.value.sort((a: Message, b: Message) => b.created - a.created))

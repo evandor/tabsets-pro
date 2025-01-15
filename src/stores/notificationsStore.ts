@@ -24,7 +24,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
    * @param ps a notifications storage
    */
   async function initialize(ps: PersistenceService) {
-    console.debug(' ...initializing notifications')
+    // console.debug(' ...initializing notifications')
     // storage = ps
     // const newNotifications = await storage.getNotifications(true)
     // notifications.value = newNotifications

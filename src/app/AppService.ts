@@ -42,7 +42,7 @@ class AppService {
 
   async init(quasar: QVueGlobals, router: Router, forceRestart = false, user: User | undefined = undefined) {
     console.log(
-      `%cinitializing AppService: first start=${!this.initialized}, forceRestart=${forceRestart}, quasar set=${quasar !== undefined}, router set=${router !== undefined}`,
+      `%cinitializing AppService: first start=${!this.initialized}, router set=${router !== undefined}`,
       forceRestart ? 'font-weight:bold' : '',
     )
 
@@ -66,38 +66,30 @@ class AppService {
     useAppStore().init()
 
     await ChromeListeners.initListeners()
-    console.debug('')
 
     // Bookmarks
     ChromeBookmarkListeners.initListeners()
 
     useBookmarksStore().init()
     await BookmarksService.init()
-    console.debug('')
 
     // Snapshots
     await useSnapshotsStore().initialize(useDB().snapshotsDb)
     await useSnapshotsService().init()
-    console.debug('')
 
     // should be initialized before search submodule
     await useThumbnailsService().init(useDB().thumbnailsDb)
-    console.debug('')
 
     await useContentService().init(IndexedDbContentPersistence)
-    console.debug('')
 
     await useRequestsService().init(IndexedDbRequestPersistence)
-    console.debug('')
 
     await useSearchStore()
       .init()
       .catch((err: any) => console.error(err))
-    console.debug('')
 
     // init services
     await useSuggestionsStore().init()
-    console.debug('')
 
     tabsetService.setLocalStorage(localStorage)
 
@@ -130,10 +122,7 @@ class AppService {
     const authenticated = useAuthStore().isAuthenticated()
 
     await useWindowsStore().initialize()
-    console.debug('')
-
     useWindowsStore().initListeners()
-    console.debug('')
 
     /**
      * features store: passing storage for better testing.
@@ -141,14 +130,11 @@ class AppService {
      */
     const featuresStorage = useDB().featuresDb
     await useFeaturesStore().initialize(featuresStorage)
-    console.debug('')
 
     const localStorageTabsetsDb = useDB().localStorageTabsetsDb
     await useTabsetsUiStore().initialize(localStorageTabsetsDb)
-    console.debug('')
 
     await useNotesStore().initialize(useDB().notesDb)
-    console.debug('')
 
     /**
      * Pattern: TODO
@@ -162,7 +148,6 @@ class AppService {
       useEntityRegistryStore().spacesRegistry = spacesInfo
     })
     await useSpacesStore().initialize(useDB().spacesDb)
-    console.debug('')
 
     const tabsetsStore = useTabsetsStore()
     watch(tabsetsStore.tabsets, (newTabsets: Map<string, any>) => {
@@ -174,15 +159,12 @@ class AppService {
     })
     await tabsetsStore.initialize(authenticated ? useDB().tabsetsDb : useDB().localTabsetsDb)
     await useTabsetService().init(false)
-    console.debug('')
 
     await useTabsStore2().initialize()
-    console.debug('')
 
     const existingUrls = useTabsetsStore().getAllUrls()
     await useContentService().populateSearch(existingUrls)
     await useTabsetService().populateSearch()
-    console.debug('')
 
     useMessagesStore().initialize()
     useEventsStore().initialize()

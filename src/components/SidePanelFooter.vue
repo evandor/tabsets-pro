@@ -143,12 +143,11 @@
                 <q-separator />
 
                 <ContextMenuItem
-                  :disable="useTabsetsStore().getCurrentTabset?.type !== TabsetType.DEFAULT"
                   v-close-popup
                   @was-clicked="startSession()"
                   color="warning"
                   icon="sym_o_new_window"
-                  label="Start new Session..." />
+                  label="Sessions..." />
               </template>
 
               <q-separator />
@@ -285,6 +284,7 @@ import { Suggestion, SuggestionState } from 'src/suggestions/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { AddTabToTabsetCommand } from 'src/tabsets/commands/AddTabToTabsetCommand'
 import { CreateTabsetCommand } from 'src/tabsets/commands/CreateTabsetCommand'
+import { RestoreTabsetCommand } from 'src/tabsets/commands/RestoreTabset'
 import SidePanelMessagesMarkup from 'src/tabsets/components/helper/SidePanelMessagesMarkup.vue'
 import SidePanelTabsetListMarkup from 'src/tabsets/components/helper/SidePanelTabsetListMarkup.vue'
 import SidePanelTabsetReferencesMarkup from 'src/tabsets/components/helper/SidePanelTabsetReferencesMarkup.vue'
@@ -294,6 +294,7 @@ import { SaveOrReplaceResult } from 'src/tabsets/models/SaveOrReplaceResult'
 import { Tab, TabSnippet } from 'src/tabsets/models/Tab'
 import { TabAndTabsetId } from 'src/tabsets/models/TabAndTabsetId'
 import { Tabset, TabsetType } from 'src/tabsets/models/Tabset'
+import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
 import { useUiStore } from 'src/ui/stores/uiStore'
@@ -682,11 +683,11 @@ const reload = () => window.location.reload()
 const startSession = () => {
   $q.dialog({
     component: StartSessionDialog,
-  }).onOk((callback: object) => {
+  }).onOk((callback: { oldSessionName: string; collection: string }) => {
     console.log('callback', callback)
     const tabsToUse = useTabsStore2().browserTabs
     useCommandExecutor()
-      .execute(new CreateTabsetCommand(callback['oldSessionName' as keyof object], tabsToUse))
+      .execute(new CreateTabsetCommand(callback.oldSessionName, tabsToUse))
       .then((res: ExecutionResult<SaveOrReplaceResult>) => {
         console.log('res', res.result.tabset)
         const ts = res.result.tabset
@@ -695,7 +696,12 @@ const startSession = () => {
         BrowserApi.closeAllTabs(false)
       })
       .then(() => {
-        useCommandExecutor().executeFromUi(new CreateTabsetCommand(callback['sessionName' as keyof object], []))
+        const tabsetId = callback.collection['value' as keyof object]
+        //useCommandExecutor().executeFromUi(new CreateTabsetCommand(callback['sessionName' as keyof object], []))
+        if (tabsetId) {
+          useTabsetService().selectTabset(tabsetId)
+          useCommandExecutor().execute(new RestoreTabsetCommand(tabsetId, undefined, false))
+        }
       })
   })
 }

@@ -1,5 +1,4 @@
 import { uid } from 'quasar'
-import BrowserApi from 'src/app/BrowserApi'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { SidePanelViews } from 'src/app/models/SidePanelViews'
 import { useContentStore } from 'src/content/stores/contentStore'
@@ -117,7 +116,7 @@ class BrowserListeners {
 
   async initListeners() {
     if (process.env.MODE === 'bex') {
-      console.debug(' ...initializing chrome tab listeners')
+      // console.debug(' ...initializing chrome tab listeners')
 
       chrome.runtime.setUninstallURL('https://tabsets.web.app/#/uninstall')
 
@@ -138,10 +137,10 @@ class BrowserListeners {
 
       // TODO removed listeners as well?
       if (useFeaturesStore().hasFeature(FeatureIdent.NOTIFICATIONS)) {
-        chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
+        chrome.notifications?.onButtonClicked.addListener((notificationId, buttonIndex) => {
           runOnNotificationClick(notificationId, buttonIndex)
         })
-        chrome.notifications.onClicked.addListener((notificationId) => {
+        chrome.notifications?.onClicked.addListener((notificationId) => {
           runOnNotificationClick(notificationId, 0)
         })
       }
@@ -182,7 +181,13 @@ class BrowserListeners {
     if (info.status === 'complete') {
       console.debug(`onUpdated:   tab ${number}: >>> ${JSON.stringify(info)}`)
 
-      this.handleUpdateInjectScripts(info, chromeTab)
+      // matching tabs for url
+      if (chromeTab.url) {
+        useTabsetsUiStore().setMatchingTabsFor(chromeTab.url)
+      }
+
+      // set badge, text and color
+      useTabsetsUiStore().updateExtensionIcon()
 
       // handle existing tabs
       if (useFeaturesStore().hasFeature(FeatureIdent.TAB_GROUPS)) {
@@ -201,20 +206,6 @@ class BrowserListeners {
           }
         }
       }
-
-      // matching tabs for url
-      if (chromeTab.url) {
-        useTabsetsUiStore().setMatchingTabsFor(chromeTab.url)
-      }
-    }
-  }
-
-  private handleUpdateInjectScripts(info: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) {
-    if (!tab.id || (tab.url && tab.url.startsWith('https://shared.tabsets.net'))) {
-      return
-    }
-    if (!useUiStore().hideIndicatorIcon) {
-      BrowserApi.addIndicatorIcon(tab.id, tab.url)
     }
   }
 
@@ -231,6 +222,9 @@ class BrowserListeners {
   async onActivated(info: chrome.tabs.TabActiveInfo) {
     console.debug(`onActivated: tab ${info.tabId}: >>> ${JSON.stringify(info)}`)
     await setCurrentTab()
+
+    // set badge, text and color
+    useTabsetsUiStore().updateExtensionIcon()
 
     chrome.tabs.get(info.tabId, (tab) => {
       if (chrome.runtime.lastError) {
@@ -358,7 +352,7 @@ class BrowserListeners {
         }
       })
       .then(() => {
-        chrome.notifications.create({
+        chrome.notifications?.create({
           title: 'Tabset Extension Message',
           type: 'basic',
           //iconUrl: "chrome-extension://" + selfId + "/www/favicon.ico",
@@ -368,7 +362,7 @@ class BrowserListeners {
       })
       .catch((err: any) => {
         console.log('catching rejection', err)
-        chrome.notifications.create({
+        chrome.notifications?.create({
           title: 'Tabset Extension Message',
           type: 'basic',
           //iconUrl: "chrome-extension://" + selfId + "/www/favicon.ico",

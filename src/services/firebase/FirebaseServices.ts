@@ -16,7 +16,7 @@ class FirebaseServices {
   // private realtimeDb: Database = null as unknown as Database
 
   init() {
-    console.log('initializing FirebaseServices')
+    // console.log('initializing FirebaseServices')
     this.firebaseApp = firebase.initializeApp({
       apiKey: process.env.FIREBASE_API_KEY,
       authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -43,7 +43,7 @@ class FirebaseServices {
     initializeFirestore(this.firebaseApp, {})
     this.firestore = getFirestore(this.firebaseApp)
     this.storage = getStorage(this.firebaseApp)
-    console.log('initializing FirebaseServices -- done')
+    //console.log('initializing FirebaseServices -- done')
   }
 
   getAuth() {

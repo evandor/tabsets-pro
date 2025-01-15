@@ -8,7 +8,7 @@ export const usePermissionsStore = defineStore('permissions', () => {
   const permissions = ref<chrome.permissions.Permissions | undefined>(undefined)
 
   async function initialize() {
-    console.debug(' ...initializing permissionsStore', '✅')
+    // console.debug(' ...initializing permissionsStore', '✅')
     await load()
   }
 

@@ -1,4 +1,5 @@
 <template>
+  <!-- SidePanelSearchPage -->
   <q-page style="padding-top: 50px">
     <div class="row q-ma-none q-pa-none">
       <div class="col-12 q-ma-none q-pa-none">
@@ -138,7 +139,7 @@ const newSearch = (term: string) => {
         0,
         0,
         Math.round(100 - 100 * (h?.score || 1)),
-        [], //h.item.tabsets,
+        h.item.tabsets,
         [],
         _.map(h['matches' as keyof object], (m: any) => {
           return {

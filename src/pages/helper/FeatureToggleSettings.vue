@@ -42,7 +42,6 @@
         <q-btn label="Trigger Error" no-caps @click="triggerErrorHandler()" />
       </div>
     </div>
-
     <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
       <div class="col-3"><b>Trigger Catch-All Error Handler</b></div>
       <div class="col-3">this should initiate a sentry error message from the vue error interceptor.</div>
