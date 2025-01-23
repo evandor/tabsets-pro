@@ -1,4 +1,4 @@
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, onSnapshot, Unsubscribe } from 'firebase/firestore'
 import { defineStore } from 'pinia'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { Event } from 'src/tabsets/models/Event'
@@ -7,7 +7,7 @@ import { useAuthStore } from 'stores/authStore'
 import { ref } from 'vue'
 
 export const useEventsStore = defineStore('events', () => {
-  let unsubscribe: any
+  let unsubscribe: Unsubscribe | undefined = undefined
 
   const lastUpdate = ref<number>(new Date().getTime())
   const events = ref<Event[]>([])
@@ -20,9 +20,9 @@ export const useEventsStore = defineStore('events', () => {
   function setUpSnapshotListener() {
     events.value = []
     let reloadTabset = false
-    unsubscribe = onSnapshot(
-      collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'events'),
-      (docs) => {
+    const userId = useAuthStore().user?.uid
+    if (userId && unsubscribe === undefined) {
+      unsubscribe = onSnapshot(collection(FirebaseServices.getFirestore(), 'users', userId, 'events'), (docs) => {
         events.value = []
         //const source = doc.metadata.hasPendingWrites ? 'Local' : 'Server'
         docs.forEach((doc: any) => {
@@ -47,8 +47,8 @@ export const useEventsStore = defineStore('events', () => {
           useTabsetsStore().reloadTabset(useTabsetsStore().currentTabsetId!)
           reloadTabset = false
         }
-      },
-    )
+      })
+    }
   }
 
   return {

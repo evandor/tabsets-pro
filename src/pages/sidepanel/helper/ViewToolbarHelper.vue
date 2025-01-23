@@ -2,8 +2,6 @@
   <!-- FirstToolbarHelper2 -->
   <q-toolbar class="q-pa-none q-pl-none q-pr-none q-pb-none greyBorderBottom" :style="offsetTop()">
     <q-toolbar-title>
-      <div v-if="showWatermark" id="watermark">{{ watermark }}</div>
-
       <div class="row q-ma-none q-pa-none">
         <div class="col-6 q-ma-none q-pa-none" style="border: 0 solid red">
           <!-- no spaces && searching -->
@@ -13,45 +11,15 @@
             :search-hits="props.searchHits!" />
 
           <FilterWithTransitionHelper v-else-if="showFilter" />
-          <!-- no spaces && not searching -->
+          <!-- not searching -->
           <template v-else>
-            <!-- no spaces && not searching -->
             <div class="col-12 text-subtitle1">
               <div class="q-ml-md q-mt-sm">
-                <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SPACES)">
-                  <div class="text-caption cursor-pointer" @click.stop="router.push('/sidepanel/spaces')">
-                    {{ title() }}
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="text-caption cursor-pointer" @click="router.push('/sidepanel/collections')">
-                    {{ title() }}
-                  </div>
-                </template>
-                <div
-                  class="text-body1 text-bold cursor-pointer ellipsis"
-                  @click="router.push('/sidepanel/collections')">
-                  <template v-if="currentTabset">
-                    <q-icon
-                      v-if="currentTabset!.sharing?.sharedId"
-                      name="ios_share"
-                      class="q-ma-none q-pa-none q-pb-sm"
-                      color="grey-5"
-                      size="xs">
-                      <q-tooltip class="tooltip-small">This tabset is being shared</q-tooltip>
-                    </q-icon>
-                    {{ currentTabset.name }}
-                    <q-icon name="arrow_drop_down" class="q-ma-none q-pa-none" color="grey-5" size="xs" />
-                    <q-tooltip
-                      class="tooltip-small"
-                      :delay="3000"
-                      v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)"
-                      >{{ currentTabset?.id }},{{ currentTabset?.loaded }},{{ currentTabset?.sharing?.shareReference }}
-                    </q-tooltip>
-                  </template>
-                  <template v-else>
-                    <q-spinner color="primary" size="1em" />
-                  </template>
+                <div class="text-caption cursor-pointer" @click.stop="backToMainView()">
+                  <span>&lt;&nbsp;back </span>
+                </div>
+                <div class="text-body1 text-bold ellipsis">
+                  {{ props.title }}
                 </div>
               </div>
             </div>
@@ -62,32 +30,7 @@
           class="col-6 text-subtitle1 text-right q-ma-none q-pa-none q-pr-none"
           v-if="!useUiStore().appLoading"
           style="border: 0 solid green">
-          <slot name="iconsRight">
-            <div class="q-mt-sm q-ma-none q-qa-none" style="border: 0 solid blue">
-              <template v-if="showSearchIcon()">
-                <SidePanelToolbarButton
-                  icon="search"
-                  class="q-mr-sm"
-                  id="toggleSearchBtn"
-                  size="11px"
-                  @click="toggleSearch" />
-              </template>
-
-              <SidePanelToolbarTabNavigationHelper />
-
-              <span>
-                <SpecialUrlAddToTabsetComponent
-                  v-if="currentChromeTab && currentTabset"
-                  @button-clicked="
-                    (args: ActionHandlerButtonClickedHolder) => handleButtonClicked(currentTabset!, args)
-                  "
-                  :currentChromeTab="currentChromeTab"
-                  :tabset="currentTabset" />
-              </span>
-              <q-icon name="more_vert" size="sm" color="secondary" class="cursor-pointer" />
-              <SidePanelPageContextMenu v-if="currentTabset" :tabset="currentTabset as Tabset" />
-            </div>
-          </slot>
+          <slot name="iconsRight"> </slot>
         </div>
       </div>
       <div class="row q-ma-none q-pa-none" v-if="useUiStore().overlapIndicator">
@@ -103,18 +46,14 @@
 import { useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { SidePanelViews } from 'src/app/models/SidePanelViews'
-import SidePanelToolbarButton from 'src/core/components/SidePanelToolbarButton.vue'
 import FilterWithTransitionHelper from 'src/core/widget/FilterWithTransitionHelper.vue'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
-import SidePanelToolbarTabNavigationHelper from 'src/opentabs/pages/SidePanelToolbarTabNavigationHelper.vue'
 import SearchWithTransitionHelper from 'src/pages/sidepanel/helper/SearchWithTransitionHelper.vue'
-import SidePanelPageContextMenu from 'src/pages/sidepanel/SidePanelPageContextMenu.vue'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import { useActionHandlers } from 'src/tabsets/actionHandling/ActionHandlers'
 import { ActionHandlerButtonClickedHolder } from 'src/tabsets/actionHandling/model/ActionHandlerButtonClickedHolder'
-import SpecialUrlAddToTabsetComponent from 'src/tabsets/actionHandling/SpecialUrlAddToTabsetComponent.vue'
 import { Tab } from 'src/tabsets/models/Tab'
-import { Tabset, TabsetSharing, TabsetType } from 'src/tabsets/models/Tabset'
+import { Tabset, TabsetType } from 'src/tabsets/models/Tabset'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
@@ -145,8 +84,6 @@ const currentTabset = ref<Tabset | undefined>(undefined)
 const currentChromeTab = ref<chrome.tabs.Tab | undefined>(undefined)
 const overlap = ref(0.5)
 const overlapTooltip = ref('')
-const showWatermark = ref(false)
-const watermark = ref('')
 
 const toggleSearch = () => {
   searching.value = !searching.value
@@ -194,11 +131,6 @@ watchEffect(() => {
   showFilter.value = useUiStore().sidePanelActiveViewIs(SidePanelViews.TABS_LIST) && useUiStore().toolbarFilter
 })
 
-watchEffect(() => {
-  showWatermark.value = useUiStore().getWatermark().length > 0
-  watermark.value = useUiStore().getWatermark()
-})
-
 if ($q.platform.is.chrome && $q.platform.is.bex) {
   chrome.commands.onCommand.addListener((command) => {
     if (command === 'search') {
@@ -212,7 +144,7 @@ const showSearchIcon = () => useTabsetsStore().tabsets.size > 1
 
 const title = (): string => {
   if (useFeaturesStore().hasFeature(FeatureIdent.SPACES)) {
-    return useSpacesStore().space ? useSpacesStore().space.label : t('no_space_selected')
+    return useSpacesStore().space ? useSpacesStore().space.label : 'no_space_selected'
   } else {
     const currentTs = useTabsetsStore().getCurrentTabset
     if (currentTs) {
@@ -220,18 +152,7 @@ const title = (): string => {
         case TabsetType.SESSION:
           return `Session (${currentTs.tabs.length} tab${currentTs.tabs.length > 1 ? 's' : ''})`
         default:
-          switch (currentTs.sharing.sharing) {
-            case TabsetSharing.UNSHARED:
-              return 'Collection'
-            case TabsetSharing.PUBLIC_LINK:
-              return 'Shared Collection'
-            case TabsetSharing.PUBLIC_LINK_OUTDATED:
-              return 'Shared Collection'
-            case TabsetSharing.USER:
-              return currentTs.sharing.shareReference ? 'Shared Collection' : 'Sharing Collection'
-            default:
-              return 'Collection'
-          }
+          return currentTs.sharing?.sharedId ? 'Shared Collection' : 'Collection'
       }
     }
     return 'Collection'
@@ -249,6 +170,11 @@ const handleButtonClicked = async (tabset: Tabset, args: ActionHandlerButtonClic
 }
 
 const offsetTop = () => ($q.platform.is.capacitor || $q.platform.is.cordova ? 'margin-top:40px;' : '')
+
+const backToMainView = () => {
+  useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
+  router.push('/sidepanel')
+}
 </script>
 
 <style scoped>

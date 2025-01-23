@@ -1,4 +1,4 @@
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, onSnapshot, Unsubscribe } from 'firebase/firestore'
 import { defineStore } from 'pinia'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { Message } from 'src/tabsets/models/Message'
@@ -6,7 +6,7 @@ import { useAuthStore } from 'stores/authStore'
 import { computed, ref } from 'vue'
 
 export const useMessagesStore = defineStore('messages', () => {
-  let unsubscribe: any
+  let unsubscribe: Unsubscribe | undefined = undefined
 
   const lastUpdate = ref<number>(new Date().getTime())
   const messages = ref<Message[]>([])
@@ -18,8 +18,8 @@ export const useMessagesStore = defineStore('messages', () => {
 
   function setUpSnapshotListener() {
     messages.value = []
-    const userId = useAuthStore().user.uid
-    if (userId) {
+    const userId = useAuthStore().user?.uid
+    if (userId && unsubscribe === undefined) {
       unsubscribe = onSnapshot(
         collection(FirebaseServices.getFirestore(), 'users', useAuthStore().user.uid, 'messages'),
         (docs) => {

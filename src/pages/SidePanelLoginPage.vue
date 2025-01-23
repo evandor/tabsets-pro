@@ -1,6 +1,8 @@
 <template>
   <q-page>
-    <div class="q-ma-none q-pa-md text-h6">Tabsets Pro</div>
+    <div v-if="showWatermark" id="watermark">{{ watermark }}</div>
+
+    <div class="q-ma-none q-pa-md text-h6">{{ pageTitle }}</div>
 
     <div class="q-ma-md example-column-equal-width" style="border: 1px solid #bfbfbf">
       <q-tabs v-model="tab" dense>
@@ -75,7 +77,7 @@
             </div>
 
             <div class="col q-mt-sm text-right">
-              <q-checkbox :disable="email ? email.indexOf('@') < 0 : true" label="Remember Me" v-model="rememberMe" />
+              <q-checkbox label="Remember Me" v-model="rememberMe" />
             </div>
           </form>
         </q-tab-panel>
@@ -165,11 +167,15 @@ import {
 import { LocalStorage, openURL, useQuasar } from 'quasar'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
 import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
+import { useUtils } from 'src/core/services/Utils'
+import { useUiStore } from 'src/ui/stores/uiStore'
 import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const $q = useQuasar()
+
+const { inBexMode } = useUtils()
 
 const password = ref('')
 const loading = ref<boolean>(false)
@@ -179,10 +185,19 @@ const rememberMe = ref(LocalStorage.getItem(CURRENT_USER_EMAIL) !== null)
 const invited = ref<string | undefined>(useRoute().query.invited as string | undefined)
 const email = ref<string>(invited.value ? invited.value : (LocalStorage.getItem(CURRENT_USER_EMAIL) as string))
 const tab = ref(invited.value ? 'register' : 'login')
+const pageTitle = ref('Tabsets Pro')
+const showWatermark = ref(false)
+const watermark = ref('')
 
 const router = useRouter()
+const route = useRoute()
 
 const { handleError, handleSuccess } = useNotificationHandler()
+
+console.log('route', route.query)
+if (route.query['invited']) {
+  pageTitle.value = 'Tabsets Pro Invitation'
+}
 
 watchEffect(() => {
   if (email.value && email.value.length === 0) {
@@ -196,6 +211,11 @@ watchEffect(() => {
     LocalStorage.remove(CURRENT_USER_EMAIL)
     rememberMe.value = false
   }
+})
+
+watchEffect(() => {
+  showWatermark.value = useUiStore().getWatermark().length > 0
+  watermark.value = useUiStore().getWatermark()
 })
 
 const signin = async (registerMode: boolean) => {
@@ -215,10 +235,13 @@ const signin = async (registerMode: boolean) => {
     } else {
       LocalStorage.remove(CURRENT_USER_EMAIL)
     }
-    //console.log("user!!!", user)
-    useAuthStore().setUser(user)
+    await useAuthStore().setUser(user)
     loading.value = false
-    router.push('/sidepanel')
+    if (inBexMode()) {
+      await router.push('/sidepanel')
+    } else {
+      await router.push('/tabsets')
+    }
     // emits('hideLogin')
   } catch (error: any) {
     const errorCode = error.code

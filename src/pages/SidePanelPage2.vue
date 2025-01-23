@@ -45,7 +45,6 @@
 <script lang="ts" setup>
 import _ from 'lodash'
 import { LocalStorage } from 'quasar'
-import AppService from 'src/app/AppService'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import OfflineInfo from 'src/core/components/helper/offlineInfo.vue'
 import { useUtils } from 'src/core/services/Utils'
@@ -55,6 +54,7 @@ import SidePanelNotesView from 'src/notes/views/sidepanel/SidePanelNotesView.vue
 import FirstToolbarHelper2 from 'src/pages/sidepanel/helper/FirstToolbarHelper2.vue'
 import StartingHint from 'src/pages/widgets/StartingHint.vue'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
+import { useAuthStore } from 'src/stores/authStore'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import SidePanelPageTabList from 'src/tabsets/layouts/SidePanelPageTabList.vue'
 import { Tabset, TabsetStatus } from 'src/tabsets/models/Tabset'
@@ -65,7 +65,6 @@ import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
 import SidePanelFoldersView from 'src/tabsets/views/sidepanel/SidePanelFoldersView.vue'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { useWindowsStore } from 'src/windows/stores/windowsStore'
-import { useAuthStore } from 'stores/authStore'
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -97,7 +96,7 @@ onMounted(() => {
   if (!useAuthStore().isAuthenticated) {
     //router.push("/authenticate")
   } else {
-    Analytics.firePageViewEvent('SidePanelPage', document.location.href)
+    Analytics.firePageViewEvent('SidePanelPage2', document.location.href)
   }
 })
 
@@ -160,7 +159,7 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  const windowId = useWindowsStore().currentChromeWindow?.id || 0
+  const windowId = useWindowsStore().currentBrowserWindow?.id || 0
   currentChromeTab.value = useTabsStore2().getCurrentChromeTab(windowId) || useTabsStore2().currentChromeTab
 })
 
@@ -268,7 +267,10 @@ if (inBexMode()) {
           })
       }
     } else if (message.name === 'reload-application') {
-      AppService.restart('restarted=true')
+      //AppService.restart('restarted=true')
+      console.error('message reload-applictation was called, no-op')
+    } else if (message.name === 'window-updated') {
+      useWindowsStore().setup('window-updated event')
     } else {
       console.log('got unmatched message', message)
     }

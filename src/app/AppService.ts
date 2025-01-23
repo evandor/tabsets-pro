@@ -93,30 +93,46 @@ class AppService {
 
     tabsetService.setLocalStorage(localStorage)
 
-    await this.initCoreSerivces(this.router, quasar)
+    // avatar settings - done in useAuth
+    // if (user?.email && !useUiStore().sharingAvatar) {
+    //   try {
+    //     const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(user.email!))
+    //     const hashArray = Array.from(new Uint8Array(hashBuffer))
+    //     const identifier = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+    //     const gravatarResponse = await fetch(`https://api.gravatar.com/v3/profiles/${identifier}`)
+    //     const responseBody = JSON.parse(await gravatarResponse.text())
+    //     console.log('gravatarResponse', responseBody)
+    //     if (responseBody['profile_url']) {
+    //     }
+    //   } catch (err: any) {
+    //     console.warn('could not get avatar info')
+    //   }
+    // }
+
+    await this.initCoreSerivces(quasar, this.router)
   }
 
-  restart(ar: string) {
-    console.log('%crestarting tabsets', 'font-weight:bold', window.location.href, ar)
-    const baseLocation = window.location.href.split('?')[0]
-    console.log('%cbaseLocation', 'font-weight:bold', baseLocation)
-    console.log('%cwindow.location.href', 'font-weight:bold', window.location.href)
-    if (window.location.href.indexOf('?') < 0) {
-      const tsIframe = window.parent.frames[0]
-      //log("iframe", tsIframe)
-      if (tsIframe) {
-        console.debug('%cnew window.location.href', 'font-weight:bold', baseLocation + '?' + ar)
-        tsIframe.location.href = baseLocation + '?' + ar
-        //tsIframe.location.href = "https://www.skysail.io"
-        tsIframe.location.reload()
-      } else {
-        window.location.reload()
-      }
-    }
-    useAuthStore().setAuthRequest(null as unknown as string)
-  }
+  // restart(ar: string) {
+  //   console.error('%crestarting tabsets', 'font-weight:bold', window.location.href, ar)
+  //   const baseLocation = window.location.href.split('?')[0]
+  //   console.log('%cbaseLocation', 'font-weight:bold', baseLocation)
+  //   console.log('%cwindow.location.href', 'font-weight:bold', window.location.href)
+  //   if (window.location.href.indexOf('?') < 0) {
+  //     const tsIframe = window.parent.frames[0]
+  //     //log("iframe", tsIframe)
+  //     if (tsIframe) {
+  //       console.debug('%cnew window.location.href', 'font-weight:bold', baseLocation + '?' + ar)
+  //       tsIframe.location.href = baseLocation + '?' + ar
+  //       //tsIframe.location.href = "https://www.skysail.io"
+  //       tsIframe.location.reload()
+  //     } else {
+  //       window.location.reload()
+  //     }
+  //   }
+  //   useAuthStore().setAuthRequest(null as unknown as string)
+  // }
 
-  private async initCoreSerivces(router: Router, quasar: QVueGlobals) {
+  private async initCoreSerivces(quasar: QVueGlobals, router: Router) {
     console.log(`%cinitializing AppService: initCoreSerivces`, 'font-weight:bold')
 
     const authenticated = useAuthStore().isAuthenticated()
@@ -191,6 +207,9 @@ class AppService {
     ) {
       await router.push('/sidepanel/welcome')
     }
+
+    // set badge, text and color
+    useTabsetsUiStore().updateExtensionIcon()
 
     ChromeApi.buildContextMenu('AppService')
   }

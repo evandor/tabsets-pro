@@ -74,6 +74,11 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('src/opentabs/pages/SidePanelOpenTabsPage.vue') }],
   },
   {
+    path: '/sidepanel/sessions',
+    component: () => import('layouts/SidePanelLayout.vue'),
+    children: [{ path: '', component: () => import('src/tabsets/pages/SidePanelSessionsPage.vue') }],
+  },
+  {
     path: '/sidepanel/tagslist',
     component: () => import('layouts/SidePanelLayout.vue'),
     children: [{ path: '', component: () => import('pages/sidepanel/SidePanelTagsListViewer.vue') }],
@@ -334,11 +339,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/PlainLayout.vue'),
     children: [{ path: '', component: () => import('pages/public/ImportPublicTabsetPage.vue') }],
   },
-  {
-    path: '/pwa/tabsets/:tabsetId',
-    component: () => import('layouts/PwaPageLayout.vue'),
-    children: [{ path: '', component: () => import('pages/pwa/PwaTabsetPage.vue') }],
-  },
+  // {
+  //   path: '/pwa/tabsets/:tabsetId',
+  //   component: () => import('layouts/PwaPageLayout.vue'),
+  //   children: [{ path: '', component: () => import('pages/pwa/PwaTabsetPage.vue') }],
+  // },
   {
     path: '/invitation',
     redirect: (to) => ({

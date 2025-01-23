@@ -387,7 +387,8 @@ watchEffect(() => {
     if (tab.value.tags.constructor === Array) {
       tags.value = [...new Set(tab.value.tags)]
       // remove duplicates if any
-      tab.value.setTags(tags.value)
+      // tab.value.setTags(tags.value)
+      Tab.setTags(tab.value, tags.value)
     } else {
       tags.value = []
     }

@@ -16,6 +16,7 @@
     <q-tabs align="left" inline-label v-model="tab" no-caps>
       <q-tab name="appearance" :label="t('appearance')" />
       <q-tab name="account" label="Account" />
+      <q-tab name="sharing" label="Sharing" />
       <q-tab name="thirdparty" label="Third Party Services" />
       <!--      <q-tab name="ignored" label="Ignored Urls"/>-->
       <q-tab

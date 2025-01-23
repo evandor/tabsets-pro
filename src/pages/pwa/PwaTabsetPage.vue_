@@ -24,8 +24,8 @@
               @mouseenter="showEditButton = true"
               @mouseout="showEditButton = false">
               {{ useTabsetsStore().currentTabsetName }}
-              <span v-if="tabset.sharedId" class="text-caption"
-                >shared by {{ tabset.sharedBy }}, {{ date.formatDate(tabset.sharedAt, 'DD.MM.YYYY HH:mm') }}</span
+              <span v-if="tabset.sharing?.sharedId" class="text-caption"
+                >shared by {{ tabset.sharing?.sharedBy }}, {{ date.formatDate(tabset.sharedAt, 'DD.MM.YYYY HH:mm') }}</span
               >
             </span>
             <span v-if="tabset.sharedPath">

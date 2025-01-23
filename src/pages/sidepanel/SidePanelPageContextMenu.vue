@@ -100,7 +100,7 @@
           <q-menu anchor="top end" self="top start">
             <q-list>
               <q-item
-                v-if="tabset.sharing === TabsetSharing.UNSHARED || !tabset.sharing"
+                v-if="tabset.sharing.sharing === TabsetSharing.UNSHARED || !tabset.sharing"
                 color="warning"
                 dense
                 clickable
@@ -110,7 +110,7 @@
                 <q-tooltip class="tooltip-small">Publish this tabset</q-tooltip>
               </q-item>
               <q-item
-                v-if="tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
+                v-if="tabset.sharing.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED"
                 color="warning"
                 dense
                 clickable
@@ -121,7 +121,8 @@
               </q-item>
               <q-item
                 v-if="
-                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
+                  tabset.sharing.sharing === TabsetSharing.PUBLIC_LINK ||
+                  tabset.sharing.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
                 "
                 color="warning"
                 dense
@@ -133,7 +134,8 @@
               </q-item>
               <q-item
                 v-if="
-                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
+                  tabset.sharing.sharing === TabsetSharing.PUBLIC_LINK ||
+                  tabset.sharing.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
                 "
                 color="warning"
                 dense
@@ -149,13 +151,14 @@
               </q-item>
               <q-item
                 v-if="
-                  tabset.sharing === TabsetSharing.PUBLIC_LINK || tabset.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
+                  tabset.sharing.sharing === TabsetSharing.PUBLIC_LINK ||
+                  tabset.sharing.sharing === TabsetSharing.PUBLIC_LINK_OUTDATED
                 "
                 color="warning"
                 dense
                 clickable
                 v-close-popup
-                @click="removePublicShare(tabset.id, tabset.sharedId || '')">
+                @click="removePublicShare(tabset.id, tabset.sharing?.sharedId || '')">
                 <q-item-section>Stop Sharing</q-item-section>
                 <q-tooltip class="tooltip-small">Delete Shared Link</q-tooltip>
               </q-item>
@@ -180,9 +183,9 @@
         @was-clicked="deleteTabsetDialog(tabset as Tabset)"
         icon="o_delete"
         color="negative"
-        :disable="tabset.sharedId !== undefined"
+        :disable="tabset.sharing?.sharedId !== undefined"
         :label="tabset.type === TabsetType.SESSION ? 'Delete Session' : 'Delete Tabset'">
-        <q-tooltip class="tooltip-small" v-if="tabset.sharedId !== undefined">
+        <q-tooltip class="tooltip-small" v-if="tabset.sharing?.sharedId !== undefined">
           Stop sharing first if you want to delete this tabset
         </q-tooltip>
       </ContextMenuItem>
@@ -332,7 +335,7 @@ const shareTabsetPubliclyDialog = (tabset: Tabset, republish: boolean = false) =
     component: ShareTabsetPubliclyDialog,
     componentProps: {
       tabsetId: tabset.id,
-      sharedId: tabset.sharedId,
+      sharedId: tabset.sharing?.sharedId,
       tabsetName: tabset.name,
       republish: republish,
     },
@@ -344,7 +347,7 @@ const openShareWithDialog = (tabset: Tabset, republish: boolean = false) => {
     component: ShareTabsetDialog,
     componentProps: {
       tabsetId: tabset.id,
-      sharedId: tabset.sharedId,
+      sharedId: tabset.sharing?.sharedId,
       tabsetName: tabset.name,
       republish: republish,
     },
@@ -353,7 +356,7 @@ const openShareWithDialog = (tabset: Tabset, republish: boolean = false) => {
 
 const openPublicShare = (tabsetId: string) => {
   const ts = useTabsetsStore().getTabset(tabsetId)
-  if (ts && ts.sharedId) {
+  if (ts && ts.sharing?.sharedId) {
     openURL(getPublicTabsetLink(ts))
   }
 }
@@ -362,17 +365,17 @@ const getPublicTabsetLink = (ts: Tabset) => {
   // https://shared.tabsets.net/#/pwa/imp/2f0f2171-27a6-4d03-a2dd-157ab6ef42ae?n=TXVzaWM=&a=Q2Fyc3Rlbg==
   // http://localhost:9200/#/pwa/imp/2f0f2171-27a6-4d03-a2dd-157ab6ef42ae?n=TXVzaWM=&a=Q2Fyc3Rlbg==
   let image = 'https://tabsets.web.app/favicon.ico'
-  if (ts && ts.sharedId) {
-    //return PUBLIC_SHARE_URL + "#/pwa/imp/" + ts.sharedId + "?n=" + btoa(ts.name) + "&a=" + btoa(ts.sharedBy || 'n/a') + "&d=" + ts.sharedAt
+  if (ts && ts.sharing?.sharedId) {
+    //return PUBLIC_SHARE_URL + "#/pwa/imp/" + ts.sharing?.sharedId + "?n=" + btoa(ts.name) + "&a=" + btoa(ts.sharing?.sharedBy || 'n/a') + "&d=" + ts.sharedAt
     return (
       // 'https://us-central1-tabsets-backend-prd.cloudfunctions.net/app/share/preview/' +
       process.env.PWA_BACKEND_URL +
       '/#/pwa/imp/' +
-      ts.sharedId +
+      ts.sharing?.sharedId +
       '?n=' +
       btoa(ts.name) +
       '&a=' +
-      btoa(ts.sharedBy || 'n/a')
+      btoa(ts.sharing?.sharedBy || 'n/a')
     )
   }
   return image
@@ -380,7 +383,7 @@ const getPublicTabsetLink = (ts: Tabset) => {
 
 const copyPublicShareToClipboard = (tabsetId: string) => {
   const ts = useTabsetsStore().getTabset(tabsetId)
-  if (ts && ts.sharedId) {
+  if (ts && ts.sharing?.sharedId) {
     useCommandExecutor().executeFromUi(new CopyToClipboardCommand(getPublicTabsetLink(ts)))
   }
 }

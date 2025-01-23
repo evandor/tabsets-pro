@@ -33,6 +33,8 @@ class FirebaseServices {
       const db = getFirestore()
       connectFirestoreEmulator(db, '127.0.0.1', 8080)
       connectStorageEmulator(getStorage(), '127.0.0.1', 9199)
+    } else if (process.env.TABSETS_STAGE?.toLowerCase() !== 'prd') {
+      useUiStore().setWatermark(process.env.TABSETS_STAGE || '???')
     }
 
     // https://firebase.google.com/docs/firestore/manage-data/enable-offline#web-modular-api

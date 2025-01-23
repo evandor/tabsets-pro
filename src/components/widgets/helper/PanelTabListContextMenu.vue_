@@ -187,7 +187,7 @@ const deleteTab = async () => {
 
 const addCommentDialog = () => $q.dialog({
   component: CommentDialog,
-  componentProps: {tabId: props.tab.id, sharedId: props.tabset?.sharedId}
+  componentProps: {tabId: props.tab.id, sharedId: props.tabset?.sharing?.sharedId}
 })
 
 const showTabDetails = async (tab: Tab) => {

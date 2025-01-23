@@ -12,14 +12,8 @@
             width="32px">
             <q-tooltip class="tooltip">Toggle the tabset list view by clicking here</q-tooltip>
           </q-img>
-          <q-toolbar-title
-            v-if="!useFeaturesStore().hasFeature(FeatureIdent.SPACES)"
-            @click.stop="goHome()"
-            class="cursor-pointer"
-            style="min-width: 200px"
-            shrink>
+          <q-toolbar-title v-if="!useFeaturesStore().hasFeature(FeatureIdent.SPACES)" style="min-width: 200px" shrink>
             {{ title() }}
-            <q-tooltip class="tooltip">Reload Tabsets Extension</q-tooltip>
           </q-toolbar-title>
           <q-toolbar-title v-else>
             {{ title() }}
@@ -43,25 +37,14 @@
 
         <Transition name="colorized-appear">
           <div
-            v-if="useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD) && useTabsetsStore().tabsets.size > 0">
+            v-if="
+              inBexMode() &&
+              useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD) &&
+              useTabsetsStore().tabsets.size > 0
+            ">
             <OpenTabsThresholdWidget />
           </div>
         </Transition>
-
-        <!--        <div v-if="unreadNotifications().length > 0">-->
-        <!--          <q-btn flat icon="o_notifications" class="q-mr-md cursor-pointer">-->
-        <!--            <q-badge floating color="red" rounded/>-->
-        <!--          </q-btn>-->
-        <!--          <q-menu :offset="[0, 7]">-->
-        <!--            <q-list style="min-width: 200px">-->
-        <!--              <q-item>New Notifications:</q-item>-->
-        <!--              <q-item v-for="n in unreadNotifications()"-->
-        <!--                      clickable v-close-popup @click="showNotificationDialog(n.id)">-->
-        <!--                <q-item-section>{{ n.title }}</q-item-section>-->
-        <!--              </q-item>-->
-        <!--            </q-list>-->
-        <!--          </q-menu>-->
-        <!--        </div>-->
 
         <span
           v-if="
@@ -99,24 +82,6 @@
           </q-menu>
         </span>
 
-        <!--        <ToolbarButton-->
-        <!--          :feature="FeatureIdent.SAVE_TAB"-->
-        <!--          :drawer="DrawerTabs.SAVED_TABS"-->
-        <!--          icon="o_save"-->
-        <!--          tooltip="List of MTHML Snapshots"/>-->
-
-        <!--        <ToolbarButton-->
-        <!--          :feature="FeatureIdent.SAVE_TAB_AS_PNG"-->
-        <!--          :drawer="DrawerTabs.SAVED_TABS_AS_PNG"-->
-        <!--          icon="o_image"-->
-        <!--          tooltip="The List of PNGs"/>-->
-
-        <!--        <ToolbarButton-->
-        <!--          :feature="FeatureIdent.SAVE_TAB_AS_PDF"-->
-        <!--          :drawer="DrawerTabs.SAVED_TABS_AS_PDF"-->
-        <!--          icon="o_picture_as_pdf"-->
-        <!--          tooltip="The List of PDFs"/>-->
-
         <ToolbarButton
           :feature="FeatureIdent.GROUP_BY_DOMAIN"
           :drawer="DrawerTabs.GROUP_BY_HOST_TABS"
@@ -150,16 +115,26 @@
           tooltip="Show tags viewer"
           :restricted="$q.platform.is.chrome" />
 
+        <div v-if="useAuthStore().user">
+          <!--          <q-icon name="person" />-->
+          <span class="cursor-pointer">{{ useAuthStore().user.email }}</span>
+          <q-menu :offset="[0, 7]">
+            <q-list style="min-width: 200px">
+              <q-item clickable @click="logout()">Logout</q-item>
+            </q-list>
+          </q-menu>
+        </div>
+
         <div>
-          <q-btn @click="toggleSettings" flat size="12px" class="q-mr-md" icon="o_settings"> </q-btn>
+          <q-btn @click="toggleSettings" flat size="12px" class="q-mr-md" icon="o_settings"></q-btn>
           <q-menu :offset="[0, 7]">
             <q-list style="min-width: 200px">
               <q-item clickable @click="router.push('/settings')">Settings</q-item>
               <q-item clickable @click="tabsClicked(DrawerTabs.FEATURES)" v-close-popup>
                 Activate more Features
               </q-item>
-              <q-item clickable @click="showImportDialog" v-close-popup> Import Tabsets </q-item>
-              <q-item clickable @click="showExportDialog" v-close-popup> Export Tabsets </q-item>
+              <q-item clickable @click="showImportDialog" v-close-popup> Import Tabsets</q-item>
+              <q-item clickable @click="showExportDialog" v-close-popup> Export Tabsets</q-item>
             </q-list>
           </q-menu>
         </div>
@@ -174,7 +149,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" behavior="desktop" bordered>
-      <Navigation></Navigation>
+      <Navigation2></Navigation2>
     </q-drawer>
 
     <q-drawer
@@ -194,11 +169,11 @@
 
 <script setup lang="ts">
 import DrawerRight from 'components/DrawerRight.vue'
+import Navigation2 from 'components/Navigation2.vue'
 import ToolbarButton from 'components/widgets/ToolbarButton.vue'
 import _ from 'lodash'
 import { useMeta, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
-import Navigation from 'src/components/Navigation.vue'
 import { useUtils } from 'src/core/services/Utils'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import OpenTabsThresholdWidget from 'src/opentabs/widgets/OpenTabsThresholdWidget.vue'
@@ -212,6 +187,7 @@ import ExportDialog from 'src/tabsets/dialogues/ExportDialog.vue'
 import ImportDialog from 'src/tabsets/dialogues/ImportDialog.vue'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { DrawerTabs, useUiStore } from 'src/ui/stores/uiStore'
+import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -260,10 +236,8 @@ useMeta(() => {
 })
 
 const title = () => {
-  return inBexMode() ? 'Tabsets' : process.env.MODE === 'spa' ? 'Tabsets Web' : 'Tabsets'
+  return inBexMode() ? 'Tabsets' : process.env.MODE === 'spa' ? 'Tabsets Web' : 'Tabsets Pro'
 }
-
-const goHome = () => router.push('/')
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
@@ -292,4 +266,15 @@ const dependingOnStates = () =>
     : 'white'
 
 const toggleSettings = () => (settingsClicked.value = !settingsClicked.value)
+
+const logout = () => {
+  useAuthStore()
+    .logout()
+    .then(() => {
+      // router.push("/refresh/sidepanel")
+    })
+    .catch((err: any) => {
+      console.log('error logging out', err)
+    })
+}
 </script>
