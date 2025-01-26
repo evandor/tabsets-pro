@@ -58,6 +58,17 @@
         <q-btn label="User Feedback" no-caps @click="collectUserFeedback()" />
       </div>
     </div>
+    <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+      <div class="col-3"><b>Create a (dummy) suggestion</b></div>
+      <div class="col-3"></div>
+      <div class="col-1"></div>
+      <div class="col-5">
+        <q-btn label="Tabset Shared" no-caps @click="createSuggestion('TABSET_SHARED')" />
+        <q-btn label="Use Extension" no-caps @click="createSuggestion('USE_EXTENSION')" />
+        <q-btn label="Spaces Feature" no-caps @click="createSuggestion('FEATURE')" />
+        <q-btn label="Clear all" no-caps @click="clearSuggestions()" />
+      </div>
+    </div>
     <!--    </template>-->
   </div>
 </template>
@@ -74,6 +85,8 @@ import { DeactivateFeatureCommand } from 'src/features/commands/DeactivateFeatur
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useSettingsStore } from 'src/stores/settingsStore'
+import { Suggestion, SuggestionType } from 'src/suggestions/models/Suggestion'
+import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { Message } from 'src/tabsets/models/Message'
 import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
@@ -110,6 +123,34 @@ const triggerErrorHandler = () => handleError('an user-initiated error message f
 
 const triggerCatchAll = () => {
   throw new Error('user triggered catch-all-Error at' + new Date().getTime())
+}
+
+const clearSuggestions = () => {
+  useSuggestionsStore().clearAll()
+}
+
+const createSuggestion = async (type: SuggestionType) => {
+  switch (type) {
+    case 'TABSET_SHARED':
+      const s = new Suggestion(
+        uid(),
+        'dummy suggestion',
+        'from settings page - new shared tabsets',
+        uid(),
+        'TABSET_SHARED',
+      )
+      s.setImage('o_tabs')
+      await useSuggestionsStore().addSuggestion(s)
+      break
+    case 'USE_EXTENSION':
+      await useSuggestionsStore().addSuggestion(Suggestion.getStaticSuggestion('USE_EXTENSION_SUGGESTION'))
+      break
+    case 'FEATURE':
+      await useSuggestionsStore().addSuggestion(Suggestion.getStaticSuggestion('TRY_SPACES_FEATURE'))
+      break
+    default:
+      console.warn(`unknown type ${type}`)
+  }
 }
 
 const collectUserFeedback = async () => {

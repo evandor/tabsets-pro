@@ -244,7 +244,7 @@ function getActiveFolder(tabset: Tabset) {
 
 const handleButtonClicked = async (tabset: Tabset, args: ActionHandlerButtonClickedHolder, folder?: Tabset) => {
   const useFolder: Tabset | undefined = folder ? folder : getActiveFolder(tabset)
-  console.log(`button clicked: tsId=${tabset.id}, folderId=${useFolder?.id}, args=...`)
+  //console.log(`button clicked: tsId=${tabset.id}, folderId=${useFolder?.id}, args=...`)
   await useActionHandlers(undefined).handleClick(tabset, currentChromeTab.value!, args, useFolder)
 }
 

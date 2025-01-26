@@ -24,7 +24,6 @@ import { useSnapshotsStore } from 'src/snapshots/stores/SnapshotsStore'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import { useAppStore } from 'src/stores/appStore'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
-import tabsetService from 'src/tabsets/services/TabsetService'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsetsUiStore } from 'src/tabsets/stores/tabsetsUiStore'
@@ -89,9 +88,9 @@ class AppService {
       .catch((err: any) => console.error(err))
 
     // init services
-    await useSuggestionsStore().init()
+    await useSuggestionsStore().init(useDB().suggestionsDb)
 
-    tabsetService.setLocalStorage(localStorage)
+    // tabsetService.setLocalStorage(localStorage)
 
     // avatar settings - done in useAuth
     // if (user?.email && !useUiStore().sharingAvatar) {

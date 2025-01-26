@@ -266,7 +266,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/settings',
-    component: () => import('layouts/DefaultLayout.vue'),
+    component: () => import('layouts/FullPageLayout.vue'),
     children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
   },
   {
@@ -299,11 +299,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/FullPageLayout.vue'),
     children: [{ path: '', component: () => import('src/tabsets/pages/ByDomainPage.vue') }],
   },
-  {
-    path: '/historyByAge/:encodedAge',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [{ path: '', component: () => import('src/tabsets/pages/ByAgePage.vue') }],
-  },
+  // {
+  //   path: '/historyByAge/:encodedAge',
+  //   component: () => import('layouts/DefaultLayout.vue'),
+  //   children: [{ path: '', component: () => import('src/tabsets/pages/ByAgePage.vue') }],
+  // },
   {
     path: '/features/:feature',
     component: () => import('layouts/FullPageLayout.vue'),
@@ -324,11 +324,11 @@ const routes: RouteRecordRaw[] = [
   //   component: () => import('layouts/DefaultLayout.vue'),
   //   children: [{path: '', component: () => import('pages/IFramePage.vue')}],
   // },
-  {
-    path: '/preview/:tabId',
-    component: () => import('layouts/DefaultLayout.vue'),
-    children: [{ path: '', component: () => import('pages/PreviewPage.vue') }],
-  },
+  // {
+  //   path: '/preview/:tabId',
+  //   component: () => import('layouts/DefaultLayout.vue'),
+  //   children: [{ path: '', component: () => import('pages/PreviewPage.vue') }],
+  // },
   {
     path: '/browser/:tabId',
     component: () => import('layouts/FullPageLayout.vue'),

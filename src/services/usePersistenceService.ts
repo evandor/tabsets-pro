@@ -7,6 +7,8 @@ import FirestoreSnapshotsPersistence from 'src/snapshots/persistence/FirestoreSn
 import SnapshotsPersistence from 'src/snapshots/persistence/SnapshotsPersistence'
 import FirestoreSpacesPersistence from 'src/spaces/persistence/FirestoreSpacesPersistence'
 import SpacesPersistence from 'src/spaces/persistence/SpacesPersistence'
+import FirestoreSuggestionsPersistence from 'src/suggestions/persistence/FirestoreSuggestionsPersistence'
+import SuggestionsPersistence from 'src/suggestions/persistence/SuggestionsPersistence'
 import FirestoreTabsetsPersistence from 'src/tabsets/persistence/FirestoreTabsetsPersistence'
 import IndexedDbTabsetsPersistence from 'src/tabsets/persistence/IndexedDbTabsetsPersistence'
 import { LocalStorageTabsetsPersistence } from 'src/tabsets/persistence/LocalStorageTabsetsPersistence'
@@ -24,6 +26,7 @@ export function useDB() {
   const snapshotsDb: SnapshotsPersistence = FirestoreSnapshotsPersistence
   const notesDb: NotesPersistence = FirestoreNotesPersistence
   const thumbnailsDb: ThumbnailsPersistence = FirestoreThumbnailsPersistence
+  const suggestionsDb: SuggestionsPersistence = FirestoreSuggestionsPersistence
 
   let localDb = undefined as unknown as PersistenceService
 
@@ -40,5 +43,6 @@ export function useDB() {
     notesDb,
     thumbnailsDb,
     featuresDb,
+    suggestionsDb,
   }
 }

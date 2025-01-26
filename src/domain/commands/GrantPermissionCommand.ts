@@ -5,7 +5,6 @@ import { usePermissionsStore } from 'src/core/stores/usePermissionsStore'
 import { RevokePermissionCommand } from 'src/domain/commands/RevokePermissionCommand'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import ChromeBookmarkListeners from 'src/services/ChromeBookmarkListeners'
-import { StaticSuggestionIdent } from 'src/suggestions/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 
 class UndoCommand implements Command<boolean> {
@@ -38,7 +37,7 @@ export class GrantPermissionCommand implements Command<boolean> {
                 //useTabsetService().init(useDB(undefined).db)
                 ChromeBookmarkListeners.initListeners()
               })
-            useSuggestionsStore().removeSuggestion(StaticSuggestionIdent.TRY_BOOKMARKS_FEATURE)
+            useSuggestionsStore().removeSuggestion('TRY_BOOKMARKS_FEATURE')
             //          } else if ("history" === this.permission) {
             //            useFeaturesStore().activateFeature('history')
           } else if ('notifications' === this.permission) {

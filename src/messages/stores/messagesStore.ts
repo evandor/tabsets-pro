@@ -5,6 +5,9 @@ import { Message } from 'src/tabsets/models/Message'
 import { useAuthStore } from 'stores/authStore'
 import { computed, ref } from 'vue'
 
+/**
+ * messages are displayed to the user to inform her about things happening.
+ */
 export const useMessagesStore = defineStore('messages', () => {
   let unsubscribe: Unsubscribe | undefined = undefined
 

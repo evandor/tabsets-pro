@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh LpR lFr">
     <q-header elevated>
-      <q-toolbar class="bg-grey-2 text-primary">
+      <q-toolbar>
         <template v-if="leftDrawerOpen">
           <q-img
             class="q-ml-xs q-mr-none cursor-pointer"
@@ -46,17 +46,23 @@
           </div>
         </Transition>
 
-        <span
-          v-if="
-            useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED]).length > 0
-          ">
-          <q-btn flat :color="dependingOnStates()" name="rss" icon="o_assistant">
+        <span v-if="useSuggestionsService().hasSuggestionsInState(relevantSuggestions, ['NEW', 'DECISION_DELAYED'])">
+          <q-btn
+            flat
+            :color="dependingOnStates()"
+            name="rss"
+            icon="o_assistant"
+            class="q-mr-lg"
+            :label="suggestionsLabel()">
             <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200"
               >You have suggestions
             </q-tooltip>
             <q-badge
+              floating
+              rounded
+              color="accent"
               :label="
-                useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED]).length
+                useSuggestionsService().suggestionsInsState(relevantSuggestions, ['NEW', 'DECISION_DELAYED']).length
               " />
           </q-btn>
           <q-menu :offset="[0, 7]">
@@ -66,9 +72,9 @@
                 v-close-popup
                 v-ripple
                 @click="suggestionDialog(s)"
-                v-for="s in useSuggestionsStore().getSuggestions([
-                  SuggestionState.NEW,
-                  SuggestionState.DECISION_DELAYED,
+                v-for="s in useSuggestionsService().suggestionsInsState(relevantSuggestions, [
+                  'NEW',
+                  'DECISION_DELAYED',
                 ])">
                 <q-item-section avatar>
                   <q-icon color="primary" :name="s.img ? s.img : 'rss_feed'" />
@@ -152,13 +158,13 @@
       <Navigation2></Navigation2>
     </q-drawer>
 
-    <q-drawer
-      v-model="useUiStore().rightDrawerOpen"
-      side="right"
-      bordered
-      content-class="column justify-between no-wrap bg-grey-1">
-      <DrawerRight />
-    </q-drawer>
+    <!--    <q-drawer-->
+    <!--      v-model="useUiStore().rightDrawerOpen"-->
+    <!--      side="right"-->
+    <!--      bordered-->
+    <!--      content-class="column justify-between no-wrap bg-grey-1">-->
+    <!--      <DrawerRight />-->
+    <!--    </q-drawer>-->
 
     <q-page-container>
       <router-view />
@@ -168,7 +174,6 @@
 </template>
 
 <script setup lang="ts">
-import DrawerRight from 'components/DrawerRight.vue'
 import Navigation2 from 'components/Navigation2.vue'
 import ToolbarButton from 'components/widgets/ToolbarButton.vue'
 import _ from 'lodash'
@@ -181,7 +186,8 @@ import SearchWidget from 'src/search/widgets/SearchWidget.vue'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import SpacesSelectorWidget from 'src/spaces/widgets/SpacesSelectorWidget.vue'
 import SuggestionDialog from 'src/suggestions/dialogues/SuggestionDialog.vue'
-import { Suggestion, SuggestionState } from 'src/suggestions/models/Suggestion'
+import { Suggestion } from 'src/suggestions/models/Suggestion'
+import { useSuggestionsService } from 'src/suggestions/services/SuggestionsServices'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import ExportDialog from 'src/tabsets/dialogues/ExportDialog.vue'
 import ImportDialog from 'src/tabsets/dialogues/ImportDialog.vue'
@@ -199,9 +205,7 @@ const leftDrawerOpen = ref($q.screen.gt.md)
 const spacesStore = useSpacesStore()
 
 const spacesOptions = ref<object[]>([])
-const suggestions = ref<Suggestion[]>(
-  useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED]),
-)
+const relevantSuggestions = ref<Suggestion[]>([])
 
 const { inBexMode } = useUtils()
 
@@ -214,7 +218,7 @@ $q.loadingBar.setDefaults({
 const settingsClicked = ref(false)
 
 watchEffect(() => {
-  suggestions.value = useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED])
+  relevantSuggestions.value = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED'])
 })
 
 watchEffect(() => {
@@ -258,12 +262,13 @@ const suggestionDialog = (s: Suggestion) =>
   })
 
 const dependingOnStates = () =>
-  _.find(
-    useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED]),
-    (s: any) => s.state === SuggestionState.NEW,
-  )
-    ? 'warning'
-    : 'white'
+  useSuggestionsService().hasSuggestionsInState(relevantSuggestions.value, ['NEW']) ? 'warning' : 'white'
+
+const suggestionsLabel = () => {
+  return useSuggestionsService().suggestionsInsState(relevantSuggestions.value, ['NEW']).length > 0
+    ? 'New Suggestions'
+    : ''
+}
 
 const toggleSettings = () => (settingsClicked.value = !settingsClicked.value)
 

@@ -5,7 +5,6 @@ import { useContentStore } from 'src/content/stores/contentStore'
 import { useUtils } from 'src/core/services/Utils'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import NavigationService from 'src/services/NavigationService'
-import { SuggestionState } from 'src/suggestions/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { Tab } from 'src/tabsets/models/Tab'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
@@ -22,7 +21,7 @@ const { sanitize, inBexMode } = useUtils()
 async function setCurrentTab() {
   const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
   if (chrome.runtime.lastError) {
-    console.warn('got runtime error:' + chrome.runtime.lastError.toString())
+    console.warn('got runtime error:' + JSON.stringify(chrome.runtime.lastError))
   }
   //console.debug("setting current tab", tabs)
   if (tabs && tabs[0]) {
@@ -31,7 +30,7 @@ async function setCurrentTab() {
     // Seems to be necessary when creating a new chrome group
     const tabs2 = await chrome.tabs.query({ active: true })
     if (chrome.runtime.lastError) {
-      console.warn('got runtime error:' + chrome.runtime.lastError.toString())
+      console.warn('got runtime error:' + JSON.stringify(chrome.runtime.lastError))
     }
     //console.log("setting current tab II", tabs2)
     if (tabs2 && tabs2[0]) {
@@ -80,10 +79,10 @@ function runOnNotificationClick(notificationId: string, buttonIndex: number) {
       case 0: // show
         const url = chrome.runtime.getURL('www/index.html') + '#/mainpanel/suggestions/' + notificationId
         NavigationService.openOrCreateTab([url])
-        useSuggestionsStore().updateSuggestionState(notificationId, SuggestionState.CHECKED)
+        useSuggestionsStore().updateSuggestionState(notificationId, 'CHECKED')
         break
       default: // ignore
-        useSuggestionsStore().updateSuggestionState(notificationId, SuggestionState.IGNORED)
+        useSuggestionsStore().updateSuggestionState(notificationId, 'IGNORED')
     }
   }
 }
@@ -235,7 +234,7 @@ class BrowserListeners {
 
     chrome.tabs.get(info.tabId, (tab) => {
       if (chrome.runtime.lastError) {
-        console.warn('got runtime error:' + chrome.runtime.lastError.toString())
+        console.warn('got runtime error:' + JSON.stringify(chrome.runtime.lastError))
       }
       const url = tab.url
       if (url) {

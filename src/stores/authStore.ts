@@ -86,7 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
   const limitExceeded = computed(
     (): ((item: AccessItem, count: number) => { exceeded: boolean; limit: number | undefined }) => {
       function hasRole(role: string) {
-        console.log('all roles', roles.value)
+        //console.log('all roles', roles.value)
         return roles.value.indexOf(role) >= 0
       }
 

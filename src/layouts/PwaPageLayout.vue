@@ -62,7 +62,7 @@ import { useMeta, useQuasar } from 'quasar'
 import Navigation from 'src/components/Navigation.vue'
 import { useUtils } from 'src/core/services/Utils'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
-import { Suggestion, SuggestionState } from 'src/suggestions/models/Suggestion'
+import { Suggestion } from 'src/suggestions/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { useNotificationsStore } from 'stores/notificationsStore'
@@ -78,9 +78,7 @@ const notificationsStore = useNotificationsStore()
 const spacesStore = useSpacesStore()
 
 const spacesOptions = ref<object[]>([])
-const suggestions = ref<Suggestion[]>(
-  useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED]),
-)
+const suggestions = ref<Suggestion[]>(useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED']))
 const search = ref('')
 
 const { inBexMode } = useUtils()
@@ -94,7 +92,7 @@ $q.loadingBar.setDefaults({
 const settingsClicked = ref(false)
 
 watchEffect(() => {
-  suggestions.value = useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED])
+  suggestions.value = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED'])
 })
 
 watchEffect(() => {

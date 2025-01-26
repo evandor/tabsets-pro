@@ -162,7 +162,6 @@
  *
  */
 
-import OpenRightDrawerWidget from 'components/widgets/OpenRightDrawerWidget.vue'
 import { getAuth } from 'firebase/auth'
 import _ from 'lodash'
 import FeatureToggleSettings from 'pages/helper/FeatureToggleSettings.vue'
@@ -193,6 +192,7 @@ import InternalSettings from 'pages/helper/InternalSettings.vue'
 import SharingSettings from 'pages/helper/SharingSettings.vue'
 import DeleteAccountCommand from 'src/account/commands/DeleteAccountCommand'
 import BackupSettings from 'src/tabsets/pages/settings/BackupSettings.vue'
+import OpenRightDrawerWidget from 'src/ui/widgets/OpenRightDrawerWidget.vue'
 
 const { t } = useI18n()
 

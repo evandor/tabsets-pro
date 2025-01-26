@@ -20,28 +20,25 @@
       </q-toolbar>
     </q-header>
 
-    <q-footer class="q-pa-none q-mt-sm darkInDarkMode brightInBrightMode">
-      <q-toolbar>
-        <q-toolbar-title>Footer</q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-
     <q-page-container>
       <q-page class="q-pa-md">
-        <q-list class="q-mt-none greyBorderTop"
-          >***
+        <q-list class="q-mt-none greyBorderTop">
           <NavTabsetsListWidgetNonBex :tabsets="tabsets()" :space-id="useSpacesStore().space?.id || '0'" />
         </q-list>
 
         <q-separator v-if="tabsetsWithTypes([TabsetType.SPECIAL]).length > 0" />
 
         <NavTabsetsListWidgetNonBex :tabsets="tabsetsWithTypes([TabsetType.SPECIAL])" />
-        <!--        <q-page-sticky expand position="top" class="darkInDarkMode brightInBrightMode">-->
-        <!--          &lt;!&ndash;          <FirstToolbarHelper2 :showSearchBox="false" />&ndash;&gt;-->
-        <!--          ***-->
-        <!--        </q-page-sticky>-->
       </q-page>
     </q-page-container>
+
+    <q-footer class="q-pa-none q-mt-sm darkInDarkMode brightInBrightMode">
+      <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSET_LIST)">
+        <SidePanelTabsetListMarkup />
+      </template>
+
+      <SidePanelMessagesMarkup />
+    </q-footer>
   </q-layout>
 </template>
 
@@ -51,6 +48,9 @@ import { useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
+import SpacesSelectorWidget from 'src/spaces/widgets/SpacesSelectorWidget.vue'
+import SidePanelMessagesMarkup from 'src/tabsets/components/helper/SidePanelMessagesMarkup.vue'
+import SidePanelTabsetListMarkup from 'src/tabsets/components/helper/SidePanelTabsetListMarkup.vue'
 import NewTabsetDialog from 'src/tabsets/dialogues/NewTabsetDialog.vue'
 import { Tabset, TabsetStatus, TabsetType } from 'src/tabsets/models/Tabset'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'

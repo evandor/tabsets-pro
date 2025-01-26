@@ -252,7 +252,7 @@ import { Account } from 'src/models/Account'
 import NavigationService from 'src/services/NavigationService'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import SuggestionDialog from 'src/suggestions/dialogues/SuggestionDialog.vue'
-import { Suggestion, SuggestionState } from 'src/suggestions/models/Suggestion'
+import { Suggestion } from 'src/suggestions/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { AddTabToTabsetCommand } from 'src/tabsets/commands/AddTabToTabsetCommand'
 import SidePanelMessagesMarkup from 'src/tabsets/components/helper/SidePanelMessagesMarkup.vue'
@@ -321,19 +321,15 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  const suggestions = useSuggestionsStore().getSuggestions([
-    SuggestionState.NEW,
-    SuggestionState.DECISION_DELAYED,
-    SuggestionState.NOTIFICATION,
-  ])
+  const suggestions = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED', 'NOTIFICATION'])
   //console.log("watcheffect for", suggestions)
   showSuggestionButton.value =
     doShowSuggestionButton.value ||
     (useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
       _.findIndex(suggestions, (s: Suggestion) => {
         return (
-          s.state === SuggestionState.NEW ||
-          (s.state === SuggestionState.NOTIFICATION && !useFeaturesStore().hasFeature(FeatureIdent.NOTIFICATIONS))
+          s.state === 'NEW' ||
+          (s.state === 'NOTIFICATION' && !useFeaturesStore().hasFeature(FeatureIdent.NOTIFICATIONS))
         )
       }) >= 0)
 
@@ -341,7 +337,7 @@ watchEffect(() => {
     !doShowSuggestionButton.value &&
     useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
     _.findIndex(suggestions, (s: Suggestion) => {
-      return s.state === SuggestionState.DECISION_DELAYED
+      return s.state === 'DECISION_DELAYED'
     }) >= 0
 })
 
@@ -389,10 +385,7 @@ const settingsTooltip = () => {
 const rightButtonClass = () => 'q-my-xs q-px-xs q-mr-none'
 
 const dependingOnStates = () =>
-  _.find(
-    useSuggestionsStore().getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED]),
-    (s: Suggestion) => s.state === SuggestionState.NEW,
-  )
+  _.find(useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED']), (s: Suggestion) => s.state === 'NEW')
     ? 'warning'
     : 'primary'
 
@@ -401,19 +394,13 @@ const suggestionDialog = () => {
   $q.dialog({
     component: SuggestionDialog,
     componentProps: {
-      suggestion: useSuggestionsStore()
-        .getSuggestions([SuggestionState.NEW, SuggestionState.DECISION_DELAYED, SuggestionState.NOTIFICATION])
-        .at(0),
+      suggestion: useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED', 'NOTIFICATION']).at(0),
       fromPanel: true,
     },
   })
 }
 const suggestionsLabel = () => {
-  const suggestions = useSuggestionsStore().getSuggestions([
-    SuggestionState.NEW,
-    SuggestionState.DECISION_DELAYED,
-    SuggestionState.NOTIFICATION,
-  ])
+  const suggestions = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED', 'NOTIFICATION'])
   return suggestions.length === 1 ? suggestions.length + ' New Suggestion' : suggestions.length + ' New Suggestions'
 }
 
