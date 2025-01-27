@@ -345,6 +345,7 @@ import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import TabFaviconWidget from 'src/tabsets/widgets/TabFaviconWidget.vue'
 import { useThumbnailsService } from 'src/thumbnails/services/ThumbnailsService'
+import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -407,7 +408,7 @@ watchEffect(() => {
 watchEffect(() => {
   if (tab.value) {
     useThumbnailsService()
-      .getThumbnailFor(tab.value.id)
+      .getThumbnailFor(tab.value.id, useAuthStore().user.uid)
       .then((data) => {
         if (data) {
           thumbnail.value = data

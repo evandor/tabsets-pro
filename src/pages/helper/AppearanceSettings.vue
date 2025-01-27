@@ -184,7 +184,7 @@ import { DeactivateFeatureCommand } from 'src/features/commands/DeactivateFeatur
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import NavigationService from 'src/services/NavigationService'
 import { useSettingsStore } from 'src/stores/settingsStore'
-import { Suggestion } from 'src/suggestions/models/Suggestion'
+import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { FontSize, ListDetailLevel, useUiStore } from 'src/ui/stores/uiStore'
 import { ref, watch, watchEffect } from 'vue'

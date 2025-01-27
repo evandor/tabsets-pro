@@ -1,4 +1,5 @@
 import { LocalStorage } from 'quasar'
+import { Tab } from 'src/tabsets/models/Tab'
 
 export function useEventsServices() {
   const getLocalStorageEvents = (): { added: string[]; removed: string[] } => {
@@ -38,10 +39,37 @@ export function useEventsServices() {
     updateTabsetEvents(tabsetEvents)
   }
 
+  const listNewComments = (tabsetId: string, tab: Tab): string[] => {
+    let found: string[] = []
+    if (tabsetId && tab) {
+      const tabsetEvents = ((LocalStorage.getItem('ui.events.tabsets') as object) || {})[tabsetId as keyof object] as
+        | {
+            added: string[]
+            removed: string[]
+          }
+        | undefined
+      if (tabsetEvents?.added) {
+        for (const c of tab.comments) {
+          if (
+            tabsetEvents.added.findIndex((a: string) => {
+              //console.log('checking tabsetEvents', a, c.id, a.endsWith(c.id))
+              return a.endsWith(c.id)
+            }) >= 0
+          ) {
+            found.push(c.id)
+          }
+        }
+        return found
+      }
+    }
+    return []
+  }
+
   return {
     // getLocalStorageEvents,
     // updateTabsetEvents,
     addTabsetsEvent,
     removeTabsetEvent,
+    listNewComments,
   }
 }

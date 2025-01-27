@@ -14,7 +14,7 @@ import { useThumbnailsService } from 'src/thumbnails/services/ThumbnailsService'
  */
 class AppEventDispatcher {
   dispatchEvent(name: string, params: object): Promise<object> {
-    //console.debug(" >>> dispatching event", name, params)
+    //console.log(' >>> dispatching event', name, params)
     try {
       switch (name) {
         case 'add-to-search':
@@ -24,7 +24,11 @@ class AppEventDispatcher {
           useSearchStore().upsertObject(params)
           return Promise.resolve({})
         case 'capture-screenshot':
-          useThumbnailsService().handleCaptureCallback(params['tabId' as keyof object], params['data' as keyof object])
+          useThumbnailsService().handleCaptureCallback(
+            params['tabId' as keyof object],
+            params['tabsetId' as keyof object],
+            params['data' as keyof object],
+          )
           return Promise.resolve({})
         case 'restore-tabset':
           useCommandExecutor()
@@ -34,7 +38,9 @@ class AppEventDispatcher {
             .catch((err: any) => console.warn('error in RestoreTabsetCommand', err))
           return Promise.resolve({})
         case 'remove-captured-screenshot':
-          // no-op TODO
+          useThumbnailsService()
+            .removeThumbnailsFor(params['tabId' as keyof object])
+            .catch((err: any) => console.warn('error deleting thumbnail', params, err))
           return Promise.resolve({})
         default:
           return Promise.reject(`unknown event ${name}`)

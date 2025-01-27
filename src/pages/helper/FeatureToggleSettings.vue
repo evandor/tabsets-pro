@@ -60,11 +60,11 @@
     </div>
     <div class="row q-pa-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
       <div class="col-3"><b>Create a (dummy) suggestion</b></div>
-      <div class="col-3"></div>
+      <div class="col-3">Suggestions are shown to the user to let her decide if they are applicable</div>
       <div class="col-1"></div>
       <div class="col-5">
         <q-btn label="Tabset Shared" no-caps @click="createSuggestion('TABSET_SHARED')" />
-        <q-btn label="Use Extension" no-caps @click="createSuggestion('USE_EXTENSION')" />
+        <q-btn label="Use Extension" no-caps @click="createSuggestion('USE_EXTENSION')" v-if="!inBexMode()" />
         <q-btn label="Spaces Feature" no-caps @click="createSuggestion('FEATURE')" />
         <q-btn label="Clear all" no-caps @click="clearSuggestions()" />
       </div>
@@ -80,17 +80,19 @@ import { uid } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { useNotificationHandler } from 'src/core/services/ErrorHandler'
+import { useUtils } from 'src/core/services/Utils'
 import { ActivateFeatureCommand } from 'src/features/commands/ActivateFeatureCommand'
 import { DeactivateFeatureCommand } from 'src/features/commands/DeactivateFeatureCommand'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useSettingsStore } from 'src/stores/settingsStore'
-import { Suggestion, SuggestionType } from 'src/suggestions/models/Suggestion'
+import { Suggestion, SuggestionType } from 'src/suggestions/domain/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { Message } from 'src/tabsets/models/Message'
 import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
 
+const { inBexMode } = useUtils()
 const settingsStore = useSettingsStore()
 const { handleError } = useNotificationHandler()
 
@@ -134,12 +136,13 @@ const createSuggestion = async (type: SuggestionType) => {
     case 'TABSET_SHARED':
       const s = new Suggestion(
         uid(),
-        'dummy suggestion',
-        'from settings page - new shared tabsets',
+        'New Shared Tabset',
+        'Carsten wants to share a new tabset with you',
         uid(),
         'TABSET_SHARED',
       )
       s.setImage('o_tabs')
+      s.applyLabel = 'accept'
       await useSuggestionsStore().addSuggestion(s)
       break
     case 'USE_EXTENSION':
