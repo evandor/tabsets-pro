@@ -333,6 +333,7 @@ const simulateStaticSuggestion = () => {
   const suggestions: [Suggestion] = [
     // @ts-expect-error TODO
     Suggestion.getStaticSuggestion('TRY_SPACES_FEATURE'),
+    Suggestion.getStaticSuggestion('TRY_OPENTABS_FEATURE'),
     Suggestion.getStaticSuggestion('TRY_BOOKMARKS_FEATURE'),
   ]
   useSuggestionsStore().addSuggestion(suggestions[suggestionsCounter++ % 2])

@@ -3,15 +3,12 @@ import { boot } from 'quasar/wrappers'
 const INDEX_DB_VERSION = 22
 
 const CLEANUP_PERIOD_IN_MINUTES = 10 // in prod: 10
-const EXPIRE_DATA_PERIOD_IN_MINUTES = 60 // in prod: 60
 const MONITORING_PERIOD_IN_MINUTES = 60 // in prod: 60
 
 const SPECIAL_ID_FOR_NO_GROUP_ASSIGNED = 'no_group_assigned_identifier'
 
 const STRIP_CHARS_IN_USER_INPUT = /[`@#$%^*=\[\]{};"\\|<>~]/g
 const STRIP_CHARS_IN_COLOR_INPUT = /[`@$%^*=\[\]{};:"\\|<>\/~]/g
-
-// const RELEASE_NOTES_URL = "https://us-central1-tabsets-backend-prd.cloudfunctions.net/app/share/preview/5d2cccf9-83ea-40be-bc84-37b03e38af1d"
 
 // Local storage Identifiers
 const TITLE_IDENT = 'title'
@@ -34,6 +31,7 @@ const GITHUB_PATH = 'github.path'
 const SPACES_LIMIT_NO_SUBSCRIPTION = 2
 const TABS_LIMIT_NO_SUBSCRIPTION = 100
 const TABSETS_LIMIT_NO_SUBSCRIPTION = 5
+const THUMBNAILS_LIMIT_NO_SUBSCRIPTION = 1
 
 export default boot(({}) => {})
 
@@ -42,7 +40,6 @@ export {
   CLEANUP_PERIOD_IN_MINUTES,
   STRIP_CHARS_IN_USER_INPUT,
   STRIP_CHARS_IN_COLOR_INPUT,
-  EXPIRE_DATA_PERIOD_IN_MINUTES,
   SPECIAL_ID_FOR_NO_GROUP_ASSIGNED,
   MONITORING_PERIOD_IN_MINUTES,
   SHARING_AUTHOR_IDENT,
@@ -60,4 +57,5 @@ export {
   SPACES_LIMIT_NO_SUBSCRIPTION,
   TABSETS_LIMIT_NO_SUBSCRIPTION,
   TABS_LIMIT_NO_SUBSCRIPTION,
+  THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
 }

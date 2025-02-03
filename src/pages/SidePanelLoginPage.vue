@@ -2,9 +2,11 @@
   <q-page>
     <div v-if="showWatermark" id="watermark">{{ watermark }}</div>
 
-    <div class="q-ma-none q-pa-md text-h6">{{ pageTitle }}</div>
+    <div class="q-ma-none q-pa-md text-h4 q-ma-xl" style="max-width: 500px; margin: 100px auto 50px auto">
+      {{ pageTitle }}
+    </div>
 
-    <div class="q-ma-md example-column-equal-width" style="border: 1px solid #bfbfbf">
+    <div class="q-ma-md" style="border: 1px solid #bfbfbf; max-width: 500px; margin: 0 auto">
       <q-tabs v-model="tab" dense>
         <q-tab name="login" label="Login" />
         <q-tab name="register" label="Create Account" />
@@ -23,6 +25,7 @@
             <div class="col">
               <q-input
                 id="username"
+                autocomplete="username"
                 square
                 filled
                 type="email"
@@ -30,8 +33,7 @@
                 :rules="[(val) => !!val || 'Please provide a valid email address']"
                 dense
                 tabindex="1"
-                autofocus
-                autocomplete="on" />
+                autofocus />
             </div>
 
             <div class="col q-mt-sm">
@@ -48,6 +50,7 @@
             <div class="col q-mt-sm">
               <q-input
                 id="password"
+                autocomplete="current-password"
                 square
                 filled
                 :type="isPwd ? 'password' : 'text'"
@@ -92,6 +95,7 @@
             <div class="col">
               <q-input
                 id="username"
+                autocomplete="username"
                 square
                 filled
                 type="email"
@@ -99,8 +103,7 @@
                 :rules="[(val) => !!val || 'Please provide a valid email address']"
                 dense
                 tabindex="1"
-                autofocus
-                autocomplete="on" />
+                autofocus />
             </div>
 
             <div class="col q-mt-sm">
@@ -109,7 +112,15 @@
               </div>
             </div>
             <div class="col">
-              <q-input id="password" square filled type="password" v-model="password" dense tabindex="2" />
+              <q-input
+                id="password"
+                autocomplete="new-password"
+                square
+                filled
+                type="password"
+                v-model="password"
+                dense
+                tabindex="2" />
             </div>
 
             <div class="col q-mt-xl">
@@ -128,7 +139,7 @@
         </q-tab-panel>
       </q-tab-panels>
     </div>
-    <div class="row q-mr-md">
+    <div class="row q-mr-md" style="max-width: 500px; margin: 10px auto">
       <div class="col-12 text-right">
         <span
           class="text-grey q-mx-none cursor-pointer"

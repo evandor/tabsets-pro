@@ -63,7 +63,7 @@
           v-if="!useUiStore().appLoading"
           style="border: 0 solid green">
           <slot name="iconsRight">
-            <div class="q-mt-sm q-ma-none q-qa-none" style="border: 0 solid blue">
+            <div class="q-mt-sm q-ma-none q-qa-none">
               <template v-if="showSearchIcon()">
                 <SidePanelToolbarButton
                   icon="search"
@@ -158,6 +158,13 @@ const toggleSearch = () => {
 }
 
 windowLocation.value = window.location.href
+
+setTimeout(() => {
+  // redirect to welcome page if there are not tabsets
+  if (useTabsetsStore().tabsets.size === 0) {
+    router.push('/sidepanel/welcome')
+  }
+}, 1000)
 
 watchEffect(() => {
   currentTabset.value = useTabsetsStore().getCurrentTabset

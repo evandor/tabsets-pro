@@ -24,6 +24,7 @@
             'max. ' + TABS_LIMIT_NO_SUBSCRIPTION + ' Tabs',
             'max. ' + TABSETS_LIMIT_NO_SUBSCRIPTION + ' Tabsets',
             'max. ' + SPACES_LIMIT_NO_SUBSCRIPTION + ' Spaces',
+            'max. ' + THUMBNAILS_LIMIT_NO_SUBSCRIPTION + ' MBytes of Thumbnails',
             // 'optional newsletter',
             // 'feature request form',
             //'access to experimental features',
@@ -87,7 +88,12 @@
 </template>
 
 <script lang="ts" setup>
-import { SPACES_LIMIT_NO_SUBSCRIPTION, TABS_LIMIT_NO_SUBSCRIPTION, TABSETS_LIMIT_NO_SUBSCRIPTION } from 'boot/constants'
+import {
+  SPACES_LIMIT_NO_SUBSCRIPTION,
+  TABS_LIMIT_NO_SUBSCRIPTION,
+  TABSETS_LIMIT_NO_SUBSCRIPTION,
+  THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
+} from 'boot/constants'
 import InfoMessageWidget from 'components/widgets/InfoMessageWidget.vue'
 import { getAuth, sendEmailVerification } from 'firebase/auth'
 import { addDoc, collection, DocumentData, getDocs, onSnapshot, query, QuerySnapshot, where } from 'firebase/firestore'

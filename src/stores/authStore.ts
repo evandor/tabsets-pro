@@ -3,6 +3,7 @@ import {
   SPACES_LIMIT_NO_SUBSCRIPTION,
   TABS_LIMIT_NO_SUBSCRIPTION,
   TABSETS_LIMIT_NO_SUBSCRIPTION,
+  THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
 } from 'boot/constants'
 import { getAuth, signOut, User } from 'firebase/auth'
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
@@ -14,7 +15,7 @@ import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useSettingsStore } from 'stores/settingsStore'
 import { computed, ref } from 'vue'
 
-export type AccessItem = 'TABS' | 'TABSETS' | 'SPACES' | 'SYNC' | 'SHARE' | 'FEATURE_TOGGLES'
+export type AccessItem = 'TABS' | 'TABSETS' | 'SPACES' | 'SYNC' | 'SHARE' | 'FEATURE_TOGGLES' | 'THUMBNAILS'
 
 export const useAuthStore = defineStore('auth', () => {
   const authenticated = ref(false)
@@ -63,6 +64,12 @@ export const useAuthStore = defineStore('auth', () => {
     return (): Account | undefined => account.value
   })
 
+  const getUserData = computed(() => {
+    return (): { thumbnails: number } => {
+      return { thumbnails: account.value?.userData ? account.value!.userData['thumbnails' as keyof object] || 0 : 0 }
+    }
+  })
+
   const getRoles = computed(() => {
     return (): string[] => roles.value
   })
@@ -84,45 +91,77 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   const limitExceeded = computed(
-    (): ((item: AccessItem, count: number) => { exceeded: boolean; limit: number | undefined }) => {
+    (): ((item: AccessItem, count: number) => { exceeded: boolean; limit: number | undefined; quota: number }) => {
       function hasRole(role: string) {
         //console.log('all roles', roles.value)
         return roles.value.indexOf(role) >= 0
       }
 
-      return (item: AccessItem, count: number): { exceeded: boolean; limit: number | undefined } => {
+      return (item: AccessItem, count: number): { exceeded: boolean; limit: number | undefined; quota: number } => {
         const localMode = useSettingsStore().isEnabled('localMode')
         if (localMode) {
-          return { exceeded: false, limit: undefined }
+          return { exceeded: false, limit: undefined, quota: 0 }
         }
 
         switch (item) {
           case 'TABS':
             if (hasRole('bibbly.team')) {
-              return { exceeded: count >= 50, limit: 50 }
+              const limit = 50
+              return { exceeded: count >= limit, limit, quota: Math.round((100 * count) / limit) }
             } else if (hasRole('bibbly.user')) {
-              return { exceeded: count >= 10, limit: 10 }
+              const limit = 10
+              return { exceeded: count >= limit, limit, quota: Math.round((100 * count) / limit) }
             } else {
-              return { exceeded: count >= TABS_LIMIT_NO_SUBSCRIPTION, limit: TABS_LIMIT_NO_SUBSCRIPTION }
+              return {
+                exceeded: count >= TABS_LIMIT_NO_SUBSCRIPTION,
+                limit: TABS_LIMIT_NO_SUBSCRIPTION,
+                quota: Math.round((100 * count) / TABS_LIMIT_NO_SUBSCRIPTION),
+              }
             }
           case 'TABSETS':
             if (hasRole('bibbly.team')) {
-              return { exceeded: count >= 50, limit: 50 }
+              const limit = 50
+              return { exceeded: count >= 50, limit, quota: Math.round((100 * count) / limit) }
             } else if (hasRole('bibbly.user')) {
-              return { exceeded: count >= 10, limit: 10 }
+              const limit = 10
+              return { exceeded: count >= 10, limit, quota: Math.round((100 * count) / limit) }
             } else {
-              return { exceeded: count >= TABSETS_LIMIT_NO_SUBSCRIPTION, limit: TABSETS_LIMIT_NO_SUBSCRIPTION }
+              return {
+                exceeded: count >= TABSETS_LIMIT_NO_SUBSCRIPTION,
+                limit: TABSETS_LIMIT_NO_SUBSCRIPTION,
+                quota: Math.round((100 * count) / TABSETS_LIMIT_NO_SUBSCRIPTION),
+              }
             }
           case 'SPACES':
             if (hasRole('bibbly.team')) {
-              return { exceeded: count >= 50, limit: 50 }
+              const limit = 50
+              return { exceeded: count >= 50, limit, quota: Math.round((100 * count) / limit) }
             } else if (hasRole('bibbly.user')) {
-              return { exceeded: count >= 10, limit: 10 }
+              const limit = 10
+              return { exceeded: count >= 10, limit, quota: Math.round((100 * count) / limit) }
             } else {
-              return { exceeded: count >= SPACES_LIMIT_NO_SUBSCRIPTION, limit: SPACES_LIMIT_NO_SUBSCRIPTION }
+              return {
+                exceeded: count >= SPACES_LIMIT_NO_SUBSCRIPTION,
+                limit: SPACES_LIMIT_NO_SUBSCRIPTION,
+                quota: Math.round((100 * count) / SPACES_LIMIT_NO_SUBSCRIPTION),
+              }
+            }
+          case 'THUMBNAILS':
+            if (hasRole('bibbly.team')) {
+              const limit = 5
+              return { exceeded: count >= 50, limit, quota: Math.round((100 * count) / limit) }
+            } else if (hasRole('bibbly.user')) {
+              const limit = 2
+              return { exceeded: count >= 10, limit, quota: Math.round((100 * count) / limit) }
+            } else {
+              return {
+                exceeded: count >= THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
+                limit: THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
+                quota: Math.round((100 * count) / THUMBNAILS_LIMIT_NO_SUBSCRIPTION),
+              }
             }
           default:
-            return { exceeded: false, limit: undefined }
+            return { exceeded: false, limit: undefined, quota: 0 }
         }
       }
     },
@@ -215,6 +254,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function upsertAccount(acc: Account | undefined) {
+    console.log('upserting account', acc)
     if (acc) {
       //storage.upsertAccount(acc)
     }
@@ -235,6 +275,7 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     user,
     getAccount,
+    getUserData,
     getRoles,
     setProducts,
     userMayAccess,

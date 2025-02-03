@@ -200,7 +200,7 @@ import { useRouter } from 'vue-router'
 const $q = useQuasar()
 const router = useRouter()
 
-const leftDrawerOpen = ref($q.screen.gt.md)
+const leftDrawerOpen = ref($q.screen.gt.sm)
 
 const spacesStore = useSpacesStore()
 

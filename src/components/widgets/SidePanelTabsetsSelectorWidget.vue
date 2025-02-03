@@ -2,16 +2,21 @@
   <div class="cursor-pointer">
     <div class="q-ma-none q-pa-none text-subtitle q-pl-sm cursor-pointer ellipsis">
       {{ tabsetLabel() }}
-      <q-tooltip class="tooltip_small">The currenly selected tabset</q-tooltip>
+      <q-tooltip class="tooltip-small" :delay="1000" anchor="center right" self="bottom start"
+        >The currenly selected tabset</q-tooltip
+      >
       <q-icon name="arrow_drop_down" class="q-mr-xs" size="xs" />
     </div>
 
     <q-menu :offset="[0, 0]">
       <q-list dense>
-        <q-item disable v-if="tabsetsOptions.length > 0 && useFeaturesStore().hasFeature(FeatureIdent.SPACES)">
+        <q-item disable dense v-if="tabsetsOptions.length > 0 && useFeaturesStore().hasFeature(FeatureIdent.SPACES)">
           {{ useSpacesStore().space?.label ? 'Tabsets of ' + useSpacesStore().space.label : 'Tabsets w/o Space' }}
         </q-item>
-        <q-item disable v-else-if="!useFeaturesStore().hasFeature(FeatureIdent.SPACES)">
+        <q-item
+          disable
+          dense
+          v-else-if="!useFeaturesStore().hasFeature(FeatureIdent.SPACES) && useTabsetsStore().tabsets.size > 1">
           Switch to other Tabset:
         </q-item>
         <q-item v-if="allTabsetsButCurrent.length > 10">
@@ -34,7 +39,7 @@
             </template>
           </q-select>
         </q-item>
-        <q-item v-else clickable v-for="ts in allTabsetsButCurrent" @click="switchToTabset(ts as Tabset)">
+        <q-item v-else clickable v-for="ts in allTabsetsButCurrent" @click="switchToTabset(ts as Tabset)" v-close-popup>
           {{ ts.name }}
         </q-item>
 
@@ -104,6 +109,9 @@ const props = defineProps({
   fromPanel: { type: Boolean, default: true },
   useAsTabsetsSwitcher: { type: Boolean, default: false },
 })
+
+const emits = defineEmits(['tabsetSwitched'])
+
 const spacesStore = useSpacesStore()
 const router = useRouter()
 const $q = useQuasar()
@@ -219,6 +227,7 @@ const switchToTabset = (ts: Tabset) => {
   useCommandExecutor()
     .execute(new SelectTabsetCommand(ts.id))
     .then((res: ExecutionResult<Tabset | undefined>) => {
+      emits('tabsetSwitched')
       //useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
       if (!props.useAsTabsetsSwitcher) {
         router.push('/sidepanel/tabsets/' + ts.id)

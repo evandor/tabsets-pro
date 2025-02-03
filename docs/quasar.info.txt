@@ -38,6 +38,6 @@ Quasar App Extensions
   @quasar/quasar-app-extension-testing-unit-vitest - 1.1.0 -- A Quasar App Extension for running tests with Vitest
 
 Networking
-  Host - Carstens-MacBook-Pro.fritz.box
-  en0 - 192.168.178.136
+  Host - 63e2ede0-1d4c-4d82-bcf7-ee1322c77ab2.fritz.box
+  en0 - 192.168.178.149
 

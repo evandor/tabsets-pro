@@ -1,17 +1,30 @@
 <template>
-  <span class="cursor-pointer">
-    <span
+  <div class="cursor-pointer">
+    <div
       class="q-ma-none q-pa-none text-subtitle2 q-pl-sm cursor-pointer ellipsis"
       :class="useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) ? '' : 'text-grey-5'">
       {{ tabsetLabel() }}
-      <q-icon name="arrow_drop_down" class="q-mr-xs" size="xs" />
-    </span>
+      <q-icon name="arrow_drop_down" class="q-mr-xs" size="xs" color="primary" />
+    </div>
 
     <q-menu :offset="[0, 0]">
       <q-list dense>
         <q-item disable v-if="tabsetsOptions.length > 0 && useFeaturesStore().hasFeature(FeatureIdent.SPACES)">
           {{ useSpacesStore().space?.label ? 'Tabsets of ' + useSpacesStore().space.label : 'Tabsets w/o Space' }}
         </q-item>
+
+        <!--        <template-->
+        <!--          v-if="useFeaturesStore().hasFeature(FeatureIdent.BACKUP) || useFeaturesStore().hasFeature(FeatureIdent.IGNORE)">-->
+        <!--          <q-separator/>-->
+        <!--          <q-item disable>-->
+        <!--            Special Tabsets-->
+        <!--          </q-item>-->
+        <!--          <q-item v-for="ts in tabsetsWithTypes([TabsetType.SPECIAL])" clickable v-close-popup-->
+        <!--                  @click="switchTabset(ts)">-->
+        <!--            <q-item-section class="q-ml-sm">{{ ts.name }}</q-item-section>-->
+        <!--          </q-item>-->
+        <!--        </template>-->
+
         <q-separator />
         <q-item clickable v-close-popup @click="openNewTabsetDialog()">
           <q-item-section>Add new Tabset</q-item-section>
@@ -26,7 +39,7 @@
         </q-item>
       </q-list>
     </q-menu>
-  </span>
+  </div>
 </template>
 
 <script lang="ts" setup>

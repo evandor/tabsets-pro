@@ -263,7 +263,7 @@ if (inBexMode()) {
           .reloadTabset(currentTabset.value.id)
           .then((ts: Tabset) => {
             currentTabset.value = ts
-            console.log('reloading tabset: ', ts)
+            //console.log('reloading tabset: ', ts)
           })
       }
     } else if (message.name === 'reload-application') {

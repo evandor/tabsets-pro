@@ -51,7 +51,7 @@ class AppService {
     }
 
     if (this.initialized) {
-      await ChromeListeners.resetListeners()
+      //await ChromeListeners.resetListeners()
       useWindowsStore().resetListeners()
     }
 
@@ -92,22 +92,6 @@ class AppService {
 
     // tabsetService.setLocalStorage(localStorage)
 
-    // avatar settings - done in useAuth
-    // if (user?.email && !useUiStore().sharingAvatar) {
-    //   try {
-    //     const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(user.email!))
-    //     const hashArray = Array.from(new Uint8Array(hashBuffer))
-    //     const identifier = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
-    //     const gravatarResponse = await fetch(`https://api.gravatar.com/v3/profiles/${identifier}`)
-    //     const responseBody = JSON.parse(await gravatarResponse.text())
-    //     console.log('gravatarResponse', responseBody)
-    //     if (responseBody['profile_url']) {
-    //     }
-    //   } catch (err: any) {
-    //     console.warn('could not get avatar info')
-    //   }
-    // }
-
     await this.initCoreSerivces(quasar, this.router)
   }
 
@@ -124,11 +108,8 @@ class AppService {
   //       tsIframe.location.href = baseLocation + '?' + ar
   //       //tsIframe.location.href = "https://www.skysail.io"
   //       tsIframe.location.reload()
-  //     } else {
-  //       window.location.reload()
   //     }
   //   }
-  //   useAuthStore().setAuthRequest(null as unknown as string)
   // }
 
   private async initCoreSerivces(quasar: QVueGlobals, router: Router) {

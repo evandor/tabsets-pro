@@ -7,14 +7,13 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "cp envs/env.local ./.env && quasar dev -m bex -T chrome",
+    "dev": "cp envs/env.dev ./.env && quasar dev -m bex -T chrome",
     "dev emulator": "cp envs/env.emulator ./.env && quasar dev -m bex -T chrome",
-    "dev pwa": "cp envs/env.local ./.env && quasar dev -m pwa",
     "dev pwa emulator": "cp envs/env.emulator ./.env && quasar dev -m pwa",
     "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{ts,js,cjs,mjs,vue}\"",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "build": "quasar build -m bex -T chrome",
-    "build pwa": "cp envs/env.local ./.env && quasar build -m pwa",
+    "build pwa": "cp envs/env.dev ./.env && quasar build -m pwa",
     "build pwa.prd & deploy to india032": "cp envs/env.prd ./.env && quasar build -m pwa && scp -r -P 222 dist/pwa/* carsten@carsten.evandor.de:/home/carsten/tabsets/pwa.tabsets.net",
     "build pwa.dev & deploy to india032": "cp envs/env.dev ./.env && quasar build -m pwa && scp -r -P 222 dist/pwa/* carsten@carsten.evandor.de:/home/carsten/tabsets/pwa.dev.tabsets.net",
     "icon": "icongenie generate -i src/assets/icon.png",
@@ -32,7 +31,7 @@
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org skysail-dk --project tabsets-pro ./dist && sentry-cli sourcemaps upload --org skysail-dk --project tabsets-pro ./dist"
   },
   "resolutions": {
-    "vite": "^6.0.5"
+    "vite": "6.0.8"
   },
   "dependencies": {
     "@calumk/editorjs-codecup": "^1.2.0",
