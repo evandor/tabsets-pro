@@ -80,6 +80,16 @@ class BrowserApi {
       { urls: ['*://*/*'], types: ['main_frame'] },
       ['responseHeaders'],
     )
+    chrome.webRequest?.onCompleted.addListener(
+      (details: any) => {
+        console.log('details!', details)
+      },
+      {
+        urls: ['*://*/*/graphql'],
+        types: ['xmlhttprequest'],
+      },
+      ['responseHeaders'],
+    )
   }
 
   stopWebRequestListener() {
@@ -236,10 +246,13 @@ class BrowserApi {
             //   }
           } else if (e.menuItemId === 'save_to_currentTS') {
             const tabId = tab?.id || 0
-            const currentTsId = useTabsetsStore().currentTabsetId
-            if (currentTsId && tab) {
-              this.executeAddToTS(currentTsId, tab)
-            }
+            useTabsetsStore()
+              .getCurrentTabsetId()
+              .then((currentTsId: string | undefined) => {
+                if (currentTsId && tab) {
+                  this.executeAddToTS(currentTsId, tab)
+                }
+              })
           } else if (e.menuItemId === 'annotate_website') {
             console.log('creating annotation JS', tab)
             if (tab && tab.id) {

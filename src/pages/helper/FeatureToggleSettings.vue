@@ -145,9 +145,9 @@ const createSuggestion = async (type: SuggestionType) => {
       s.applyLabel = 'accept'
       await useSuggestionsStore().addSuggestion(s)
       break
-    case 'USE_EXTENSION':
-      await useSuggestionsStore().addSuggestion(Suggestion.getStaticSuggestion('USE_EXTENSION_SUGGESTION'))
-      break
+    // case 'USE_EXTENSION':
+    //   await useSuggestionsStore().addSuggestion(Suggestion.getStaticSuggestion('USE_EXTENSION_SUGGESTION'))
+    //   break
     case 'FEATURE':
       await useSuggestionsStore().addSuggestion(Suggestion.getStaticSuggestion('TRY_SPACES_FEATURE'))
       break

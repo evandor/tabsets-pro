@@ -19,6 +19,10 @@ export const useMessagesStore = defineStore('messages', () => {
     setUpSnapshotListener()
   }
 
+  function addMessage(msg: Message) {
+    messages.value.push(msg)
+  }
+
   function setUpSnapshotListener() {
     messages.value = []
     const userId = useAuthStore().user?.uid
@@ -40,11 +44,18 @@ export const useMessagesStore = defineStore('messages', () => {
     }
   }
 
+  function deleteMessage(msgId: string) {
+    console.log('deleting msg', msgId)
+    messages.value = messages.value.filter((m: Message) => m.id !== msgId)
+  }
+
   const getUnreadMessages = computed(() => messages.value.sort((a: Message, b: Message) => b.created - a.created))
 
   return {
     initialize,
     lastUpdate,
+    addMessage,
+    deleteMessage,
     getUnreadMessages,
   }
 })

@@ -7,14 +7,14 @@
             class="col-12 q-mx-sm q-my-none q-pa-none q-pt-md cursor-pointer text-accent"
             style="font-size: smaller"
             @click="router.push('/sidepanel/welcome')">
-            ... or create a new collection manually
+            &lt; back
           </div>
-          <div
-            class="col-12 q-mx-sm q-my-none q-pa-none cursor-pointer text-accent"
-            style="font-size: smaller"
-            @click="gotoSettingsPage()">
-            ... or import from existing backup
-          </div>
+          <!--          <div does not seem to work, redirecting to welcome page for some reason-->
+          <!--            class="col-12 q-mx-sm q-my-none q-pa-none cursor-pointer text-accent"-->
+          <!--            style="font-size: smaller"-->
+          <!--            @click="gotoSettingsPage()">-->
+          <!--            ... or import from existing backup-->
+          <!--          </div>-->
 
           <div class="col-12 q-ma-sm q-pa-none q-pt-md text-grey">
             Select a folder and click the import icon
@@ -111,7 +111,7 @@ const imported = async (a: { bmId: number; recursive: boolean; tsName: string })
   // const tabset = await createTabsetFrom(a.tsName, "" + a.bmId)
 
   useCommandExecutor()
-    .execute(new CreateTabsetFromBookmarksRecursive(a.tsName, '' + a.bmId))
+    .execute(new CreateTabsetFromBookmarksRecursive(a.tsName, '' + a.bmId, true))
     .then(async (res: ExecutionResult<Tabset>) => {
       const tabset = res.result
       await useTabsetService().saveTabset(tabset)

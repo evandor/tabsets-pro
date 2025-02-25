@@ -31,7 +31,7 @@
             <q-card-section class="q-ml-sm q-pl-none text-grey-8">
               <q-checkbox v-model="addCurrentTabs" :label="$t('add_current_tabs')" size="xs" color="text-grey-8" />
             </q-card-section>
-            <q-card-actions align="right" class="q-pr-md q-pb-xs q-ma-none q-mt-md">
+            <q-card-actions align="right" class="q-pr-md q-pb-xs q-ma-none q-my-md">
               <DialogButton
                 :label="$t('add_tabset')"
                 @was-clicked="addFirstTabset"
@@ -41,16 +41,24 @@
               <div
                 class="text-right q-ma-none q-pa-none text-accent cursor-pointer"
                 style="font-size: smaller"
-                @click="importFromBookmarks()">
-                or import from bookmarks...
-              </div>
-              <div
-                class="text-right q-ma-none q-pa-none text-accent cursor-pointer"
-                style="font-size: smaller"
-                @click="opentabsView()">
-                or start from your open tabs...
+                @click="importFromBackup()">
+                or import from backup...
               </div>
             </q-card-actions>
+            <!--            <q-card-actions align="right" class="q-pr-md q-pb-md q-ma-none q-mt-none">-->
+            <!--              <div-->
+            <!--                class="text-right q-ma-none q-pa-none text-accent cursor-pointer"-->
+            <!--                style="font-size: smaller"-->
+            <!--                @click="importFromBookmarks()">-->
+            <!--                or import from bookmarks...-->
+            <!--              </div>-->
+            <!--              <div-->
+            <!--                class="text-right q-ma-none q-pa-none text-accent cursor-pointer"-->
+            <!--                style="font-size: smaller"-->
+            <!--                @click="opentabsView()">-->
+            <!--                or start from your open tabs...-->
+            <!--              </div>-->
+            <!--            </q-card-actions>-->
           </q-card>
         </div>
         <div class="row q-mr-sm">
@@ -89,9 +97,9 @@ import { SidePanelViews } from 'src/app/models/SidePanelViews'
 import { STRIP_CHARS_IN_USER_INPUT, TITLE_IDENT } from 'src/boot/constants'
 import DialogButton from 'src/core/dialog/buttons/DialogButton.vue'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
+import { useNavigationService } from 'src/core/services/NavigationService'
 import Analytics from 'src/core/utils/google-analytics'
 import { ActivateFeatureCommand } from 'src/features/commands/ActivateFeatureCommand'
-import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import { CreateTabsetCommand } from 'src/tabsets/commands/CreateTabsetCommand'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
@@ -135,7 +143,7 @@ watchEffect(() => {
 
 const addFirstTabset = () => {
   useCommandExecutor()
-    .executeFromUi(new CreateTabsetCommand(tabsetName.value, addCurrentTabs ? useTabsStore2().browserTabs : []))
+    .executeFromUi(new CreateTabsetCommand(tabsetName.value, addCurrentTabs.value ? useTabsStore2().browserTabs : []))
     .then((res: any) => {
       useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
       router.push('/sidepanel?first=true')
@@ -152,7 +160,7 @@ const stageIdentifier = () => (process.env.TABSETS_STAGE !== 'PRD' ? ' (' + proc
 const clicked = (url: string) => openURL(url)
 
 const opentabsView = () => {
-  useFeaturesStore().activateFeature(FeatureIdent.OPEN_TABS)
+  // useFeaturesStore().activateFeature(FeatureIdent.OPEN_TABS)
   useUiStore().sidePanelSetActiveView(SidePanelViews.TABS_LIST)
 }
 
@@ -162,6 +170,11 @@ const importFromBookmarks = () => {
     .then(() => {
       router.push('/sidepanel/bookmarks/import')
     })
+}
+
+const importFromBackup = () => {
+  const url = chrome.runtime.getURL('/www/index.html#/mainpanel/settings?tab=importExport')
+  useNavigationService().browserTabFor(url)
 }
 </script>
 

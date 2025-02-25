@@ -85,7 +85,7 @@ export const useEventsStore = defineStore('events', () => {
 
         if (reloadTabset) {
           console.log('initiating reload')
-          useTabsetsStore().reloadTabset(useTabsetsStore().currentTabsetId!)
+          // TODO check: useTabsetsStore().reloadTabset(useTabsetsStore().getCurrentTabsetId()!)
           reloadTabset = false
         }
       })

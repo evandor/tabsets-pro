@@ -1,6 +1,6 @@
 <template>
   <!-- SidePanelSearchPage -->
-  <q-page style="padding-top: 50px">
+  <q-page style="padding-top: 85px">
     <div class="row q-ma-none q-pa-none">
       <div class="col-12 q-ma-none q-pa-none">
         <q-list class="q-ma-none">
@@ -32,16 +32,18 @@
           <CloseSidePanelViewButton />
         </template>
       </FirstToolbarHelper2>
+      <SearchToolbarHelper class="bg-grey-1" />
     </q-page-sticky>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import _ from 'lodash'
-import FirstToolbarHelper2 from 'pages/sidepanel/helper/FirstToolbarHelper2.vue'
 import { uid } from 'quasar'
 import SearchHit from 'src/components/layouts/SearchHit.vue'
 import Analytics from 'src/core/utils/google-analytics'
+import FirstToolbarHelper2 from 'src/pages/sidepanel/helper/FirstToolbarHelper2.vue'
+import SearchToolbarHelper from 'src/pages/sidepanel/helper/SearchToolbarHelper.vue'
 import { Hit } from 'src/search/models/Hit'
 import { useSearchStore } from 'src/search/stores/searchStore'
 import { Tab } from 'src/tabsets/models/Tab'

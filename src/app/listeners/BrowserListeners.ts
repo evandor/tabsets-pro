@@ -5,8 +5,11 @@ import { useContentStore } from 'src/content/stores/contentStore'
 import { useUtils } from 'src/core/services/Utils'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import NavigationService from 'src/services/NavigationService'
+import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { Tab } from 'src/tabsets/models/Tab'
+import { TabAndTabsetId } from 'src/tabsets/models/TabAndTabsetId'
+import { useSelectedTabsetService } from 'src/tabsets/services/selectedTabsetService'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsetsUiStore } from 'src/tabsets/stores/tabsetsUiStore'
@@ -16,6 +19,43 @@ import { useUiStore } from 'src/ui/stores/uiStore'
 const { addToTabsetId } = useTabsetService()
 
 const { inBexMode, addListenerOnce } = useUtils()
+
+let timer: { time: number; start: number; url: string } = { time: 0, start: new Date().getTime(), url: '' }
+
+async function stopTimer(url: string) {
+  const duration = new Date().getTime() - timer.start
+  //console.log(`stopping timer for ${url}: ${timer.time} + ${duration}`)
+  const tabsForUrl: TabAndTabsetId[] = useTabsetsStore().tabsForUrl(url)
+  for (const tabWithTsId of tabsForUrl) {
+    //console.log('found', tabWithTsId)
+    tabWithTsId.tab.readingTime += Math.min(duration, 60000)
+    const ts = useTabsetsStore().getTabset(tabWithTsId.tabsetId)
+    if (ts) {
+      //console.log('saving', ts)
+      await useTabsetService().saveTabset(ts)
+    }
+  }
+  if (tabsForUrl.length === 0) {
+    timers.set(url, timer.time + duration)
+  }
+  //console.log('timers', timers)
+}
+
+function startTimer(url: string | undefined) {
+  if (url) {
+    if (timer.url !== url) {
+      stopTimer(timer.url) // stop 'old' timer
+    }
+    timer = { start: new Date().getTime(), url: url, time: timers.get(url) || 0 }
+    //console.log('started timer', timer)
+  }
+}
+
+function stopTimers() {
+  timer = { time: 0, start: new Date().getTime(), url: '' }
+}
+
+const timers = new Map<string, number>()
 
 async function setCurrentTab() {
   const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
@@ -86,6 +126,28 @@ function runOnNotificationClick(notificationId: string, buttonIndex: number) {
   }
 }
 
+async function checkSwitchTabsetSuggestion(windowId: number) {
+  const suggestedTabsetAndFolder = await useTabsStore2().suggestTabsetAndFolder(0.6)
+  if (suggestedTabsetAndFolder) {
+    console.log('suggestedTabsetAndFolder', suggestedTabsetAndFolder)
+    const suggestion = new Suggestion(
+      uid(), //'SWITCH_TABSET',
+      'Switch Tabset?',
+      'Your currently open tabs match a different tabset: ' +
+        suggestedTabsetAndFolder?.tabsetName +
+        '. Do you want to switch to this tabset?',
+      'tabset://' + suggestedTabsetAndFolder?.tabsetId + '/' + suggestedTabsetAndFolder?.folder,
+      'SWITCH_TABSET',
+    )
+    //  .setImage('o_tab')
+    // .setState('PRIO')
+    //  .setWindowId(windowId)
+    suggestion.applyLabel = 'switch'
+    suggestion.windowId = windowId
+    await useSuggestionsStore().addSuggestion(suggestion)
+  }
+}
+
 class BrowserListeners {
   private onUpdatedListener = (number: number, info: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) =>
     this.onUpdated(number, info, tab)
@@ -95,6 +157,10 @@ class BrowserListeners {
   private onActivatedListener = (info: chrome.tabs.TabActiveInfo) => this.onActivated(info)
   private onMessageListener = (request: any, sender: chrome.runtime.MessageSender, sendResponse: any) =>
     this.onMessage(request, sender, sendResponse)
+
+  private onWindowFocusChangedListener = (windowId: number) => this.onWindowFocusChanged(windowId)
+  private onWindowRemovedListener = (windowId: number) => this.onWindowRemoved(windowId)
+
   private onCommandListener = (command: string) => {
     switch (command) {
       case 'tabHistoryBack':
@@ -119,17 +185,21 @@ class BrowserListeners {
 
       await setCurrentTab()
 
+      // --- tab listeners ---
       //chrome.tabs.onCreated.addListener(this.onCreatedListener)
       addListenerOnce(chrome.tabs.onUpdated, this.onUpdatedListener)
       addListenerOnce(chrome.tabs.onActivated, this.onActivatedListener)
       addListenerOnce(chrome.tabs.onMoved, this.onMovedListener)
       addListenerOnce(chrome.tabs.onRemoved, this.onRemovedListener)
       addListenerOnce(chrome.tabs.onReplaced, this.onReplacedListener)
+
+      // --- window listeners ---
+      addListenerOnce(chrome.windows.onFocusChanged, this.onWindowFocusChangedListener)
+      addListenerOnce(chrome.windows.onRemoved, this.onWindowRemovedListener)
+
+      // --- other listeners ---
       addListenerOnce(chrome.runtime.onMessage, this.onMessageListener)
 
-      // if (!chrome.runtime.onMessage.hasListener(this.onMessageListener)) {
-      //   chrome.runtime.onMessage.addListener(this.onMessageListener)
-      // }
       if (chrome.commands) {
         chrome.commands.onCommand.addListener(this.onCommandListener)
       }
@@ -161,6 +231,8 @@ class BrowserListeners {
     useTabsetsUiStore().setMatchingTabsFor(chromeTab.url)
     useTabsetService().urlWasActivated(chromeTab.url)
     useTabsetsUiStore().updateExtensionIcon(chromeTab.id)
+
+    await checkSwitchTabsetSuggestion(chromeTab.windowId)
   }
 
   // #endregion snippet
@@ -183,14 +255,13 @@ class BrowserListeners {
   //   }
   // }
 
-  onRemoved(number: number, info: chrome.tabs.TabRemoveInfo) {
+  async onRemoved(number: number, info: chrome.tabs.TabRemoveInfo) {
     if (info.isWindowClosing) {
       // ignore single closing of tab if the whole window is about to be closed.
       return
     }
     console.debug(`==> tabRemoved: window ${info.windowId}`)
-    // useWindowsStore().refreshTabsetWindow(info.windowId)
-    //useWindowsStore().setLastUpdate()
+    // await checkSwitchTabsetSuggestion(info.windowId)
   }
 
   onReplaced(n1: number, n2: number) {
@@ -210,7 +281,19 @@ class BrowserListeners {
       useContentStore().setCurrentTabUrl(tab.url)
       useTabsetService().urlWasActivated(tab.url)
       useTabsetsUiStore().setMatchingTabsFor(tab.url)
+
+      startTimer(tab.url)
     })
+  }
+
+  onWindowFocusChanged(windowId: number) {
+    if (windowId === chrome.windows.WINDOW_ID_NONE) {
+      stopTimers()
+    }
+  }
+
+  onWindowRemoved(windowId: number) {
+    useSelectedTabsetService().clearWindow(windowId)
   }
 
   // #endregion snippet2
@@ -348,7 +431,7 @@ class BrowserListeners {
   private ignoreUrl(url: string | undefined) {
     const selfUrl = chrome.runtime.getURL('')
     if (url?.startsWith(selfUrl)) {
-      console.debug(`onTabUpdated: >>> .url starts with '${selfUrl}'`)
+      //console.debug(`onTabUpdated: >>> .url starts with '${selfUrl}'`)
       return true
     }
   }

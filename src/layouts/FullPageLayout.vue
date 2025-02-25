@@ -12,8 +12,14 @@
             width="32px">
             <q-tooltip class="tooltip">Toggle the tabset list view by clicking here</q-tooltip>
           </q-img>
-          <q-toolbar-title v-if="!useFeaturesStore().hasFeature(FeatureIdent.SPACES)" style="min-width: 200px" shrink>
+          <q-toolbar-title
+            v-if="!useFeaturesStore().hasFeature(FeatureIdent.SPACES)"
+            @click.stop="goHome()"
+            class="cursor-pointer"
+            style="min-width: 200px"
+            shrink>
             {{ title() }}
+            <q-tooltip class="tooltip">Reload Tabsets Extension</q-tooltip>
           </q-toolbar-title>
           <q-toolbar-title v-else>
             {{ title() }}
@@ -108,7 +114,6 @@
           tooltip="Access to your bookmarks" />
 
         <ToolbarButton
-          v-if="useFeaturesStore().hasFeature(FeatureIdent.OPEN_TABS)"
           :drawer="DrawerTabs.OPEN_TABS"
           icon="o_playlist_add"
           tooltip="Show Open Tabs View"

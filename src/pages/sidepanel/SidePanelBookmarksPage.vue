@@ -27,13 +27,13 @@
 </template>
 
 <script lang="ts" setup>
-import ViewToolbarHelper from 'pages/sidepanel/helper/ViewToolbarHelper.vue'
 import { useQuasar } from 'quasar'
 import BookmarksTree from 'src/bookmarks/components/BookmarksTree.vue'
 import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import Analytics from 'src/core/utils/google-analytics'
+import ViewToolbarHelper from 'src/pages/sidepanel/helper/ViewToolbarHelper.vue'
 import { CreateTabsetFromBookmarksRecursive } from 'src/tabsets/commands/CreateTabsetFromBookmarksRecursive'
 import { Tabset } from 'src/tabsets/models/Tabset'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
@@ -61,7 +61,7 @@ const imported = async (a: { bmId: number; recursive: boolean; tsName: string })
   $q.loadingBar?.start()
 
   useCommandExecutor()
-    .execute(new CreateTabsetFromBookmarksRecursive(a.tsName, '' + a.bmId))
+    .execute(new CreateTabsetFromBookmarksRecursive(a.tsName, '' + a.bmId, a.recursive))
     .then(async (res: ExecutionResult<Tabset>) => {
       const tabset = res.result
       await useTabsetService().saveTabset(tabset)

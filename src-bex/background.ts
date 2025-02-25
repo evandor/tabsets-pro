@@ -1,13 +1,5 @@
-/**
- * Importing the file below initializes the extension background.
- *
- * Warnings:
- * 1. Do NOT remove the import statement below. It is required for the extension to work.
- *    If you don't need createBridge(), leave it as "import '#q-app/bex/background'".
- * 2. Do NOT import this file in multiple background scripts. Only in one!
- * 3. Import it in your background service worker (if available for your target browser).
- */
 import { createBridge } from '#q-app/bex/background'
+import Analytics from 'src/core/utils/google-analytics'
 
 // https://stackoverflow.com/questions/49739438/when-and-how-does-a-pwa-update-itself
 const updateTrigger = 10
@@ -18,7 +10,7 @@ const updateTrigger = 10
 addEventListener('unhandledrejection', async (event) => {
   console.log('[service-worker] ga: fire error event', event)
   // getting error: Service worker registration failed. Status code: 15
-  //Analytics.fireErrorEvent(event.reason);
+  Analytics.fireErrorEvent(event.reason)
 })
 
 chrome.omnibox.onInputEntered.addListener((text) => {
