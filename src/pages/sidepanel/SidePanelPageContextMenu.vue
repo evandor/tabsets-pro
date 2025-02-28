@@ -1,33 +1,33 @@
 <template>
   <q-menu :offset="[22, 6]">
     <q-list dense style="min-width: 200px">
-      <ContextMenuItem
-        v-close-popup
-        @was-clicked="openEditTabsetDialog(tabset)"
-        icon="o_note"
-        :label="tabset.type === TabsetType.SESSION ? 'Edit Session' : 'Edit Tabset'" />
+      <!--      <ContextMenuItem-->
+      <!--        v-close-popup-->
+      <!--        @was-clicked="openEditTabsetDialog(tabset)"-->
+      <!--        icon="o_note"-->
+      <!--        :label="tabset.type === TabsetType.SESSION ? 'Edit Session' : 'Edit Tabset'" />-->
 
-      <template v-if="tabset.type === TabsetType.SESSION">
-        <q-separator inset />
+      <!--      <template v-if="tabset.type === TabsetType.SESSION">-->
+      <!--        <q-separator inset />-->
 
-        <ContextMenuItem
-          v-close-popup
-          @was-clicked="convertToCollection(tabset)"
-          color="warning"
-          icon="o_folder"
-          label="Convert to Collection" />
-      </template>
+      <!--        <ContextMenuItem-->
+      <!--          v-close-popup-->
+      <!--          @was-clicked="convertToCollection(tabset)"-->
+      <!--          color="warning"-->
+      <!--          icon="o_folder"-->
+      <!--          label="Convert to Collection" />-->
+      <!--      </template>-->
 
-      <template v-if="tabset.type === TabsetType.DEFAULT">
-        <q-separator inset />
+      <!--      <template v-if="tabset.type === TabsetType.DEFAULT">-->
+      <!--        <q-separator inset />-->
 
-        <ContextMenuItem
-          v-close-popup
-          @was-clicked="createSubfolder(tabset)"
-          color="warning"
-          icon="o_folder"
-          label="Create Subfolder" />
-      </template>
+      <!--        <ContextMenuItem-->
+      <!--          v-close-popup-->
+      <!--          @was-clicked="createSubfolder(tabset)"-->
+      <!--          color="warning"-->
+      <!--          icon="o_folder"-->
+      <!--          label="Create Subfolder" />-->
+      <!--      </template>-->
 
       <q-separator inset v-if="useTabsetsStore().tabsets.size > 1" />
 

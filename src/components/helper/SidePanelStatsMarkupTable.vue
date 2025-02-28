@@ -65,10 +65,10 @@ import { date, useQuasar } from 'quasar'
 import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
 import NavigationService from 'src/services/NavigationService'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
+import { useAuthStore } from 'src/stores/authStore'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
 import { useWindowsStore } from 'src/windows/stores/windowsStore'
-import { useAuthStore } from 'stores/authStore'
 import { onMounted, ref, watch, watchEffect } from 'vue'
 
 interface StatRow {
@@ -76,7 +76,7 @@ interface StatRow {
   count: number
   snapshot: any
   link?: string
-  quota?: number
+  quota: number | undefined
 }
 
 const localstorage = useQuasar().localStorage
@@ -162,19 +162,22 @@ const calcStatsRows = (): StatRow[] => {
       count: useBookmarksStore().bookmarksCount,
       snapshot: getFromSnapshot('Bookmarks'),
       link: 'https://docs.tabsets.net/bookmarks',
+      quota: undefined,
     },
     {
       name: 'Bookmark Folders',
       count: useBookmarksStore().foldersCount,
       snapshot: getFromSnapshot('Bookmark Folders'),
+      quota: undefined,
     },
     {
       name: 'Open Windows',
       count: useWindowsStore().currentBrowserWindows.length,
       snapshot: getFromSnapshot('Open Windows'),
       link: 'https://docs.tabsets.net/windows-management',
+      quota: undefined,
     },
-    { name: 'Open Tabs', count: useTabsStore2().tabsCount, snapshot: getFromSnapshot('Open Tabs') },
+    { name: 'Open Tabs', count: useTabsStore2().tabsCount, snapshot: getFromSnapshot('Open Tabs'), quota: undefined },
   ]
 }
 

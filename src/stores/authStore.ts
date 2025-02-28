@@ -91,13 +91,19 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   const limitExceeded = computed(
-    (): ((item: AccessItem, count: number) => { exceeded: boolean; limit: number | undefined; quota: number }) => {
+    (): ((
+      item: AccessItem,
+      count: number,
+    ) => { exceeded: boolean; limit: number | undefined; quota: number | undefined }) => {
       function hasRole(role: string) {
         //console.log('all roles', roles.value)
         return roles.value.indexOf(role) >= 0
       }
 
-      return (item: AccessItem, count: number): { exceeded: boolean; limit: number | undefined; quota: number } => {
+      return (
+        item: AccessItem,
+        count: number,
+      ): { exceeded: boolean; limit: number | undefined; quota: number | undefined } => {
         const localMode = useSettingsStore().isEnabled('localMode')
         if (localMode) {
           return { exceeded: false, limit: undefined, quota: 0 }

@@ -1,5 +1,7 @@
 import { boot } from 'quasar/wrappers'
 
+const EXTENSION_NAME = 'tabsets-pro'
+
 const INDEX_DB_VERSION = 22
 
 const CLEANUP_PERIOD_IN_MINUTES = 10 // in prod: 10
@@ -18,8 +20,8 @@ const APP_INSTALLATION_ID = 'app.installation.id'
 const SHARING_AUTHOR_IDENT = 'sharing.author'
 const SHARING_AVATAR_IDENT = 'sharing.avatar'
 
-const CURRENT_USER_ID = 'current.user.id'
-const CURRENT_USER_EMAIL = 'current.user.email'
+const CURRENT_USER_ID = 'current.user.id' // pro only
+const CURRENT_USER_EMAIL = 'current.user.email' // pro only
 
 const GITHUB_USERNAME = 'github.username'
 const GITHUB_REPONAME = 'github.reponame'
@@ -28,14 +30,15 @@ const GITHUB_AUTO_BACKUP = 'github.autobackup'
 const GITHUB_LOG = 'github.log'
 const GITHUB_PATH = 'github.path'
 
-const SPACES_LIMIT_NO_SUBSCRIPTION = 2
-const TABS_LIMIT_NO_SUBSCRIPTION = 100
-const TABSETS_LIMIT_NO_SUBSCRIPTION = 5
-const THUMBNAILS_LIMIT_NO_SUBSCRIPTION = 1
+const SPACES_LIMIT_NO_SUBSCRIPTION = 2 // pro only
+const TABS_LIMIT_NO_SUBSCRIPTION = 100 // pro only
+const TABSETS_LIMIT_NO_SUBSCRIPTION = 5 // pro only
+const THUMBNAILS_LIMIT_NO_SUBSCRIPTION = 1 // pro only
 
 export default boot(({}) => {})
 
 export {
+  EXTENSION_NAME,
   INDEX_DB_VERSION,
   CLEANUP_PERIOD_IN_MINUTES,
   STRIP_CHARS_IN_USER_INPUT,

@@ -248,6 +248,8 @@ const title = () => {
   return inBexMode() ? 'Tabsets' : process.env.MODE === 'spa' ? 'Tabsets Web' : 'Tabsets Pro'
 }
 
+const goHome = () => router.push('/')
+
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value
   useUiStore().toggleLeftDrawer()

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { CURRENT_USER_ID } from 'boot/constants'
+import { CURRENT_USER_ID, EXTENSION_NAME } from 'boot/constants'
 import { onAuthStateChanged } from 'firebase/auth'
 import { setCssVar, useQuasar } from 'quasar'
 import AppService from 'src/app/AppService'
@@ -17,6 +17,7 @@ import { useAppStore } from 'stores/appStore'
 import { useSettingsStore } from 'stores/settingsStore'
 import { onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useLogger } from 'src/services/Logger'
 
 const $q = useQuasar()
 const router = useRouter()
@@ -31,6 +32,8 @@ settingsStore.initialize($q.localStorage)
 usePermissionsStore().initialize()
 
 useAppStore().init()
+
+const { info } = useLogger()
 
 FirebaseServices.init()
 
@@ -99,11 +102,10 @@ if (currentUser) {
     // triggers, but app should already have been started, no restart enforced
     console.debug('app start fallback after 2000ms')
     AppService.init($q, router, false)
-    // info(
-    //   `tabsets-pro started: timeout=true, mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`,
-    // )
   }, 2000)
 }
+
+info(`${EXTENSION_NAME} started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
 
 if (inBexMode()) {
   $q.bex.on('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)

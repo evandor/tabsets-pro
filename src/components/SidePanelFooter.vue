@@ -229,20 +229,19 @@
 </template>
 
 <script setup lang="ts">
-import SidePanelFooterLeftButtons from 'components/helper/SidePanelFooterLeftButtons.vue'
-import SidePanelStatsMarkupTable from 'components/helper/SidePanelStatsMarkupTable.vue'
 import _ from 'lodash'
 import { openURL, uid, useQuasar } from 'quasar'
 import BrowserApi from 'src/app/BrowserApi'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { SidePanelViews } from 'src/app/models/SidePanelViews'
+import SidePanelFooterLeftButtons from 'src/components/helper/SidePanelFooterLeftButtons.vue'
+import SidePanelStatsMarkupTable from 'src/components/helper/SidePanelStatsMarkupTable.vue'
 import { useContentStore } from 'src/content/stores/contentStore'
 import ContextMenuItem from 'src/core/components/helper/ContextMenuItem.vue'
 import { ToastType } from 'src/core/models/Toast'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { useUtils } from 'src/core/services/Utils'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
-import { Account } from 'src/models/Account'
 import NavigationService from 'src/services/NavigationService'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import SuggestionDialog from 'src/suggestions/dialogues/SuggestionDialog.vue'
@@ -283,7 +282,6 @@ const showWindowTable = ref(false)
 const showStatsTable = ref(false)
 const ignored = ref('')
 const showLogin = ref(false)
-const account = ref<Account | undefined>(undefined)
 const randomKey = ref<string>(uid())
 const progressValue = ref<number>(0.0)
 const progressLabel = ref<string>('')
@@ -361,15 +359,17 @@ watchEffect(() => {
 })
 
 const openOptionsPage = () => {
-  $q.platform.is.cordova || $q.platform.is.capacitor || !$q.platform.is.bex
-    ? router.push('/settings')
-    : NavigationService.openOrCreateTab(
-        [chrome.runtime.getURL('www/index.html#/mainpanel/settings')],
-        undefined,
-        [],
-        true,
-        true,
-      )
+  if ($q.platform.is.cordova || $q.platform.is.capacitor || !$q.platform.is.bex) {
+    router.push('/settings')
+  } else {
+    NavigationService.openOrCreateTab(
+      [chrome.runtime.getURL('www/index.html#/mainpanel/settings')],
+      undefined,
+      [],
+      true,
+      true,
+    )
+  }
 }
 
 const openExtensionTab = () => openURL(chrome.runtime.getURL('www/index.html#/fullpage'))
