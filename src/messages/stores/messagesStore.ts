@@ -19,7 +19,12 @@ export const useMessagesStore = defineStore('messages', () => {
     setUpSnapshotListener()
   }
 
-  function addMessage(msg: Message) {
+  function addMessage(msg: Message, removeOlder: boolean = false) {
+    if (removeOlder) {
+      messages.value = messages.value.filter(
+        (m: Message) => m.message !== msg.message || m.actionPath !== msg.actionPath,
+      )
+    }
     messages.value.push(msg)
   }
 

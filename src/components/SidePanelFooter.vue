@@ -54,7 +54,7 @@
     <div class="row fit q-ma-none q-pa-none">
       <div class="col-6">
         <q-btn
-          v-if="!transitionGraceTime && showSuggestionButton"
+          v-if="showSuggestionButton"
           outline
           icon="o_lightbulb"
           :label="suggestionsLabel()"
@@ -64,7 +64,7 @@
           class="q-ma-none q-pa-xs q-ml-sm q-mt-xs q-pr-md cursor-pointer">
         </q-btn>
 
-        <template v-if="!transitionGraceTime && !showSuggestionButton">
+        <template v-else>
           <SidePanelFooterLeftButtons
             @was-clicked="doShowSuggestionButton = true"
             :size="getButtonSize()"
@@ -244,6 +244,7 @@ import { useUtils } from 'src/core/services/Utils'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import NavigationService from 'src/services/NavigationService'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
+import { useAuthStore } from 'src/stores/authStore'
 import SuggestionDialog from 'src/suggestions/dialogues/SuggestionDialog.vue'
 import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
@@ -259,7 +260,6 @@ import { useUiStore } from 'src/ui/stores/uiStore'
 import WindowsMarkupTable from 'src/windows/components/WindowsMarkupTable.vue'
 import { Window } from 'src/windows/models/Window'
 import { useWindowsStore } from 'src/windows/stores/windowsStore'
-import { useAuthStore } from 'stores/authStore'
 import { ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTabsetsUiStore } from '../tabsets/stores/tabsetsUiStore'

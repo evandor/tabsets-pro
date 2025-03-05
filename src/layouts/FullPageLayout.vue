@@ -179,6 +179,7 @@
 </template>
 
 <script setup lang="ts">
+import { EXTENSION_NAME } from 'boot/constants'
 import Navigation2 from 'components/Navigation2.vue'
 import ToolbarButton from 'components/widgets/ToolbarButton.vue'
 import _ from 'lodash'
@@ -245,7 +246,8 @@ useMeta(() => {
 })
 
 const title = () => {
-  return inBexMode() ? 'Tabsets' : process.env.MODE === 'spa' ? 'Tabsets Web' : 'Tabsets Pro'
+  const extensionName = EXTENSION_NAME
+  return inBexMode() ? extensionName : process.env.MODE === 'spa' ? extensionName + ' Web' : extensionName + ' Pro'
 }
 
 const goHome = () => router.push('/')

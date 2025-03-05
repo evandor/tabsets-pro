@@ -372,6 +372,16 @@ export class AppFeatures {
     ]),
 
     new Feature(
+      FeatureIdent.MONITOR,
+      'EXPERIMENTAL',
+      'Tab Monitor',
+      'Periodically check for changes',
+      'notifications',
+      '',
+      ['all'],
+    ),
+
+    new Feature(
       FeatureIdent.TABSETS_SHARING,
       'OPTIONAL',
       'Sharing Tabsets',

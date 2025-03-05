@@ -91,8 +91,8 @@
                   :tabset="currentTabset"
                   :level="'root'" />
               </span>
-              <!--              <q-icon name="more_vert" size="sm" color="secondary" class="cursor-pointer" />-->
-              <!--              <SidePanelPageContextMenu v-if="currentTabset" :tabset="currentTabset as Tabset" />-->
+              <q-icon name="more_vert" size="sm" color="secondary" class="cursor-pointer" />
+              <SidePanelPageContextMenu v-if="currentTabset" :tabset="currentTabset as Tabset" />
             </div>
           </slot>
         </div>
@@ -102,6 +102,7 @@
 </template>
 
 <script lang="ts" setup>
+import SidePanelPageContextMenu from 'pages/sidepanel/SidePanelPageContextMenu.vue'
 import { useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { SidePanelViews } from 'src/app/models/SidePanelViews'

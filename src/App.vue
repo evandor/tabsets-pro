@@ -12,12 +12,12 @@ import { useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useUtils } from 'src/core/services/Utils'
 import { usePermissionsStore } from 'src/core/stores/usePermissionsStore'
 import FirebaseServices from 'src/services/firebase/FirebaseServices'
+import { useLogger } from 'src/services/Logger'
+import { useAppStore } from 'src/stores/appStore'
+import { useSettingsStore } from 'src/stores/settingsStore'
 import { useUiStore } from 'src/ui/stores/uiStore'
-import { useAppStore } from 'stores/appStore'
-import { useSettingsStore } from 'stores/settingsStore'
 import { onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useLogger } from 'src/services/Logger'
 
 const $q = useQuasar()
 const router = useRouter()
