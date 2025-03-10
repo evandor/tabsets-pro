@@ -23,6 +23,7 @@ import { useSnapshotsService } from 'src/snapshots/services/SnapshotsService'
 import { useSnapshotsStore } from 'src/snapshots/stores/SnapshotsStore'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import { useAppStore } from 'src/stores/appStore'
+import { useAuthStore } from 'src/stores/authStore'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
@@ -31,7 +32,6 @@ import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
 import { useThumbnailsService } from 'src/thumbnails/services/ThumbnailsService'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { useWindowsStore } from 'src/windows/stores/windowsStore'
-import { useAuthStore } from 'stores/authStore'
 import { watch } from 'vue'
 import { Router } from 'vue-router'
 
@@ -95,23 +95,6 @@ class AppService {
     await this.initCoreSerivces(quasar, this.router)
   }
 
-  // restart(ar: string) {
-  //   console.error('%crestarting tabsets', 'font-weight:bold', window.location.href, ar)
-  //   const baseLocation = window.location.href.split('?')[0]
-  //   console.log('%cbaseLocation', 'font-weight:bold', baseLocation)
-  //   console.log('%cwindow.location.href', 'font-weight:bold', window.location.href)
-  //   if (window.location.href.indexOf('?') < 0) {
-  //     const tsIframe = window.parent.frames[0]
-  //     //log("iframe", tsIframe)
-  //     if (tsIframe) {
-  //       console.debug('%cnew window.location.href', 'font-weight:bold', baseLocation + '?' + ar)
-  //       tsIframe.location.href = baseLocation + '?' + ar
-  //       //tsIframe.location.href = "https://www.skysail.io"
-  //       tsIframe.location.reload()
-  //     }
-  //   }
-  // }
-
   private async initCoreSerivces(quasar: QVueGlobals, router: Router) {
     console.log(`%cinitializing AppService: initCoreSerivces`, 'font-weight:bold')
 
@@ -154,7 +137,7 @@ class AppService {
       useEntityRegistryStore().tabsetRegistry = tsInfo
     })
     await tabsetsStore.initialize(authenticated ? useDB().tabsetsDb : useDB().localTabsetsDb)
-    await useTabsetService().init(false)
+    await useTabsetService().init()
 
     await useTabsStore2().initialize()
 

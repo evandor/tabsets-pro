@@ -1,3 +1,4 @@
+import { useAuthStore } from 'stores/authStore'
 import { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
@@ -5,8 +6,13 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     redirect:
       process.env.MODE === 'pwa' || process.env.MODE === 'electron'
-        ? '/tabsets' // use case: sharing tabset, opening link, import in PWA for anonymous user
+        ? '/splash' // use case: sharing tabset, opening link, import in PWA for anonymous user
         : '/sidepanel',
+  },
+  {
+    path: '/splash',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SplashPage.vue') }],
   },
   {
     path: '/fullpage',
@@ -280,9 +286,23 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('src/tabsets/pages/TabsetPage.vue') }],
   },
   {
+    path: '/p', // p <=> 'public'
+    component: () => import('layouts/PublicLayout.vue'),
+    children: [
+      { path: 'tabs/:tabId', component: () => import('src/tabsets/pages/PublicTabsetPage.vue') },
+      { path: 'notes/:notebookId', component: () => import('src/tabsets/pages/PublicNotePage.vue') },
+    ],
+  },
+  {
     path: '/tabsets',
     component: () => import('layouts/FullPageLayout.vue'),
     children: [{ path: '', component: () => import('src/tabsets/pages/TabsetPage.vue') }],
+    beforeEnter: (to: any, from: any) => {
+      // console.error(`to2: ${JSON.stringify(to)}`)
+      if (useAuthStore().user?.isAnonymous) {
+        return '/mainpanel/login'
+      }
+    },
   },
   {
     path: '/dynamicTs/:tabsetId',

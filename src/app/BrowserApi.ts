@@ -29,6 +29,7 @@ function runHousekeeping() {
 
 class BrowserApi {
   onHeadersReceivedListener = function (details: chrome.webRequest.WebResponseHeadersDetails) {
+    console.log('onHeadersReceivedListener', details)
     if (details.url) {
       // store transient information
       useRequestsStore().setCurrentTabRequest(details)
@@ -79,11 +80,7 @@ class BrowserApi {
       // NavigationService.updateAvailable(details)
     })
 
-    if (useFeaturesStore().hasFeature(FeatureIdent.ANALYSE_TABS)) {
-      this.startWebRequestListener()
-    } else {
-      this.stopWebRequestListener()
-    }
+    this.startWebRequestListener()
   }
 
   startWebRequestListener() {

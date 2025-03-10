@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { CURRENT_USER_ID, EXTENSION_NAME } from 'boot/constants'
-import { onAuthStateChanged } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
 import { setCssVar, useQuasar } from 'quasar'
 import AppService from 'src/app/AppService'
 import BexFunctions from 'src/core/communication/BexFunctions'
@@ -56,9 +56,19 @@ onAuthStateChanged(auth, async (user) => {
   } else {
     // User is signed out
     console.log('%conAuthStateChanged: logged out', 'border:1px solid green')
-    // TODO
-    if (!(route.fullPath.startsWith('/pwa/imp/') || route.fullPath.startsWith('/mainpanel/login'))) {
-      await router.push('/sidepanel/login')
+    if (inBexMode()) {
+      if (!(route.fullPath.startsWith('/pwa/imp/') || route.fullPath.startsWith('/mainpanel/login'))) {
+        await router.push('/sidepanel/login')
+      }
+    } else {
+      const auth = getAuth()
+      signInAnonymously(auth)
+        .then((user: any) => {
+          console.log('logged in anonymously', user)
+        })
+        .catch((err: any) => {
+          console.warn('error logging ')
+        })
     }
   }
 })

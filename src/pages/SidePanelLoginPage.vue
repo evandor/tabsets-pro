@@ -79,8 +79,19 @@
                 @click="signin(false)" />
             </div>
 
-            <div class="col q-mt-sm text-right">
-              <q-checkbox label="Remember Me" v-model="rememberMe" />
+            <div class="row">
+              <div class="col-6 q-mt-sm">
+                <q-btn
+                  v-if="!inBexMode()"
+                  class="cursor-pointer q-mt-sm"
+                  outline
+                  label="back home"
+                  @click="router.push('/')"
+                  size="sm" />
+              </div>
+              <div class="col q-mt-sm text-right">
+                <q-checkbox label="Remember Me" v-model="rememberMe" />
+              </div>
             </div>
           </form>
         </q-tab-panel>

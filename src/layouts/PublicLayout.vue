@@ -41,91 +41,6 @@
           style="position: absolute; left: 300px; top: 5px; max-width: 500px"
           v-if="useTabsetsStore().tabsets.size > 1 || useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
 
-        <Transition name="colorized-appear">
-          <div
-            v-if="
-              inBexMode() &&
-              useFeaturesStore().hasFeature(FeatureIdent.OPENTABS_THRESHOLD) &&
-              useTabsetsStore().tabsets.size > 0
-            ">
-            <OpenTabsThresholdWidget />
-          </div>
-        </Transition>
-
-        <span v-if="useSuggestionsService().hasSuggestionsInState(relevantSuggestions, ['NEW', 'DECISION_DELAYED'])">
-          <q-btn
-            flat
-            :color="dependingOnStates()"
-            name="rss"
-            icon="o_assistant"
-            class="q-mr-lg"
-            :label="suggestionsLabel()">
-            <q-tooltip class="tooltip" anchor="center right" self="center left" :delay="200"
-              >You have suggestions
-            </q-tooltip>
-            <q-badge
-              floating
-              rounded
-              color="accent"
-              :label="
-                useSuggestionsService().suggestionsInsState(relevantSuggestions, ['NEW', 'DECISION_DELAYED']).length
-              " />
-          </q-btn>
-          <q-menu :offset="[0, 7]">
-            <q-list style="min-width: 200px">
-              <q-item
-                clickable
-                v-close-popup
-                v-ripple
-                @click="suggestionDialog(s)"
-                v-for="s in useSuggestionsService().suggestionsInsState(relevantSuggestions, [
-                  'NEW',
-                  'DECISION_DELAYED',
-                ])">
-                <q-item-section avatar>
-                  <q-icon color="primary" :name="s.img ? s.img : 'rss_feed'" />
-                </q-item-section>
-                <q-item-section>
-                  <div>{{ s.title }}</div>
-                  <div class="text-caption">{{ s.msg }}</div>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </span>
-
-        <ToolbarButton
-          :feature="FeatureIdent.GROUP_BY_DOMAIN"
-          :drawer="DrawerTabs.GROUP_BY_HOST_TABS"
-          icon="o_dns"
-          tooltip="Your tabs grouped by domain" />
-
-        <ToolbarButton
-          :feature="FeatureIdent.RSS"
-          :drawer="DrawerTabs.RSS"
-          icon="o_rss_feed"
-          tooltip="Access to your rss feed" />
-
-        <ToolbarButton
-          v-if="useFeaturesStore().hasFeature(FeatureIdent.BOOKMARKS)"
-          :drawer="DrawerTabs.BOOKMARKS"
-          color="warning"
-          icon="o_bookmark"
-          tooltip="Access to your bookmarks" />
-
-        <ToolbarButton
-          :drawer="DrawerTabs.OPEN_TABS"
-          icon="o_playlist_add"
-          tooltip="Show Open Tabs View"
-          :restricted="$q.platform.is.chrome" />
-
-        <ToolbarButton
-          v-if="useFeaturesStore().hasFeature(FeatureIdent.TAGS)"
-          :drawer="DrawerTabs.TAGS_VIEWER"
-          icon="o_label"
-          tooltip="Show tags viewer"
-          :restricted="$q.platform.is.chrome" />
-
         <div v-if="useAuthStore().user">
           <!--          <q-icon name="person" />-->
           <span class="cursor-pointer">{{ useAuthStore().user.email }}</span>
@@ -136,7 +51,7 @@
           </q-menu>
         </div>
 
-        <div>
+        <div v-if="useAuthStore().user && !useAuthStore().user.isAnonymous">
           <q-btn @click="toggleSettings" flat size="12px" class="q-mr-md" icon="o_settings"></q-btn>
           <q-menu :offset="[0, 7]">
             <q-list style="min-width: 200px">
@@ -153,32 +68,15 @@
         <div class="cursor-pointer" @click="login()" v-if="!useAuthStore().user || useAuthStore().user.isAnonymous">
           Log in
         </div>
-
-        <!--        <div class="cursor-pointer" @click="router.push('/')" v-if="notificationsStore.updateToVersion !== ''">-->
-        <!--          <q-btn-->
-        <!--            class="text-primary bg-warning"-->
-        <!--            @click="installNewVersion(notificationsStore.updateToVersion)"-->
-        <!--            :label="'New Version ' + notificationsStore.updateToVersion + ' available. Click here to update'"/>-->
-        <!--        </div>-->
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" behavior="desktop" bordered>
-      <!--      <Navigation2></Navigation2>-->
       <TabsNavigation />
     </q-drawer>
 
-    <!--    <q-drawer-->
-    <!--      v-model="useUiStore().rightDrawerOpen"-->
-    <!--      side="right"-->
-    <!--      bordered-->
-    <!--      content-class="column justify-between no-wrap bg-grey-1">-->
-    <!--      <DrawerRight />-->
-    <!--    </q-drawer>-->
-
     <q-page-container>
       <router-view />
-      <!--      <div id="fixed-footer" class="q-pl-md q-pa-xs">{{ useUiStore().footerInfo }}</div>-->
     </q-page-container>
   </q-layout>
 </template>
@@ -186,13 +84,11 @@
 <script setup lang="ts">
 import { EXTENSION_NAME } from 'boot/constants'
 import TabsNavigation from 'components/TabsNavigation.vue'
-import ToolbarButton from 'components/widgets/ToolbarButton.vue'
 import _ from 'lodash'
 import { useMeta, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { useUtils } from 'src/core/services/Utils'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
-import OpenTabsThresholdWidget from 'src/opentabs/widgets/OpenTabsThresholdWidget.vue'
 import SearchWidget from 'src/search/widgets/SearchWidget.vue'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import SpacesSelectorWidget from 'src/spaces/widgets/SpacesSelectorWidget.vue'
