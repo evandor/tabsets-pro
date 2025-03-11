@@ -68,7 +68,12 @@
 
 <script lang="ts" setup>
 import { CURRENT_USER_EMAIL } from 'boot/constants'
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, UserCredential } from 'firebase/auth'
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  UserCredential,
+} from 'firebase/auth/web-extension'
 import { LocalStorage } from 'quasar'
 import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'
 import NavigationService from 'src/services/NavigationService'

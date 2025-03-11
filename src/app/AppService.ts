@@ -1,4 +1,4 @@
-import { User } from 'firebase/auth'
+import { User } from 'firebase/auth/web-extension'
 import _ from 'lodash'
 import { QVueGlobals } from 'quasar'
 import ChromeApi from 'src/app/BrowserApi'

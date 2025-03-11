@@ -95,7 +95,7 @@ import {
   THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
 } from 'boot/constants'
 import InfoMessageWidget from 'components/widgets/InfoMessageWidget.vue'
-import { getAuth, sendEmailVerification } from 'firebase/auth'
+import { getAuth, sendEmailVerification } from 'firebase/auth/web-extension'
 import { addDoc, collection, DocumentData, getDocs, onSnapshot, query, QuerySnapshot, where } from 'firebase/firestore'
 import PlanFeature from 'pages/helper/PlanFeature.vue'
 import PricingCard from 'pages/helper/PricingCard.vue'

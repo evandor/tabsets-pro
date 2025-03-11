@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { CURRENT_USER_ID, EXTENSION_NAME } from 'boot/constants'
-import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth/web-extension'
 import { setCssVar, useQuasar } from 'quasar'
 import AppService from 'src/app/AppService'
 import BexFunctions from 'src/core/communication/BexFunctions'

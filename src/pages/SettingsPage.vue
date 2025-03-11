@@ -162,7 +162,7 @@
  *
  */
 
-import { getAuth } from 'firebase/auth'
+import { getAuth } from 'firebase/auth/web-extension'
 import _ from 'lodash'
 import FeatureToggleSettings from 'pages/helper/FeatureToggleSettings.vue'
 import SubscriptionSettings from 'pages/helper/SubscriptionSettings.vue'

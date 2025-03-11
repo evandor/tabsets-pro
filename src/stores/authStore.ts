@@ -5,7 +5,7 @@ import {
   TABSETS_LIMIT_NO_SUBSCRIPTION,
   THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
 } from 'boot/constants'
-import { getAuth, signOut, User } from 'firebase/auth'
+import { getAuth, signOut, User } from 'firebase/auth/web-extension'
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
 import { sha256 } from 'js-sha256'
 import { defineStore } from 'pinia'

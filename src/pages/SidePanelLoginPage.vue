@@ -185,7 +185,7 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   UserCredential,
-} from 'firebase/auth'
+} from 'firebase/auth/web-extension'
 import { LocalStorage, openURL, useQuasar } from 'quasar'
 import { ExecutionResult } from 'src/core/domain/ExecutionResult'
 import { NotificationType, useNotificationHandler } from 'src/core/services/ErrorHandler'

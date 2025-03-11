@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import 'firebase/compat/firestore'
-import { Auth, connectAuthEmulator, getAuth } from 'firebase/auth'
+import { Auth, connectAuthEmulator, getAuth } from 'firebase/auth/web-extension'
 import { connectFirestoreEmulator, Firestore, getFirestore, initializeFirestore } from 'firebase/firestore'
 import { connectStorageEmulator, FirebaseStorage, getStorage } from 'firebase/storage'
 import { useUiStore } from 'src/ui/stores/uiStore'
