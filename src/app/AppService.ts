@@ -164,10 +164,12 @@ class AppService {
     if (
       useTabsetsStore().tabsets.size === 0 &&
       quasar.platform.is.bex &&
+      useAuthStore().user !== null &&
       useAuthStore().isAuthenticated() &&
       !router.currentRoute.value.path.startsWith('/fullpage') &&
       !router.currentRoute.value.path.startsWith('/mainpanel')
     ) {
+      console.log('redirecting to welcome page...')
       await router.push('/sidepanel/welcome')
     }
 

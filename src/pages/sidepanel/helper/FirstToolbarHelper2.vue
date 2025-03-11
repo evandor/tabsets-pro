@@ -117,6 +117,7 @@ import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { useWindowsStore } from 'src/windows/stores/windowsStore'
+import { useAuthStore } from 'stores/authStore'
 import { ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -159,7 +160,7 @@ windowLocation.value = window.location.href
 
 setTimeout(() => {
   // redirect to welcome page if there are not tabsets
-  if (useTabsetsStore().tabsets.size === 0) {
+  if (useTabsetsStore().tabsets.size === 0 && useAuthStore().user !== null) {
     router.push('/sidepanel/welcome')
   }
 }, 1000)
