@@ -1,6 +1,6 @@
 {
   "name": "tabsets-pro",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Use tabsets.net to safely keep track of all your tabs and links in the Side Panel, stored locally on your browser",
   "productName": "Tabsets Pro (Alpha!)",
   "author": "evandor <evandor@gmail.com>",
@@ -27,6 +27,7 @@
     "test:e2e:showReport": "npx playwright show-report",
     "test:specificTest": "npx playwright test addFirstTabset",
     "test:specificTest:debug": "npx playwright test addFirstTabset --debug",
+    "firebase build & deploy pwa (dev)": "cp envs/env.dev ./.env && quasar build -m pwa && firebase deploy --only hosting",
     "info": "yarn list > docs/yarn.list.txt && quasar info > docs/quasar.info.txt",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org skysail-dk --project tabsets-pro ./dist && sentry-cli sourcemaps upload --org skysail-dk --project tabsets-pro ./dist"
   },

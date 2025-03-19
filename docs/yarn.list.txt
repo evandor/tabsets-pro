@@ -6,58 +6,58 @@
 ├─ @algolia/autocomplete-preset-algolia@1.17.7
 │  └─ @algolia/autocomplete-shared@1.17.7
 ├─ @algolia/autocomplete-shared@1.17.7
-├─ @algolia/client-abtesting@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/client-analytics@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/client-common@5.20.3
-├─ @algolia/client-insights@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/client-personalization@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/client-query-suggestions@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/client-search@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/ingestion@1.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/monitoring@1.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/recommend@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
-├─ @algolia/requester-browser-xhr@5.20.3
-│  └─ @algolia/client-common@5.20.3
-├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/client-common@5.20.3
-├─ @algolia/requester-node-http@5.20.3
-│  └─ @algolia/client-common@5.20.3
+├─ @algolia/client-abtesting@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/client-analytics@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/client-common@5.21.0
+├─ @algolia/client-insights@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/client-personalization@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/client-query-suggestions@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/client-search@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/ingestion@1.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/monitoring@1.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/recommend@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
+├─ @algolia/requester-browser-xhr@5.21.0
+│  └─ @algolia/client-common@5.21.0
+├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/client-common@5.21.0
+├─ @algolia/requester-node-http@5.21.0
+│  └─ @algolia/client-common@5.21.0
 ├─ @ampproject/remapping@2.3.0
 │  ├─ @jridgewell/gen-mapping@^0.3.5
 │  └─ @jridgewell/trace-mapping@^0.3.24
@@ -74,26 +74,26 @@
 │  ├─ js-tokens@^4.0.0
 │  └─ picocolors@^1.0.0
 ├─ @babel/compat-data@7.26.8
-├─ @babel/core@7.26.9
+├─ @babel/core@7.26.10
 │  ├─ @ampproject/remapping@^2.2.0
 │  ├─ @babel/code-frame@^7.26.2
-│  ├─ @babel/generator@^7.26.9
+│  ├─ @babel/generator@^7.26.10
 │  ├─ @babel/helper-compilation-targets@^7.26.5
 │  ├─ @babel/helper-module-transforms@^7.26.0
-│  ├─ @babel/helpers@^7.26.9
-│  ├─ @babel/parser@^7.26.9
+│  ├─ @babel/helpers@^7.26.10
+│  ├─ @babel/parser@^7.26.10
 │  ├─ @babel/template@^7.26.9
-│  ├─ @babel/traverse@^7.26.9
-│  ├─ @babel/types@^7.26.9
+│  ├─ @babel/traverse@^7.26.10
+│  ├─ @babel/types@^7.26.10
 │  ├─ convert-source-map@^2.0.0
 │  ├─ debug@^4.1.0
 │  ├─ gensync@^1.0.0-beta.2
 │  ├─ json5@^2.2.3
 │  ├─ semver@^6.3.1
 │  └─ semver@6.3.1
-├─ @babel/generator@7.26.9
-│  ├─ @babel/parser@^7.26.9
-│  ├─ @babel/types@^7.26.9
+├─ @babel/generator@7.26.10
+│  ├─ @babel/parser@^7.26.10
+│  ├─ @babel/types@^7.26.10
 │  ├─ @jridgewell/gen-mapping@^0.3.5
 │  ├─ @jridgewell/trace-mapping@^0.3.25
 │  └─ jsesc@^3.0.2
@@ -159,11 +159,11 @@
 │  ├─ @babel/template@^7.25.9
 │  ├─ @babel/traverse@^7.25.9
 │  └─ @babel/types@^7.25.9
-├─ @babel/helpers@7.26.9
+├─ @babel/helpers@7.26.10
 │  ├─ @babel/template@^7.26.9
-│  └─ @babel/types@^7.26.9
-├─ @babel/parser@7.26.9
-│  └─ @babel/types@^7.26.9
+│  └─ @babel/types@^7.26.10
+├─ @babel/parser@7.26.10
+│  └─ @babel/types@^7.26.10
 ├─ @babel/plugin-bugfix-firefox-class-in-computed-class-key@7.25.9
 │  ├─ @babel/helper-plugin-utils@^7.25.9
 │  └─ @babel/traverse@^7.25.9
@@ -399,22 +399,22 @@
 │  ├─ @babel/helper-plugin-utils@^7.0.0
 │  ├─ @babel/types@^7.4.4
 │  └─ esutils@^2.0.2
-├─ @babel/runtime@7.26.9
+├─ @babel/runtime@7.26.10
 │  └─ regenerator-runtime@^0.14.0
 ├─ @babel/template@7.26.9
 │  ├─ @babel/code-frame@^7.26.2
 │  ├─ @babel/parser@^7.26.9
 │  └─ @babel/types@^7.26.9
-├─ @babel/traverse@7.26.9
+├─ @babel/traverse@7.26.10
 │  ├─ @babel/code-frame@^7.26.2
-│  ├─ @babel/generator@^7.26.9
-│  ├─ @babel/parser@^7.26.9
+│  ├─ @babel/generator@^7.26.10
+│  ├─ @babel/parser@^7.26.10
 │  ├─ @babel/template@^7.26.9
-│  ├─ @babel/types@^7.26.9
+│  ├─ @babel/types@^7.26.10
 │  ├─ debug@^4.3.1
 │  ├─ globals@^11.1.0
 │  └─ globals@11.12.0
-├─ @babel/types@7.26.9
+├─ @babel/types@7.26.10
 │  ├─ @babel/helper-string-parser@^7.25.9
 │  └─ @babel/helper-validator-identifier@^7.25.9
 ├─ @bcoe/v8-coverage@1.0.2
@@ -423,7 +423,7 @@
 ├─ @calumk/codecup@1.9.4
 │  ├─ @types/prismjs@^1.9.1
 │  └─ prismjs@^1.29.0
-├─ @calumk/editorjs-codecup@1.2.0
+├─ @calumk/editorjs-codecup@1.3.0
 │  └─ @calumk/codecup@^1.8.1
 ├─ @calumk/editorjs-columns@0.3.2
 │  ├─ @editorjs/editorjs@^2.26.5
@@ -475,41 +475,42 @@
 ├─ @editorjs/raw@2.5.1
 │  ├─ @codexteam/icons@^0.0.4
 │  └─ @codexteam/icons@0.0.4
-├─ @editorjs/table@2.4.3
+├─ @editorjs/table@2.4.4
 │  ├─ @codexteam/icons@^0.0.6
 │  └─ @codexteam/icons@0.0.6
-├─ @esbuild/aix-ppc64@0.25.0
-├─ @esbuild/android-arm@0.25.0
-├─ @esbuild/android-arm64@0.25.0
-├─ @esbuild/android-x64@0.25.0
-├─ @esbuild/darwin-arm64@0.25.0
-├─ @esbuild/darwin-x64@0.25.0
-├─ @esbuild/freebsd-arm64@0.25.0
-├─ @esbuild/freebsd-x64@0.25.0
-├─ @esbuild/linux-arm@0.25.0
-├─ @esbuild/linux-arm64@0.25.0
-├─ @esbuild/linux-ia32@0.25.0
-├─ @esbuild/linux-loong64@0.25.0
-├─ @esbuild/linux-mips64el@0.25.0
-├─ @esbuild/linux-ppc64@0.25.0
-├─ @esbuild/linux-riscv64@0.25.0
-├─ @esbuild/linux-s390x@0.25.0
-├─ @esbuild/linux-x64@0.25.0
-├─ @esbuild/netbsd-arm64@0.25.0
-├─ @esbuild/netbsd-x64@0.25.0
-├─ @esbuild/openbsd-arm64@0.25.0
-├─ @esbuild/openbsd-x64@0.25.0
-├─ @esbuild/sunos-x64@0.25.0
-├─ @esbuild/win32-arm64@0.25.0
-├─ @esbuild/win32-ia32@0.25.0
-├─ @esbuild/win32-x64@0.25.0
-├─ @eslint-community/eslint-utils@4.4.1
+├─ @esbuild/aix-ppc64@0.25.1
+├─ @esbuild/android-arm@0.25.1
+├─ @esbuild/android-arm64@0.25.1
+├─ @esbuild/android-x64@0.25.1
+├─ @esbuild/darwin-arm64@0.25.1
+├─ @esbuild/darwin-x64@0.25.1
+├─ @esbuild/freebsd-arm64@0.25.1
+├─ @esbuild/freebsd-x64@0.25.1
+├─ @esbuild/linux-arm@0.25.1
+├─ @esbuild/linux-arm64@0.25.1
+├─ @esbuild/linux-ia32@0.25.1
+├─ @esbuild/linux-loong64@0.25.1
+├─ @esbuild/linux-mips64el@0.25.1
+├─ @esbuild/linux-ppc64@0.25.1
+├─ @esbuild/linux-riscv64@0.25.1
+├─ @esbuild/linux-s390x@0.25.1
+├─ @esbuild/linux-x64@0.25.1
+├─ @esbuild/netbsd-arm64@0.25.1
+├─ @esbuild/netbsd-x64@0.25.1
+├─ @esbuild/openbsd-arm64@0.25.1
+├─ @esbuild/openbsd-x64@0.25.1
+├─ @esbuild/sunos-x64@0.25.1
+├─ @esbuild/win32-arm64@0.25.1
+├─ @esbuild/win32-ia32@0.25.1
+├─ @esbuild/win32-x64@0.25.1
+├─ @eslint-community/eslint-utils@4.5.1
 │  └─ eslint-visitor-keys@^3.4.3
 ├─ @eslint-community/regexpp@4.12.1
 ├─ @eslint/config-array@0.19.2
 │  ├─ @eslint/object-schema@^2.1.6
 │  ├─ debug@^4.3.1
 │  └─ minimatch@^3.1.2
+├─ @eslint/config-helpers@0.1.0
 ├─ @eslint/core@0.12.0
 │  └─ @types/json-schema@^7.0.15
 ├─ @eslint/eslintrc@3.3.0
@@ -523,203 +524,203 @@
 │  ├─ js-yaml@^4.1.0
 │  ├─ minimatch@^3.1.2
 │  └─ strip-json-comments@^3.1.1
-├─ @eslint/js@9.21.0
+├─ @eslint/js@9.22.0
 ├─ @eslint/object-schema@2.1.6
 ├─ @eslint/plugin-kit@0.2.7
 │  ├─ @eslint/core@^0.12.0
 │  └─ levn@^0.4.1
-├─ @firebase/analytics-compat@0.2.17
+├─ @firebase/analytics-compat@0.2.18
 │  ├─ @firebase/analytics-types@0.8.3
-│  ├─ @firebase/analytics@0.10.11
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/analytics@0.10.12
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/analytics-types@0.8.3
-├─ @firebase/analytics@0.10.11
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/installations@0.6.12
+├─ @firebase/analytics@0.10.12
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/installations@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/app-check-compat@0.3.18
+├─ @firebase/app-check-compat@0.3.19
 │  ├─ @firebase/app-check-types@0.5.3
-│  ├─ @firebase/app-check@0.8.11
-│  ├─ @firebase/component@0.6.12
+│  ├─ @firebase/app-check@0.8.12
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/app-check-interop-types@0.3.3
 ├─ @firebase/app-check-types@0.5.3
-├─ @firebase/app-check@0.8.11
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/app-check@0.8.12
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/app-compat@0.2.50
-│  ├─ @firebase/app@0.11.1
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/app-compat@0.2.51
+│  ├─ @firebase/app@0.11.2
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/app-types@0.9.3
-├─ @firebase/app@0.11.1
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/app@0.11.2
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  ├─ idb@7.1.1
 │  ├─ idb@7.1.1
 │  └─ tslib@^2.1.0
-├─ @firebase/auth-compat@0.5.18
+├─ @firebase/auth-compat@0.5.19
 │  ├─ @firebase/auth-types@0.13.0
-│  ├─ @firebase/auth@1.9.0
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/auth@1.9.1
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/auth-interop-types@0.2.4
 ├─ @firebase/auth-types@0.13.0
-├─ @firebase/auth@1.9.0
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/auth@1.9.1
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/component@0.6.12
-│  ├─ @firebase/util@1.10.3
+├─ @firebase/component@0.6.13
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/data-connect@0.3.0
+├─ @firebase/data-connect@0.3.1
 │  ├─ @firebase/auth-interop-types@0.2.4
-│  ├─ @firebase/component@0.6.12
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/database-compat@2.0.3
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/database-types@1.0.8
-│  ├─ @firebase/database@1.0.12
+├─ @firebase/database-compat@2.0.4
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/database-types@1.0.9
+│  ├─ @firebase/database@1.0.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/database-types@1.0.8
+├─ @firebase/database-types@1.0.9
 │  ├─ @firebase/app-types@0.9.3
-│  └─ @firebase/util@1.10.3
-├─ @firebase/database@1.0.12
+│  └─ @firebase/util@1.11.0
+├─ @firebase/database@1.0.13
 │  ├─ @firebase/app-check-interop-types@0.3.3
 │  ├─ @firebase/auth-interop-types@0.2.4
-│  ├─ @firebase/component@0.6.12
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  ├─ faye-websocket@0.11.4
 │  └─ tslib@^2.1.0
-├─ @firebase/firestore-compat@0.3.43
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/firestore-compat@0.3.44
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/firestore-types@3.0.3
-│  ├─ @firebase/firestore@4.7.8
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/firestore@4.7.9
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/firestore-types@3.0.3
-├─ @firebase/firestore@4.7.8
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/firestore@4.7.9
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  ├─ @firebase/webchannel-wrapper@1.0.3
 │  ├─ @grpc/grpc-js@~1.9.0
 │  ├─ @grpc/proto-loader@^0.7.8
 │  └─ tslib@^2.1.0
-├─ @firebase/functions-compat@0.3.19
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/functions-compat@0.3.20
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/functions-types@0.6.3
-│  ├─ @firebase/functions@0.12.2
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/functions@0.12.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/functions-types@0.6.3
-├─ @firebase/functions@0.12.2
+├─ @firebase/functions@0.12.3
 │  ├─ @firebase/app-check-interop-types@0.3.3
 │  ├─ @firebase/auth-interop-types@0.2.4
-│  ├─ @firebase/component@0.6.12
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/messaging-interop-types@0.2.3
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/installations-compat@0.2.12
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/installations-compat@0.2.13
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/installations-types@0.5.3
-│  ├─ @firebase/installations@0.6.12
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/installations@0.6.13
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/installations-types@0.5.3
-├─ @firebase/installations@0.6.12
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/util@1.10.3
+├─ @firebase/installations@0.6.13
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/util@1.11.0
 │  ├─ idb@7.1.1
 │  ├─ idb@7.1.1
 │  └─ tslib@^2.1.0
 ├─ @firebase/logger@0.4.4
 │  └─ tslib@^2.1.0
-├─ @firebase/messaging-compat@0.2.16
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/messaging@0.12.16
-│  ├─ @firebase/util@1.10.3
+├─ @firebase/messaging-compat@0.2.17
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/messaging@0.12.17
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/messaging-interop-types@0.2.3
-├─ @firebase/messaging@0.12.16
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/installations@0.6.12
+├─ @firebase/messaging@0.12.17
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/installations@0.6.13
 │  ├─ @firebase/messaging-interop-types@0.2.3
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  ├─ idb@7.1.1
 │  ├─ idb@7.1.1
 │  └─ tslib@^2.1.0
-├─ @firebase/performance-compat@0.2.13
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/performance-compat@0.2.14
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
 │  ├─ @firebase/performance-types@0.2.3
-│  ├─ @firebase/performance@0.7.0
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/performance@0.7.1
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/performance-types@0.2.3
-├─ @firebase/performance@0.7.0
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/installations@0.6.12
+├─ @firebase/performance@0.7.1
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/installations@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  ├─ tslib@^2.1.0
 │  └─ web-vitals@^4.2.4
-├─ @firebase/remote-config-compat@0.2.12
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/remote-config-compat@0.2.13
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
 │  ├─ @firebase/remote-config-types@0.4.0
-│  ├─ @firebase/remote-config@0.5.0
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/remote-config@0.6.0
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/remote-config-types@0.4.0
-├─ @firebase/remote-config@0.5.0
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/installations@0.6.12
+├─ @firebase/remote-config@0.6.0
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/installations@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/storage-compat@0.3.16
-│  ├─ @firebase/component@0.6.12
+├─ @firebase/storage-compat@0.3.17
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/storage-types@0.8.3
-│  ├─ @firebase/storage@0.13.6
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/storage@0.13.7
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/storage-types@0.8.3
-├─ @firebase/storage@0.13.6
-│  ├─ @firebase/component@0.6.12
-│  ├─ @firebase/util@1.10.3
+├─ @firebase/storage@0.13.7
+│  ├─ @firebase/component@0.6.13
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/util@1.10.3
+├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
-├─ @firebase/vertexai@1.0.4
+├─ @firebase/vertexai@1.1.0
 │  ├─ @firebase/app-check-interop-types@0.3.3
-│  ├─ @firebase/component@0.6.12
+│  ├─ @firebase/component@0.6.13
 │  ├─ @firebase/logger@0.4.4
-│  ├─ @firebase/util@1.10.3
+│  ├─ @firebase/util@1.11.0
 │  └─ tslib@^2.1.0
 ├─ @firebase/webchannel-wrapper@1.0.3
 ├─ @grpc/grpc-js@1.9.15
 │  ├─ @grpc/proto-loader@^0.7.8
 │  ├─ @types/node@>=12.12.47
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  └─ undici-types@6.20.0
 ├─ @grpc/proto-loader@0.7.13
@@ -754,7 +755,7 @@
 │  ├─ @babel/traverse@^7.25.9
 │  ├─ @babel/types@^7.26.0
 │  └─ semver@^7.5.2
-├─ @iconify-json/simple-icons@1.2.26
+├─ @iconify-json/simple-icons@1.2.28
 │  └─ @iconify/types@*
 ├─ @iconify/types@2.0.0
 ├─ @iconify/utils@2.3.0
@@ -766,7 +767,7 @@
 │  ├─ kolorist@^1.8.0
 │  ├─ local-pkg@^1.0.0
 │  └─ mlly@^1.7.4
-├─ @inquirer/figures@1.0.10
+├─ @inquirer/figures@1.0.11
 ├─ @interactjs/actions@1.10.27
 │  └─ @interactjs/interact@1.10.27
 ├─ @interactjs/auto-scroll@1.10.27
@@ -805,19 +806,19 @@
 │  ├─ mlly@^1.2.0
 │  ├─ source-map-js@^1.0.1
 │  └─ yaml-eslint-parser@^1.2.2
-├─ @intlify/core-base@11.1.1
-│  ├─ @intlify/message-compiler@11.1.1
-│  ├─ @intlify/shared@11.1.1
-│  └─ @intlify/shared@11.1.1
-├─ @intlify/message-compiler@11.1.1
-│  ├─ @intlify/shared@11.1.1
-│  ├─ @intlify/shared@11.1.1
+├─ @intlify/core-base@11.1.2
+│  ├─ @intlify/message-compiler@11.1.2
+│  ├─ @intlify/shared@11.1.2
+│  └─ @intlify/shared@11.1.2
+├─ @intlify/message-compiler@11.1.2
+│  ├─ @intlify/shared@11.1.2
+│  ├─ @intlify/shared@11.1.2
 │  └─ source-map-js@^1.0.2
-├─ @intlify/shared@10.0.5
+├─ @intlify/shared@10.0.6
 ├─ @intlify/unplugin-vue-i18n@6.0.3
 │  ├─ @eslint-community/eslint-utils@^4.4.0
 │  ├─ @intlify/bundle-utils@^10.0.0
-│  ├─ @intlify/shared@11.1.1
+│  ├─ @intlify/shared@11.1.2
 │  ├─ @intlify/shared@latest
 │  ├─ @intlify/vue-i18n-extensions@^8.0.0
 │  ├─ @rollup/pluginutils@^5.1.0
@@ -839,18 +840,18 @@
 │  └─ webpack-virtual-modules@0.6.2
 ├─ @intlify/vue-i18n-extensions@8.0.0
 │  ├─ @babel/parser@^7.24.6
-│  ├─ @intlify/core-base@10.0.5
-│  │  ├─ @intlify/message-compiler@10.0.5
-│  │  └─ @intlify/shared@10.0.5
-│  ├─ @intlify/message-compiler@10.0.5
-│  │  ├─ @intlify/shared@10.0.5
+│  ├─ @intlify/core-base@10.0.6
+│  │  ├─ @intlify/message-compiler@10.0.6
+│  │  └─ @intlify/shared@10.0.6
+│  ├─ @intlify/message-compiler@10.0.6
+│  │  ├─ @intlify/shared@10.0.6
 │  │  └─ source-map-js@^1.0.2
 │  ├─ @intlify/shared@^10.0.0
 │  ├─ @vue/compiler-dom@^3.2.45
 │  ├─ vue-i18n@^10.0.0
-│  └─ vue-i18n@10.0.5
-│     ├─ @intlify/core-base@10.0.5
-│     ├─ @intlify/shared@10.0.5
+│  └─ vue-i18n@10.0.6
+│     ├─ @intlify/core-base@10.0.6
+│     ├─ @intlify/shared@10.0.6
 │     └─ @vue/devtools-api@^6.5.0
 ├─ @isaacs/cliui@8.0.2
 │  ├─ ansi-regex@6.1.0
@@ -911,8 +912,8 @@
 ├─ @one-ini/wasm@0.1.1
 ├─ @pkgjs/parseargs@0.11.0
 ├─ @pkgr/core@0.1.1
-├─ @playwright/test@1.50.1
-│  └─ playwright@1.50.1
+├─ @playwright/test@1.51.0
+│  └─ playwright@1.51.0
 ├─ @polka/url@1.0.0-next.28
 ├─ @protobufjs/aspromise@1.1.2
 ├─ @protobufjs/base64@1.1.2
@@ -926,7 +927,7 @@
 ├─ @protobufjs/path@1.1.2
 ├─ @protobufjs/pool@1.1.0
 ├─ @protobufjs/utf8@1.1.0
-├─ @quasar/app-vite@2.1.1
+├─ @quasar/app-vite@2.1.4
 │  ├─ @quasar/render-ssr-error@^1.0.3
 │  ├─ @quasar/ssl-certificate@^1.0.0
 │  ├─ @quasar/vite-plugin@^1.9.0
@@ -954,6 +955,7 @@
 │  ├─ kolorist@^1.8.0
 │  ├─ lodash@^4.17.21
 │  ├─ minimist@^1.2.8
+│  ├─ mlly@^1.7.4
 │  ├─ open@^10.1.0
 │  ├─ rollup-plugin-visualizer@^5.13.1
 │  ├─ sass-embedded@^1.83.0
@@ -1014,25 +1016,25 @@
 │  ├─ estree-walker@^2.0.2
 │  ├─ picomatch@^4.0.2
 │  └─ picomatch@4.0.2
-├─ @rollup/rollup-android-arm-eabi@4.34.8
-├─ @rollup/rollup-android-arm64@4.34.8
-├─ @rollup/rollup-darwin-arm64@4.34.8
-├─ @rollup/rollup-darwin-x64@4.34.8
-├─ @rollup/rollup-freebsd-arm64@4.34.8
-├─ @rollup/rollup-freebsd-x64@4.34.8
-├─ @rollup/rollup-linux-arm-gnueabihf@4.34.8
-├─ @rollup/rollup-linux-arm-musleabihf@4.34.8
-├─ @rollup/rollup-linux-arm64-gnu@4.34.8
-├─ @rollup/rollup-linux-arm64-musl@4.34.8
-├─ @rollup/rollup-linux-loongarch64-gnu@4.34.8
-├─ @rollup/rollup-linux-powerpc64le-gnu@4.34.8
-├─ @rollup/rollup-linux-riscv64-gnu@4.34.8
-├─ @rollup/rollup-linux-s390x-gnu@4.34.8
-├─ @rollup/rollup-linux-x64-gnu@4.34.8
-├─ @rollup/rollup-linux-x64-musl@4.34.8
-├─ @rollup/rollup-win32-arm64-msvc@4.34.8
-├─ @rollup/rollup-win32-ia32-msvc@4.34.8
-├─ @rollup/rollup-win32-x64-msvc@4.34.8
+├─ @rollup/rollup-android-arm-eabi@4.35.0
+├─ @rollup/rollup-android-arm64@4.35.0
+├─ @rollup/rollup-darwin-arm64@4.35.0
+├─ @rollup/rollup-darwin-x64@4.35.0
+├─ @rollup/rollup-freebsd-arm64@4.35.0
+├─ @rollup/rollup-freebsd-x64@4.35.0
+├─ @rollup/rollup-linux-arm-gnueabihf@4.35.0
+├─ @rollup/rollup-linux-arm-musleabihf@4.35.0
+├─ @rollup/rollup-linux-arm64-gnu@4.35.0
+├─ @rollup/rollup-linux-arm64-musl@4.35.0
+├─ @rollup/rollup-linux-loongarch64-gnu@4.35.0
+├─ @rollup/rollup-linux-powerpc64le-gnu@4.35.0
+├─ @rollup/rollup-linux-riscv64-gnu@4.35.0
+├─ @rollup/rollup-linux-s390x-gnu@4.35.0
+├─ @rollup/rollup-linux-x64-gnu@4.35.0
+├─ @rollup/rollup-linux-x64-musl@4.35.0
+├─ @rollup/rollup-win32-arm64-msvc@4.35.0
+├─ @rollup/rollup-win32-ia32-msvc@4.35.0
+├─ @rollup/rollup-win32-x64-msvc@4.35.0
 ├─ @rowanmanning/feed-parser@1.1.1
 │  ├─ fast-xml-parser@^4.0.8
 │  └─ html-entities@^2.3.3
@@ -1095,21 +1097,21 @@
 │  │  └─ brace-expansion@^2.0.1
 │  ├─ minipass@4.2.8
 │  └─ unplugin@1.0.1
-├─ @sentry/cli-darwin@2.42.2
-├─ @sentry/cli-linux-arm@2.42.2
-├─ @sentry/cli-linux-arm64@2.42.2
-├─ @sentry/cli-linux-i686@2.42.2
-├─ @sentry/cli-linux-x64@2.42.2
-├─ @sentry/cli-win32-i686@2.42.2
-├─ @sentry/cli-win32-x64@2.42.2
-├─ @sentry/cli@2.42.2
-│  ├─ @sentry/cli-darwin@2.42.2
-│  ├─ @sentry/cli-linux-arm@2.42.2
-│  ├─ @sentry/cli-linux-arm64@2.42.2
-│  ├─ @sentry/cli-linux-i686@2.42.2
-│  ├─ @sentry/cli-linux-x64@2.42.2
-│  ├─ @sentry/cli-win32-i686@2.42.2
-│  ├─ @sentry/cli-win32-x64@2.42.2
+├─ @sentry/cli-darwin@2.42.3
+├─ @sentry/cli-linux-arm@2.42.3
+├─ @sentry/cli-linux-arm64@2.42.3
+├─ @sentry/cli-linux-i686@2.42.3
+├─ @sentry/cli-linux-x64@2.42.3
+├─ @sentry/cli-win32-i686@2.42.3
+├─ @sentry/cli-win32-x64@2.42.3
+├─ @sentry/cli@2.42.3
+│  ├─ @sentry/cli-darwin@2.42.3
+│  ├─ @sentry/cli-linux-arm@2.42.3
+│  ├─ @sentry/cli-linux-arm64@2.42.3
+│  ├─ @sentry/cli-linux-i686@2.42.3
+│  ├─ @sentry/cli-linux-x64@2.42.3
+│  ├─ @sentry/cli-win32-i686@2.42.3
+│  ├─ @sentry/cli-win32-x64@2.42.3
 │  ├─ https-proxy-agent@^5.0.0
 │  ├─ node-fetch@^2.6.7
 │  ├─ progress@^2.0.3
@@ -1154,7 +1156,7 @@
 ├─ @types/body-parser@1.19.5
 │  ├─ @types/connect@*
 │  ├─ @types/node@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  └─ undici-types@6.20.0
 ├─ @types/chrome@0.0.262
@@ -1172,12 +1174,12 @@
 │  │  ├─ @types/express-serve-static-core@^5.0.0
 │  │  ├─ @types/qs@*
 │  │  └─ @types/serve-static@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  └─ undici-types@6.20.0
 ├─ @types/connect@3.4.38
 │  ├─ @types/node@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  └─ undici-types@6.20.0
 ├─ @types/cordova@11.0.3
@@ -1263,7 +1265,7 @@
 ├─ @types/estree@1.0.6
 ├─ @types/express-serve-static-core@4.19.6
 │  ├─ @types/node@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  ├─ @types/qs@*
 │  ├─ @types/range-parser@*
@@ -1286,7 +1288,7 @@
 ├─ @types/json-schema@7.0.15
 ├─ @types/json5@0.0.29
 ├─ @types/linkify-it@5.0.0
-├─ @types/lodash@4.17.15
+├─ @types/lodash@4.17.16
 ├─ @types/markdown-it@14.1.2
 │  ├─ @types/linkify-it@^5
 │  └─ @types/mdurl@^2
@@ -1297,14 +1299,14 @@
 ├─ @types/ms@2.1.0
 ├─ @types/node-forge@1.3.11
 │  ├─ @types/node@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  └─ undici-types@6.20.0
-├─ @types/node@20.17.19
+├─ @types/node@20.17.24
 │  └─ undici-types@~6.19.2
 ├─ @types/pngjs@6.0.5
 │  ├─ @types/node@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  └─ undici-types@6.20.0
 ├─ @types/prismjs@1.26.5
@@ -1316,13 +1318,13 @@
 ├─ @types/send@0.17.4
 │  ├─ @types/mime@^1
 │  ├─ @types/node@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  └─ undici-types@6.20.0
 ├─ @types/serve-static@1.15.7
 │  ├─ @types/http-errors@*
 │  ├─ @types/node@*
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  ├─ @types/send@*
 │  └─ undici-types@6.20.0
@@ -1330,35 +1332,35 @@
 │  └─ @types/json-schema@*
 ├─ @types/trusted-types@2.0.7
 ├─ @types/unist@3.0.3
-├─ @types/web-bluetooth@0.0.20
-├─ @typescript-eslint/eslint-plugin@8.25.0
+├─ @types/web-bluetooth@0.0.21
+├─ @typescript-eslint/eslint-plugin@8.26.1
 │  ├─ @eslint-community/regexpp@^4.10.0
-│  ├─ @typescript-eslint/scope-manager@8.25.0
-│  ├─ @typescript-eslint/type-utils@8.25.0
-│  ├─ @typescript-eslint/utils@8.25.0
-│  ├─ @typescript-eslint/visitor-keys@8.25.0
+│  ├─ @typescript-eslint/scope-manager@8.26.1
+│  ├─ @typescript-eslint/type-utils@8.26.1
+│  ├─ @typescript-eslint/utils@8.26.1
+│  ├─ @typescript-eslint/visitor-keys@8.26.1
 │  ├─ graphemer@^1.4.0
 │  ├─ ignore@^5.3.1
 │  ├─ natural-compare@^1.4.0
 │  └─ ts-api-utils@^2.0.1
-├─ @typescript-eslint/parser@8.25.0
-│  ├─ @typescript-eslint/scope-manager@8.25.0
-│  ├─ @typescript-eslint/types@8.25.0
-│  ├─ @typescript-eslint/typescript-estree@8.25.0
-│  ├─ @typescript-eslint/visitor-keys@8.25.0
+├─ @typescript-eslint/parser@8.26.1
+│  ├─ @typescript-eslint/scope-manager@8.26.1
+│  ├─ @typescript-eslint/types@8.26.1
+│  ├─ @typescript-eslint/typescript-estree@8.26.1
+│  ├─ @typescript-eslint/visitor-keys@8.26.1
 │  └─ debug@^4.3.4
-├─ @typescript-eslint/scope-manager@8.25.0
-│  ├─ @typescript-eslint/types@8.25.0
-│  └─ @typescript-eslint/visitor-keys@8.25.0
-├─ @typescript-eslint/type-utils@8.25.0
-│  ├─ @typescript-eslint/typescript-estree@8.25.0
-│  ├─ @typescript-eslint/utils@8.25.0
+├─ @typescript-eslint/scope-manager@8.26.1
+│  ├─ @typescript-eslint/types@8.26.1
+│  └─ @typescript-eslint/visitor-keys@8.26.1
+├─ @typescript-eslint/type-utils@8.26.1
+│  ├─ @typescript-eslint/typescript-estree@8.26.1
+│  ├─ @typescript-eslint/utils@8.26.1
 │  ├─ debug@^4.3.4
 │  └─ ts-api-utils@^2.0.1
-├─ @typescript-eslint/types@8.25.0
-├─ @typescript-eslint/typescript-estree@8.25.0
-│  ├─ @typescript-eslint/types@8.25.0
-│  ├─ @typescript-eslint/visitor-keys@8.25.0
+├─ @typescript-eslint/types@8.26.1
+├─ @typescript-eslint/typescript-estree@8.26.1
+│  ├─ @typescript-eslint/types@8.26.1
+│  ├─ @typescript-eslint/visitor-keys@8.26.1
 │  ├─ debug@^4.3.4
 │  ├─ fast-glob@^3.3.2
 │  ├─ is-glob@^4.0.3
@@ -1367,13 +1369,13 @@
 │  │  └─ brace-expansion@^2.0.1
 │  ├─ semver@^7.6.0
 │  └─ ts-api-utils@^2.0.1
-├─ @typescript-eslint/utils@8.25.0
+├─ @typescript-eslint/utils@8.26.1
 │  ├─ @eslint-community/eslint-utils@^4.4.0
-│  ├─ @typescript-eslint/scope-manager@8.25.0
-│  ├─ @typescript-eslint/types@8.25.0
-│  └─ @typescript-eslint/typescript-estree@8.25.0
-├─ @typescript-eslint/visitor-keys@8.25.0
-│  ├─ @typescript-eslint/types@8.25.0
+│  ├─ @typescript-eslint/scope-manager@8.26.1
+│  ├─ @typescript-eslint/types@8.26.1
+│  └─ @typescript-eslint/typescript-estree@8.26.1
+├─ @typescript-eslint/visitor-keys@8.26.1
+│  ├─ @typescript-eslint/types@8.26.1
 │  ├─ eslint-visitor-keys@^4.2.0
 │  └─ eslint-visitor-keys@4.2.0
 ├─ @ungap/structured-clone@1.3.0
@@ -1387,7 +1389,7 @@
 │  ├─ magic-string@^0.30.1
 │  ├─ picocolors@^1.0.0
 │  └─ std-env@^3.3.3
-├─ @vitest/coverage-v8@3.0.7
+├─ @vitest/coverage-v8@3.0.8
 │  ├─ @ampproject/remapping@^2.3.0
 │  ├─ @bcoe/v8-coverage@^1.0.2
 │  ├─ debug@^4.4.0
@@ -1400,45 +1402,45 @@
 │  ├─ std-env@^3.8.0
 │  ├─ test-exclude@^7.0.1
 │  └─ tinyrainbow@^2.0.0
-├─ @vitest/expect@3.0.7
-│  ├─ @vitest/spy@3.0.7
-│  ├─ @vitest/utils@3.0.7
+├─ @vitest/expect@3.0.8
+│  ├─ @vitest/spy@3.0.8
+│  ├─ @vitest/utils@3.0.8
 │  ├─ chai@^5.2.0
 │  └─ tinyrainbow@^2.0.0
-├─ @vitest/mocker@3.0.7
-│  ├─ @vitest/spy@3.0.7
+├─ @vitest/mocker@3.0.8
+│  ├─ @vitest/spy@3.0.8
 │  ├─ estree-walker@^3.0.3
 │  ├─ estree-walker@3.0.3
 │  │  └─ @types/estree@^1.0.0
 │  └─ magic-string@^0.30.17
-├─ @vitest/pretty-format@3.0.7
+├─ @vitest/pretty-format@3.0.8
 │  └─ tinyrainbow@^2.0.0
-├─ @vitest/runner@3.0.7
-│  ├─ @vitest/utils@3.0.7
+├─ @vitest/runner@3.0.8
+│  ├─ @vitest/utils@3.0.8
 │  └─ pathe@^2.0.3
-├─ @vitest/snapshot@3.0.7
-│  ├─ @vitest/pretty-format@3.0.7
+├─ @vitest/snapshot@3.0.8
+│  ├─ @vitest/pretty-format@3.0.8
 │  ├─ magic-string@^0.30.17
 │  └─ pathe@^2.0.3
-├─ @vitest/spy@3.0.7
+├─ @vitest/spy@3.0.8
 │  └─ tinyspy@^3.0.2
-├─ @vitest/ui@3.0.7
-│  ├─ @vitest/utils@3.0.7
+├─ @vitest/ui@3.0.8
+│  ├─ @vitest/utils@3.0.8
 │  ├─ fflate@^0.8.2
 │  ├─ flatted@^3.3.3
 │  ├─ pathe@^2.0.3
 │  ├─ sirv@^3.0.1
 │  ├─ tinyglobby@^0.2.12
 │  └─ tinyrainbow@^2.0.0
-├─ @vitest/utils@3.0.7
-│  ├─ @vitest/pretty-format@3.0.7
+├─ @vitest/utils@3.0.8
+│  ├─ @vitest/pretty-format@3.0.8
 │  ├─ loupe@^3.1.3
 │  └─ tinyrainbow@^2.0.0
-├─ @volar/language-core@2.4.11
-│  └─ @volar/source-map@2.4.11
-├─ @volar/source-map@2.4.11
-├─ @volar/typescript@2.4.11
-│  ├─ @volar/language-core@2.4.11
+├─ @volar/language-core@2.4.12
+│  └─ @volar/source-map@2.4.12
+├─ @volar/source-map@2.4.12
+├─ @volar/typescript@2.4.12
+│  ├─ @volar/language-core@2.4.12
 │  ├─ path-browserify@^1.0.1
 │  └─ vscode-uri@^3.0.8
 ├─ @vue/compiler-core@3.5.13
@@ -1480,11 +1482,11 @@
 ├─ @vue/eslint-config-prettier@10.2.0
 │  ├─ eslint-config-prettier@^10.0.1
 │  └─ eslint-plugin-prettier@^5.2.2
-├─ @vue/eslint-config-typescript@14.4.0
-│  ├─ @typescript-eslint/utils@^8.23.0
+├─ @vue/eslint-config-typescript@14.5.0
+│  ├─ @typescript-eslint/utils@^8.26.0
 │  ├─ fast-glob@^3.3.3
-│  ├─ typescript-eslint@^8.23.0
-│  └─ vue-eslint-parser@^9.4.3
+│  ├─ typescript-eslint@^8.26.0
+│  └─ vue-eslint-parser@^10.1.1
 ├─ @vue/language-core@2.2.4
 │  ├─ @volar/language-core@~2.4.11
 │  ├─ @vue/compiler-dom@^3.5.0
@@ -1513,17 +1515,17 @@
 ├─ @vue/test-utils@2.4.6
 │  ├─ js-beautify@^1.14.9
 │  └─ vue-component-type-helpers@^2.0.0
-├─ @vueuse/core@12.7.0
-│  ├─ @types/web-bluetooth@^0.0.20
-│  ├─ @vueuse/metadata@12.7.0
-│  ├─ @vueuse/shared@12.7.0
+├─ @vueuse/core@12.8.2
+│  ├─ @types/web-bluetooth@^0.0.21
+│  ├─ @vueuse/metadata@12.8.2
+│  ├─ @vueuse/shared@12.8.2
 │  └─ vue@^3.5.13
-├─ @vueuse/integrations@12.7.0
-│  ├─ @vueuse/core@12.7.0
-│  ├─ @vueuse/shared@12.7.0
+├─ @vueuse/integrations@12.8.2
+│  ├─ @vueuse/core@12.8.2
+│  ├─ @vueuse/shared@12.8.2
 │  └─ vue@^3.5.13
-├─ @vueuse/metadata@12.7.0
-├─ @vueuse/shared@12.7.0
+├─ @vueuse/metadata@12.8.2
+├─ @vueuse/shared@12.8.2
 │  └─ vue@^3.5.13
 ├─ abab@2.0.6
 ├─ abbrev@2.0.0
@@ -1539,7 +1541,7 @@
 │  └─ acorn@6.4.2
 ├─ acorn-jsx@5.3.2
 ├─ acorn-walk@6.2.0
-├─ acorn@8.14.0
+├─ acorn@8.14.1
 ├─ agent-base@6.0.2
 │  └─ debug@4
 ├─ ajv@6.12.6
@@ -1547,20 +1549,20 @@
 │  ├─ fast-json-stable-stringify@^2.0.0
 │  ├─ json-schema-traverse@^0.4.1
 │  └─ uri-js@^4.2.2
-├─ algoliasearch@5.20.3
-│  ├─ @algolia/client-abtesting@5.20.3
-│  ├─ @algolia/client-analytics@5.20.3
-│  ├─ @algolia/client-common@5.20.3
-│  ├─ @algolia/client-insights@5.20.3
-│  ├─ @algolia/client-personalization@5.20.3
-│  ├─ @algolia/client-query-suggestions@5.20.3
-│  ├─ @algolia/client-search@5.20.3
-│  ├─ @algolia/ingestion@1.20.3
-│  ├─ @algolia/monitoring@1.20.3
-│  ├─ @algolia/recommend@5.20.3
-│  ├─ @algolia/requester-browser-xhr@5.20.3
-│  ├─ @algolia/requester-fetch@5.20.3
-│  └─ @algolia/requester-node-http@5.20.3
+├─ algoliasearch@5.21.0
+│  ├─ @algolia/client-abtesting@5.21.0
+│  ├─ @algolia/client-analytics@5.21.0
+│  ├─ @algolia/client-common@5.21.0
+│  ├─ @algolia/client-insights@5.21.0
+│  ├─ @algolia/client-personalization@5.21.0
+│  ├─ @algolia/client-query-suggestions@5.21.0
+│  ├─ @algolia/client-search@5.21.0
+│  ├─ @algolia/ingestion@1.21.0
+│  ├─ @algolia/monitoring@1.21.0
+│  ├─ @algolia/recommend@5.21.0
+│  ├─ @algolia/requester-browser-xhr@5.21.0
+│  ├─ @algolia/requester-fetch@5.21.0
+│  └─ @algolia/requester-node-http@5.21.0
 ├─ alien-signals@1.0.4
 ├─ ansi-escapes@4.3.2
 │  ├─ type-fest@^0.21.3
@@ -1632,18 +1634,18 @@
 ├─ async@3.2.6
 ├─ asynckit@0.4.0
 ├─ at-least-node@1.0.0
-├─ autoprefixer@10.4.20
-│  ├─ browserslist@^4.23.3
-│  ├─ caniuse-lite@^1.0.30001646
+├─ autoprefixer@10.4.21
+│  ├─ browserslist@^4.24.4
+│  ├─ caniuse-lite@^1.0.30001702
 │  ├─ fraction.js@^4.3.7
 │  ├─ normalize-range@^0.1.2
-│  ├─ picocolors@^1.0.1
+│  ├─ picocolors@^1.1.1
 │  └─ postcss-value-parser@^4.2.0
 ├─ available-typed-arrays@1.0.7
 │  └─ possible-typed-array-names@^1.0.0
 ├─ aws-sign2@0.7.0
 ├─ aws4@1.13.2
-├─ axios@1.8.1
+├─ axios@1.8.3
 │  ├─ follow-redirects@^1.15.6
 │  ├─ form-data@^4.0.0
 │  └─ proxy-from-env@^1.1.0
@@ -1817,15 +1819,15 @@
 │  ├─ es-define-property@^1.0.0
 │  ├─ get-intrinsic@^1.2.4
 │  └─ set-function-length@^1.2.2
-├─ call-bound@1.0.3
-│  ├─ call-bind-apply-helpers@^1.0.1
-│  └─ get-intrinsic@^1.2.6
+├─ call-bound@1.0.4
+│  ├─ call-bind-apply-helpers@^1.0.2
+│  └─ get-intrinsic@^1.3.0
 ├─ callsites@3.1.0
 ├─ camel-case@4.1.2
 │  ├─ pascal-case@^3.1.2
 │  └─ tslib@^2.0.3
 ├─ camelcase@5.3.1
-├─ caniuse-lite@1.0.30001701
+├─ caniuse-lite@1.0.30001704
 ├─ caseless@0.12.0
 ├─ ccount@2.0.1
 ├─ chai@5.2.0
@@ -1890,7 +1892,7 @@
 │  ├─ is-glob@~4.0.1
 │  ├─ normalize-path@~3.0.0
 │  └─ readdirp@~3.6.0
-├─ ci-info@4.1.0
+├─ ci-info@4.2.0
 ├─ cipher-base@1.0.6
 │  ├─ inherits@^2.0.4
 │  └─ safe-buffer@^5.2.1
@@ -1965,8 +1967,8 @@
 ├─ cookie@0.7.1
 ├─ copy-anything@3.0.5
 │  └─ is-what@^4.1.8
-├─ core-js-compat@3.40.0
-│  └─ browserslist@^4.24.3
+├─ core-js-compat@3.41.0
+│  └─ browserslist@^4.24.4
 ├─ core-util-is@1.0.3
 ├─ cose-base@1.0.3
 │  └─ layout-base@^1.0.0
@@ -2179,7 +2181,7 @@
 ├─ debug@4.4.0
 │  └─ ms@^2.1.3
 ├─ decamelize@1.2.0
-├─ decode-named-character-reference@1.0.2
+├─ decode-named-character-reference@1.1.0
 │  └─ character-entities@^2.0.0
 ├─ deep-eql@5.0.2
 ├─ deep-is@0.1.4
@@ -2236,7 +2238,7 @@
 │  └─ tslib@^2.0.3
 ├─ dot-prop@9.0.0
 │  ├─ type-fest@^4.18.2
-│  └─ type-fest@4.35.0
+│  └─ type-fest@4.37.0
 ├─ dotenv-expand@11.0.7
 │  └─ dotenv@^16.4.5
 ├─ dotenv@16.4.7
@@ -2263,7 +2265,7 @@
 ├─ ee-first@1.1.1
 ├─ ejs@3.1.10
 │  └─ jake@^10.8.5
-├─ electron-to-chromium@1.5.107
+├─ electron-to-chromium@1.5.118
 ├─ element-resize-detector@1.2.4
 │  └─ batch-processor@1.0.0
 ├─ elementtree@0.1.7
@@ -2353,32 +2355,32 @@
 │  ├─ is-callable@^1.2.7
 │  ├─ is-date-object@^1.0.5
 │  └─ is-symbol@^1.0.4
-├─ esbuild@0.25.0
-│  ├─ @esbuild/aix-ppc64@0.25.0
-│  ├─ @esbuild/android-arm@0.25.0
-│  ├─ @esbuild/android-arm64@0.25.0
-│  ├─ @esbuild/android-x64@0.25.0
-│  ├─ @esbuild/darwin-arm64@0.25.0
-│  ├─ @esbuild/darwin-x64@0.25.0
-│  ├─ @esbuild/freebsd-arm64@0.25.0
-│  ├─ @esbuild/freebsd-x64@0.25.0
-│  ├─ @esbuild/linux-arm@0.25.0
-│  ├─ @esbuild/linux-arm64@0.25.0
-│  ├─ @esbuild/linux-ia32@0.25.0
-│  ├─ @esbuild/linux-loong64@0.25.0
-│  ├─ @esbuild/linux-mips64el@0.25.0
-│  ├─ @esbuild/linux-ppc64@0.25.0
-│  ├─ @esbuild/linux-riscv64@0.25.0
-│  ├─ @esbuild/linux-s390x@0.25.0
-│  ├─ @esbuild/linux-x64@0.25.0
-│  ├─ @esbuild/netbsd-arm64@0.25.0
-│  ├─ @esbuild/netbsd-x64@0.25.0
-│  ├─ @esbuild/openbsd-arm64@0.25.0
-│  ├─ @esbuild/openbsd-x64@0.25.0
-│  ├─ @esbuild/sunos-x64@0.25.0
-│  ├─ @esbuild/win32-arm64@0.25.0
-│  ├─ @esbuild/win32-ia32@0.25.0
-│  └─ @esbuild/win32-x64@0.25.0
+├─ esbuild@0.25.1
+│  ├─ @esbuild/aix-ppc64@0.25.1
+│  ├─ @esbuild/android-arm@0.25.1
+│  ├─ @esbuild/android-arm64@0.25.1
+│  ├─ @esbuild/android-x64@0.25.1
+│  ├─ @esbuild/darwin-arm64@0.25.1
+│  ├─ @esbuild/darwin-x64@0.25.1
+│  ├─ @esbuild/freebsd-arm64@0.25.1
+│  ├─ @esbuild/freebsd-x64@0.25.1
+│  ├─ @esbuild/linux-arm@0.25.1
+│  ├─ @esbuild/linux-arm64@0.25.1
+│  ├─ @esbuild/linux-ia32@0.25.1
+│  ├─ @esbuild/linux-loong64@0.25.1
+│  ├─ @esbuild/linux-mips64el@0.25.1
+│  ├─ @esbuild/linux-ppc64@0.25.1
+│  ├─ @esbuild/linux-riscv64@0.25.1
+│  ├─ @esbuild/linux-s390x@0.25.1
+│  ├─ @esbuild/linux-x64@0.25.1
+│  ├─ @esbuild/netbsd-arm64@0.25.1
+│  ├─ @esbuild/netbsd-x64@0.25.1
+│  ├─ @esbuild/openbsd-arm64@0.25.1
+│  ├─ @esbuild/openbsd-x64@0.25.1
+│  ├─ @esbuild/sunos-x64@0.25.1
+│  ├─ @esbuild/win32-arm64@0.25.1
+│  ├─ @esbuild/win32-ia32@0.25.1
+│  └─ @esbuild/win32-x64@0.25.1
 ├─ escalade@3.2.0
 ├─ escape-html@1.0.3
 ├─ escape-string-regexp@4.0.0
@@ -2399,12 +2401,19 @@
 │  │  ├─ type-check@~0.3.2
 │  │  └─ word-wrap@~1.2.3
 │  └─ source-map@~0.6.1
-├─ eslint-config-prettier@10.0.2
+├─ eslint-config-prettier@10.1.1
 ├─ eslint-plugin-prettier@5.2.3
 │  ├─ prettier-linter-helpers@^1.0.0
 │  └─ synckit@^0.9.1
-├─ eslint-plugin-vue@9.32.0
+├─ eslint-plugin-vue@9.33.0
 │  ├─ @eslint-community/eslint-utils@^4.4.0
+│  ├─ eslint-scope@7.2.2
+│  │  ├─ esrecurse@^4.3.0
+│  │  └─ estraverse@^5.2.0
+│  ├─ espree@9.6.1
+│  │  ├─ acorn-jsx@^5.3.2
+│  │  ├─ acorn@^8.9.0
+│  │  └─ eslint-visitor-keys@^3.4.1
 │  ├─ globals@^13.24.0
 │  ├─ globals@13.24.0
 │  │  └─ type-fest@^0.20.2
@@ -2414,19 +2423,28 @@
 │  ├─ semver@^7.6.3
 │  ├─ type-fest@0.20.2
 │  ├─ vue-eslint-parser@^9.4.3
+│  ├─ vue-eslint-parser@9.4.3
+│  │  ├─ debug@^4.3.4
+│  │  ├─ eslint-scope@^7.1.1
+│  │  ├─ eslint-visitor-keys@^3.3.0
+│  │  ├─ espree@^9.3.1
+│  │  ├─ esquery@^1.4.0
+│  │  ├─ lodash@^4.17.21
+│  │  └─ semver@^7.3.6
 │  ├─ xml-name-validator@^4.0.0
 │  └─ xml-name-validator@4.0.0
-├─ eslint-scope@8.2.0
+├─ eslint-scope@8.3.0
 │  ├─ esrecurse@^4.3.0
 │  └─ estraverse@^5.2.0
 ├─ eslint-visitor-keys@3.4.3
-├─ eslint@9.21.0
+├─ eslint@9.22.0
 │  ├─ @eslint-community/eslint-utils@^4.2.0
 │  ├─ @eslint-community/regexpp@^4.12.1
 │  ├─ @eslint/config-array@^0.19.2
+│  ├─ @eslint/config-helpers@^0.1.0
 │  ├─ @eslint/core@^0.12.0
 │  ├─ @eslint/eslintrc@^3.3.0
-│  ├─ @eslint/js@9.21.0
+│  ├─ @eslint/js@9.22.0
 │  ├─ @eslint/plugin-kit@^0.2.7
 │  ├─ @humanfs/node@^0.16.6
 │  ├─ @humanwhocodes/module-importer@^1.0.1
@@ -2438,7 +2456,7 @@
 │  ├─ cross-spawn@^7.0.6
 │  ├─ debug@^4.3.2
 │  ├─ escape-string-regexp@^4.0.0
-│  ├─ eslint-scope@^8.2.0
+│  ├─ eslint-scope@^8.3.0
 │  ├─ eslint-visitor-keys@^4.2.0
 │  ├─ eslint-visitor-keys@4.2.0
 │  ├─ espree@^10.3.0
@@ -2477,7 +2495,7 @@
 ├─ evp_bytestokey@1.0.3
 │  ├─ md5.js@^1.3.4
 │  └─ safe-buffer@^5.1.1
-├─ expect-type@1.1.0
+├─ expect-type@1.2.0
 ├─ express@4.21.2
 │  ├─ accepts@~1.3.8
 │  ├─ array-flatten@1.1.1
@@ -2513,6 +2531,7 @@
 │  ├─ type-is@~1.6.18
 │  ├─ utils-merge@1.0.1
 │  └─ vary@~1.1.2
+├─ exsolve@1.0.4
 ├─ extend@3.0.2
 ├─ external-editor@3.1.0
 │  ├─ chardet@^0.7.0
@@ -2562,35 +2581,35 @@
 ├─ find-up@5.0.0
 │  ├─ locate-path@^6.0.0
 │  └─ path-exists@^4.0.0
-├─ firebase@11.3.1
-│  ├─ @firebase/analytics-compat@0.2.17
-│  ├─ @firebase/analytics@0.10.11
-│  ├─ @firebase/app-check-compat@0.3.18
-│  ├─ @firebase/app-check@0.8.11
-│  ├─ @firebase/app-compat@0.2.50
+├─ firebase@11.4.0
+│  ├─ @firebase/analytics-compat@0.2.18
+│  ├─ @firebase/analytics@0.10.12
+│  ├─ @firebase/app-check-compat@0.3.19
+│  ├─ @firebase/app-check@0.8.12
+│  ├─ @firebase/app-compat@0.2.51
 │  ├─ @firebase/app-types@0.9.3
-│  ├─ @firebase/app@0.11.1
-│  ├─ @firebase/auth-compat@0.5.18
-│  ├─ @firebase/auth@1.9.0
-│  ├─ @firebase/data-connect@0.3.0
-│  ├─ @firebase/database-compat@2.0.3
-│  ├─ @firebase/database@1.0.12
-│  ├─ @firebase/firestore-compat@0.3.43
-│  ├─ @firebase/firestore@4.7.8
-│  ├─ @firebase/functions-compat@0.3.19
-│  ├─ @firebase/functions@0.12.2
-│  ├─ @firebase/installations-compat@0.2.12
-│  ├─ @firebase/installations@0.6.12
-│  ├─ @firebase/messaging-compat@0.2.16
-│  ├─ @firebase/messaging@0.12.16
-│  ├─ @firebase/performance-compat@0.2.13
-│  ├─ @firebase/performance@0.7.0
-│  ├─ @firebase/remote-config-compat@0.2.12
-│  ├─ @firebase/remote-config@0.5.0
-│  ├─ @firebase/storage-compat@0.3.16
-│  ├─ @firebase/storage@0.13.6
-│  ├─ @firebase/util@1.10.3
-│  └─ @firebase/vertexai@1.0.4
+│  ├─ @firebase/app@0.11.2
+│  ├─ @firebase/auth-compat@0.5.19
+│  ├─ @firebase/auth@1.9.1
+│  ├─ @firebase/data-connect@0.3.1
+│  ├─ @firebase/database-compat@2.0.4
+│  ├─ @firebase/database@1.0.13
+│  ├─ @firebase/firestore-compat@0.3.44
+│  ├─ @firebase/firestore@4.7.9
+│  ├─ @firebase/functions-compat@0.3.20
+│  ├─ @firebase/functions@0.12.3
+│  ├─ @firebase/installations-compat@0.2.13
+│  ├─ @firebase/installations@0.6.13
+│  ├─ @firebase/messaging-compat@0.2.17
+│  ├─ @firebase/messaging@0.12.17
+│  ├─ @firebase/performance-compat@0.2.14
+│  ├─ @firebase/performance@0.7.1
+│  ├─ @firebase/remote-config-compat@0.2.13
+│  ├─ @firebase/remote-config@0.6.0
+│  ├─ @firebase/storage-compat@0.3.17
+│  ├─ @firebase/storage@0.13.7
+│  ├─ @firebase/util@1.11.0
+│  └─ @firebase/vertexai@1.1.0
 ├─ flat-cache@4.0.1
 │  ├─ flatted@^3.2.9
 │  └─ keyv@^4.5.4
@@ -3032,10 +3051,15 @@
 │  └─ type-check@0.4.0
 │     └─ prelude-ls@^1.2.1
 ├─ lines-and-columns@1.2.4
-├─ local-pkg@1.1.0
+├─ local-pkg@1.1.1
+│  ├─ confbox@0.2.1
 │  ├─ mlly@^1.7.4
-│  ├─ pkg-types@^1.3.1
-│  └─ quansync@^0.2.1
+│  ├─ pkg-types@^2.0.1
+│  ├─ pkg-types@2.1.0
+│  │  ├─ confbox@^0.2.1
+│  │  ├─ exsolve@^1.0.1
+│  │  └─ pathe@^2.0.3
+│  └─ quansync@^0.2.8
 ├─ locate-path@6.0.0
 │  └─ p-locate@^5.0.0
 ├─ lodash-es@4.17.21
@@ -3066,7 +3090,7 @@
 ├─ make-dir@4.0.0
 │  └─ semver@^7.5.3
 ├─ mark.js@8.11.1
-├─ marked@13.0.3
+├─ marked@15.0.7
 ├─ math-intrinsics@1.1.0
 ├─ md5.js@1.3.5
 │  ├─ hash-base@^3.0.0
@@ -3104,28 +3128,27 @@
 ├─ media-typer@0.3.0
 ├─ merge-descriptors@1.0.3
 ├─ merge2@1.4.1
-├─ mermaid@11.4.1
-│  ├─ @braintree/sanitize-url@^7.0.1
-│  ├─ @iconify/utils@^2.1.32
+├─ mermaid@11.5.0
+│  ├─ @braintree/sanitize-url@^7.0.4
+│  ├─ @iconify/utils@^2.1.33
 │  ├─ @mermaid-js/parser@^0.3.0
 │  ├─ @types/d3@^7.4.3
 │  ├─ cytoscape-cose-bilkent@^4.1.0
 │  ├─ cytoscape-fcose@^2.2.0
-│  ├─ cytoscape@^3.29.2
+│  ├─ cytoscape@^3.29.3
 │  ├─ d3-sankey@^0.12.3
 │  ├─ d3@^7.9.0
 │  ├─ dagre-d3-es@7.0.11
-│  ├─ dayjs@^1.11.10
-│  ├─ dompurify@^3.2.1
+│  ├─ dayjs@^1.11.13
+│  ├─ dompurify@^3.2.4
 │  ├─ katex@^0.16.9
 │  ├─ khroma@^2.1.0
 │  ├─ lodash-es@^4.17.21
-│  ├─ marked@^13.0.2
+│  ├─ marked@^15.0.7
 │  ├─ roughjs@^4.6.6
-│  ├─ stylis@^4.3.1
+│  ├─ stylis@^4.3.6
 │  ├─ ts-dedent@^2.2.0
-│  ├─ uuid@^9.0.1
-│  └─ uuid@9.0.1
+│  └─ uuid@^11.1.0
 ├─ methods@1.1.2
 ├─ mhtml2html@3.0.0
 │  ├─ base-64@^0.1.0
@@ -3289,7 +3312,7 @@
 │  ├─ any-promise@^1.0.0
 │  ├─ object-assign@^4.0.1
 │  └─ thenify-all@^1.0.0
-├─ nanoid@3.3.8
+├─ nanoid@3.3.9
 ├─ natural-compare@1.4.0
 ├─ negotiator@0.6.4
 ├─ no-case@3.0.4
@@ -3345,7 +3368,7 @@
 │  └─ path-key@^3.0.0
 ├─ nth-check@2.1.1
 │  └─ boolbase@^1.0.0
-├─ nwsapi@2.2.16
+├─ nwsapi@2.2.18
 ├─ oauth-sign@0.9.0
 ├─ object-assign@4.1.1
 ├─ object-inspect@1.13.4
@@ -3408,7 +3431,8 @@
 │  └─ p-limit@^3.0.2
 ├─ p-try@2.2.0
 ├─ package-json-from-dist@1.0.1
-├─ package-manager-detector@0.2.9
+├─ package-manager-detector@0.2.11
+│  └─ quansync@^0.2.7
 ├─ pako@1.0.11
 ├─ param-case@3.0.4
 │  ├─ dot-case@^3.0.4
@@ -3471,11 +3495,11 @@
 │  ├─ confbox@^0.1.8
 │  ├─ mlly@^1.7.4
 │  └─ pathe@^2.0.1
-├─ playwright-core@1.50.1
-├─ playwright@1.50.1
+├─ playwright-core@1.51.0
+├─ playwright@1.51.0
 │  ├─ fsevents@2.3.2
 │  ├─ fsevents@2.3.2
-│  └─ playwright-core@1.50.1
+│  └─ playwright-core@1.51.0
 ├─ pn@1.1.0
 ├─ pngjs@7.0.0
 ├─ points-on-curve@0.2.0
@@ -3491,13 +3515,13 @@
 │  ├─ nanoid@^3.3.8
 │  ├─ picocolors@^1.1.1
 │  └─ source-map-js@^1.2.1
-├─ preact@10.26.3
+├─ preact@10.26.4
 ├─ prelude-ls@1.1.2
 ├─ prettier-linter-helpers@1.0.0
 │  └─ fast-diff@^1.1.2
-├─ prettier@3.5.2
+├─ prettier@3.5.3
 ├─ pretty-bytes@5.6.0
-├─ prismjs@1.29.0
+├─ prismjs@1.30.0
 ├─ process-nextick-args@2.0.1
 ├─ process@0.11.10
 ├─ progress@2.0.3
@@ -3515,7 +3539,7 @@
 │  ├─ @protobufjs/pool@^1.1.0
 │  ├─ @protobufjs/utf8@^1.1.0
 │  ├─ @types/node@>=13.7.0
-│  ├─ @types/node@22.13.5
+│  ├─ @types/node@22.13.10
 │  │  └─ undici-types@~6.20.0
 │  ├─ long@^5.0.0
 │  └─ undici-types@6.20.0
@@ -3535,8 +3559,8 @@
 ├─ punycode@2.3.1
 ├─ qs@6.13.0
 │  └─ side-channel@^1.0.6
-├─ quansync@0.2.2
-├─ quasar@2.17.7
+├─ quansync@0.2.8
+├─ quasar@2.18.1
 ├─ querystring-es3@0.2.1
 ├─ queue-microtask@1.2.3
 ├─ quoted-printable@1.0.1
@@ -3686,26 +3710,26 @@
 │  ├─ source-map@^0.7.4
 │  ├─ source-map@0.7.4
 │  └─ yargs@^17.5.1
-├─ rollup@4.34.8
-│  ├─ @rollup/rollup-android-arm-eabi@4.34.8
-│  ├─ @rollup/rollup-android-arm64@4.34.8
-│  ├─ @rollup/rollup-darwin-arm64@4.34.8
-│  ├─ @rollup/rollup-darwin-x64@4.34.8
-│  ├─ @rollup/rollup-freebsd-arm64@4.34.8
-│  ├─ @rollup/rollup-freebsd-x64@4.34.8
-│  ├─ @rollup/rollup-linux-arm-gnueabihf@4.34.8
-│  ├─ @rollup/rollup-linux-arm-musleabihf@4.34.8
-│  ├─ @rollup/rollup-linux-arm64-gnu@4.34.8
-│  ├─ @rollup/rollup-linux-arm64-musl@4.34.8
-│  ├─ @rollup/rollup-linux-loongarch64-gnu@4.34.8
-│  ├─ @rollup/rollup-linux-powerpc64le-gnu@4.34.8
-│  ├─ @rollup/rollup-linux-riscv64-gnu@4.34.8
-│  ├─ @rollup/rollup-linux-s390x-gnu@4.34.8
-│  ├─ @rollup/rollup-linux-x64-gnu@4.34.8
-│  ├─ @rollup/rollup-linux-x64-musl@4.34.8
-│  ├─ @rollup/rollup-win32-arm64-msvc@4.34.8
-│  ├─ @rollup/rollup-win32-ia32-msvc@4.34.8
-│  ├─ @rollup/rollup-win32-x64-msvc@4.34.8
+├─ rollup@4.35.0
+│  ├─ @rollup/rollup-android-arm-eabi@4.35.0
+│  ├─ @rollup/rollup-android-arm64@4.35.0
+│  ├─ @rollup/rollup-darwin-arm64@4.35.0
+│  ├─ @rollup/rollup-darwin-x64@4.35.0
+│  ├─ @rollup/rollup-freebsd-arm64@4.35.0
+│  ├─ @rollup/rollup-freebsd-x64@4.35.0
+│  ├─ @rollup/rollup-linux-arm-gnueabihf@4.35.0
+│  ├─ @rollup/rollup-linux-arm-musleabihf@4.35.0
+│  ├─ @rollup/rollup-linux-arm64-gnu@4.35.0
+│  ├─ @rollup/rollup-linux-arm64-musl@4.35.0
+│  ├─ @rollup/rollup-linux-loongarch64-gnu@4.35.0
+│  ├─ @rollup/rollup-linux-powerpc64le-gnu@4.35.0
+│  ├─ @rollup/rollup-linux-riscv64-gnu@4.35.0
+│  ├─ @rollup/rollup-linux-s390x-gnu@4.35.0
+│  ├─ @rollup/rollup-linux-x64-gnu@4.35.0
+│  ├─ @rollup/rollup-linux-x64-musl@4.35.0
+│  ├─ @rollup/rollup-win32-arm64-msvc@4.35.0
+│  ├─ @rollup/rollup-win32-ia32-msvc@4.35.0
+│  ├─ @rollup/rollup-win32-x64-msvc@4.35.0
 │  ├─ @types/estree@1.0.6
 │  └─ fsevents@~2.3.2
 ├─ roughjs@4.6.6
@@ -3916,7 +3940,7 @@
 ├─ stack-trace@1.0.0-pre2
 ├─ stackback@0.0.2
 ├─ statuses@2.0.1
-├─ std-env@3.8.0
+├─ std-env@3.8.1
 ├─ stealthy-require@1.1.1
 ├─ stream-browserify@3.0.0
 │  ├─ inherits@~2.0.4
@@ -4118,10 +4142,10 @@
 │  ├─ is-typed-array@^1.1.13
 │  ├─ possible-typed-array-names@^1.0.0
 │  └─ reflect.getprototypeof@^1.0.6
-├─ typescript-eslint@8.25.0
-│  ├─ @typescript-eslint/eslint-plugin@8.25.0
-│  ├─ @typescript-eslint/parser@8.25.0
-│  └─ @typescript-eslint/utils@8.25.0
+├─ typescript-eslint@8.26.1
+│  ├─ @typescript-eslint/eslint-plugin@8.26.1
+│  ├─ @typescript-eslint/parser@8.26.1
+│  └─ @typescript-eslint/utils@8.26.1
 ├─ typescript@5.5.4
 ├─ ufo@1.5.4
 ├─ unbox-primitive@1.1.0
@@ -4130,7 +4154,7 @@
 │  ├─ has-symbols@^1.1.0
 │  └─ which-boxed-primitive@^1.1.1
 ├─ undici-types@6.19.8
-├─ undici@6.21.1
+├─ undici@6.21.2
 ├─ unicode-canonical-property-names-ecmascript@2.0.1
 ├─ unicode-match-property-ecmascript@2.0.0
 │  ├─ unicode-canonical-property-names-ecmascript@^2.0.0
@@ -4204,7 +4228,7 @@
 │  ├─ globrex@^0.1.2
 │  ├─ recrawl-sync@^2.0.3
 │  └─ tsconfig-paths@^3.9.0
-├─ vite-node@3.0.7
+├─ vite-node@3.0.8
 │  ├─ cac@^6.7.14
 │  ├─ debug@^4.4.0
 │  ├─ es-module-lexer@^1.6.0
@@ -4234,7 +4258,7 @@
 │  ├─ debug@^4.1.1
 │  ├─ globrex@^0.1.2
 │  └─ tsconfck@^3.0.3
-├─ vite@6.2.0
+├─ vite@6.2.2
 │  ├─ esbuild@^0.25.0
 │  ├─ fsevents@~2.3.3
 │  ├─ postcss@^8.5.3
@@ -4314,14 +4338,14 @@
 │  │  ├─ postcss@^8.4.43
 │  │  └─ rollup@^4.20.0
 │  └─ vue@^3.5.13
-├─ vitest@3.0.7
-│  ├─ @vitest/expect@3.0.7
-│  ├─ @vitest/mocker@3.0.7
-│  ├─ @vitest/pretty-format@^3.0.7
-│  ├─ @vitest/runner@3.0.7
-│  ├─ @vitest/snapshot@3.0.7
-│  ├─ @vitest/spy@3.0.7
-│  ├─ @vitest/utils@3.0.7
+├─ vitest@3.0.8
+│  ├─ @vitest/expect@3.0.8
+│  ├─ @vitest/mocker@3.0.8
+│  ├─ @vitest/pretty-format@^3.0.8
+│  ├─ @vitest/runner@3.0.8
+│  ├─ @vitest/snapshot@3.0.8
+│  ├─ @vitest/spy@3.0.8
+│  ├─ @vitest/utils@3.0.8
 │  ├─ chai@^5.2.0
 │  ├─ debug@^4.4.0
 │  ├─ expect-type@^1.1.0
@@ -4332,7 +4356,7 @@
 │  ├─ tinyexec@^0.3.2
 │  ├─ tinypool@^1.0.2
 │  ├─ tinyrainbow@^2.0.0
-│  ├─ vite-node@3.0.7
+│  ├─ vite-node@3.0.8
 │  ├─ vite@^5.0.0 || ^6.0.0
 │  └─ why-is-node-running@^2.3.0
 ├─ vm-browserify@1.1.2
@@ -4350,24 +4374,18 @@
 │  └─ vscode-languageserver-protocol@3.16.0
 ├─ vscode-uri@3.1.0
 ├─ vue-chartjs@5.3.2
-├─ vue-component-type-helpers@2.2.4
+├─ vue-component-type-helpers@2.2.8
 ├─ vue-demi@0.14.10
 ├─ vue-draggable-next@2.2.1
-├─ vue-eslint-parser@9.4.3
-│  ├─ debug@^4.3.4
-│  ├─ eslint-scope@^7.1.1
-│  ├─ eslint-scope@7.2.2
-│  │  ├─ esrecurse@^4.3.0
-│  │  └─ estraverse@^5.2.0
-│  ├─ eslint-visitor-keys@^3.3.0
-│  ├─ espree@^9.3.1
-│  ├─ espree@9.6.1
-│  │  ├─ acorn-jsx@^5.3.2
-│  │  ├─ acorn@^8.9.0
-│  │  └─ eslint-visitor-keys@^3.4.1
-│  ├─ esquery@^1.4.0
+├─ vue-eslint-parser@10.1.1
+│  ├─ debug@^4.4.0
+│  ├─ eslint-scope@^8.2.0
+│  ├─ eslint-visitor-keys@^4.2.0
+│  ├─ eslint-visitor-keys@4.2.0
+│  ├─ espree@^10.3.0
+│  ├─ esquery@^1.6.0
 │  ├─ lodash@^4.17.21
-│  └─ semver@^7.3.6
+│  └─ semver@^7.6.3
 ├─ vue-grid-layout-v3@3.1.2
 │  ├─ @interactjs/actions@^1.10.27
 │  ├─ @interactjs/auto-scroll@^1.10.27
@@ -4379,10 +4397,10 @@
 │  └─ mitt@^3.0.1
 ├─ vue-highlight-words@3.0.1
 │  └─ highlight-words-core@^1.2.2
-├─ vue-i18n@11.1.1
-│  ├─ @intlify/core-base@11.1.1
-│  ├─ @intlify/shared@11.1.1
-│  ├─ @intlify/shared@11.1.1
+├─ vue-i18n@11.1.2
+│  ├─ @intlify/core-base@11.1.2
+│  ├─ @intlify/shared@11.1.2
+│  ├─ @intlify/shared@11.1.2
 │  └─ @vue/devtools-api@^6.5.0
 ├─ vue-json-pretty@2.4.0
 ├─ vue-router@4.5.0
@@ -4454,11 +4472,12 @@
 │  ├─ is-weakmap@^2.0.2
 │  └─ is-weakset@^2.0.3
 ├─ which-module@2.0.1
-├─ which-typed-array@1.1.18
+├─ which-typed-array@1.1.19
 │  ├─ available-typed-arrays@^1.0.7
 │  ├─ call-bind@^1.0.8
-│  ├─ call-bound@^1.0.3
-│  ├─ for-each@^0.3.3
+│  ├─ call-bound@^1.0.4
+│  ├─ for-each@^0.3.5
+│  ├─ get-proto@^1.0.1
 │  ├─ gopd@^1.2.0
 │  └─ has-tostringtag@^1.0.2
 ├─ which@2.0.2
@@ -4592,9 +4611,8 @@
 ├─ xtend@4.0.2
 ├─ y18n@5.0.8
 ├─ yallist@3.1.1
-├─ yaml-eslint-parser@1.2.3
+├─ yaml-eslint-parser@1.3.0
 │  ├─ eslint-visitor-keys@^3.0.0
-│  ├─ lodash@^4.17.21
 │  └─ yaml@^2.0.0
 ├─ yaml@2.7.0
 ├─ yargs-parser@20.2.9

@@ -19,13 +19,13 @@ function log(msg: string, level: number) {
     _stage: process.env.TABSETS_STAGE,
   }
   api
-    .post('http://graylog.tabsets.net:12201/gelf', gelfMessage, {
+    .post('https://graylog.tabsets.net:12202/gelf', gelfMessage, {
       headers: { 'Content-Type': 'application/json' },
     })
     .catch((err: any) => {
       if (!graylogErrorLogged) {
         graylogErrorLogged = true
-        console.warn('could not log to graylog')
+        console.warn('could not log to graylog', err)
       }
     })
 }

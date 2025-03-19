@@ -164,8 +164,8 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" behavior="desktop" bordered>
-      <!--      <Navigation2></Navigation2>-->
-      <TabsNavigation />
+      <Navigation2></Navigation2>
+      <!--      <TabsNavigation />-->
     </q-drawer>
 
     <!--    <q-drawer-->
@@ -185,7 +185,7 @@
 
 <script setup lang="ts">
 import { EXTENSION_NAME } from 'boot/constants'
-import TabsNavigation from 'components/TabsNavigation.vue'
+import Navigation2 from 'components/Navigation2.vue'
 import ToolbarButton from 'components/widgets/ToolbarButton.vue'
 import _ from 'lodash'
 import { useMeta, useQuasar } from 'quasar'
