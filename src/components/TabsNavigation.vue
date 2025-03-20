@@ -24,13 +24,13 @@
 
               <!-- folders -->
               <div class="col-12">
-                <SidePanelFoldersView v-if="currentTabset" :tabset="currentTabset" />
+                <SidePanelFoldersView v-if="currentTabset" :tabset="currentTabset" filter="" />
               </div>
 
               <!-- list of tabs, assuming here we have at least one tabset-->
               <PublicPageTabList
                 v-if="currentTabset"
-                :tabsCount="useTabsetService().tabsToShow(currentTabset as Tabset)?.length"
+                :tabsCount="(currentTabset as Tabset).tabs.length"
                 :tabset="tabsetForTabList(currentTabset as Tabset)" />
             </div>
           </template>

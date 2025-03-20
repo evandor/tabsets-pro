@@ -1,13 +1,11 @@
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
+import { initializeApp } from 'firebase/app'
 import { Auth, connectAuthEmulator, getAuth } from 'firebase/auth/web-extension'
 import { connectFirestoreEmulator, Firestore, getFirestore, initializeFirestore } from 'firebase/firestore'
 import { connectStorageEmulator, FirebaseStorage, getStorage } from 'firebase/storage'
 import { useUiStore } from 'src/ui/stores/uiStore'
 
 class FirebaseServices {
-  private firebaseApp: firebase.app.App = null as unknown as firebase.app.App
+  private firebaseApp: any =  null //firebase.app.App = null as unknown as firebase.app.App
   private auth: Auth = null as unknown as Auth
   private firestore: Firestore = null as unknown as Firestore
   // private messaging: Messaging = null as unknown as Messaging
@@ -15,16 +13,18 @@ class FirebaseServices {
 
   // private realtimeDb: Database = null as unknown as Database
 
+  private firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY as string,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN as string,
+    projectId: process.env.FIREBASE_PROJECT_ID as string,
+    appId: process.env.FIREBASE_APP_ID as string,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET as string,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID as string,
+  }
+
   init() {
     // console.log('initializing FirebaseServices')
-    this.firebaseApp = firebase.initializeApp({
-      apiKey: process.env.FIREBASE_API_KEY,
-      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      appId: process.env.FIREBASE_APP_ID,
-      storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    })
+    this.firebaseApp = initializeApp(this.firebaseConfig)
     this.auth = getAuth(this.firebaseApp)
     if (process.env.TABSETS_STAGE === 'EMULATOR') {
       useUiStore().setWatermark('emulator')

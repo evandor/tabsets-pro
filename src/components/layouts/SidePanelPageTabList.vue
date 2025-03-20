@@ -81,7 +81,7 @@ const handleDragAndDrop = async (event: any, column: TabsetColumn) => {
     await TabsetService.moveTo(movedElement.id, realNewIndex, column)
     console.log('hier: ', props.tabset)
     if (props.tabset) {
-      tabs.value = useTabsetService().tabsToShow(props.tabset)
+      tabs.value = props.tabset.tabs //useTabsetService().tabsToShow(props.tabset)
       console.log(
         'tabs.value',
         _.map(tabs.value, (t: Tab) => t.url),
@@ -105,7 +105,7 @@ watchEffect(() => {
   // TODO why was this done in the first place? Updates from where?
   //const tabset = useTabsStore().useTabsetsStore(props.tabset?.id || "")
   if (props.tabset) {
-    tabs.value = useTabsetService().tabsToShow(props.tabset)
+    tabs.value = props.tabset.tabs //useTabsetService().tabsToShow(props.tabset)
   } else {
     console.warn('could not determine tabset...')
     tabs.value = []

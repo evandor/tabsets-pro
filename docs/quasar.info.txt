@@ -39,5 +39,5 @@ Quasar App Extensions
 
 Networking
   Host - Carstens-MacBook-Pro.fritz.box
-  en0 - 192.168.178.151
+  en0 - 192.168.178.118
 
