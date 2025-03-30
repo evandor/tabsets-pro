@@ -1,3 +1,4 @@
+import { QVueGlobals } from 'quasar'
 import FeaturesPersistence from 'src/features/persistence/FeaturesPersistence'
 import FirestoreFeaturesPersistence from 'src/features/persistence/FirestoreFeaturesPersistence'
 import FirestoreNotesPersistence from 'src/notes/persistence/FirestoreNotesPersistence'
@@ -16,7 +17,7 @@ import TabsetsPersistence from 'src/tabsets/persistence/TabsetsPersistence'
 import FirestoreThumbnailsPersistence from 'src/thumbnails/persistence/FirestoreThumbnailsPersistence'
 import ThumbnailsPersistence from 'src/thumbnails/persistence/ThumbnailsPersistence'
 
-export function useDB() {
+export function useDB(quasar: QVueGlobals | undefined = undefined) {
   const spacesDb: SpacesPersistence = FirestoreSpacesPersistence
   const tabsetsDb: TabsetsPersistence = FirestoreTabsetsPersistence
   const localTabsetsDb: TabsetsPersistence = IndexedDbTabsetsPersistence
@@ -24,9 +25,9 @@ export function useDB() {
   const featuresDb: FeaturesPersistence = FirestoreFeaturesPersistence
 
   const snapshotsDb: SnapshotsPersistence = FirestoreSnapshotsPersistence
+  const suggestionsDb: SuggestionsPersistence = FirestoreSuggestionsPersistence
   const notesDb: NotesPersistence = FirestoreNotesPersistence
   const thumbnailsDb: ThumbnailsPersistence = FirestoreThumbnailsPersistence
-  const suggestionsDb: SuggestionsPersistence = FirestoreSuggestionsPersistence
 
   let localDb = undefined as unknown as PersistenceService
 

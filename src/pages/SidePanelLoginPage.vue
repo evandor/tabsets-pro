@@ -6,7 +6,9 @@
       {{ pageTitle }}
     </div>
 
-    <div class="q-ma-md" style="border: 1px solid #bfbfbf; max-width: 500px; margin: 0 auto">
+    <div
+      class="q-ma-sm q-pa-sm"
+      style="border: 1px solid #bfbfbf; max-width: 500px; margin: 0 10px 0 10px; border-radius: 10px">
       <q-tabs v-model="tab" dense>
         <q-tab name="login" label="Login" />
         <q-tab name="register" label="Create Account" />
@@ -15,9 +17,9 @@
       <q-separator />
 
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="login">
+        <q-tab-panel name="login" class="q-ma-none q-pa-none">
           <form>
-            <div class="col q-mt-sm">
+            <div class="col q-mt-lg">
               <div class="row">
                 <div class="col-12">Your Email Address</div>
               </div>
@@ -96,9 +98,9 @@
           </form>
         </q-tab-panel>
 
-        <q-tab-panel name="register">
+        <q-tab-panel name="register" class="q-ma-none q-pa-none">
           <form>
-            <div class="col q-mt-sm">
+            <div class="col q-mt-lg">
               <div class="row">
                 <div class="col-12">Your Email Address</div>
               </div>

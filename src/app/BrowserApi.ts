@@ -1,7 +1,13 @@
 import _ from 'lodash'
 import { LocalStorage, uid } from 'quasar'
+import AppEventDispatcher from 'src/app/AppEventDispatcher'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
-import { CLEANUP_PERIOD_IN_MINUTES, GITHUB_AUTO_BACKUP, MONITORING_PERIOD_IN_MINUTES } from 'src/boot/constants'
+import {
+  CLEANUP_PERIOD_IN_MINUTES,
+  EXTENSION_NAME,
+  GITHUB_AUTO_BACKUP,
+  MONITORING_PERIOD_IN_MINUTES
+} from 'src/boot/constants'
 import { ContentItem } from 'src/content/models/ContentItem'
 import { useContentService } from 'src/content/services/ContentService'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
@@ -29,7 +35,6 @@ function runHousekeeping() {
 
 class BrowserApi {
   onHeadersReceivedListener = function (details: chrome.webRequest.WebResponseHeadersDetails) {
-    console.log('onHeadersReceivedListener', details)
     if (details.url) {
       // store transient information
       useRequestsStore().setCurrentTabRequest(details)
@@ -45,36 +50,41 @@ class BrowserApi {
     }
 
     // console.debug(' ...initializing ChromeApi')
+    if (chrome && chrome.alarms) {
+      try {
+        chrome.alarms
+          .create('housekeeping', { periodInMinutes: CLEANUP_PERIOD_IN_MINUTES })
+          .catch((err: any) => console.warn('could not start housekeeping alarm due to ', err))
 
-    chrome.alarms
-      .create('housekeeping', { periodInMinutes: CLEANUP_PERIOD_IN_MINUTES })
-      .catch((err: any) => console.warn('could not start housekeeping alarm due to ', err))
+        chrome.alarms
+          .create('hourlyTasks', { periodInMinutes: 60 })
+          .catch((err: any) => console.warn('could not start hourlyTasks alarm due to ', err))
 
-    chrome.alarms
-      .create('hourlyTasks', { periodInMinutes: 60 })
-      .catch((err: any) => console.warn('could not start hourlyTasks alarm due to ', err))
+        chrome.alarms
+          .create('monitoring', { periodInMinutes: MONITORING_PERIOD_IN_MINUTES })
+          .catch((err: any) => console.warn('could not start monitoring alarm due to ', err))
 
-    chrome.alarms
-      .create('monitoring', { periodInMinutes: MONITORING_PERIOD_IN_MINUTES })
-      .catch((err: any) => console.warn('could not start monitoring alarm due to ', err))
-
-    chrome.alarms.onAlarm.addListener((alarm: chrome.alarms.Alarm) => {
-      if (alarm.name === 'housekeeping') {
-        runHousekeeping()
-        //runThumbnailsHousekeeping(useTabsetService().urlExistsInATabset)
-        //runContentHousekeeping(useTabsetService().urlExistsInATabset)
-      } else if (alarm.name === 'monitoring') {
-        if (useFeaturesStore().hasFeature(FeatureIdent.MONITOR)) {
-          this.checkMonitors()
-        }
-      } else if (alarm.name === 'hourlyTasks') {
-        if (LocalStorage.getItem(GITHUB_AUTO_BACKUP) as boolean) {
-          useCommandExecutor().execute(new GithubBackupCommand())
-        }
-      } else {
-        console.log('unknown alarm', alarm)
+        chrome.alarms.onAlarm.addListener((alarm: chrome.alarms.Alarm) => {
+          if (alarm.name === 'housekeeping') {
+            runHousekeeping()
+            //runThumbnailsHousekeeping(useTabsetService().urlExistsInATabset)
+            //runContentHousekeeping(useTabsetService().urlExistsInATabset)
+          } else if (alarm.name === 'monitoring') {
+            if (useFeaturesStore().hasFeature(FeatureIdent.MONITOR)) {
+              this.checkMonitors()
+            }
+          } else if (alarm.name === 'hourlyTasks') {
+            if (LocalStorage.getItem(GITHUB_AUTO_BACKUP) as boolean) {
+              useCommandExecutor().execute(new GithubBackupCommand())
+            }
+          } else {
+            console.log('unknown alarm', alarm)
+          }
+        })
+      } catch (err) {
+        console.warn('ff issue with creating alarms, alarms deactivated due to', err)
       }
-    })
+    }
 
     chrome.runtime.onUpdateAvailable.addListener((details: any) => {
       // NavigationService.updateAvailable(details)
@@ -121,8 +131,8 @@ class BrowserApi {
         chrome.contextMenus.create(
           {
             id: 'tabset_extension',
-            title: 'Tabsets Extension',
-            documentUrlPatterns: ['https://*/*', 'https://*/', 'chrome-extension://*/'],
+            title: EXTENSION_NAME,
+            documentUrlPatterns: ['*://*/*'],
             contexts: ['all'],
           },
           () => {
@@ -139,7 +149,7 @@ class BrowserApi {
                 id: 'website_clip',
                 parentId: 'tabset_extension',
                 title: 'Create Website Clip',
-                documentUrlPatterns: ['https://*/*', 'https://*/', 'chrome-extension://*/'],
+                documentUrlPatterns: ['*://*/*'],
                 contexts: ['all'],
               })
             }
@@ -151,12 +161,26 @@ class BrowserApi {
             //   contexts: ['all']
             // })
             //}
-            // console.debug(" > context menu: save_to_currentTS")
             chrome.contextMenus.create({
               id: 'save_to_currentTS',
               parentId: 'tabset_extension',
-              title: 'Save to current Tabset (' + useTabsetsStore().currentTabsetName + ')',
-              documentUrlPatterns: ['https://*/*', 'https://*/'],
+              title: 'Save to current Collection (' + useTabsetsStore().currentTabsetName + ')',
+              documentUrlPatterns: ['*://*/*'],
+              contexts: ['all'],
+            })
+
+            chrome.contextMenus.create({
+              id: 'separator_ignore_url',
+              parentId: 'tabset_extension',
+              type: 'separator',
+              documentUrlPatterns: ['*://*/*'],
+              contexts: ['all'],
+            })
+            chrome.contextMenus.create({
+              id: 'ignore_url',
+              parentId: 'tabset_extension',
+              title: 'Ignore this URL in tabsets',
+              documentUrlPatterns: ['*://*/*'],
               contexts: ['all'],
             })
 
@@ -167,7 +191,6 @@ class BrowserApi {
                 id: 'move_to_window',
                 parentId: 'tabset_extension',
                 title: 'Move current tab...',
-                documentUrlPatterns: ['https://*/*', 'https://*/'],
                 contexts: ['all'],
               })
               // rest of logic in windowsStore
@@ -191,7 +214,7 @@ class BrowserApi {
                 id: 'separator',
                 parentId: 'tabset_extension',
                 type: 'separator',
-                documentUrlPatterns: ['https://*/*', 'https://*/'],
+                documentUrlPatterns: ['*://*/*'],
                 contexts: ['all'],
               })
             }
@@ -208,7 +231,7 @@ class BrowserApi {
                   id: 'save_as_tab_folder|' + r.firstLetter,
                   parentId: 'tabset_extension',
                   title: 'Save to Tabset ' + r.firstLetter + '...',
-                  documentUrlPatterns: ['https://*/*', 'https://*/'],
+                  documentUrlPatterns: ['*://*/*'],
                   contexts: ['all'],
                 })
 
@@ -263,6 +286,10 @@ class BrowserApi {
                   this.executeAddToTS(currentTsId, tab)
                 }
               })
+          } else if (e.menuItemId === 'ignore_url') {
+            if (tab) {
+              AppEventDispatcher.dispatchEvent('ignore_url', { url: tab.url })
+            }
           } else if (e.menuItemId === 'annotate_website') {
             console.log('creating annotation JS', tab)
             if (tab && tab.id) {
@@ -291,7 +318,7 @@ class BrowserApi {
       id: 'save_as_tab|' + ts.id,
       parentId,
       title,
-      documentUrlPatterns: ['https://*/*', 'https://*/'],
+      documentUrlPatterns: ['*://*/*'],
       contexts: ['all'],
     })
   }
@@ -483,7 +510,7 @@ class BrowserApi {
     const allTabsets: Tabset[] = [...useTabsetsStore().tabsets.values()] as Tabset[]
     const checkedTabs: { url: string; newHash: string; tabId: string; tabsetId: string }[] = []
     for (const ts of allTabsets) {
-      for (const monitoredTab of ts.monitoredTabs) {
+      for (const monitoredTab of ts.monitoredTabs || []) {
         const tabAndTabsetId: TabAndTabsetId | undefined = useTabsetsStore().getTabAndTabsetId(monitoredTab.tabId)
         if (tabAndTabsetId) {
           const url = tabAndTabsetId.tab.url

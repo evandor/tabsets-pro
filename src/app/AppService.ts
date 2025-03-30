@@ -1,3 +1,4 @@
+import { EXTENSION_NAME } from 'boot/constants'
 import { User } from 'firebase/auth/web-extension'
 import _ from 'lodash'
 import { QVueGlobals } from 'quasar'
@@ -60,7 +61,7 @@ class AppService {
 
     this.router = router
 
-    useUiStore().appLoading = 'loading tabsets pro...'
+    useUiStore().appLoading = `loading ${EXTENSION_NAME}...`
 
     useAppStore().init()
 
@@ -96,7 +97,7 @@ class AppService {
   }
 
   private async initCoreSerivces(quasar: QVueGlobals, router: Router) {
-    console.log(`%cinitializing AppService: initCoreSerivces`, 'font-weight:bold')
+    //console.log(`%cinitializing AppService: initCoreSerivces`, 'font-weight:bold')
 
     const authenticated = useAuthStore().isAuthenticated()
 
@@ -107,7 +108,7 @@ class AppService {
      * features store: passing storage for better testing.
      * make sure features are not used before this line in code.
      */
-    const featuresStorage = useDB().featuresDb
+    const featuresStorage = useDB(quasar).featuresDb
     await useFeaturesStore().initialize(featuresStorage)
 
     const localStorageTabsetsDb = useDB().localStorageTabsetsDb

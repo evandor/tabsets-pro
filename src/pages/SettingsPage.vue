@@ -18,7 +18,7 @@
       <q-tab name="account" label="Account" />
       <q-tab name="sharing" label="Sharing" />
       <q-tab name="thirdparty" label="Third Party Services" />
-      <!--      <q-tab name="ignored" label="Ignored Urls"/>-->
+      <q-tab name="ignored" label="Ignored Urls" v-if="showIgnored()" />
       <q-tab
         name="archived"
         label="Archived Tabsets"
@@ -63,8 +63,13 @@
   <div v-if="tab === 'ignored'">
     <div class="q-pa-md q-gutter-sm">
       <q-banner rounded
-        >Urls can be ignored so that the tabsets extension will not notifiy you about changes.
+        >Urls can be ignored so that the tabsets extension will close them immediately when cleaning up
       </q-banner>
+      <div class="row">
+        <div class="col">
+          <q-btn class="q-ml-md" label="show Ignored" @click="showIgnoredTabset()" />
+        </div>
+      </div>
 
       <!--      <div class="row q-pa-md" v-for="tabset in ignoredUrls()">-->
       <!--        <div class="col-3"><b>{{ tabset.url }}</b></div>-->
@@ -202,7 +207,6 @@ const searchStore = useSearchStore()
 const settingsStore = useSettingsStore()
 
 const localStorage = useQuasar().localStorage
-const $q = useQuasar()
 const route = useRoute()
 
 useUiStore().rightDrawerSetActiveTab(DrawerTabs.FEATURES)
@@ -277,6 +281,15 @@ const unarchive = (tabset: Tabset) =>
     })
 
 const setTab = (t: string) => (tab.value = t)
+
+const showIgnored = () => {
+  const ignoredTabset = useTabsetsStore().getTabset('IGNORED')
+  return !(!ignoredTabset || ignoredTabset.tabs.length === 0)
+}
+
+const showIgnoredTabset = () => {
+  sendMsg('show-ignored')
+}
 
 const deleteAccount = () => {
   const auth = getAuth()

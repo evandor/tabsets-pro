@@ -170,6 +170,7 @@ class BrowserListeners {
         NavigationService.forwardOneTab()
         break
       case 'search':
+        //console.log('in command search')
         break
       default:
         console.log(`unknown Command: ${command}`)
@@ -313,6 +314,8 @@ class BrowserListeners {
     } else if (request.msg === 'captureClipping') {
       this.handleCaptureClipping(request, sender, sendResponse)
     } else if (request.name === 'sidepanel-switch-view') {
+      useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
+    } else if (request.name === 'show-ignored') {
       useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
     } else {
       console.log('got unknown message', request)

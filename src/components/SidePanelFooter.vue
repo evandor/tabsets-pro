@@ -22,7 +22,7 @@
       </Transition>
     </template>
 
-    <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSET_LIST)">
+    <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSET_LIST) && useUiStore().showTabsetList">
       <SidePanelTabsetListMarkup />
     </template>
 
@@ -43,9 +43,9 @@
 
     <div class="row fit q-ma-none q-pa-none" v-if="!checkToasts() && useUiStore().progress">
       <div class="col-12">
-        <q-linear-progress stripe size="18px" :value="progressValue" color="grey-7" track-color="grey-4">
+        <q-linear-progress stripe size="18px" :value="progressValue" color="warning" track-color="grey-4">
           <div class="absolute-full flex flex-center">
-            <q-badge :label="progressLabel" color="grey" />
+            <q-badge :label="progressLabel" color="white" text-color="primary" />
           </div>
         </q-linear-progress>
       </div>
@@ -59,7 +59,7 @@
           icon="o_lightbulb"
           :label="suggestionsLabel()"
           :color="dependingOnStates()"
-          size="12px"
+          size="sm"
           @click="suggestionDialog()"
           class="q-ma-none q-pa-xs q-ml-sm q-mt-xs q-pr-md cursor-pointer">
         </q-btn>
@@ -73,6 +73,11 @@
       </div>
       <div class="col text-right" v-if="useUiStore().appLoading">&nbsp;</div>
       <div v-else class="col text-right">
+        <q-icon
+          class="cursor-pointer q-mr-sm"
+          v-if="!useUiStore().showTabsetList"
+          name="o_featured_play_list"
+          @click="useUiStore().hideTabsetList(false)" />
         <span>
           <input
             class="q-ma-none q-pa-none"
@@ -119,7 +124,7 @@
             icon="o_settings"
             v-if="showSettingsButton()"
             class="q-my-xs q-px-xs q-mr-none"
-            :class="{ shake: animateSettingsButton }"
+            :class="{ shakeWithColor: animateSettingsButton }"
             flat
             :size="getButtonSize()">
             <q-tooltip :delay="4000" class="tooltip_small" anchor="top left" self="bottom left">{{
@@ -127,7 +132,7 @@
             }}</q-tooltip>
           </q-btn>
           <q-menu :offset="[-10, 0]">
-            <q-list dense>
+            <q-list dense style="min-width: 190px">
               <ContextMenuItem v-close-popup @was-clicked="openOptionsPage()" icon="o_settings" label="Open Settings" />
 
               <q-separator />
@@ -153,6 +158,13 @@
                 @was-clicked="openURL('https://github.com/evandor/tabsets/issues')"
                 icon="o_open_in_new"
                 label="Issues" />
+
+              <!-- seems like this is not possible with current sentry in a chrome extension, not even with API -->
+              <ContextMenuItem v-close-popup @was-clicked="openBugDialog()" icon="o_bug_report" label="Report a Bug">
+                <template v-slot:banner v-if="warningOrErrorCount()">
+                  <q-badge :label="warningOrErrorCount()" align="top" :color="warningOrErrorColor()" size="xs" />
+                </template>
+              </ContextMenuItem>
 
               <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SESSIONS)">
                 <q-separator />
@@ -229,6 +241,7 @@
 </template>
 
 <script setup lang="ts">
+import { captureFeedback } from '@sentry/vue'
 import _ from 'lodash'
 import { openURL, uid, useQuasar } from 'quasar'
 import BrowserApi from 'src/app/BrowserApi'
@@ -252,6 +265,7 @@ import { AddTabToTabsetCommand } from 'src/tabsets/commands/AddTabToTabsetComman
 import SidePanelMessagesMarkup from 'src/tabsets/components/helper/SidePanelMessagesMarkup.vue'
 import SidePanelTabsetListMarkup from 'src/tabsets/components/helper/SidePanelTabsetListMarkup.vue'
 import SidePanelTabsetReferencesMarkup from 'src/tabsets/components/helper/SidePanelTabsetReferencesMarkup.vue'
+import NewBugDialog from 'src/tabsets/dialogues/NewBugDialog.vue'
 import { Tab, TabSnippet } from 'src/tabsets/models/Tab'
 import { TabAndTabsetId } from 'src/tabsets/models/TabAndTabsetId'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
@@ -314,6 +328,9 @@ watchEffect(() => {
 
 watchEffect(async () => {
   const suggestions = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED', 'NOTIFICATION'])
+  if (!chrome || !chrome.windows) {
+    return
+  }
   const currentWindow = await chrome.windows.getCurrent()
   //console.log("watcheffect for", suggestions)
   showSuggestionButton.value =
@@ -508,6 +525,39 @@ const drop = (evt: any) => {
 }
 
 const reload = () => window.location.reload()
+
+const openBugDialog = () => {
+  $q.dialog({
+    component: NewBugDialog,
+    componentProps: {},
+  }).onOk((userFeedback: any) => {
+    console.log('data', userFeedback)
+    captureFeedback(userFeedback)
+  })
+}
+
+const warningOrErrorCount = (): string | undefined => {
+  const warningCount = useUiStore().warningCount
+  const errorCount = useUiStore().errorCount
+  if (errorCount > 0) {
+    return errorCount > 9 ? '9+' : errorCount.toString()
+  }
+  if (warningCount > 0) {
+    return warningCount > 9 ? '9+' : warningCount.toString()
+  }
+  return undefined
+}
+const warningOrErrorColor = () => {
+  const warningCount = useUiStore().warningCount
+  const errorCount = useUiStore().errorCount
+  if (errorCount > 0) {
+    return 'negative'
+  }
+  if (warningCount > 0) {
+    return 'warning'
+  }
+  return 'primary'
+}
 </script>
 
 <style>

@@ -7,8 +7,8 @@
     <div class="row items-baseline q-ma-md q-gutter-md">
       <InfoLine :label="$t('dark_mode')">
         <q-radio v-model="darkMode" val="auto" :label="$t('Auto')" />
-        <q-radio v-model="darkMode" val="true" :label="$t('Enabled')" />
-        <q-radio v-model="darkMode" val="false" :label="$t('Disabled')" />
+        <q-radio v-model="darkMode" val="true" :label="$t('enabled')" />
+        <q-radio v-model="darkMode" val="false" :label="$t('disabled')" />
         &nbsp;&nbsp;&nbsp;{{ $t('changing_needs_restart') }}
       </InfoLine>
 
@@ -63,10 +63,6 @@
         <q-checkbox
           v-model="showRecentTabsetsList"
           label="The last couple of tabsets you opened will be displayed for quick access" />
-      </InfoLine>
-
-      <InfoLine label="Switch off content script logging" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
-        <q-checkbox v-model="contentScriptLoggingOff" label="No tabset related logging in content scripts" />
       </InfoLine>
 
       <InfoLine label="Overlap Indicator">
@@ -202,7 +198,6 @@ const fontsize = ref<FontSize>(LocalStorage.getItem('ui.fontsize') || FontSize.D
 const fullUrls = ref(LocalStorage.getItem('ui.fullUrls') || false)
 const overlapIndicator = ref(LocalStorage.getItem('ui.overlapIndicator') || false)
 const showRecentTabsetsList = ref(useFeaturesStore().hasFeature(FeatureIdent.TABSET_LIST))
-const contentScriptLoggingOff = ref(LocalStorage.getItem('ui.contentScriptLoggingOff') || false)
 const oldLayout = ref(LocalStorage.getItem('ui.sidepanel.oldLayout') || false)
 
 let suggestionsCounter = 0
@@ -304,17 +299,6 @@ watch(
     } else {
       useCommandExecutor().execute(new DeactivateFeatureCommand(FeatureIdent.TABSET_LIST.toString()))
     }
-  },
-)
-
-watch(
-  () => contentScriptLoggingOff.value,
-  (a: any, b: any) => {
-    LocalStorage.set('ui.contentScriptLoggingOff', contentScriptLoggingOff.value)
-    sendMsg('settings-changed', {
-      identifier: 'ui.contentScriptLoggingOff',
-      value: contentScriptLoggingOff.value,
-    })
   },
 )
 

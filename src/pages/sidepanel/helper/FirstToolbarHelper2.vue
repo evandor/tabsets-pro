@@ -10,16 +10,6 @@
       </div>
       <div class="row q-ma-none q-pa-none">
         <div class="col-6 q-ma-none q-pa-none" style="border: 0 solid red">
-          <!-- no spaces && searching -->
-          <!--          <SearchWithTransitionHelper-->
-          <!--            v-if="searching"-->
-          <!--            :search-term="props.searchTerm"-->
-          <!--            :search-hits="props.searchHits!" />-->
-
-          <!--          <FilterWithTransitionHelper v-else-if="showFilter" />-->
-          <!-- no spaces && not searching -->
-          <!--          <template v-else>-->
-          <!-- no spaces && not searching -->
           <div class="col-12 text-subtitle1">
             <div class="q-ml-md q-mt-sm">
               <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SPACES)">
@@ -27,12 +17,20 @@
                   v-if="route.path !== '/sidepanel/spaces'"
                   class="text-caption cursor-pointer"
                   @click.stop="router.push('/sidepanel/spaces')">
-                  <span
-                    >{{ title() }}
+                  <q-icon
+                    name="sync"
+                    class="q-mr-xs cursor-pointer"
+                    size="12px"
+                    v-if="syncingActive()"
+                    @click.stop="syncNow()">
+                    <q-tooltip class="tooltip-small">Last synced: {{ lastSyncTime() }}. Click to sync now</q-tooltip>
+                  </q-icon>
+                  <span>
+                    {{ title() }}
                     <q-icon name="arrow_drop_down" class="q-ma-none q-pa-none" color="grey-5" size="xs" />
                     <q-tooltip class="tooltip-small" :delay="1000"
-                      >Select a different space or create a new one</q-tooltip
-                    >
+                      >Select a different space or create a new one
+                    </q-tooltip>
                   </span>
                 </div>
                 <div v-else class="text-caption cursor-pointer" @click.stop="router.push('/sidepanel')">
@@ -45,7 +43,17 @@
                 </div>
               </template>
               <template v-else>
-                <div class="text-caption">{{ title() }}</div>
+                <div class="text-caption">
+                  <q-icon
+                    name="sync"
+                    class="q-mr-xs cursor-pointer"
+                    size="12px"
+                    v-if="syncingActive()"
+                    @click="syncNow()">
+                    <q-tooltip class="tooltip-small">Last synced: {{ lastSyncTime() }}. Click to sync now</q-tooltip>
+                  </q-icon>
+                  {{ title() }}
+                </div>
               </template>
               <div class="text-body1 text-bold cursor-pointer ellipsis" @click="router.push('/sidepanel/collections')">
                 <template v-if="currentTabset">
@@ -70,29 +78,25 @@
           style="border: 0 solid green">
           <slot name="iconsRight">
             <div class="q-mt-sm q-ma-none q-qa-none q-mr-xs">
-              <!--              <template v-if="showSearchIcon()">-->
-              <!--                <SidePanelToolbarButton-->
-              <!--                  icon="search"-->
-              <!--                  class="q-mr-sm"-->
-              <!--                  id="toggleSearchBtn"-->
-              <!--                  size="11px"-->
-              <!--                  @click="toggleSearch" />-->
-              <!--              </template>-->
-
-              <!--              <SidePanelToolbarTabNavigationHelper />-->
-
               <span>
                 <SpecialUrlAddToTabsetComponent
-                  v-if="currentChromeTab && currentTabset"
+                  v-if="currentChromeTab && currentTabset && currentTabset.type !== TabsetType.SPECIAL"
                   @button-clicked="
                     (args: ActionHandlerButtonClickedHolder) => handleButtonClicked(currentTabset!, args)
                   "
                   :currentChromeTab="currentChromeTab"
                   :tabset="currentTabset"
                   :level="'root'" />
+                <transition
+                  v-else-if="!currentTabset || currentTabset.type !== TabsetType.SPECIAL"
+                  appear
+                  enter-active-class="animated fadeIn slower delay-5s"
+                  leave-active-class="animated fadeOut">
+                  <q-btn icon="add" label="tab" size="sm" class="q-mr-md" @click="addUrlDialog()" />
+                </transition>
               </span>
-              <q-icon name="more_vert" size="sm" color="secondary" class="cursor-pointer" />
-              <SidePanelPageContextMenu v-if="currentTabset" :tabset="currentTabset as Tabset" />
+              <!--              <q-icon name="more_vert" size="sm" color="secondary" class="cursor-pointer" />-->
+              <!--              <SidePanelPageContextMenu v-if="currentTabset" :tabset="currentTabset as Tabset" />-->
             </div>
           </slot>
         </div>
@@ -102,15 +106,18 @@
 </template>
 
 <script lang="ts" setup>
-import SidePanelPageContextMenu from 'pages/sidepanel/SidePanelPageContextMenu.vue'
-import { useQuasar } from 'quasar'
+import { date, LocalStorage, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { SidePanelViews } from 'src/app/models/SidePanelViews'
+import { GITHUB_AUTO_SYNC, GITHUB_AUTO_SYNC_LASTUPDATE } from 'src/boot/constants'
+import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import { useActionHandlers } from 'src/tabsets/actionHandling/ActionHandlers'
 import { ActionHandlerButtonClickedHolder } from 'src/tabsets/actionHandling/model/ActionHandlerButtonClickedHolder'
 import SpecialUrlAddToTabsetComponent from 'src/tabsets/actionHandling/SpecialUrlAddToTabsetComponent.vue'
+import { GithubReadEventsCommand } from 'src/tabsets/commands/github/GithubReadEventsCommand'
+import AddUrlDialog from 'src/tabsets/dialogues/AddUrlDialog.vue'
 import { Tabset, TabsetSharing, TabsetType } from 'src/tabsets/models/Tabset'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
@@ -249,6 +256,24 @@ const handleButtonClicked = async (tabset: Tabset, args: ActionHandlerButtonClic
 }
 
 const offsetTop = () => ($q.platform.is.capacitor || $q.platform.is.cordova ? 'margin-top:40px;' : '')
+
+const addUrlDialog = () => $q.dialog({ component: AddUrlDialog })
+
+const syncingActive = () => LocalStorage.getItem(GITHUB_AUTO_SYNC)
+
+const syncNow = () => {
+  const lastUpdate: number = (LocalStorage.getItem(GITHUB_AUTO_SYNC_LASTUPDATE) as number) || 0
+  useCommandExecutor().executeFromUi(new GithubReadEventsCommand(lastUpdate))
+  router.push('/sidepanel/collections')
+}
+
+const lastSyncTime = () => {
+  const lastUpdate: number = (LocalStorage.getItem(GITHUB_AUTO_SYNC_LASTUPDATE) as number) || 0
+  if (lastUpdate == 0) {
+    return 'never'
+  }
+  return date.formatDate(lastUpdate, 'DD.MM.YY HH:mm')
+}
 </script>
 
 <style scoped>

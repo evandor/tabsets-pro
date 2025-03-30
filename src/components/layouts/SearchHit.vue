@@ -1,5 +1,5 @@
 <template>
-  <q-item v-ripple class="q-mb-lg">
+  <q-item v-ripple class="q-ma-none">
     <q-item-section
       v-if="useUiStore().listDetailLevelGreaterEqual('SOME', undefined)"
       @click.stop="open(hit)"

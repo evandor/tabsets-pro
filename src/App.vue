@@ -22,9 +22,14 @@ import { useRoute, useRouter } from 'vue-router'
 const $q = useQuasar()
 const router = useRouter()
 const route = useRoute()
-const { inBexMode } = useUtils()
+const { inBexMode, setupConsoleInterceptor } = useUtils()
 
 const { handleError } = useNotificationHandler()
+
+// TODO only in prod?
+if (process.env.TABSETS_STAGE !== 'EMULATOR') {
+  setupConsoleInterceptor(useUiStore())
+}
 
 const settingsStore = useSettingsStore()
 settingsStore.initialize($q.localStorage)

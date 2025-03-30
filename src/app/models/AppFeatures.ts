@@ -198,7 +198,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.NOTES,
-      'OPTIONAL',
+      'EXPERIMENTAL',
       'Notes Feature',
       'CreateCreate notes and treat them like tabs',
       'o_note',
@@ -208,7 +208,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.STANDALONE_APP,
-      'OPTIONAL',
+      'EXPERIMENTAL',
       'Standalone App',
       'Tabsets as full-page application',
       'o_open_in_new',
@@ -268,7 +268,7 @@ export class AppFeatures {
       ['all'],
     ),
 
-    // // permission allOrigins?
+    // permission allOrigins?
     // new Feature(
     //   FeatureIdent.ANALYSE_TABS,
     //   'EXPERIMENTAL',
