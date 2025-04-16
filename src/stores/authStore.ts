@@ -119,12 +119,13 @@ export const useAuthStore = defineStore('auth', () => {
               return { exceeded: count >= limit, limit, quota: Math.round((100 * count) / limit) }
             } else {
               return {
-                exceeded: count >= TABS_LIMIT_NO_SUBSCRIPTION,
+                exceeded: count > TABS_LIMIT_NO_SUBSCRIPTION,
                 limit: TABS_LIMIT_NO_SUBSCRIPTION,
                 quota: Math.round((100 * count) / TABS_LIMIT_NO_SUBSCRIPTION),
               }
             }
           case 'TABSETS':
+            console.log('exceeded', count, TABSETS_LIMIT_NO_SUBSCRIPTION)
             if (hasRole('bibbly.team')) {
               const limit = 50
               return { exceeded: count >= 50, limit, quota: Math.round((100 * count) / limit) }
@@ -133,7 +134,7 @@ export const useAuthStore = defineStore('auth', () => {
               return { exceeded: count >= 10, limit, quota: Math.round((100 * count) / limit) }
             } else {
               return {
-                exceeded: count >= TABSETS_LIMIT_NO_SUBSCRIPTION,
+                exceeded: count > TABSETS_LIMIT_NO_SUBSCRIPTION,
                 limit: TABSETS_LIMIT_NO_SUBSCRIPTION,
                 quota: Math.round((100 * count) / TABSETS_LIMIT_NO_SUBSCRIPTION),
               }
@@ -147,7 +148,7 @@ export const useAuthStore = defineStore('auth', () => {
               return { exceeded: count >= 10, limit, quota: Math.round((100 * count) / limit) }
             } else {
               return {
-                exceeded: count >= SPACES_LIMIT_NO_SUBSCRIPTION,
+                exceeded: count > SPACES_LIMIT_NO_SUBSCRIPTION,
                 limit: SPACES_LIMIT_NO_SUBSCRIPTION,
                 quota: Math.round((100 * count) / SPACES_LIMIT_NO_SUBSCRIPTION),
               }
@@ -161,7 +162,7 @@ export const useAuthStore = defineStore('auth', () => {
               return { exceeded: count >= 10, limit, quota: Math.round((100 * count) / limit) }
             } else {
               return {
-                exceeded: count >= THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
+                exceeded: count > THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
                 limit: THUMBNAILS_LIMIT_NO_SUBSCRIPTION,
                 quota: Math.round((100 * count) / THUMBNAILS_LIMIT_NO_SUBSCRIPTION),
               }
