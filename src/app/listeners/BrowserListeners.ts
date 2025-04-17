@@ -9,6 +9,7 @@ import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { Tab } from 'src/tabsets/models/Tab'
 import { TabAndTabsetId } from 'src/tabsets/models/TabAndTabsetId'
+import { ChangeInfo } from 'src/tabsets/models/Tabset'
 import { useSelectedTabsetService } from 'src/tabsets/services/selectedTabsetService'
 import { useTabsetService } from 'src/tabsets/services/TabsetService2'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
@@ -32,7 +33,7 @@ async function stopTimer(url: string) {
     const ts = useTabsetsStore().getTabset(tabWithTsId.tabsetId)
     if (ts) {
       //console.log('saving', ts)
-      await useTabsetService().saveTabset(ts)
+      await useTabsetService().saveTabset(ts, new ChangeInfo('tab', 'edited', tabWithTsId.tab.id, tabWithTsId.tab.url!))
     }
   }
   if (tabsForUrl.length === 0) {
@@ -81,8 +82,6 @@ async function setCurrentTab() {
 function inIgnoredMessages(request: any) {
   // TODO name vs. msg!
   return (
-    request.name === 'progress-indicator' ||
-    request.name === 'current-tabset-id-change' ||
     request.name === 'tab-being-dragged' ||
     request.name === 'note-changed' ||
     request.name === 'tab-added' ||
@@ -104,6 +103,7 @@ function inIgnoredMessages(request: any) {
     request.name === 'entity-changed' ||
     request.name === 'reload-entities' ||
     request.name === 'api-changed' ||
+    request.name === 'refresh-store' ||
     request.name === 'tabsets.app.change.currentTabset' ||
     request.action === 'highlight-annotation'
   )
@@ -149,6 +149,8 @@ async function checkSwitchTabsetSuggestion(windowId: number) {
 }
 
 class BrowserListeners {
+  private injectList: number[] = []
+
   private onUpdatedListener = (number: number, info: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab) =>
     this.onUpdated(number, info, tab)
   private onMovedListener = (number: number, info: chrome.tabs.TabMoveInfo) => this.onMoved(number, info)
@@ -228,7 +230,25 @@ class BrowserListeners {
     if (this.ignoreUrl(chromeTab.url) || info.status !== 'complete') {
       return
     }
-    console.debug(`==> tabUpdate: ${chromeTab.url?.substring(0, 30)}`)
+    //console.debug(`tabUpdate: ${chromeTab.id} - ${chromeTab.url?.substring(0, 30)}`)
+
+    if (
+      chromeTab.id &&
+      useFeaturesStore().hasFeature(FeatureIdent.TOOLBAR_INTEGRATION) &&
+      chromeTab.url?.startsWith('https://')
+    ) {
+      //if (this.injectList.filter((n: number) => n === chromeTab.id).length === 0) {
+      this.injectList.push(chromeTab.id)
+      console.log(`injecting into ${chromeTab.id}`, this.injectList, info)
+      chrome.scripting
+        .executeScript({
+          target: { tabId: chromeTab.id, allFrames: false },
+          files: ['my-content-script.js'],
+          injectImmediately: true,
+        })
+        .catch((err) => console.log('executeScript error:', err))
+      //}
+    }
     useTabsetsUiStore().setMatchingTabsFor(chromeTab.url)
     useTabsetService().urlWasActivated(chromeTab.url)
     useTabsetsUiStore().updateExtensionIcon(chromeTab.id)
@@ -261,7 +281,7 @@ class BrowserListeners {
       // ignore single closing of tab if the whole window is about to be closed.
       return
     }
-    console.debug(`==> tabRemoved: window ${info.windowId}`)
+    //console.debug(`==> tabRemoved: window ${info.windowId}`)
     // await checkSwitchTabsetSuggestion(info.windowId)
   }
 
@@ -272,7 +292,7 @@ class BrowserListeners {
 
   // #region snippet2
   async onActivated(info: chrome.tabs.TabActiveInfo) {
-    console.debug(`==> tabActivated: ${JSON.stringify(info)}`)
+    //console.debug(`tabActivated: ${JSON.stringify(info)}`)
     await setCurrentTab()
     useTabsetsUiStore().updateExtensionIcon(info.tabId)
     chrome.tabs.get(info.tabId, (tab) => {
@@ -308,7 +328,7 @@ class BrowserListeners {
     if (inIgnoredMessages(request)) {
       return true
     }
-    console.debug(` <<< got message '${request.msg}'`, request)
+    console.debug(` <<< message '${request.msg}'`, request)
     if (request.msg === 'addTabToTabset') {
       this.handleAddTabToTabset(request, sender, sendResponse)
     } else if (request.msg === 'captureClipping') {

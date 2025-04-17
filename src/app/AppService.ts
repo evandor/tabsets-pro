@@ -1,11 +1,11 @@
-import { EXTENSION_NAME } from 'boot/constants'
 import { User } from 'firebase/auth/web-extension'
 import _ from 'lodash'
 import { QVueGlobals } from 'quasar'
 import ChromeApi from 'src/app/BrowserApi'
-import ChromeListeners from 'src/app/listeners/BrowserListeners'
+import BrowserListeners from 'src/app/listeners/BrowserListeners'
 import BookmarksService from 'src/bookmarks/services/BookmarksService'
 import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
+import { EXTENSION_NAME } from 'src/boot/constants'
 import IndexedDbContentPersistence from 'src/content/persistence/IndexedDbContentPersistence'
 import { useContentService } from 'src/content/services/ContentService'
 import { SpaceInfo } from 'src/core/models/SpaceInfo'
@@ -65,7 +65,7 @@ class AppService {
 
     useAppStore().init()
 
-    await ChromeListeners.initListeners()
+    await BrowserListeners.initListeners()
 
     // Bookmarks
     ChromeBookmarkListeners.initListeners()
@@ -90,8 +90,6 @@ class AppService {
 
     // init services
     await useSuggestionsStore().init(useDB().suggestionsDb)
-
-    // tabsetService.setLocalStorage(localStorage)
 
     await this.initCoreSerivces(quasar, this.router)
   }

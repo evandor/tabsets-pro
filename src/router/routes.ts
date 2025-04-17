@@ -37,7 +37,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/sidepanel/welcome',
     component: () => import('layouts/SidePanelNoFooterLayout.vue'),
-    children: [{ path: '', component: () => import('pages/sidepanel/WelcomePage.vue') }],
+    children: [{ path: '', component: () => import('pages/sidepanel/WelcomeProPage.vue') }],
   },
   // {
   //   path: '/sidepanel/tabsets/:tabsetId',
@@ -274,6 +274,21 @@ const routes: RouteRecordRaw[] = [
     path: '/mainpanel/readingmode/:tabId',
     component: () => import('layouts/PlainLayout.vue'),
     children: [{ path: '', component: () => import('src/pages/mainpanel/MainPanelReadingModePage.vue') }],
+  },
+  {
+    path: '/mainpanel/navigation',
+    component: () => import('layouts/MainNavigationLayout.vue'),
+    children: [{ path: '', component: () => import('src/pages/mainpanel/NavigationPage.vue') }],
+  },
+  {
+    path: '/overlay/note',
+    component: () => import('layouts/MainNavigationLayout.vue'),
+    children: [{ path: '', component: () => import('src/pages/mainpanel/NoteOverlayPage.vue') }],
+  },
+  {
+    path: '/overlay/snapshots',
+    component: () => import('layouts/MainNavigationLayout.vue'),
+    children: [{ path: '', component: () => import('src/pages/mainpanel/SnapshotOverlayPage.vue') }],
   },
   {
     path: '/settings',

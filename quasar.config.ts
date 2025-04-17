@@ -18,7 +18,7 @@ export default defineConfig((ctx) => {
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: ['i18n', 'axios', 'errorhandling', 'constants'],
 
-    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.scss'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -73,6 +73,10 @@ export default defineConfig((ctx) => {
         LOCALE: process.env.LOCALE,
         SENTRY_DSN: process.env.SENTRY_DSN,
         STRIPE_CUSTOMER_PORTAL: process.env.STRIPE_CUSTOMER_PORTAL,
+        GRAFANA_LOKI_USER: process.env.GRAFANA_LOKI_USER,
+        GRAFANA_LOKI_TOKEN: process.env.GRAFANA_LOKI_TOKEN,
+        GRAFANA_METRICS_USER: process.env.GRAFANA_METRICS_USER,
+        GRAFANA_METRICS_KEY: process.env.GRAFANA_METRICS_KEY,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -132,13 +136,13 @@ export default defineConfig((ctx) => {
       ],
     },
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
+    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#devserver
     devServer: {
       // https: true,
       open: true, // opens browser window automatically
     },
 
-    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
     framework: {
       config: {},
 
@@ -160,7 +164,7 @@ export default defineConfig((ctx) => {
     // https://v2.quasar.dev/options/animations
     animations: 'all',
 
-    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
+    // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#sourcefiles
     // sourceFiles: {
     //   rootComponent: 'src/App.vue',
     //   router: 'src/router/index',

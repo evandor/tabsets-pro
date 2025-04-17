@@ -137,6 +137,16 @@
 
               <q-separator />
 
+              <template v-if="syncingActive()">
+                <ContextMenuItem
+                  v-close-popup
+                  @was-clicked="syncNow()"
+                  icon="o_sync"
+                  :label="'Sync (' + lastSyncTime() + ')'" />
+
+                <q-separator />
+              </template>
+
               <ContextMenuItem
                 v-close-popup
                 @was-clicked="openURL('https://docs.tabsets.net')"
@@ -243,14 +253,15 @@
 <script setup lang="ts">
 import { captureFeedback } from '@sentry/vue'
 import _ from 'lodash'
-import { openURL, uid, useQuasar } from 'quasar'
+import { date, LocalStorage, openURL, uid, useQuasar } from 'quasar'
 import BrowserApi from 'src/app/BrowserApi'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import { SidePanelViews } from 'src/app/models/SidePanelViews'
-import SidePanelFooterLeftButtons from 'src/components/helper/SidePanelFooterLeftButtons.vue'
-import SidePanelStatsMarkupTable from 'src/components/helper/SidePanelStatsMarkupTable.vue'
+import { GITHUB_AUTO_SYNC, GITHUB_AUTO_SYNC_LASTUPDATE } from 'src/boot/constants'
 import { useContentStore } from 'src/content/stores/contentStore'
 import ContextMenuItem from 'src/core/components/helper/ContextMenuItem.vue'
+import SidePanelFooterLeftButtons from 'src/core/components/helper/SidePanelFooterLeftButtons.vue'
+import SidePanelStatsMarkupTable from 'src/core/components/helper/SidePanelStatsMarkupTable.vue'
 import { ToastType } from 'src/core/models/Toast'
 import { useCommandExecutor } from 'src/core/services/CommandExecutor'
 import { useUtils } from 'src/core/services/Utils'
@@ -262,6 +273,7 @@ import SuggestionDialog from 'src/suggestions/dialogues/SuggestionDialog.vue'
 import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import { AddTabToTabsetCommand } from 'src/tabsets/commands/AddTabToTabsetCommand'
+import { GithubReadEventsCommand } from 'src/tabsets/commands/github/GithubReadEventsCommand'
 import SidePanelMessagesMarkup from 'src/tabsets/components/helper/SidePanelMessagesMarkup.vue'
 import SidePanelTabsetListMarkup from 'src/tabsets/components/helper/SidePanelTabsetListMarkup.vue'
 import SidePanelTabsetReferencesMarkup from 'src/tabsets/components/helper/SidePanelTabsetReferencesMarkup.vue'
@@ -326,14 +338,12 @@ watchEffect(() => {
   animateSettingsButton.value = useUiStore().animateSettingsButton
 })
 
-watchEffect(async () => {
-  const suggestions = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED', 'NOTIFICATION'])
-  if (!chrome || !chrome.windows) {
-    return
-  }
+const calcShowSuggestionButton = async (suggestions: Suggestion[]) => {
   const currentWindow = await chrome.windows.getCurrent()
-  //console.log("watcheffect for", suggestions)
-  showSuggestionButton.value =
+  if (!chrome || !chrome.windows) {
+    return false
+  }
+  return (
     doShowSuggestionButton.value ||
     (useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
       _.findIndex(suggestions, (s: Suggestion) => {
@@ -343,14 +353,33 @@ watchEffect(async () => {
           (s.state === 'NOTIFICATION' && !useFeaturesStore().hasFeature(FeatureIdent.NOTIFICATIONS))
         )
       }) >= 0)
+  )
+}
 
-  showSuggestionIcon.value =
+const calcShowSuggestionIcon = (suggestions: Suggestion[]) => {
+  return (
     !doShowSuggestionButton.value &&
     useUiStore().sidePanelActiveViewIs(SidePanelViews.MAIN) &&
     _.findIndex(suggestions, (s: Suggestion) => {
       return s.state === 'DECISION_DELAYED'
     }) >= 0
+  )
+}
+
+watchEffect(async () => {
+  const suggestions: Suggestion[] = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED', 'NOTIFICATION'])
+  showSuggestionButton.value = await calcShowSuggestionButton(suggestions)
+  showSuggestionIcon.value = calcShowSuggestionIcon(suggestions)
 })
+
+watch(
+  () => doShowSuggestionButton.value,
+  async () => {
+    const suggestions: Suggestion[] = useSuggestionsStore().getSuggestions(['NEW', 'DECISION_DELAYED', 'NOTIFICATION'])
+    showSuggestionButton.value = await calcShowSuggestionButton(suggestions)
+    showSuggestionIcon.value = calcShowSuggestionIcon(suggestions)
+  },
+)
 
 watchEffect(() => {
   if (currentChromeTabs.value[0]?.url) {
@@ -557,6 +586,22 @@ const warningOrErrorColor = () => {
     return 'warning'
   }
   return 'primary'
+}
+
+const syncingActive = () => LocalStorage.getItem(GITHUB_AUTO_SYNC)
+
+const syncNow = () => {
+  const lastUpdate: number = (LocalStorage.getItem(GITHUB_AUTO_SYNC_LASTUPDATE) as number) || 0
+  useCommandExecutor().executeFromUi(new GithubReadEventsCommand(lastUpdate))
+  router.push('/sidepanel/collections')
+}
+
+const lastSyncTime = () => {
+  const lastUpdate: number = (LocalStorage.getItem(GITHUB_AUTO_SYNC_LASTUPDATE) as number) || 0
+  if (lastUpdate == 0) {
+    return 'never'
+  }
+  return date.formatDate(lastUpdate, 'DD.MM.YY HH:mm')
 }
 </script>
 

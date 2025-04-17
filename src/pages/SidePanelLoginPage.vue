@@ -6,9 +6,7 @@
       {{ pageTitle }}
     </div>
 
-    <div
-      class="q-ma-sm q-pa-sm"
-      style="border: 1px solid #bfbfbf; max-width: 500px; margin: 0 10px 0 10px; border-radius: 10px">
+    <div class="q-ma-sm q-pa-sm box">
       <q-tabs v-model="tab" dense>
         <q-tab name="login" label="Login" />
         <q-tab name="register" label="Create Account" />
@@ -153,7 +151,14 @@
       </q-tab-panels>
     </div>
     <div class="row q-mr-md" style="max-width: 500px; margin: 10px auto">
-      <div class="col-12 text-right">
+      <div class="col-12 text-center">
+        <span
+          class="text-grey q-mx-none cursor-pointer"
+          style="font-size: smaller"
+          @click.stop="router.push('/sidepanel/welcome')"
+          >About</span
+        >
+        <span class="q-ma-none q-pa-none q-mx-xs text-grey-5">|</span>
         <span
           class="text-grey q-mx-none cursor-pointer"
           style="font-size: smaller"
@@ -314,3 +319,12 @@ const promptReset = () => {
 
 const clicked = (url: string) => openURL(url)
 </script>
+
+<style lang="scss">
+.box {
+  border: 3px solid $accent;
+  border-radius: 10px;
+  min-height: 400px;
+  max-width: 500px;
+}
+</style>

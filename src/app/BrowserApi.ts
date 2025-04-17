@@ -6,7 +6,7 @@ import {
   CLEANUP_PERIOD_IN_MINUTES,
   EXTENSION_NAME,
   GITHUB_AUTO_BACKUP,
-  MONITORING_PERIOD_IN_MINUTES
+  MONITORING_PERIOD_IN_MINUTES,
 } from 'src/boot/constants'
 import { ContentItem } from 'src/content/models/ContentItem'
 import { useContentService } from 'src/content/services/ContentService'
@@ -94,7 +94,7 @@ class BrowserApi {
   }
 
   startWebRequestListener() {
-    console.log(' ...adding WebRequestListener')
+    //console.log(' ...adding WebRequestListener')
     chrome.webRequest?.onHeadersReceived.addListener(
       this.onHeadersReceivedListener,
       { urls: ['*://*/*'], types: ['main_frame'] },

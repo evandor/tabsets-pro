@@ -382,6 +382,16 @@ export class AppFeatures {
     ),
 
     new Feature(
+      FeatureIdent.TOOLBAR_INTEGRATION,
+      'EXPERIMENTAL',
+      'Toolbar Integration',
+      'Adds a Bar to all open tabs to quickly access Tabsets features',
+      'sym_o_toolbar',
+      '',
+      ['all'],
+    ),
+
+    new Feature(
       FeatureIdent.TABSETS_SHARING,
       'OPTIONAL',
       'Sharing Tabsets',

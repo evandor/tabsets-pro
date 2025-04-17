@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts">
-import { CURRENT_USER_ID, EXTENSION_NAME } from 'boot/constants'
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth/web-extension'
-import { setCssVar, useQuasar } from 'quasar'
+import { LocalStorage, setCssVar, useQuasar } from 'quasar'
 import AppService from 'src/app/AppService'
+import { CURRENT_USER_ID, EXTENSION_NAME, NEW_TAB_EXTENSION_ID } from 'src/boot/constants'
 import BexFunctions from 'src/core/communication/BexFunctions'
 import { useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useUtils } from 'src/core/services/Utils'
@@ -63,7 +63,12 @@ onAuthStateChanged(auth, async (user) => {
     console.log('%conAuthStateChanged: logged out', 'border:1px solid green')
     if (inBexMode()) {
       if (!(route.fullPath.startsWith('/pwa/imp/') || route.fullPath.startsWith('/mainpanel/login'))) {
-        await router.push('/sidepanel/login')
+        const welcomePageHasBeenShown = LocalStorage.getItem('ui.welcome.shown') as boolean
+        if (welcomePageHasBeenShown) {
+          await router.push('/sidepanel/login')
+        } else {
+          await router.push('/sidepanel/welcome')
+        }
       }
     } else {
       const auth = getAuth()
@@ -120,12 +125,45 @@ if (currentUser) {
   }, 2000)
 }
 
-info(`${EXTENSION_NAME} started: mode=${process.env.MODE}, version=${import.meta.env.PACKAGE_VERSION}`)
+info(`${EXTENSION_NAME} started`)
 
 if (inBexMode()) {
   $q.bex.on('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
   onBeforeUnmount(() => {
     $q.bex.off('tabsets.bex.tab.excerpt', BexFunctions.handleBexTabExcerpt)
   })
+  $q.bex.on('reload-current-tabset', BexFunctions.handleReload)
+  onBeforeUnmount(() => {
+    $q.bex.off('reload-current-tabset', BexFunctions.handleReload)
+  })
 }
+
+// newtab extension installed?
+//console.log('checkin', NEW_TAB_EXTENSION_ID)
+chrome.runtime.sendMessage(NEW_TAB_EXTENSION_ID, { message: 'getVersion' }, function (response) {
+  //console.log('testing for newtab extension', response)
+  if (response) {
+    console.log('newtab is installed')
+    LocalStorage.setItem('ui.newtab.installed', true)
+  } else if (chrome.runtime.lastError) {
+    LocalStorage.setItem('ui.newtab.installed', false)
+    /* ignore */
+  }
+  // if (targetInRange(response.targetData))
+  //chrome.runtime.sendMessage('bafapaeaebbfoobjakidbomlnpfcfakn', { activateLasers: true })
+})
+
+chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResponse) {
+  // if (sender.id === "oeocceffjkjgiljgelllkaddapnaafgn") { // tabsets.net
+  //   if (request.message === "getVersion") {
+  //     sendResponse({version: "0.0.1"});
+  //   } else if (request.message === "setTabset") {
+  //     useTabsetsStore().setTabset( request.tabset)
+  //     sendResponse({message: "done"});
+  //   }
+  //   // sendResponse({version: import.meta.env.PACKAGE_VERSION});
+  // }
+  console.log('request:', request)
+  console.log('sender:', sender)
+})
 </script>
