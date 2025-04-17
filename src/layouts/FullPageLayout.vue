@@ -184,12 +184,12 @@
 </template>
 
 <script setup lang="ts">
-import { EXTENSION_NAME } from 'boot/constants'
-import Navigation2 from 'components/Navigation2.vue'
 import ToolbarButton from 'components/widgets/ToolbarButton.vue'
 import _ from 'lodash'
 import { useMeta, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import { EXTENSION_NAME } from 'src/boot/constants'
+import Navigation2 from 'src/core/components/Navigation2.vue'
 import { useUtils } from 'src/core/services/Utils'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import OpenTabsThresholdWidget from 'src/opentabs/widgets/OpenTabsThresholdWidget.vue'
