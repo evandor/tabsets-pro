@@ -78,7 +78,7 @@ const handleDragAndDrop = async (event: any, column: TabsetColumn) => {
     const movedElement: Tab = tabsInColumn[moved.oldIndex]!.tab
     const realNewIndex = tabsInColumn[moved.newIndex]!.index
     console.log(`             '${movedElement.id}' ${moved.oldIndex} -> ${realNewIndex}`)
-    await TabsetService.moveTo(movedElement.id, realNewIndex, column)
+    await TabsetService.moveTo(movedElement.id, realNewIndex, column.id)
     console.log('hier: ', props.tabset)
     if (props.tabset) {
       tabs.value = props.tabset.tabs //useTabsetService().tabsToShow(props.tabset)

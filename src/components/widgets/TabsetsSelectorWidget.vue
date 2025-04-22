@@ -67,6 +67,7 @@ const props = defineProps({
   fromPanel: { type: Boolean, default: false },
 })
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 watchEffect(async () => {
   currentTabsetId.value = await useTabsetsStore().getCurrentTabsetId()
 })

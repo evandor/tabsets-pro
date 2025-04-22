@@ -27,6 +27,7 @@ const spaces = ref<object>(null as unknown as object)
 const spacesOptions = ref<object[]>([])
 const currentTabsetId = ref<string | undefined>(undefined)
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 watchEffect(async () => {
   currentTabsetId.value = await useTabsetsStore().getCurrentTabsetId()
 })

@@ -25,6 +25,7 @@ $q.loading.show({
   message: 'Initializing tabsets...',
 })
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 watchEffect(async () => {
   const user = useAuthStore().user
   const tabsetsLoaded = useTabsetsStore().loaded
@@ -39,6 +40,8 @@ watchEffect(async () => {
     } else {
       router.push(`/tabsets/${currentTabsetId}`)
     }
+  } else {
+    router.push('/p/tabs/0')
   }
 })
 </script>

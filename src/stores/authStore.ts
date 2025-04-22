@@ -66,7 +66,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getUserData = computed(() => {
     return (): { thumbnails: number } => {
-      return { thumbnails: account.value?.userData ? account.value!.userData['thumbnails' as keyof object] || 0 : 0 }
+      return { thumbnails: account.value?.userData ? account.value.userData['thumbnails' as keyof object] || 0 : 0 }
     }
   })
 

@@ -9,6 +9,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "cp envs/env.dev ./.env && quasar dev -m bex -T chrome",
+    "dev pwa": "cp envs/env.dev ./.env && quasar dev -m pwa -T chrome",
     "dev emulator": "cp envs/env.emulator ./.env && quasar dev -m bex -T chrome",
     "dev pwa emulator": "cp envs/env.emulator ./.env && quasar dev -m pwa",
     "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{ts,js,cjs,mjs,vue}\"",
@@ -45,6 +46,8 @@
     "@editorjs/quote": "^2.7.2",
     "@editorjs/raw": "^2.5.0",
     "@editorjs/table": "^2.4.1",
+    "@grafana/faro-web-sdk": "^1.17.1",
+    "@grafana/faro-web-tracing": "^1.17.1",
     "@he-tree/vue": "^2.9.3",
     "@miketako3/cloki": "^0.1.16",
     "@mozilla/readability": "^0.5.0",

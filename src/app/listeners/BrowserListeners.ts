@@ -33,7 +33,7 @@ async function stopTimer(url: string) {
     const ts = useTabsetsStore().getTabset(tabWithTsId.tabsetId)
     if (ts) {
       //console.log('saving', ts)
-      await useTabsetService().saveTabset(ts, new ChangeInfo('tab', 'edited', tabWithTsId.tab.id, tabWithTsId.tab.url!))
+      await useTabsetService().saveTabset(ts, new ChangeInfo('tab', 'edited', tabWithTsId.tab.id, tabWithTsId.tab.url))
     }
   }
   if (tabsForUrl.length === 0) {
@@ -190,9 +190,12 @@ class BrowserListeners {
 
       // --- tab listeners ---
       //chrome.tabs.onCreated.addListener(this.onCreatedListener)
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       addListenerOnce(chrome.tabs.onUpdated, this.onUpdatedListener)
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       addListenerOnce(chrome.tabs.onActivated, this.onActivatedListener)
       addListenerOnce(chrome.tabs.onMoved, this.onMovedListener)
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       addListenerOnce(chrome.tabs.onRemoved, this.onRemovedListener)
       addListenerOnce(chrome.tabs.onReplaced, this.onReplacedListener)
 
@@ -354,6 +357,7 @@ class BrowserListeners {
   private capture(request: any) {
     return new Promise((resolve, reject) => {
       // @ts-expect-error TODO
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       chrome.tabs.captureVisibleTab(null, { format: 'png' }, (dataUrl) => {
         const lastError = chrome.runtime.lastError
         if (lastError) {
@@ -410,7 +414,7 @@ class BrowserListeners {
 
     if (sender.tab && currentTS) {
       //console.log('blob', blob)
-      const blobId = await useTabsetService().saveBlob(sender.tab, blob as unknown as Blob)
+      const blobId = await useTabsetService().saveBlob(sender.tab, blob as Blob)
 
       const newTab = new Tab(uid(), sender.tab)
       newTab.image = 'blob://' + blobId

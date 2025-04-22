@@ -122,6 +122,7 @@ const switchTabsetModel = ref(null)
 const switchTabsetOptions = ref<string[]>([])
 const currentTabsetId = ref<string | undefined>(undefined)
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 watchEffect(async () => {
   currentTabsetId.value = await useTabsetsStore().getCurrentTabsetId()
 })

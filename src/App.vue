@@ -3,6 +3,8 @@
 </template>
 
 <script setup lang="ts">
+import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk'
+import { TracingInstrumentation } from '@grafana/faro-web-tracing'
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth/web-extension'
 import { LocalStorage, setCssVar, useQuasar } from 'quasar'
 import AppService from 'src/app/AppService'
@@ -18,6 +20,23 @@ import FirebaseServices from 'src/services/firebase/FirebaseServices'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+initializeFaro({
+  url: 'https://faro-collector-prod-eu-west-2.grafana.net/collect/36f18ee1077d9db649df6b3f090217ae',
+  app: {
+    name: 'pwa.dev.tabsets.net',
+    version: '1.0.0',
+    environment: 'production',
+  },
+  trackGeolocation: false,
+  instrumentations: [
+    // Mandatory, omits default instrumentations otherwise.
+    ...getWebInstrumentations(),
+
+    // Tracing package to get end-to-end visibility for HTTP requests.
+    new TracingInstrumentation(),
+  ],
+})
 
 const $q = useQuasar()
 const router = useRouter()
@@ -44,6 +63,7 @@ FirebaseServices.init()
 
 const auth = FirebaseServices.getAuth()
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log('%conAuthStateChanged: about to log in', 'border:1px solid green', user?.email)
@@ -140,30 +160,18 @@ if (inBexMode()) {
 
 // newtab extension installed?
 //console.log('checkin', NEW_TAB_EXTENSION_ID)
-chrome.runtime.sendMessage(NEW_TAB_EXTENSION_ID, { message: 'getVersion' }, function (response) {
-  //console.log('testing for newtab extension', response)
-  if (response) {
-    console.log('newtab is installed')
-    LocalStorage.setItem('ui.newtab.installed', true)
-  } else if (chrome.runtime.lastError) {
-    LocalStorage.setItem('ui.newtab.installed', false)
-    /* ignore */
-  }
-  // if (targetInRange(response.targetData))
-  //chrome.runtime.sendMessage('bafapaeaebbfoobjakidbomlnpfcfakn', { activateLasers: true })
-})
-
-chrome.runtime.onMessageExternal.addListener(function (request, sender, sendResponse) {
-  // if (sender.id === "oeocceffjkjgiljgelllkaddapnaafgn") { // tabsets.net
-  //   if (request.message === "getVersion") {
-  //     sendResponse({version: "0.0.1"});
-  //   } else if (request.message === "setTabset") {
-  //     useTabsetsStore().setTabset( request.tabset)
-  //     sendResponse({message: "done"});
-  //   }
-  //   // sendResponse({version: import.meta.env.PACKAGE_VERSION});
-  // }
-  console.log('request:', request)
-  console.log('sender:', sender)
-})
+if (chrome && chrome.runtime) {
+  chrome.runtime.sendMessage(NEW_TAB_EXTENSION_ID, { message: 'getVersion' }, function (response) {
+    //console.log('testing for newtab extension', response)
+    if (response) {
+      console.log('newtab is installed')
+      LocalStorage.setItem('ui.newtab.installed', true)
+    } else if (chrome.runtime.lastError) {
+      LocalStorage.setItem('ui.newtab.installed', false)
+      /* ignore */
+    }
+    // if (targetInRange(response.targetData))
+    //chrome.runtime.sendMessage('bafapaeaebbfoobjakidbomlnpfcfakn', { activateLasers: true })
+  })
+}
 </script>

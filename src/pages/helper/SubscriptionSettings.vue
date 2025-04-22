@@ -125,6 +125,7 @@ onMounted(async () => {
   // await getSubscriptions()
 })
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 watchEffect(async () => {
   account.value = useAuthStore().getAccount()
   roles.value = useAuthStore().getRoles()
@@ -158,6 +159,7 @@ watchEffect(async () => {
   }
 })
 
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 watchEffect(async () => {
   activeSubscriptions.value = []
   const t = await getDocs(
