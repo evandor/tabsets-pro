@@ -31,66 +31,32 @@
 
       <q-separator inset v-if="useTabsetsStore().tabsets.size > 1" />
 
-      <ContextMenuItem
-        v-close-popup
-        v-if="showCreateNoteItem()"
-        @was-clicked="startTabsetNote(tabset)"
-        icon="o_description"
-        label="Create Note" />
+      <!--      <ContextMenuItem-->
+      <!--        v-close-popup-->
+      <!--        v-if="showCreateNoteItem()"-->
+      <!--        @was-clicked="startTabsetNote(tabset)"-->
+      <!--        icon="o_description"-->
+      <!--        label="Create Note" />-->
 
-      <template v-if="tabset.tabs.length > 0 && inBexMode() && (!tabset.window || tabset.window === 'current')">
-        <ContextMenuItem icon="open_in_new" label="Open all in...">
-          <q-item-section side>
-            <q-icon name="keyboard_arrow_right" />
-          </q-item-section>
-          <q-menu anchor="top end" self="top start">
-            <q-list>
-              <q-item
-                v-if="useFeaturesStore().hasFeature(FeatureIdent.AUTO_TAB_SWITCHER)"
-                dense
-                clickable
-                v-close-popup
-                @click="startAutoSwitchingTab(tabset.id)">
-                <q-item-section>switching tab</q-item-section>
-              </q-item>
-              <q-item dense clickable v-close-popup @click="restoreInNewWindow(tabset.id)">
-                <q-item-section>new window</q-item-section>
-              </q-item>
-              <q-item dense clickable v-close-popup @click="restoreInGroup(tabset.id)">
-                <q-item-section>this window</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </ContextMenuItem>
-      </template>
+      <!--      <template v-if="tabset.tabs.length > 0 && inBexMode() && useFeaturesStore().hasFeature(FeatureIdent.GALLERY)">-->
+      <!--        <ContextMenuItem-->
+      <!--          v-close-popup-->
+      <!--          @was-clicked="openOverviewPage(tabset.id)"-->
+      <!--          icon="calendar_view_month"-->
+      <!--          label="Show Gallery" />-->
+      <!--      </template>-->
 
-      <template v-if="tabset.tabs.length > 0 && inBexMode() && tabset.window && tabset.window !== 'current'">
-        <ContextMenuItem
-          v-close-popup
-          @was-clicked="restoreInGroup(tabset.id, tabset.window)"
-          icon="open_in_new"
-          label="Open in window..." />
-      </template>
+      <!--      <template-->
+      <!--        v-if="useFeaturesStore().hasFeature(FeatureIdent.ARCHIVE_TABSET) && tabset.status === TabsetStatus.DEFAULT">-->
+      <!--        <ContextMenuItem-->
+      <!--          v-close-popup-->
+      <!--          @was-clicked="archiveTabset(tabset)"-->
+      <!--          icon="o_inventory_2"-->
+      <!--          color="warning"-->
+      <!--          label="Archive" />-->
+      <!--      </template>-->
 
-      <template v-if="tabset.tabs.length > 0 && inBexMode() && useFeaturesStore().hasFeature(FeatureIdent.GALLERY)">
-        <ContextMenuItem
-          v-close-popup
-          @was-clicked="openOverviewPage(tabset.id)"
-          icon="calendar_view_month"
-          label="Show Gallery" />
-      </template>
-
-      <template
-        v-if="useFeaturesStore().hasFeature(FeatureIdent.ARCHIVE_TABSET) && tabset.status === TabsetStatus.DEFAULT">
-        <ContextMenuItem
-          v-close-popup
-          @was-clicked="archiveTabset(tabset)"
-          icon="o_inventory_2"
-          color="warning"
-          label="Archive" />
-      </template>
-
-      <q-separator inset />
+      <!--      <q-separator inset />-->
 
       <template v-if="useFeaturesStore().hasFeature(FeatureIdent.TABSETS_SHARING)">
         <ContextMenuItem label="Sharing..." icon="ios_share">
@@ -169,32 +135,23 @@
         <q-separator inset />
       </template>
 
-      <!--      <template v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">-->
-      <!--        <ContextMenuItem v-close-popup-->
-      <!--                         @was-clicked="useSearchStore().reindexTabset(tabset.id)"-->
-      <!--                         icon="o_note"-->
-      <!--                         label="Re-Index Search (dev)"/>-->
-
-      <!--        <q-separator inset/>-->
-      <!--      </template>-->
-
-      <ContextMenuItem
-        v-close-popup
-        @was-clicked="deleteTabsetDialog(tabset as Tabset)"
-        icon="o_delete"
-        color="negative"
-        :disable="tabset.sharing?.sharedId !== undefined"
-        :label="tabset.type === TabsetType.SESSION ? 'Delete Session' : 'Delete Tabset'">
-        <q-tooltip class="tooltip-small" v-if="tabset.sharing?.sharedId !== undefined">
-          Stop sharing first if you want to delete this tabset
-        </q-tooltip>
-      </ContextMenuItem>
+      <!--      <ContextMenuItem-->
+      <!--        v-close-popup-->
+      <!--        @was-clicked="deleteTabsetDialog(tabset as Tabset)"-->
+      <!--        icon="o_delete"-->
+      <!--        color="negative"-->
+      <!--        :disable="tabset.sharing?.sharedId !== undefined"-->
+      <!--        :label="tabset.type === TabsetType.SESSION ? 'Delete Session' : 'Delete Tabset'">-->
+      <!--        <q-tooltip class="tooltip-small" v-if="tabset.sharing?.sharedId !== undefined">-->
+      <!--          Stop sharing first if you want to delete this tabset-->
+      <!--        </q-tooltip>-->
+      <!--      </ContextMenuItem>-->
     </q-list>
   </q-menu>
 </template>
 
 <script lang="ts" setup>
-import { LocalStorage, openURL, useQuasar } from 'quasar'
+import { openURL, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import ContextMenuItem from 'src/core/components/helper/ContextMenuItem.vue'
 import { CopyToClipboardCommand } from 'src/core/domain/commands/CopyToClipboard'
@@ -205,14 +162,13 @@ import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import NavigationService from 'src/services/NavigationService'
 import { DeleteTabsetCommand } from 'src/tabsets/commands/DeleteTabsetCommand'
 import { MarkTabsetAsArchivedCommand } from 'src/tabsets/commands/MarkTabsetAsArchived'
-import { RestoreTabsetCommand } from 'src/tabsets/commands/RestoreTabset'
 import { UnShareTabsetCommand } from 'src/tabsets/commands/UnShareTabsetCommand'
 import DeleteTabsetDialog from 'src/tabsets/dialogues/DeleteTabsetDialog.vue'
 import EditTabsetDialog from 'src/tabsets/dialogues/EditTabsetDialog.vue'
 import NewSubfolderDialog from 'src/tabsets/dialogues/NewSubfolderDialog.vue'
 import ShareTabsetDialog from 'src/tabsets/dialogues/ShareTabsetDialog.vue'
 import ShareTabsetPubliclyDialog from 'src/tabsets/dialogues/ShareTabsetPubliclyDialog.vue'
-import { Tabset, TabsetSharing, TabsetStatus, TabsetType } from 'src/tabsets/models/Tabset'
+import { Tabset, TabsetSharing, TabsetType } from 'src/tabsets/models/Tabset'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useUiStore } from 'src/ui/stores/uiStore'
 import { PropType } from 'vue'
@@ -262,45 +218,8 @@ const openEditTabsetDialog = (tabset: Tabset) => {
   })
 }
 
-const restoreInNewWindow = (tabsetId: string, windowName: string | undefined = undefined) =>
-  useCommandExecutor().execute(new RestoreTabsetCommand(tabsetId, windowName))
-
-const startAutoSwitchingTab = (tabsetId: string) => {
-  const tabset = useTabsetsStore().getTabset(tabsetId)
-  if (tabset && tabset.tabs?.length > 1 && tabset.tabs[0]!.url) {
-    const tabs = tabset.tabs
-    let tabIndex = 0
-    NavigationService.openSingleTab(tabset.tabs[tabIndex]!.url || '').then((tab) => {
-      console.log('tabId', tab)
-      let interval = setInterval(
-        () => {
-          try {
-            const nextTab = tabs[++tabIndex % tabs.length]
-            console.log('updating ', nextTab!.url)
-            chrome.tabs.update(tab.id || 0, { url: nextTab!.url }, (cb) => {
-              if (chrome.runtime.lastError) {
-                console.warn('got runtime error', chrome.runtime.lastError)
-                clearInterval(interval)
-              }
-            })
-          } catch (err) {
-            console.log('got error', err, interval)
-            clearInterval(interval)
-          }
-        },
-        (LocalStorage.getItem('ui.tabSwitcher') as number) || 5000,
-      )
-    })
-  }
-}
-
-const restoreInGroup = (tabsetId: string, windowName: string | undefined = undefined) =>
-  useCommandExecutor().execute(new RestoreTabsetCommand(tabsetId, windowName, false))
-
 const openOverviewPage = (tabsetId: string) =>
   NavigationService.openOrCreateTab([chrome.runtime.getURL(`www/index.html#/mainpanel/tabsets/overview/${tabsetId}`)])
-
-const focus = (tabset: Tabset) => router.push('/sidepanel/tabsets/' + tabset.id)
 
 const showCreateNoteItem = () => useFeaturesStore().hasFeature(FeatureIdent.NOTES)
 
@@ -365,19 +284,19 @@ const getPublicTabsetLink = (ts: Tabset) => {
   // https://shared.tabsets.net/#/pwa/imp/2f0f2171-27a6-4d03-a2dd-157ab6ef42ae?n=TXVzaWM=&a=Q2Fyc3Rlbg==
   // http://localhost:9200/#/pwa/imp/2f0f2171-27a6-4d03-a2dd-157ab6ef42ae?n=TXVzaWM=&a=Q2Fyc3Rlbg==
   let image = 'https://tabsets.web.app/favicon.ico'
-  if (ts && ts.sharing?.sharedId) {
-    //return PUBLIC_SHARE_URL + "#/pwa/imp/" + ts.sharing?.sharedId + "?n=" + btoa(ts.name) + "&a=" + btoa(ts.sharing?.sharedBy || 'n/a') + "&d=" + ts.sharedAt
-    return (
-      // 'https://us-central1-tabsets-backend-prd.cloudfunctions.net/app/share/preview/' +
-      process.env.PWA_BACKEND_URL +
-      '/#/pwa/imp/' +
-      ts.sharing?.sharedId +
-      '?n=' +
-      btoa(ts.name) +
-      '&a=' +
-      btoa(ts.sharing?.sharedBy || 'n/a')
-    )
-  }
+  // if (ts && ts.sharing?.sharedId) {
+  //   //return PUBLIC_SHARE_URL + "#/pwa/imp/" + ts.sharing?.sharedId + "?n=" + btoa(ts.name) + "&a=" + btoa(ts.sharing?.sharedBy || 'n/a') + "&d=" + ts.sharedAt
+  //   return (
+  //     // 'https://us-central1-tabsets-backend-prd.cloudfunctions.net/app/share/preview/' +
+  //     process.env.PWA_BACKEND_URL +
+  //     '/#/pwa/imp/' +
+  //     ts.sharing?.sharedId +
+  //     '?n=' +
+  //     btoa(ts.name) +
+  //     '&a=' +
+  //     btoa(ts.sharing?.sharedBy || 'n/a')
+  //   )
+  // }
   return image
 }
 

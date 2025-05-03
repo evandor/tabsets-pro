@@ -271,3 +271,19 @@
   border: 2px solid $accent;
   border-radius: 10px;
 }
+
+.documentation {
+  border: 2px solid $accent;
+  border-radius: 10px;
+  //background: linear-gradient(to bottom, white, #efefef);
+}
+
+.box {
+  border: 2px solid $accent;
+  border-radius: 10px;
+}
+
+.hint {
+  border: 2px solid $warning;
+  border-radius: 10px;
+}

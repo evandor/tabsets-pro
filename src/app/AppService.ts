@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth/web-extension'
 import _ from 'lodash'
-import { QVueGlobals } from 'quasar'
+import { LocalStorage, QVueGlobals } from 'quasar'
 import ChromeApi from 'src/app/BrowserApi'
 import BrowserListeners from 'src/app/listeners/BrowserListeners'
 import BookmarksService from 'src/bookmarks/services/BookmarksService'
@@ -163,13 +163,19 @@ class AppService {
     if (
       useTabsetsStore().tabsets.size === 0 &&
       quasar.platform.is.bex &&
-      useAuthStore().user !== null &&
-      useAuthStore().isAuthenticated() &&
+      //useAuthStore().isAuthenticated() &&
       !router.currentRoute.value.path.startsWith('/fullpage') &&
-      !router.currentRoute.value.path.startsWith('/mainpanel')
+      !router.currentRoute.value.path.startsWith('/mainpanel') &&
+      router.currentRoute.value.path !== '/'
     ) {
-      console.log('redirecting to welcome page...')
-      await router.push('/sidepanel/welcome')
+      console.log('pushing to welcome (pro) page', router.currentRoute.value.path)
+      const welcomePageHasBeenShown = LocalStorage.getItem('ui.welcomepro.shown') as boolean
+      if (welcomePageHasBeenShown) {
+        await router.push('/sidepanel/welcome')
+        return
+      }
+      await router.push('/sidepanel/welcomepro')
+      return
     }
 
     // set badge, text and color

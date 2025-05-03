@@ -2,7 +2,7 @@ import { boot } from 'quasar/wrappers'
 
 const EXTENSION_NAME = 'tabsets-pro'
 
-const INDEX_DB_VERSION = 22
+const INDEX_DB_VERSION = 23
 
 const CLEANUP_PERIOD_IN_MINUTES = 10 // in prod: 10
 const MONITORING_PERIOD_IN_MINUTES = 60 // in prod: 60

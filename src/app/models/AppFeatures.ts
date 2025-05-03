@@ -72,16 +72,16 @@ export class AppFeatures {
       ['all'],
     ),
 
-    // new Feature(
-    //   FeatureIdent.OPEN_TABS,
-    //   'RECOMMENDED',
-    //   'Open Tabs',
-    //   'Quick access to all your open tabs of the current browsers window<br><br>' +
-    //     'Adds quick navigation to jump back and forth to recently opened tabs.',
-    //   'o_playlist_add',
-    //   '/opentabs.png',
-    //   ['bex'],
-    // ),
+    new Feature(
+      FeatureIdent.OPEN_TABS,
+      'RECOMMENDED',
+      'Open Tabs',
+      'Quick access to all your open tabs of the current browsers window<br><br>' +
+        'Adds quick navigation to jump back and forth to recently opened tabs.',
+      'sym_o_tabs',
+      '/opentabs.png',
+      ['bex'],
+    ),
 
     new Feature(
       FeatureIdent.GROUP_BY_DOMAIN,
@@ -339,7 +339,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.READING_MODE,
-      'DISABLED',
+      'EXPERIMENTAL',
       'Reading Mode',
       'Analyse tab contents and use the distraction-free Reading Mode if applicable',
       'library_books',
@@ -377,16 +377,6 @@ export class AppFeatures {
       'Tab Monitor',
       'Periodically check for changes',
       'notifications',
-      '',
-      ['all'],
-    ),
-
-    new Feature(
-      FeatureIdent.TOOLBAR_INTEGRATION,
-      'EXPERIMENTAL',
-      'Toolbar Integration',
-      'Adds a Bar to all open tabs to quickly access Tabsets features',
-      'sym_o_toolbar',
       '',
       ['all'],
     ),

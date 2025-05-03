@@ -21,12 +21,16 @@ import { useUiStore } from 'src/ui/stores/uiStore'
 import { onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+const version = import.meta.env.PACKAGE_VERSION
+
 initializeFaro({
-  url: 'https://faro-collector-prod-eu-west-2.grafana.net/collect/36f18ee1077d9db649df6b3f090217ae',
+  url: process.env.GRAFANA_FARO_COLLECTOR_URL as string,
   app: {
-    name: 'pwa.dev.tabsets.net',
-    version: '1.0.0',
-    environment: 'production',
+    name: EXTENSION_NAME + '.extension',
+    version: version,
+    environment: 'test',
+    namespace: process.env.MODE || 'unknown',
+    // _mode: process.env.MODE || 'unknown', _version: version, service_name: EXTENSION_NAME
   },
   trackGeolocation: false,
   instrumentations: [
@@ -42,6 +46,8 @@ const $q = useQuasar()
 const router = useRouter()
 const route = useRoute()
 const { inBexMode, setupConsoleInterceptor } = useUtils()
+const platform = $q.platform
+LocalStorage.set('platform', platform)
 
 const { handleError } = useNotificationHandler()
 
@@ -83,11 +89,12 @@ onAuthStateChanged(auth, async (user) => {
     console.log('%conAuthStateChanged: logged out', 'border:1px solid green')
     if (inBexMode()) {
       if (!(route.fullPath.startsWith('/pwa/imp/') || route.fullPath.startsWith('/mainpanel/login'))) {
-        const welcomePageHasBeenShown = LocalStorage.getItem('ui.welcome.shown') as boolean
+        const welcomePageHasBeenShown = LocalStorage.getItem('ui.welcomepro.shown') as boolean
         if (welcomePageHasBeenShown) {
           await router.push('/sidepanel/login')
         } else {
-          await router.push('/sidepanel/welcome')
+          console.log('redirecting to /sidepanel/welcomepro')
+          await router.push('/sidepanel/welcomepro')
         }
       }
     } else {

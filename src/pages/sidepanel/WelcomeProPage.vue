@@ -134,6 +134,7 @@ import { CreateTabsetCommand } from 'src/tabsets/commands/CreateTabsetCommand'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useTabsStore2 } from 'src/tabsets/stores/tabsStore2'
 import { useUiStore } from 'src/ui/stores/uiStore'
+import { useAuthStore } from 'stores/authStore'
 import { onMounted, ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -155,8 +156,12 @@ onMounted(() => {
 })
 
 const gotoLoginPage = () => {
-  LocalStorage.setItem('ui.welcome.shown', true)
-  router.push('/sidepanel/login')
+  LocalStorage.setItem('ui.welcomepro.shown', true)
+  if (useAuthStore().isAuthenticated()) {
+    router.push('/sidepanel')
+    return
+  }
+  router.push('/sidepanel/login?mode=signup')
 }
 
 watchEffect(() => {
@@ -204,17 +209,3 @@ const importFromBackup = () => {
   useNavigationService().browserTabFor(url)
 }
 </script>
-
-<style lang="scss">
-.documentation {
-  border: 3px solid $accent;
-  border-radius: 10px;
-  min-height: 400px;
-}
-
-.box {
-  border: 2px solid $accent;
-  border-radius: 10px;
-  min-height: 400px;
-}
-</style>

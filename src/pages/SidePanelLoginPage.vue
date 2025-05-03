@@ -227,6 +227,9 @@ console.log('route', route.query)
 if (route.query['invited']) {
   pageTitle.value = 'Tabsets Pro Invitation'
 }
+if (route.query['mode'] === 'signup') {
+  tab.value = 'register'
+}
 
 watchEffect(() => {
   if (email.value && email.value.length === 0) {
@@ -319,12 +322,3 @@ const promptReset = () => {
 
 const clicked = (url: string) => openURL(url)
 </script>
-
-<style lang="scss">
-.box {
-  border: 3px solid $accent;
-  border-radius: 10px;
-  min-height: 400px;
-  max-width: 500px;
-}
-</style>

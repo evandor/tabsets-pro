@@ -11,7 +11,7 @@ export enum FeatureIdent {
   SPACES = 'SPACES',
   HELP = 'HELP',
   TOP10 = 'TOP10',
-  // OPEN_TABS = 'OPEN_TABS', -- always active default
+  OPEN_TABS = 'OPEN_TABS',
   WINDOWS = 'WINDOWS',
   SCHEDULED = 'SCHEDULED',
   BACKUP = 'BACKUP',
@@ -41,7 +41,6 @@ export enum FeatureIdent {
   TABSET_LIST = 'TABSET_LIST',
   REMINDER = 'REMINDER',
   MONITOR = 'MONITOR',
-  TOOLBAR_INTEGRATION = 'TOOLBAR_INTEGRATION',
 }
 
 export type FeatureType = 'RECOMMENDED' | 'OPTIONAL' | 'EXPERIMENTAL' | 'PLANNED' | 'DISABLED' | 'INTERNAL'
