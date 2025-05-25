@@ -22,6 +22,45 @@ if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
   chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch((error: any) => console.error(error))
 }
 
+// if (useQuasar().platform.is.firefox) {
+chrome.action.onClicked.addListener((t: chrome.tabs.Tab) => {
+  try {
+    // @ts-expect-error unknown
+    if (browser && browser.sidebarAction) {
+      // @ts-expect-error unknown
+      browser.sidebarAction.toggle()
+    }
+  } catch (e: any) {
+    console.log('e', e)
+    // opera maybe?
+    // @ts-expect-error unknown
+    if (opr && opr.sidebarAction) {
+      // @ts-expect-error unknown
+      opr.sidebarAction.setPanel({ panel: 'www/index.html' })
+    }
+  }
+})
+// }
+
+chrome.runtime.onInstalled.addListener((details) => {
+  console.debug('adding onInstalled listener in background.ts', details)
+  if (chrome.runtime.lastError) {
+    console.warn('got runtime error', chrome.runtime.lastError)
+  }
+})
+
+// chrome.runtime.onInstalled.addListener(openExtension);
+// chrome.action.onClicked.addListener(openExtension);
+
+chrome.runtime.onConnect.addListener(function (port) {
+  if (port.name === 'tabsetsSidepanel') {
+    //console.log("[service-worker] port3", port)
+    // port.onDisconnect.addListener(async () => {
+    //   //alert('Sidepanel closed.');
+    // });
+  }
+})
+
 declare module '@quasar/app-vite' {
   interface BexEventMap {
     log: [{ message: string; data?: any[] }, void]

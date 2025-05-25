@@ -6,9 +6,4 @@
   <div></div>
 </template>
 
-<script lang="ts" setup>
-// @ts-ignore
-const props = defineProps({
-  tabId: { type: String, required: true },
-})
-</script>
+<script lang="ts" setup></script>

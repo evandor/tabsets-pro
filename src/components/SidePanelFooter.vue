@@ -176,16 +176,16 @@
                 </template>
               </ContextMenuItem>
 
-              <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SESSIONS)">
-                <q-separator />
+              <!--              <template v-if="useFeaturesStore().hasFeature(FeatureIdent.SESSIONS)">-->
+              <!--                <q-separator />-->
 
-                <ContextMenuItem
-                  v-close-popup
-                  @was-clicked="useUiStore().sidePanelSetActiveView(SidePanelViews.SESSIONS)"
-                  color="warning"
-                  icon="sym_o_new_window"
-                  label="Sessions..." />
-              </template>
+              <!--                <ContextMenuItem-->
+              <!--                  v-close-popup-->
+              <!--                  @was-clicked="useUiStore().sidePanelSetActiveView(SidePanelViews.SESSIONS)"-->
+              <!--                  color="warning"-->
+              <!--                  icon="sym_o_new_window"-->
+              <!--                  label="Sessions..." />-->
+              <!--              </template>-->
 
               <q-separator />
 
@@ -198,7 +198,6 @@
             </q-list>
           </q-menu>
         </span>
-
         <span class="q-my-xs q-ml-xs q-mr-none cursor-pointer" v-if="authStore.isAuthenticated()">
           <q-avatar size="24px" v-if="authStore.user?.photoURL">
             <q-img :src="authStore.user.photoURL" />

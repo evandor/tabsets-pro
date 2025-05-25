@@ -57,6 +57,7 @@
                 v-model="password"
                 :rules="[(val) => !!val || 'the password must not be empty']"
                 dense
+                @keydown.enter.prevent="signin(false)"
                 tabindex="2">
                 <template v-slot:append>
                   <q-icon
@@ -130,6 +131,7 @@
                 filled
                 type="password"
                 v-model="password"
+                @keydown.enter.prevent="signin(true)"
                 dense
                 tabindex="2" />
             </div>
@@ -255,7 +257,7 @@ const signin = async (registerMode: boolean) => {
   const auth = getAuth()
   try {
     let userCredential: UserCredential = null as unknown as UserCredential
-    //console.log(`signing with ${email.value} and password length ${password.value.length}`)
+    console.log(`signing with ${email.value} and password length ${password.value.length}`)
     if (registerMode) {
       userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value)
     } else {

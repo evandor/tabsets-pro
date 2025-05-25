@@ -23,10 +23,10 @@
         name="archived"
         label="Archived Tabsets"
         v-if="useFeaturesStore().hasFeature(FeatureIdent.ARCHIVE_TABSET)" />
-      <q-tab name="search" label="Search Engine" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
+      <q-tab name="search" label="Search Engine" v-if="useSettingsStore().has('DEV_MODE')" />
       <q-tab name="importExport" label="Import/Export" />
-      <q-tab name="backup" label="Backup" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
-      <q-tab name="internals" label="Internals" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
+      <q-tab name="backup" label="Backup" v-if="useSettingsStore().has('DEV_MODE')" />
+      <q-tab name="internals" label="Internals" v-if="useSettingsStore().has('DEV_MODE')" />
       <!--      <q-tab name="featureToggles" label="Feature Toggles"-->
       <!--             :class="useAuthStore().userMayAccess(AccessItem.FEATURE_TOGGLES) ? 'text-primary':'text-grey'"/>-->
       <q-tab name="featureToggles" label="Feature Toggles" />
@@ -130,21 +130,32 @@
 
   <div v-if="tab === 'thirdparty'">
     <div class="q-pa-md q-gutter-sm">
-      <q-banner rounded style="border: 1px solid orange"> TODO </q-banner>
+      <q-banner rounded style="border: 1px solid orange"> TODO</q-banner>
 
-      <!--      <div class="row q-pa-md">-->
-      <!--        <div class="col-3"><b>DuckDuckGo FavIcon Service</b></div>-->
-      <!--        <div class="col-5">Usually, the favicon (the little icon displayed next to a tab url) is provided by the page-->
-      <!--          you are visiting.-->
-      <!--          Sometimes, Tabsets does not have the information (yet) and might defer to a third party service, here-->
-      <!--          duckduckgo. Switch this off-->
-      <!--          if you do not want to use this service.-->
-      <!--        </div>-->
-      <!--        <div class="col-1"></div>-->
-      <!--        <div class="col-3">-->
-      <!--          <q-toggle v-model="ddgEnabled" @click="updateSettings('noDDG', ddgEnabled)"/>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div class="row q-pa-md">
+        <div class="col-3"><b>Disable DuckDuckGo FavIcon Service</b></div>
+        <div class="col-5">
+          Usually, the favicon (the little icon displayed next to a tab url) is provided by the page you are visiting.
+          Sometimes, Tabsets does not have the information (yet) and might defer to a third party service, here
+          duckduckgo. Switch this off if you do not want to use this service.
+        </div>
+        <div class="col-1"></div>
+        <div class="col-3">
+          <q-toggle v-model="ddgEnabled" @click="updateSettings('noDDG', ddgEnabled)" />
+        </div>
+      </div>
+
+      <div class="row q-pa-md">
+        <div class="col-3"><b>Opt-out Performance Metrics and Error Tracking</b></div>
+        <div class="col-5">
+          We track anonymous performance metrics and track error messages to improve our application. If you do not want
+          to transmit any of this active this toggle to opt out.
+        </div>
+        <div class="col-1"></div>
+        <div class="col-3">
+          <q-toggle v-model="monitoringEnabled" @click="updateSettings('noMonitoring', monitoringEnabled)" />
+        </div>
+      </div>
     </div>
   </div>
 
@@ -191,11 +202,12 @@ import { useI18n } from 'vue-i18n'
 import VueJsonPretty from 'vue-json-pretty'
 import { useRoute } from 'vue-router'
 import 'vue-json-pretty/lib/styles.css'
-import AppearanceSettings from 'pages/helper/AppearanceSettings.vue'
 import SharingSettings from 'pages/helper/SharingSettings.vue'
 import DeleteAccountCommand from 'src/account/commands/DeleteAccountCommand'
+import { SettingIdent } from 'src/app/models/SettingIdent'
 import ImportExportSettings from 'src/core/pages/helper/ImportExportSettings.vue'
 import InternalSettings from 'src/core/pages/helper/InternalSettings.vue'
+import AppearanceSettings from 'src/pages/helper/AppearanceSettings.vue'
 import BackupSettings from 'src/tabsets/pages/settings/BackupSettings.vue'
 import OpenRightDrawerWidget from 'src/ui/widgets/OpenRightDrawerWidget.vue'
 
@@ -221,6 +233,7 @@ const state = reactive({
 })
 
 const ddgEnabled = ref<boolean>(!settingsStore.isEnabled('noDDG'))
+const monitoringEnabled = ref<boolean>(!settingsStore.isEnabled('noMonitoring'))
 const ignoreExtensionsEnabled = ref<boolean>(!settingsStore.isEnabled('extensionsAsTabs'))
 
 const account = ref<Account | undefined>(undefined)
@@ -240,9 +253,11 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  //console.log("watching settingsStore.activeToggles...", settingsStore.activeToggles)
   ddgEnabled.value = settingsStore.isEnabled('noDDG')
-  ignoreExtensionsEnabled.value = settingsStore.isEnabled('extensionsAsTabs')
+})
+
+watchEffect(() => {
+  monitoringEnabled.value = settingsStore.isEnabled('noMonitoring')
 })
 
 watchEffect(() => {
@@ -250,7 +265,6 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  // @ts-ignore
   indexSize.value = searchStore?.getIndex()?.size()
 })
 
@@ -289,6 +303,11 @@ const showIgnored = () => {
 
 const showIgnoredTabset = () => {
   sendMsg('show-ignored')
+}
+
+const updateSettings = (ident: SettingIdent, val: boolean) => {
+  console.log('settings updated to', ident, val)
+  settingsStore.setToggle(ident, val)
 }
 
 const deleteAccount = () => {

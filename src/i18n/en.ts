@@ -4,7 +4,7 @@ export default {
   activate_bookmarks_integration: 'Activate Bookmarks Integration',
   activate_browser_notifications: 'Activate Browser Notifications',
   activate_fullpage_application: 'Activate Full-Page App',
-  add_current_tabs: 'Add all {count} open tabs',
+  add_current_tabs: 'Add all open tabs',
   add_new_tabset: 'Add new Tabset',
   add_tabset: 'Create',
   appearance: 'Appearance',
@@ -41,5 +41,5 @@ export default {
   thumbnail_quality: 'Thumbnail Quality in %',
   warning_thresholds: 'Warning Thresholds',
   warnings_info: 'warnings start when minimum open tabs count is reached. Reaching the maximum will turn the bar red.',
-  welcome_to_tabsets: 'Welcome  to Tabsets Pro!',
+  welcome_to_tabsets: 'Welcome to Tabsets',
 }

@@ -8,7 +8,7 @@ import { TracingInstrumentation } from '@grafana/faro-web-tracing'
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth/web-extension'
 import { LocalStorage, setCssVar, useQuasar } from 'quasar'
 import AppService from 'src/app/AppService'
-import { CURRENT_USER_ID, EXTENSION_NAME, NEW_TAB_EXTENSION_ID } from 'src/boot/constants'
+import { EXTENSION_NAME, NEW_TAB_EXTENSION_ID } from 'src/boot/constants'
 import BexFunctions from 'src/core/communication/BexFunctions'
 import { useNotificationHandler } from 'src/core/services/ErrorHandler'
 import { useLogger } from 'src/core/services/Logger'
@@ -23,24 +23,30 @@ import { useRoute, useRouter } from 'vue-router'
 
 const version = import.meta.env.PACKAGE_VERSION
 
-initializeFaro({
-  url: process.env.GRAFANA_FARO_COLLECTOR_URL as string,
-  app: {
-    name: EXTENSION_NAME + '.extension',
-    version: version,
-    environment: 'test',
-    namespace: process.env.MODE || 'unknown',
-    // _mode: process.env.MODE || 'unknown', _version: version, service_name: EXTENSION_NAME
-  },
-  trackGeolocation: false,
-  instrumentations: [
-    // Mandatory, omits default instrumentations otherwise.
-    ...getWebInstrumentations(),
+const settingsStore = useSettingsStore()
+settingsStore.initialize()
 
-    // Tracing package to get end-to-end visibility for HTTP requests.
-    new TracingInstrumentation(),
-  ],
-})
+// console.log('===', useSettingsStore().isDisabled('noMonitoring'), process.env.GRAFANA_FARO_COLLECTOR_URL as string)
+if (useSettingsStore().isDisabled('noMonitoring') && !process.env.DEV) {
+  initializeFaro({
+    url: process.env.GRAFANA_FARO_COLLECTOR_URL as string,
+    app: {
+      name: EXTENSION_NAME + '.extension',
+      version: version,
+      environment: process.env.DEV ? 'development' : 'production',
+      namespace: process.env.MODE || 'unknown',
+      // _mode: process.env.MODE || 'unknown', _version: version, service_name: EXTENSION_NAME
+    },
+    trackGeolocation: false,
+    instrumentations: [
+      // Mandatory, omits default instrumentations otherwise.
+      ...getWebInstrumentations(),
+
+      // Tracing package to get end-to-end visibility for HTTP requests.
+      new TracingInstrumentation(),
+    ],
+  })
+}
 
 const $q = useQuasar()
 const router = useRouter()
@@ -55,9 +61,6 @@ const { handleError } = useNotificationHandler()
 if (process.env.TABSETS_STAGE !== 'EMULATOR') {
   setupConsoleInterceptor(useUiStore())
 }
-
-const settingsStore = useSettingsStore()
-settingsStore.initialize($q.localStorage)
 
 usePermissionsStore().initialize()
 
@@ -140,17 +143,7 @@ if (useDarkMode === 'true') {
 const fontsize = useUiStore().fontsize
 useUiStore().setFontsize(fontsize)
 
-const currentUser = $q.localStorage.getItem(CURRENT_USER_ID)
-if (currentUser) {
-  console.log('current user id found, waiting for auto-login')
-  // we should be logged in any second
-} else {
-  setTimeout(() => {
-    // triggers, but app should already have been started, no restart enforced
-    console.debug('app start fallback after 2000ms')
-    AppService.init($q, router, false)
-  }, 2000)
-}
+AppService.init($q, router)
 
 info(`${EXTENSION_NAME} started`)
 
@@ -163,11 +156,25 @@ if (inBexMode()) {
   onBeforeUnmount(() => {
     $q.bex.off('reload-current-tabset', BexFunctions.handleReload)
   })
+
+  chrome.tabs.query({ active: true, currentWindow: true }).then((currentTabs: chrome.tabs.Tab[]) => {
+    console.log('currentTab', currentTabs)
+    if (currentTabs.length > 0 && currentTabs[0]!.id) {
+      chrome.tabs
+        .sendMessage(currentTabs[0]!.id, 'getExcerpt', {})
+        .then((payload) => {
+          BexFunctions.handleBexTabExcerpt({ from: '', to: '', event: '', payload })
+        })
+        .catch((err) => {
+          console.log('could not handle tab excerpt', err)
+        })
+    }
+  })
 }
 
 // newtab extension installed?
 //console.log('checkin', NEW_TAB_EXTENSION_ID)
-if (chrome && chrome.runtime) {
+try {
   chrome.runtime.sendMessage(NEW_TAB_EXTENSION_ID, { message: 'getVersion' }, function (response) {
     //console.log('testing for newtab extension', response)
     if (response) {
@@ -180,5 +187,7 @@ if (chrome && chrome.runtime) {
     // if (targetInRange(response.targetData))
     //chrome.runtime.sendMessage('bafapaeaebbfoobjakidbomlnpfcfakn', { activateLasers: true })
   })
+} catch (error) {
+  console.debug("can't check for newtab extension", error)
 }
 </script>

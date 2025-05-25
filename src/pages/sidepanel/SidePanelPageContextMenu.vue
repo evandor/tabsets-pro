@@ -185,69 +185,8 @@ const props = defineProps({
 
 const emits = defineEmits(['editHeaderDescription'])
 
-const startTabsetNote = (tabset: Tabset) => {
-  const url =
-    chrome && chrome.runtime && chrome.runtime.getURL
-      ? chrome.runtime.getURL('www/index.html') + '#/mainpanel/notes/?tsId=' + tabset.id + '&edit=true'
-      : '#/mainpanel/notes/?tsId=' + tabset.id + '&edit=true'
-  NavigationService.openOrCreateTab([url])
-}
-
-const createSubfolder = (tabset: Tabset) => {
-  $q.dialog({
-    component: NewSubfolderDialog,
-    componentProps: {
-      tabsetId: tabset.id,
-      parentFolder: undefined,
-    },
-  })
-}
-
-const openEditTabsetDialog = (tabset: Tabset) => {
-  $q.dialog({
-    component: EditTabsetDialog,
-    //TODO switch to tabset: tabset?
-    componentProps: {
-      tabsetId: tabset.id,
-      tabsetName: tabset.name,
-      tabsetColor: tabset.color,
-      window: tabset.window,
-      details: tabset.details || useUiStore().listDetailLevel,
-      fromPanel: true,
-    },
-  })
-}
-
-const openOverviewPage = (tabsetId: string) =>
-  NavigationService.openOrCreateTab([chrome.runtime.getURL(`www/index.html#/mainpanel/tabsets/overview/${tabsetId}`)])
-
-const showCreateNoteItem = () => useFeaturesStore().hasFeature(FeatureIdent.NOTES)
-
 const removePublicShare = (tabsetId: string, sharedId: string) =>
   useCommandExecutor().executeFromUi(new UnShareTabsetCommand(tabsetId, sharedId))
-
-const archiveTabset = (tabset: Tabset) =>
-  useCommandExecutor().executeFromUi(new MarkTabsetAsArchivedCommand(tabset.id), NotificationType.NOTIFY)
-
-const deleteTabsetDialog = (tabset: Tabset): void => {
-  if (tabset.tabs.length === 0) {
-    useCommandExecutor().executeFromUi(new DeleteTabsetCommand(tabset.id))
-    return
-  }
-  $q.dialog({
-    component: DeleteTabsetDialog,
-    componentProps: {
-      tabsetId: tabset.id,
-      tabsetName: tabset.name,
-      tabsCount: tabset.tabs.length,
-    },
-  })
-}
-
-const convertToCollection = (tabset: Tabset) => {
-  tabset.type = TabsetType.DEFAULT
-  useTabsetsStore().saveTabset(tabset)
-}
 
 const shareTabsetPubliclyDialog = (tabset: Tabset, republish: boolean = false) => {
   $q.dialog({

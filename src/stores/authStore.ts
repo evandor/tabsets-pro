@@ -54,7 +54,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   const getUsername = computed(() => {
     if (authenticated.value) {
-      // @ts-ignore
       return user.value?.displayName || 'undefined'
     }
     return 'anonymous'
@@ -75,11 +74,10 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   const getAccessTokenSilently = computed(async () => {
-    if (process.env.MODE === 'electron') {
-      // @ts-ignore
-      const accessToken = await window.electronAPI.getAccessToken()
-      return accessToken
-    }
+    // if (process.env.MODE === 'electron') {
+    //   const accessToken = await window.electronAPI.getAccessToken()
+    //   return accessToken
+    // }
     return 'await auth0.getAccessTokenSilently()'
   })
 

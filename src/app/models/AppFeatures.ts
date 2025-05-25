@@ -6,15 +6,15 @@ import { Feature } from 'src/features/models/Feature'
 
 export class AppFeatures {
   features: Feature[] = [
-    new Feature(
-      FeatureIdent.DEV_MODE,
-      'INTERNAL',
-      'Developer Mode',
-      'A feature toggle to switch between dev mode on/off',
-      '',
-      '',
-      ['all'],
-    ),
+    // new Feature(
+    //   FeatureIdent.DEV_MODE,
+    //   'INTERNAL',
+    //   'Developer Mode',
+    //   'A feature toggle to switch between dev mode on/off',
+    //   '',
+    //   '',
+    //   ['all'],
+    // ),
 
     new Feature(
       FeatureIdent.BOOKMARKS,
@@ -30,8 +30,21 @@ export class AppFeatures {
     ),
 
     new Feature(
+      FeatureIdent.FOLDER,
+      'RECOMMENDED',
+      'Folders and Subfolders',
+      'Use folders inside your tabsets to add another level of organisation',
+      'o_folder',
+      '',
+      ['all'],
+      [],
+      false,
+      'warning',
+    ),
+
+    new Feature(
       FeatureIdent.GALLERY,
-      'OPTIONAL',
+      'RECOMMENDED',
       'Gallery View',
       'View and organize your tabs in a Tabset Gallery',
       'calendar_view_month',
@@ -120,17 +133,17 @@ export class AppFeatures {
       ['bex', 'spa'],
     ),
 
-    new Feature(
-      FeatureIdent.SESSIONS,
-      'EXPERIMENTAL',
-      'Sessions',
-      'You want to start something in-between without losing your already opened tabs? Start a new session and come back to your old tabs whenever needed.',
-      'sym_o_new_window',
-      '',
-      ['all'],
-    )
-      .setActivateCommands([new GrantPermissionCommand('sessions')])
-      .setDeactivateCommands([new RevokePermissionCommand('sessions')]),
+    // new Feature(
+    //   FeatureIdent.SESSIONS,
+    //   'EXPERIMENTAL',
+    //   'Sessions',
+    //   'You want to start something in-between without losing your already opened tabs? Start a new session and come back to your old tabs whenever needed.',
+    //   'sym_o_new_window',
+    //   '',
+    //   ['all'],
+    // )
+    //   .setActivateCommands([new GrantPermissionCommand('sessions')])
+    //   .setDeactivateCommands([new RevokePermissionCommand('sessions')]),
 
     new Feature(
       FeatureIdent.SPACES,
@@ -197,14 +210,26 @@ export class AppFeatures {
       .setDeactivateCommands([new RevokePermissionCommand('pageCapture')]),
 
     new Feature(
-      FeatureIdent.NOTES,
+      FeatureIdent.SAVE_MHTML,
       'EXPERIMENTAL',
-      'Notes Feature',
-      'CreateCreate notes and treat them like tabs',
-      'o_note',
+      'Save Page Snapshot',
+      'Saves the content of a website as MHTML as a snapshot',
+      'o_save',
       '',
-      ['all'],
-    ),
+      ['bex'],
+    )
+      .setActivateCommands([new GrantPermissionCommand('pageCapture')])
+      .setDeactivateCommands([new RevokePermissionCommand('pageCapture')]),
+
+    // new Feature(
+    //   FeatureIdent.NOTES,
+    //   'EXPERIMENTAL',
+    //   'Notes Feature',
+    //   'CreateCreate notes and treat them like tabs',
+    //   'o_note',
+    //   '',
+    //   ['all'],
+    // ),
 
     new Feature(
       FeatureIdent.STANDALONE_APP,
@@ -342,7 +367,7 @@ export class AppFeatures {
       'EXPERIMENTAL',
       'Reading Mode',
       'Analyse tab contents and use the distraction-free Reading Mode if applicable',
-      'library_books',
+      'sym_o_menu_book',
       '',
       ['bex'],
     ),
@@ -380,7 +405,24 @@ export class AppFeatures {
       '',
       ['all'],
     ),
-
+    new Feature(
+      FeatureIdent.PIN_TAB,
+      'EXPERIMENTAL',
+      'Pin Tabs',
+      'Pinning a tab means that it will show up in all subfolders',
+      'sym_o_keep',
+      '',
+      ['all'],
+    ),
+    new Feature(
+      FeatureIdent.PAGES,
+      'EXPERIMENTAL',
+      'Custom Pages',
+      'create a website page and treat it as any other tab',
+      'sym_o_article',
+      '',
+      ['all'],
+    ),
     new Feature(
       FeatureIdent.TABSETS_SHARING,
       'OPTIONAL',

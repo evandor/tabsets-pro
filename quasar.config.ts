@@ -37,7 +37,7 @@ export default defineConfig((ctx) => {
       'material-symbols-outlined',
     ],
 
-    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
+    // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
       // https://github.com/quasarframework/quasar/issues/14589
       sourcemap: 'true' as unknown as boolean,

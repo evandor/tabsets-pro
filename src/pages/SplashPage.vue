@@ -41,6 +41,7 @@ watchEffect(async () => {
       router.push(`/tabsets/${currentTabsetId}`)
     }
   } else {
+    $q.loading.hide()
     router.push('/p/tabs/0')
   }
 })

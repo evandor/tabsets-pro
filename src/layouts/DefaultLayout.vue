@@ -36,7 +36,7 @@
 
         <SearchWidget
           style="position: absolute; left: 300px; top: 5px; max-width: 500px"
-          v-if="useTabsetsStore().tabsets.size > 1 || useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
+          v-if="useTabsetsStore().tabsets.size > 1 || useSettingsStore().has('DEV_MODE')" />
 
         <Transition name="colorized-appear">
           <div
@@ -135,7 +135,7 @@
               <q-item v-if="!useAuthStore().isAuthenticated" clickable @click="router.push('/login')">Login</q-item>
               <q-item v-else clickable @click="router.push('/logout')">Logout</q-item>
 
-              <q-item clickable @click="router.push('/settings')">Settings</q-item>
+              <q-item clickable @click="router.push('/mainpanel/settings')">Settings</q-item>
               <q-item clickable @click="tabsClicked(DrawerTabs.FEATURES)" v-close-popup>
                 Activate more Features
               </q-item>

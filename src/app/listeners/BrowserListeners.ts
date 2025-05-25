@@ -91,6 +91,8 @@ function inIgnoredMessages(request: any) {
     request.name === 'mark-tabset-deleted' ||
     request.name === 'feature-activated' ||
     request.name === 'feature-deactivated' ||
+    request.name === 'setting-activated' ||
+    request.name === 'setting-deactivated' ||
     request.name === 'tabsets-imported' ||
     request.name === 'settings-changed' ||
     request.name === 'reload-suggestions' ||
@@ -162,6 +164,7 @@ class Queue<T extends any[]> {
     }
     this.queue.push(a)
   }
+
   hasRepetition(a: T) {
     //console.log('hasRepetition', a, this.queue.length)
     for (const q of this.queue) {
@@ -259,10 +262,10 @@ class BrowserListeners {
   async onUpdated(number: number, info: chrome.tabs.TabChangeInfo, chromeTab: chrome.tabs.Tab) {
     //console.debug(`tabUpdate: ${chromeTab.id} - ${chromeTab.url?.substring(0, 30)}`, info)
     //this.lastTabUpdates.add([number, info])
-    if (this.lastTabUpdates.hasRepetition([number, info])) {
-      //console.log('stopping repetition in onUpdated')
-      return
-    }
+    // if (this.lastTabUpdates.hasRepetition([number, info])) {
+    //   console.log('stopping repetition in onUpdated')
+    //   return
+    // }
     await setCurrentTab()
     if (this.ignoreUrl(chromeTab.url) || info.status !== 'complete') {
       return
@@ -328,21 +331,28 @@ class BrowserListeners {
 
   // #region snippet2
   async onActivated(info: chrome.tabs.TabActiveInfo) {
-    //console.debug(`tabActivated: ${JSON.stringify(info)}`)
-    await setCurrentTab()
-    useTabsetsUiStore().updateExtensionIcon(info.tabId)
-    chrome.tabs.get(info.tabId, (tab) => {
+    try {
+      const currentBrowserWindow = await chrome.windows.getCurrent()
+      console.debug(`tabActivated: ${JSON.stringify(info)}`, currentBrowserWindow.id === info.windowId)
+      if (info.windowId !== currentBrowserWindow.id) {
+        return
+      }
+      await setCurrentTab()
+      useTabsetsUiStore().updateExtensionIcon(info.tabId)
+      const tab: chrome.tabs.Tab = await chrome.tabs.get(info.tabId) //, (tab) => {
       if (chrome.runtime.lastError) {
         console.warn('got runtime error:', chrome.runtime.lastError)
       }
       // reset content store
-      useContentStore().resetFor(tab.url)
+      await useContentStore().resetFor(tab)
 
       useTabsetService().urlWasActivated(tab.url)
       useTabsetsUiStore().setMatchingTabsFor(tab.url)
 
       startTimer(tab.url)
-    })
+    } catch (err: any) {
+      console.log('got error in onActivated', err)
+    }
   }
 
   onWindowFocusChanged(windowId: number) {
@@ -375,6 +385,10 @@ class BrowserListeners {
       useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
     } else if (request.name === 'show-ignored') {
       useUiStore().sidePanelSetActiveView(SidePanelViews.MAIN)
+    } else if (request.name === 'start-spinner-save-snapshot') {
+      useUiStore().pageCaptureLoading = true
+    } else if (request.name === 'stop-spinner-save-snapshot') {
+      useUiStore().pageCaptureLoading = false
     } else {
       console.log('got unknown message', request)
     }

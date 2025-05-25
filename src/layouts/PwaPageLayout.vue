@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import _ from 'lodash'
 import { useMeta, useQuasar } from 'quasar'
-import Navigation from 'src/components/Navigation.vue'
+import Navigation from 'src/core/components/Navigation.vue'
 import { useUtils } from 'src/core/services/Utils'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
@@ -104,12 +104,8 @@ watchEffect(() => {
     .concat({ id: '', label: 'create new space' })
 })
 
-//@ts-ignore
-const appVersion = import.meta.env.PACKAGE_VERSION
-
 useMeta(() => {
   return {
-    // @ts-ignore
     title: 'Tabsets Extension', //+ appVersion
   }
 })

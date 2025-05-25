@@ -13,14 +13,4 @@
   <div></div>
 </template>
 
-<script lang="ts" setup>
-import { Tab } from 'src/tabsets/models/Tab'
-import { Tabset } from 'src/tabsets/models/Tabset'
-import { PropType } from 'vue'
-
-// @ts-ignore
-const props = defineProps({
-  tab: { type: Object as PropType<Tab>, required: true },
-  tabset: { type: Object as PropType<Tabset>, required: false },
-})
-</script>
+<script lang="ts" setup></script>

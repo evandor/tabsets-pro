@@ -1,13 +1,15 @@
 export enum FeatureIdent {
-  DEV_MODE = 'DEV_MODE',
+  // DEV_MODE = 'DEV_MODE', -- handled as setting now
   BOOKMARKS = 'BOOKMARKS',
+  FOLDER = 'FOLDER',
   STATS = 'STATS',
   SAVE_TAB_AS_PDF = 'SAVE_TAB_AS_PDF', // not active yet
   SAVE_TAB_AS_PNG = 'SAVE_TAB_AS_PNG',
+  SAVE_MHTML = 'SAVE_MHTML',
   GROUP_BY_DOMAIN = 'GROUP_BY_DOMAIN',
   OPENTABS_THRESHOLD = 'OPENTABS_THRESHOLD',
   RSS = 'RSS',
-  SESSIONS = 'SESSIONS',
+  // SESSIONS = 'SESSIONS', -- replaced by "stash" functionality (active by default)
   SPACES = 'SPACES',
   HELP = 'HELP',
   TOP10 = 'TOP10',
@@ -16,7 +18,7 @@ export enum FeatureIdent {
   SCHEDULED = 'SCHEDULED',
   BACKUP = 'BACKUP',
   IGNORE = 'IGNORE',
-  NOTES = 'NOTES',
+  // NOTES = 'NOTES', -- replaced by pages functionality
   TAGS = 'TAGS',
   WEBSITE_CLIP = 'WEBSITE_CLIP',
   STANDALONE_APP = 'STANDALONE_APP',
@@ -41,6 +43,8 @@ export enum FeatureIdent {
   TABSET_LIST = 'TABSET_LIST',
   REMINDER = 'REMINDER',
   MONITOR = 'MONITOR',
+  PIN_TAB = 'PIN_TAB',
+  PAGES = 'PAGES',
 }
 
 export type FeatureType = 'RECOMMENDED' | 'OPTIONAL' | 'EXPERIMENTAL' | 'PLANNED' | 'DISABLED' | 'INTERNAL'

@@ -1,12 +1,5 @@
-/**
- * Importing the file below initializes the content script.
- *
- * Warning:
- *   Do not remove the import statement below. It is required for the extension to work.
- *   If you don't need createBridge(), leave it as "import '#q-app/bex/content'".
- */
 import { createBridge } from '#q-app/bex/content'
-import { LocalStorage } from 'quasar'
+import { LocalStorage } from 'quasar' // The use of the bridge is optional.
 
 // The use of the bridge is optional.
 const bridge = createBridge({ debug: false })
@@ -58,6 +51,20 @@ function getMetas(document: Document) {
   return result
 }
 
+function getExcerptResponseMessage() {
+  return {
+    html: document.documentElement.outerHTML,
+    metas: getMetas(document),
+    port: bridge.portName,
+    url: window.location.href,
+    storage: {
+      //tabsetsName: LocalStorage.getItem('tabsets_name'),
+      tabsetsTabId: LocalStorage.getItem('tabsets_tabId'),
+      tabsetsTimestamp: LocalStorage.getItem('tabsets_ts'),
+    },
+  }
+}
+
 /**
  * Leave this AFTER you attach your initial listeners
  * so that the bridge can properly handle them.
@@ -71,17 +78,7 @@ bridge
   .connectToBackground()
   .then(() => {
     console.log('[BEX-CT] Connected to background', bridge.portName)
-    const responseMessage = {
-      html: document.documentElement.outerHTML,
-      metas: getMetas(document),
-      port: bridge.portName,
-      url: window.location.href,
-      storage: {
-        //tabsetsName: LocalStorage.getItem('tabsets_name'),
-        tabsetsTabId: LocalStorage.getItem('tabsets_tabId'),
-        tabsetsTimestamp: LocalStorage.getItem('tabsets_ts'),
-      },
-    }
+    const responseMessage = getExcerptResponseMessage()
     bridge.send({ event: 'tabsets.bex.tab.excerpt', to: 'app', payload: responseMessage }).catch((err: any) => {
       console.log('[BEX-CT] Failed to send message to app', err)
     })
@@ -89,3 +86,15 @@ bridge
   .catch((err) => {
     console.error('[BEX-CT] Failed to connect to background:', err)
   })
+
+// alternative way to bridge tabsets.bex.tab.excerpt approach, called from bex
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request === 'getExcerpt') {
+    console.debug("tabsets: got request 'getExcerpt'")
+    const responseMessage = getExcerptResponseMessage()
+    sendResponse(responseMessage)
+  } else {
+    sendResponse({ content: 'unknown request in tabsets-content-scripts: ' + request })
+  }
+  return true
+})

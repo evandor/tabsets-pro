@@ -11,7 +11,16 @@
         <q-radio v-model="darkMode" val="false" :label="$t('disabled')" />
         &nbsp;&nbsp;&nbsp;{{ $t('changing_needs_restart') }}
       </InfoLine>
+    </div>
 
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-9">
+        <hr />
+      </div>
+    </div>
+
+    <div class="row">
       <InfoLine :label="$t('keyboard_shortcuts')">
         <div
           class="text-accent cursor-pointer"
@@ -43,6 +52,33 @@
     </div>
 
     <div class="row items-baseline">
+      <InfoLine label="UI Density">
+        <q-radio v-model="density" :val="'dense'" label="Dense" />
+        <q-radio v-model="density" :val="'thin'" label="Light (Default)" />
+      </InfoLine>
+    </div>
+
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-9">
+        <hr />
+      </div>
+    </div>
+
+    <div class="row items-baseline">
+      <InfoLine label="Quick Access Menu">
+        <q-checkbox v-model="quickAccessSearch" label="Search" />
+      </InfoLine>
+    </div>
+
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-9">
+        <hr />
+      </div>
+    </div>
+
+    <div class="row items-baseline">
       <InfoLine label="Font Size">
         <q-radio v-model="fontsize" :val="FontSize.SMALLER" label="Smaller" />
         <q-radio v-model="fontsize" :val="FontSize.SMALL" label="Small" />
@@ -59,7 +95,7 @@
 
       <InfoLine label="Folder Appearance">
         <q-radio v-model="folderAppearance" val="expand" label="Expand (experimental)" />
-        <q-radio v-model="folderAppearance" val="goInto" label="Go into (default)" />
+        <q-radio v-model="folderAppearance" val="goInto" label="Go into (Default)" />
       </InfoLine>
     </div>
 
@@ -71,20 +107,15 @@
     </div>
 
     <div class="row items-baseline">
-      <InfoLine
-        :label="
-          $t('tab_info_detail_level', {
-            detailLevelPerTabset: detailLevelPerTabset ? ' (Default)' : '',
-          })
-        ">
+      <InfoLine label="Tab Detail Level (default)">
         <q-radio v-model="detailLevel" :val="'MINIMAL'" label="Minimal Details" />
         <q-radio v-model="detailLevel" :val="'SOME'" label="Some Details" />
         <q-radio v-model="detailLevel" :val="'MAXIMAL'" label="All Details" />
       </InfoLine>
 
-      <InfoLine label="">
-        <q-checkbox v-model="detailLevelPerTabset" :label="$t('individually_per_tabset')" />
-      </InfoLine>
+      <!--      <InfoLine label="">-->
+      <!--        <q-checkbox v-model="detailLevelPerTabset" :label="$t('individually_per_tabset')" />-->
+      <!--      </InfoLine>-->
 
       <InfoLine label="URLs">
         <q-checkbox v-model="fullUrls" :label="$t('show_full_url')" />
@@ -181,7 +212,7 @@
       </div>
     </div>
 
-    <!--    <div class="row items-baseline q-ma-md q-gutter-md" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">-->
+    <!--    <div class="row items-baseline q-ma-md q-gutter-md" v-if="useSettingsStore().has('DEV_MODE')">-->
     <!--      <div class="col-3">-->
     <!--        New Version Simulation-->
     <!--      </div>-->
@@ -193,7 +224,7 @@
     <!--      </div>-->
     <!--    </div>-->
 
-    <div class="row items-baseline" v-if="useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)">
+    <div class="row items-baseline" v-if="useSettingsStore().has('DEV_MODE')">
       <div class="col-3">New Suggestion Simulation</div>
       <div class="col-3">
         Simulate that there is a new suggestion to use a (new) feature (refresh sidebar for effects)
@@ -227,7 +258,14 @@ import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import NavigationService from 'src/services/NavigationService'
 import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
-import { FolderAppearance, FontSize, ListDetailLevel, ToolbarIntegration, useUiStore } from 'src/ui/stores/uiStore'
+import {
+  FolderAppearance,
+  FontSize,
+  ListDetailLevel,
+  ToolbarIntegration,
+  UiDensity,
+  useUiStore,
+} from 'src/ui/stores/uiStore'
 import { ref, watch, watchEffect } from 'vue'
 
 const { sendMsg } = useUtils()
@@ -237,14 +275,17 @@ const settingsStore = useSettingsStore()
 
 const darkMode = ref<string>(LocalStorage.getItem('darkMode') || 'auto')
 const installationTitle = ref<string>((LocalStorage.getItem(TITLE_IDENT) as string) || 'My Tabsets')
-const detailLevelPerTabset = ref(LocalStorage.getItem('ui.detailsPerTabset') || false)
+// const detailLevelPerTabset = ref(LocalStorage.getItem('ui.detailsPerTabset') || false)
 const detailLevel = ref<ListDetailLevel>(LocalStorage.getItem('ui.detailLevel') || 'MINIMAL')
 const fontsize = ref<FontSize>(LocalStorage.getItem('ui.fontsize') || FontSize.DEFAULT)
+const density = ref<UiDensity>(LocalStorage.getItem('ui.density') || 'thin')
 const folderAppearance = ref<FolderAppearance>(LocalStorage.getItem('ui.folder.style') || 'goInto')
 const toolbarIntegration = ref<ToolbarIntegration>(LocalStorage.getItem('ui.toolbar.integration') || 'tabsets')
 const fullUrls = ref(LocalStorage.getItem('ui.fullUrls') || false)
 const overlapIndicator = ref(LocalStorage.getItem('ui.overlapIndicator') || false)
 const showRecentTabsetsList = ref(useFeaturesStore().hasFeature(FeatureIdent.TABSET_LIST))
+
+const quickAccessSearch = ref(useUiStore().quickAccessFor('search'))
 
 let suggestionsCounter = 0
 
@@ -271,6 +312,11 @@ const autoSwitcherOptions = [
 ]
 
 watchEffect(() => {
+  useUiStore().setQuickAccess('search', quickAccessSearch.value)
+  sendMsg('settings-changed', { identifier: 'ui.quickAccess', value: quickAccessSearch.value })
+})
+
+watchEffect(() => {
   if (installationTitle.value && installationTitle.value.trim().length > 0) {
     LocalStorage.set(TITLE_IDENT, installationTitle.value.replace(STRIP_CHARS_IN_USER_INPUT, ''))
   } else {
@@ -293,13 +339,13 @@ watchEffect(() => {
   sendMsg('reload-application')
 })
 
-watch(
-  () => detailLevelPerTabset.value,
-  (v: any) => {
-    LocalStorage.set('ui.detailsPerTabset', detailLevelPerTabset.value)
-    sendMsg('detail-level-perTabset-changed', { level: detailLevelPerTabset.value })
-  },
-)
+// watch(
+//   () => detailLevelPerTabset.value,
+//   (v: any) => {
+//     LocalStorage.set('ui.detailsPerTabset', detailLevelPerTabset.value)
+//     sendMsg('detail-level-perTabset-changed', { level: detailLevelPerTabset.value })
+//   },
+// )
 
 watch(
   () => detailLevel.value,
@@ -315,6 +361,14 @@ watch(
     LocalStorage.set('ui.fontsize', fontsize.value)
     //sendMsg('detail-level-changed', {level: detailLevel.value})
     sendMsg('settings-changed', { identifier: 'ui.fontsize', value: fontsize.value })
+  },
+)
+
+watch(
+  () => density.value,
+  () => {
+    LocalStorage.set('ui.density', density.value)
+    sendMsg('settings-changed', { identifier: 'ui.density', value: density.value })
   },
 )
 

@@ -39,7 +39,7 @@
 
         <SearchWidget
           style="position: absolute; left: 300px; top: 5px; max-width: 500px"
-          v-if="useTabsetsStore().tabsets.size > 1 || useFeaturesStore().hasFeature(FeatureIdent.DEV_MODE)" />
+          v-if="useTabsetsStore().tabsets.size > 1 || useSettingsStore().has('DEBUG_MODE')" />
 
         <div v-if="useAuthStore().user">
           <!--          <q-icon name="person" />-->
@@ -88,6 +88,7 @@ import { useMeta, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
 import Navigation2 from 'src/core/components/FullpageNavigation.vue'
 import { useUtils } from 'src/core/services/Utils'
+import { useSettingsStore } from 'src/core/stores/settingsStore'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import SearchWidget from 'src/search/widgets/SearchWidget.vue'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
@@ -136,9 +137,6 @@ watchEffect(() => {
     .concat({ id: '', label: '(unassigned)' })
     .concat({ id: '', label: 'create new space' })
 })
-
-//@ts-ignore
-const appVersion = import.meta.env.PACKAGE_VERSION
 
 useMeta(() => {
   return {
