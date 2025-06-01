@@ -120,7 +120,7 @@
         <mxCell id="46" value="&lt;font color=&quot;#0000ff&quot;&gt;we need to create this entry in the&lt;br&gt;users A store for permission&lt;br&gt;reasons&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="570" y="50" width="230" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="47" value="/users/&amp;lt;User A&amp;gt;/tabset-shares/&amp;lt;Tabset Y&amp;gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="47" value="/users/&amp;lt;User A&amp;gt;/tabset-shares/&amp;lt;Tabset Y&amp;gt;/&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;uid&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="380" y="90" width="490" height="40" as="geometry" />
         </mxCell>
         <mxCell id="50" value="&lt;font color=&quot;#0000ff&quot;&gt;done by a function, &lt;br&gt;no permission issues&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -153,7 +153,7 @@
             <mxPoint x="700" y="570" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="49" value="/shared-with-queue/base64(email)/invitations/&amp;lt;tabsetId&amp;gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="49" value="/shared-with-queue/&lt;font style=&quot;color: rgb(0, 204, 0);&quot;&gt;uid&lt;/font&gt;/invitations/&amp;lt;tabsetId&amp;gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="200" y="417.5" width="410" height="20" as="geometry" />
         </mxCell>
         <mxCell id="64" value="User B&lt;br&gt;exists&lt;br&gt;already" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
