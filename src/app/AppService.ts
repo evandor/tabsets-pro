@@ -2,14 +2,17 @@ import { User } from 'firebase/auth/web-extension'
 import _ from 'lodash'
 import { LocalStorage, QVueGlobals } from 'quasar'
 import ChromeApi from 'src/app/BrowserApi'
+import FirebaseListener from 'src/app/FirebaseListener'
 import BrowserListeners from 'src/app/listeners/BrowserListeners'
 import BookmarksService from 'src/bookmarks/services/BookmarksService'
 import { useBookmarksStore } from 'src/bookmarks/stores/bookmarksStore'
 import { EXTENSION_NAME } from 'src/boot/constants'
 import IndexedDbContentPersistence from 'src/content/persistence/IndexedDbContentPersistence'
 import { useContentService } from 'src/content/services/ContentService'
+import BexFunctions from 'src/core/communication/BexFunctions'
 import { SpaceInfo } from 'src/core/models/SpaceInfo'
 import { TabsetInfo } from 'src/core/models/TabsetInfo'
+import { useUtils } from 'src/core/services/Utils'
 import { useAppStore } from 'src/core/stores/appStore'
 import { useEntityRegistryStore } from 'src/core/stores/entityRegistryStore'
 import { useEventsStore } from 'src/events/stores/eventsStore'
@@ -35,13 +38,15 @@ import { useWindowsStore } from 'src/windows/stores/windowsStore'
 import { watch } from 'vue'
 import { Router } from 'vue-router'
 
+const { inBexMode } = useUtils()
+
 class AppService {
   router: Router = null as unknown as Router
   initialized = false
 
   async init(quasar: QVueGlobals, router: Router, forceRestart = false, user: User | undefined = undefined) {
     console.log(
-      `%cinitializing AppService: first start=${!this.initialized}, router set=${router !== undefined}`,
+      `%cinitializing AppService: initialized=${this.initialized}, router set=${router !== undefined}`,
       forceRestart ? 'font-weight:bold' : '',
     )
 
@@ -80,6 +85,22 @@ class AppService {
     await useThumbnailsService().init(useDB().thumbnailsDb)
 
     await useContentService().init(IndexedDbContentPersistence)
+
+    if (inBexMode()) {
+      chrome.tabs.query({ active: true, currentWindow: true }).then((currentTabs: chrome.tabs.Tab[]) => {
+        console.log('currentTab', currentTabs)
+        if (currentTabs.length > 0 && currentTabs[0]!.id) {
+          chrome.tabs
+            .sendMessage(currentTabs[0]!.id, 'getExcerpt', {})
+            .then((payload) => {
+              BexFunctions.handleBexTabExcerpt({ from: '', to: '', event: '', payload })
+            })
+            .catch((err) => {
+              console.log('could not handle tab excerpt', err)
+            })
+        }
+      })
+    }
 
     await useRequestsService().init(IndexedDbRequestPersistence)
 
@@ -173,6 +194,10 @@ class AppService {
       }
       await router.push('/sidepanel/welcomepro')
       return
+    }
+
+    if (useAuthStore().user?.uid) {
+      FirebaseListener.startListening()
     }
 
     // set badge, text and color

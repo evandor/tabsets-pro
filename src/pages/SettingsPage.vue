@@ -153,7 +153,12 @@
         </div>
         <div class="col-1"></div>
         <div class="col-3">
-          <q-toggle v-model="monitoringEnabled" @click="updateSettings('noMonitoring', monitoringEnabled)" />
+          <q-toggle
+            v-model="monitoringDisabled"
+            :disable="optOutIsDisabled()"
+            @click="updateSettings('noMonitoring', monitoringDisabled)">
+            <q-tooltip class="tooltip-small">Disabled, running in development mode</q-tooltip>
+          </q-toggle>
         </div>
       </div>
     </div>
@@ -178,6 +183,10 @@
  *
  */
 
+/**
+ * refactoring remark: uses many other modules, needs to be one-per-application
+ *
+ */
 import { getAuth } from 'firebase/auth/web-extension'
 import _ from 'lodash'
 import FeatureToggleSettings from 'pages/helper/FeatureToggleSettings.vue'
@@ -233,7 +242,7 @@ const state = reactive({
 })
 
 const ddgEnabled = ref<boolean>(!settingsStore.isEnabled('noDDG'))
-const monitoringEnabled = ref<boolean>(!settingsStore.isEnabled('noMonitoring'))
+const monitoringDisabled = ref<boolean>(process.env.DEV ? true : settingsStore.isEnabled('noMonitoring'))
 const ignoreExtensionsEnabled = ref<boolean>(!settingsStore.isEnabled('extensionsAsTabs'))
 
 const account = ref<Account | undefined>(undefined)
@@ -257,7 +266,7 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  monitoringEnabled.value = settingsStore.isEnabled('noMonitoring')
+  monitoringDisabled.value = process.env.DEV ? true : settingsStore.isEnabled('noMonitoring')
 })
 
 watchEffect(() => {
@@ -317,4 +326,6 @@ const deleteAccount = () => {
     useCommandExecutor().executeFromUi(new DeleteAccountCommand())
   }
 }
+
+const optOutIsDisabled = (): boolean => !!process.env.DEV
 </script>

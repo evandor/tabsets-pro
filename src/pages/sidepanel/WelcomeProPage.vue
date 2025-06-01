@@ -169,10 +169,6 @@ watchEffect(() => {
 })
 
 watchEffect(() => {
-  useUiStore().showLoginTable = login.value
-})
-
-watchEffect(() => {
   // we might have been redirected here too early, redirecting
   // back as soon we know we actually do have some tabsets
   if (useTabsetsStore().tabsets.size > 0) {

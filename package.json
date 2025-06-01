@@ -1,6 +1,6 @@
 {
   "name": "tabsets-pro",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Use tabsets.net to safely keep track of all your tabs and links in the Side Panel, stored locally on your browser",
   "productName": "Tabsets Pro (Alpha!)",
   "author": "evandor <evandor@gmail.com>",
@@ -12,6 +12,7 @@
     "dev pwa": "cp envs/env.dev ./.env && quasar dev -m pwa -T chrome",
     "dev emulator": "cp envs/env.emulator ./.env && quasar dev -m bex -T chrome",
     "dev pwa emulator": "cp envs/env.emulator ./.env && quasar dev -m pwa",
+    "dev ff emulator": "cp envs/env.emulator ./.env && quasar dev -m bex -T firefox",
     "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{ts,js,cjs,mjs,vue}\"",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "build": "cp envs/env.dev ./.env && quasar build -m bex -T chrome",

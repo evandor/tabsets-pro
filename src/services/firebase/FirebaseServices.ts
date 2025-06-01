@@ -1,15 +1,17 @@
 import { initializeApp } from 'firebase/app'
 import { Auth, connectAuthEmulator, getAuth } from 'firebase/auth/web-extension'
+import { connectDatabaseEmulator, Database, getDatabase } from 'firebase/database'
 import { connectFirestoreEmulator, Firestore, getFirestore, initializeFirestore } from 'firebase/firestore'
 import { connectStorageEmulator, FirebaseStorage, getStorage } from 'firebase/storage'
 import { useUiStore } from 'src/ui/stores/uiStore'
 
 class FirebaseServices {
-  private firebaseApp: any =  null //firebase.app.App = null as unknown as firebase.app.App
+  private firebaseApp: any = null //firebase.app.App = null as unknown as firebase.app.App
   private auth: Auth = null as unknown as Auth
   private firestore: Firestore = null as unknown as Firestore
   // private messaging: Messaging = null as unknown as Messaging
   private storage: FirebaseStorage = null as unknown as FirebaseStorage
+  private database: Database = null as unknown as Database
 
   // private realtimeDb: Database = null as unknown as Database
 
@@ -19,6 +21,7 @@ class FirebaseServices {
     projectId: process.env.FIREBASE_PROJECT_ID as string,
     appId: process.env.FIREBASE_APP_ID as string,
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET as string,
+    databaseURL: process.env.FIREBASE_DATABASE_URL as string,
     messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID as string,
   }
 
@@ -33,6 +36,7 @@ class FirebaseServices {
       const db = getFirestore()
       connectFirestoreEmulator(db, '127.0.0.1', 8080)
       connectStorageEmulator(getStorage(), '127.0.0.1', 9199)
+      connectDatabaseEmulator(getDatabase(), '127.0.0.1', 9000)
     } else if (process.env.TABSETS_STAGE?.toLowerCase() !== 'prd') {
       useUiStore().setWatermark(process.env.TABSETS_STAGE || '???')
     }
@@ -45,6 +49,7 @@ class FirebaseServices {
     initializeFirestore(this.firebaseApp, {})
     this.firestore = getFirestore(this.firebaseApp)
     this.storage = getStorage(this.firebaseApp)
+    this.database = getDatabase(this.firebaseApp)
     //console.log('initializing FirebaseServices -- done')
   }
 
@@ -58,6 +63,10 @@ class FirebaseServices {
 
   getStorage(): FirebaseStorage {
     return this.storage
+  }
+
+  getDatabase(): Database {
+    return this.database
   }
 }
 

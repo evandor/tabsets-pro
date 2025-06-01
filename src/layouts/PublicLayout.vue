@@ -71,8 +71,8 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" behavior="desktop" bordered>
-      <Navigation2></Navigation2>
+    <q-drawer v-model="leftDrawerOpen" side="left" :behavior="leftDrawerBehavior" bordered>
+      <PublicTabsetsNavigation />
     </q-drawer>
 
     <q-page-container>
@@ -86,16 +86,14 @@ import { EXTENSION_NAME } from 'boot/constants'
 import _ from 'lodash'
 import { useMeta, useQuasar } from 'quasar'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
-import Navigation2 from 'src/core/components/FullpageNavigation.vue'
+import PublicTabsetsNavigation from 'src/core/components/PublicTabsetsNavigation.vue'
 import { useUtils } from 'src/core/services/Utils'
 import { useSettingsStore } from 'src/core/stores/settingsStore'
 import { useFeaturesStore } from 'src/features/stores/featuresStore'
 import SearchWidget from 'src/search/widgets/SearchWidget.vue'
 import { useSpacesStore } from 'src/spaces/stores/spacesStore'
 import SpacesSelectorWidget from 'src/spaces/widgets/SpacesSelectorWidget.vue'
-import SuggestionDialog from 'src/suggestions/dialogues/SuggestionDialog.vue'
 import { Suggestion } from 'src/suggestions/domain/models/Suggestion'
-import { useSuggestionsService } from 'src/suggestions/domain/SuggestionsServices'
 import { useSuggestionsStore } from 'src/suggestions/stores/suggestionsStore'
 import ExportDialog from 'src/tabsets/dialogues/ExportDialog.vue'
 import ImportDialog from 'src/tabsets/dialogues/ImportDialog.vue'
@@ -109,6 +107,7 @@ const $q = useQuasar()
 const router = useRouter()
 
 const leftDrawerOpen = ref($q.screen.gt.sm)
+const leftDrawerBehavior = ref<'default' | 'desktop' | 'mobile' | undefined>('desktop')
 
 const spacesStore = useSpacesStore()
 
@@ -116,6 +115,10 @@ const spacesOptions = ref<object[]>([])
 const relevantSuggestions = ref<Suggestion[]>([])
 
 const { inBexMode } = useUtils()
+
+if ($q.platform.is.mobile) {
+  leftDrawerBehavior.value = 'mobile'
+}
 
 $q.loadingBar.setDefaults({
   color: 'positive',
@@ -160,23 +163,6 @@ const tabsClicked = (tab: DrawerTabs, data: object = {}) => {} //useUiStore().ri
 
 const showExportDialog = () => $q.dialog({ component: ExportDialog })
 const showImportDialog = () => $q.dialog({ component: ImportDialog })
-
-const suggestionDialog = (s: Suggestion) =>
-  $q.dialog({
-    component: SuggestionDialog,
-    componentProps: {
-      suggestion: s,
-    },
-  })
-
-const dependingOnStates = () =>
-  useSuggestionsService().hasSuggestionsInState(relevantSuggestions.value, ['NEW']) ? 'warning' : 'white'
-
-const suggestionsLabel = () => {
-  return useSuggestionsService().suggestionsInsState(relevantSuggestions.value, ['NEW']).length > 0
-    ? 'New Suggestions'
-    : ''
-}
 
 const toggleSettings = () => (settingsClicked.value = !settingsClicked.value)
 

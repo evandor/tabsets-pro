@@ -18,7 +18,6 @@ const routes: RouteRecordRaw[] = [
     path: '/fullpage',
     component: () => import('layouts/FullPageLayout.vue'),
     children: [
-      { path: '', component: () => import('src/core/pages/FullpageStart.vue') },
       { path: 'tabsets/:tabsetId', component: () => import('src/tabsets/pages/TabsetPage.vue') },
       {
         path: 'spaces',
@@ -76,7 +75,7 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
-  /** MainPanel **/
+  /** MainPanel (chrome extension plus main screen) **/
   {
     path: '/mainpanel',
     component: () => import('layouts/PlainLayout.vue'),
@@ -139,11 +138,39 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
+  /** Public (PWA) **/
   {
     path: '/p', // p <=> 'public'
     component: () => import('layouts/PublicLayout.vue'),
-    children: [{ path: 'tabs/:tabId', component: () => import('src/tabsets/pages/PublicTabsetPage.vue') }],
+    children: [
+      // {
+      //   path: 'imp',
+      //   component: () => import('layouts/PlainLayout.vue'),
+      //   children: [{ path: ':sharedId', component: () => import('pages/public/ImportPublicTabsetPage.vue') }],
+      // },
+      { path: 'tabsets', component: () => import('src/tabsets/pages/PublicTabsetPage.vue') },
+      { path: 'tabsets/:id', component: () => import('src/tabsets/pages/PublicTabsetPage.vue') },
+      { path: 'tabs/:tabId', component: () => import('src/tabsets/pages/PublicTabsetPage.vue') },
+    ],
   },
+  {
+    path: '/p/imp/:sharedId',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/public/ImportPublicTabsetPage.vue') }],
+  },
+
+  /** Shared (PWA) **/
+  {
+    path: '/s', // p <=> 'shared'
+    component: () => import('layouts/ShareLayout.vue'),
+    children: [
+      { path: ':sharedId', component: () => import('pages/public/SharedTabsetInfoPage.vue') },
+      { path: 'tabsets/:sharedId', component: () => import('src/tabsets/pages/SharedTabsetPage.vue') },
+    ],
+  },
+
+  /** PWA ??? */
+
   {
     path: '/tabsets',
     component: () => import('layouts/FullPageLayout.vue'),
@@ -156,7 +183,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
 
-  /** Overlay **/
+  /** Overlay (in originl page) **/
   {
     path: '/overlay',
     component: () => import('layouts/MainNavigationLayout.vue'),
@@ -169,6 +196,8 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+
+  /** TODOS **/
 
   {
     path: '/features/:feature',
@@ -186,7 +215,18 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/FullPageLayout.vue'),
     children: [{ path: '', component: () => import('src/core/pages/SearchResultPage.vue') }],
   },
-
+  // {
+  //   path: '/pwa/imp/:sharedId',
+  //   component: () => import('layouts/PlainLayout.vue'),
+  //   children: [{ path: '', component: () => import('pages/public/ImportPublicTabsetPage.vue') }],
+  // },
+  {
+    path: '/invitation',
+    redirect: (to) => ({
+      path: '/mainpanel/login',
+      query: { invited: to.query.email },
+    }),
+  },
   {
     path: '/:catchAll(.*)*',
     component: () => import('src/app/pages/ErrorNotFound.vue'),

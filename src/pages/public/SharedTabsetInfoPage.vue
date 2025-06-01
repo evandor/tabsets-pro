@@ -4,7 +4,7 @@
 
     <div class="text-body1 q-mx-none q-my-lg">
       <i>{{ author }}</i> wants to share a tabset named <i>{{ name }}</i> with you.<br />
-      Click on "show" (or "update") to proceed.
+      Click on "show" (or "update") to proceed
     </div>
 
     <div class="text-body1 q-mx-none q-my-lg" v-if="maybeTabset">
@@ -70,7 +70,7 @@ async function setupTabset(importedTS: Tabset) {
   // console.log('res', res)
   // useTabsetService().selectTabset(importedTS.id)
   //useTabsetService().reloadTabset(importedTS.id)
-  router.push('/p/tabsets/' + tabset.value.id)
+  router.push('/s/tabsets/' + tabset.value.id)
 }
 
 function paramNotSet(ident: string) {
