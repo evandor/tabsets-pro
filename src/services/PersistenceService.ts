@@ -1,5 +1,5 @@
 // Deprecated
-import { Account } from 'src/models/Account'
+import { Account } from 'src/core/models/Account'
 
 interface PersistenceService {
   getServiceName(): string
