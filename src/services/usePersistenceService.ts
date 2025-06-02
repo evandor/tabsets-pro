@@ -1,6 +1,6 @@
 import { QVueGlobals } from 'quasar'
+import FirestoreFeaturesPersistence from 'src/ext/features/FirestoreFeaturesPersistence'
 import FeaturesPersistence from 'src/features/persistence/FeaturesPersistence'
-import FirestoreFeaturesPersistence from 'src/features/persistence/FirestoreFeaturesPersistence'
 import PersistenceService from 'src/services/PersistenceService'
 import FirestoreSnapshotsPersistence from 'src/snapshots/persistence/FirestoreSnapshotsPersistence'
 import SnapshotsPersistence from 'src/snapshots/persistence/SnapshotsPersistence'
