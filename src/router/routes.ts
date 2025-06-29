@@ -14,6 +14,43 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/PlainLayout.vue'),
     children: [{ path: '', component: () => import('src/pages/SplashPage.vue') }],
   },
+
+  {
+    path: '/popup/welcome',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{ path: '', component: () => import('src/core/pages/popup/WelcomePage.vue') }],
+  },
+  {
+    path: '/popup/getstarted',
+    component: () => import('layouts/PlainLayout.vue'),
+    children: [{ path: '', component: () => import('src/core/pages/popup/GetStartedPage.vue') }],
+  },
+  {
+    path: '/popup',
+    component: () => import('layouts/PopupLayout.vue'),
+    children: [{ path: '', component: () => import('src/core/pages/popup/PopupPage.vue') }],
+  },
+  {
+    path: '/popup/tabset',
+    component: () => import('layouts/PopupLayout.vue'),
+    children: [{ path: '', component: () => import('src/core/pages/popup/PopupCollectionPage.vue') }],
+  },
+  {
+    path: '/popup/tabsets',
+    component: () => import('layouts/PopupLayout.vue'),
+    children: [{ path: '', component: () => import('src/core/pages/popup/PopupCollectionsPage.vue') }],
+  },
+  {
+    path: '/popup/opentabs',
+    component: () => import('layouts/PopupLayout.vue'),
+    children: [{ path: '', component: () => import('src/core/pages/popup/PopupOpenTabsPage.vue') }],
+  },
+  {
+    path: '/popup/settings',
+    component: () => import('layouts/PopupLayout.vue'),
+    children: [{ path: '', component: () => import('src/core/pages/popup/PopupSettingsPage.vue') }],
+  },
+
   {
     path: '/fullpage',
     component: () => import('layouts/FullPageLayout.vue'),

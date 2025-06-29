@@ -126,6 +126,28 @@ export default defineConfig((ctx) => {
         nodePolyfills(), // as of https://stackoverflow.com/questions/76431747/module-has-been-externalized-for-browser-compatibility-error-in-vite-build
         version(),
         [
+          'rollup-plugin-copy',
+          {
+            targets: [
+              {
+                src: 'node_modules/@huggingface/transformers/dist/*.wasm',
+                //src: 'src/env.d.ts',
+                dest: 'dist/bex-chrome--dev/www/wasm',
+              },
+              {
+                src: 'node_modules/@huggingface/transformers/dist/*.mjs',
+                dest: 'dist/bex-chrome--dev/www/wasm',
+              },
+              {
+                src: 'public/wasm/*',
+                dest: 'dist/bex-chrome--dev/www/wasm',
+              },
+            ],
+            verbose: true,
+            hook: 'buildStart',
+          },
+        ],
+        [
           sentryVitePlugin,
           {
             authToken: process.env.SENTRY_AUTH_TOKEN,

@@ -6,7 +6,7 @@ import {
   CLEANUP_PERIOD_IN_MINUTES,
   EXTENSION_NAME,
   GITHUB_AUTO_BACKUP,
-  MONITORING_PERIOD_IN_MINUTES
+  MONITORING_PERIOD_IN_MINUTES,
 } from 'src/boot/constants'
 import { ContentItem } from 'src/content/models/ContentItem'
 import { useContentService } from 'src/content/services/ContentService'
@@ -27,7 +27,6 @@ import { MonitoredTab, Tabset } from 'src/tabsets/models/Tabset'
 import { useTabsetsStore } from 'src/tabsets/stores/tabsetsStore'
 import { useWindowsStore } from 'src/windows/stores/windowsStore'
 import { v5 as uuidv5 } from 'uuid'
-import { Router } from 'vue-router'
 
 function runHousekeeping() {
   //console.log("housekeeping now...")
@@ -44,7 +43,7 @@ class BrowserApi {
     }
   }
 
-  init(router: Router) {
+  init() {
     if (process.env.MODE !== 'bex') {
       return
     }

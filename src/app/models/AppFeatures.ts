@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { FeatureIdent } from 'src/app/models/FeatureIdent'
+import { DownloadAIModelsCommand } from 'src/core/domain/commands/DownloadAIModelsCommand'
 import { GrantPermissionCommand } from 'src/core/domain/commands/GrantPermissionCommand'
 import { RevokePermissionCommand } from 'src/core/domain/commands/RevokePermissionCommand'
 import { Feature } from 'src/features/models/Feature'
@@ -31,7 +32,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.FOLDER,
-      'RECOMMENDED',
+      'RECOMMENDED_POPUP',
       'Folders and Subfolders',
       'Use folders inside your tabsets to add another level of organisation',
       'o_folder',
@@ -44,7 +45,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.GALLERY,
-      'RECOMMENDED',
+      'RECOMMENDED_POPUP',
       'Gallery View',
       'View and organize your tabs in a Tabset Gallery',
       'calendar_view_month',
@@ -87,7 +88,7 @@ export class AppFeatures {
 
     new Feature(
       FeatureIdent.OPEN_TABS,
-      'RECOMMENDED',
+      'RECOMMENDED_POPUP',
       'Open Tabs',
       'Quick access to all your open tabs of the current browsers window<br><br>' +
         'Adds quick navigation to jump back and forth to recently opened tabs.',
@@ -423,6 +424,27 @@ export class AppFeatures {
       '',
       ['all'],
     ),
+    new Feature(
+      FeatureIdent.STASHING,
+      'EXPERIMENTAL',
+      'Stashing',
+      'stash away (i.e. save and close) currently open tabs and have a fresh start',
+      'sym_o_play_circle',
+      '',
+      ['all'],
+    ),
+    new Feature(
+      FeatureIdent.AI,
+      'EXPERIMENTAL',
+      'AI Features',
+      'active additional AI Features like language detection, summaries etc.',
+      'sym_o_play_circle',
+      '',
+      ['all'],
+    ).setActivateCommands([new DownloadAIModelsCommand()]),
+    new Feature(FeatureIdent.VISUALIZATIONS, 'EXPERIMENTAL', 'Visualizations', 'mind-map style', 'sym_o_graph_5', '', [
+      'all',
+    ]),
     new Feature(
       FeatureIdent.TABSETS_SHARING,
       'OPTIONAL',

@@ -211,7 +211,8 @@ export const useTabsetsStore = defineStore('tabsets', () => {
   }
 
   async function selectCurrentTabset(tabsetId: string): Promise<Tabset | undefined> {
-    console.log('selectCurrentTabset', tabsetId, [...tabsets.value.values()].map((ts: Tabset) => ts.id).join(','))
+    //console.log('selectCurrentTabset', tabsetId)
+    await useSelectedTabsetService().setCurrentTabsetId(tabsetId)
 
     const found = _.find([...tabsets.value.values()] as Tabset[], (k: Tabset) => {
       console.log('checking tabset', k?.id)
@@ -221,7 +222,6 @@ export const useTabsetsStore = defineStore('tabsets', () => {
     if (found) {
       currentTabsetId.value = found.id
       currentTabsetFolderId.value = found.folderActive
-      await useSelectedTabsetService().setCurrentTabsetId(tabsetId)
       return found
     } else {
       console.debug(`did not find tabset ${tabsetId}, not trying to reload`)

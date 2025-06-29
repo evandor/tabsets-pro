@@ -1,13 +1,20 @@
-# Quasar App (quasar-project)
+# Tabsets Extension
 
-A Quasar Project
+Browser Extension to manage tabsets and bookmarks
 
-## Install the dependencies
+# Developer Documentation
+
+https://evandor.github.io/tabsets/
+
+# User Documentation
+
+https://docs.tabsets.net
+
+## Quick setup
 
 ```bash
-yarn
-# or
-npm install
+git clone --recurse-submodules -j8 https://github.com/evandor/tabsets.git
+yarn install
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)

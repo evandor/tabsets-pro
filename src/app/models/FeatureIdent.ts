@@ -45,6 +45,16 @@ export enum FeatureIdent {
   MONITOR = 'MONITOR',
   PIN_TAB = 'PIN_TAB',
   PAGES = 'PAGES',
+  STASHING = 'STASHING',
+  AI = 'AI',
+  VISUALIZATIONS = 'VISUALIZATIONS',
 }
 
-export type FeatureType = 'RECOMMENDED' | 'OPTIONAL' | 'EXPERIMENTAL' | 'PLANNED' | 'DISABLED' | 'INTERNAL'
+export type FeatureType =
+  | 'RECOMMENDED'
+  | 'RECOMMENDED_POPUP'
+  | 'OPTIONAL'
+  | 'EXPERIMENTAL'
+  | 'PLANNED'
+  | 'DISABLED'
+  | 'INTERNAL'

@@ -22,7 +22,7 @@
       }
     ],
     "content_security_policy": {
-      "extension_pages": "script-src 'self'; object-src 'self';"
+      "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
     },
     "web_accessible_resources": [
       {
@@ -38,7 +38,8 @@
         "suggested_key": {
           "default": "Ctrl+B",
           "mac": "Command+B"
-        }
+        },
+        "description": "Open Tabsets.net"
       },
       "search": {
         "description": "Open Search Box"
@@ -53,8 +54,12 @@
     "options_page": "www/index.html#/mainpanel/settings"
   },
   "chrome": {
+    "action": {
+      "default_title": "Click to open tabsets.net",
+      "default_popup": "www/index.html#/popup"
+    },
     "side_panel": {
-      "default_path": "www/index.html"
+      "default_path": "www/index.html#/sidepanel"
     },
     "permissions": ["storage", "tabs", "activeTab", "alarms", "scripting", "sidePanel", "contextMenus", "bookmarks"],
     "optional_permissions": ["pageCapture", "notifications", "webRequest", "tabGroups"],
