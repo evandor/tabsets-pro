@@ -22,10 +22,6 @@
 	path = src/suggestions
 	url = https://github.com/evandor/submodule-suggestions.git
 	branch = main
-[submodule "src/opentabs"]
-	path = src/opentabs
-	url = https://github.com/evandor/submodule-opentabs.git
-	branch = main
 [submodule "src/snapshots"]
 	path = src/snapshots
 	url = https://github.com/evandor/submodule-snapshots.git
@@ -33,8 +29,4 @@
 [submodule "src/ui"]
 	path = src/ui
 	url = https://github.com/evandor/submodule-ui.git
-	branch = main
-[submodule "src/requests"]
-	path = src/requests
-	url = https://github.com/evandor/submodule-requests.git
 	branch = main
