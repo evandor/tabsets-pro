@@ -10,10 +10,6 @@
 	path = src/windows
 	url = https://github.com/evandor/submodule-windows.git
 	branch = main
-[submodule "src/search"]
-	path = src/search
-	url = https://github.com/evandor/submodule-search.git
-	branch = main
 [submodule "src/thumbnails"]
 	path = src/thumbnails
 	url = https://github.com/evandor/submodule-thumbnails.git
@@ -21,10 +17,6 @@
 [submodule "src/suggestions"]
 	path = src/suggestions
 	url = https://github.com/evandor/submodule-suggestions.git
-	branch = main
-[submodule "src/snapshots"]
-	path = src/snapshots
-	url = https://github.com/evandor/submodule-snapshots.git
 	branch = main
 [submodule "src/ui"]
 	path = src/ui
